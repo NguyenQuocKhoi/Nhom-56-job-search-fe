@@ -1,0 +1,33 @@
+.signupContainer {
+  position: relative; /* Để logo được định vị đúng */
+  padding-top: 60px; /* Tạo khoảng trống phía trên để không bị che bởi logo */
+}
+
+.logoContainer {
+  position: absolute;
+  top: 16px; /* Khoảng cách từ trên cùng */
+  left: -68px; /* Khoảng cách từ bên trái */
+}
+
+.logo {
+  width: 50px; /* Kích thước logo */
+  height: auto; /* Đảm bảo tỷ lệ hình ảnh không bị biến dạng */
+}
+
+.signupCard {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.signupTitle {
+  margin-bottom: 20px;
+}
+
+.loginLink {
+  color: #007bff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "header": {
+      "login": "Log in",
+      "signup": "Sign up",
+      "jobs": "Jobs",
+      "companies": "Companies",
+      "profile": "Profile",
+      "logout": "Logout",
+      "changepassword":"Change password"
+    }
+  }
+  

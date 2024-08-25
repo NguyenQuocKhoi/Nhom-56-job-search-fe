@@ -1,0 +1,12 @@
+{
+    "header": {
+      "login": "Đăng nhập",
+      "signup": "Đăng ký",
+      "jobs": "Việc làm",
+      "companies": "Công ty",
+      "profile": "Hồ sơ",
+      "logout": "Đăng xuất",
+      "changepassword":"Đổi mật khẩu"
+    }
+  }
+  

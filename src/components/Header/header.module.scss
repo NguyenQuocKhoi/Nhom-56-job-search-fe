@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #87CEEB, #1E90FF);
+  position: fixed; /* Fix the header to the top of the page */
+  top: 0;
+  left: 0;
+  width: 100%; /* Make sure the header spans the entire width */
+  z-index: 1000; /* Ensure the header is above other content */
+}
+
+.mainContent {
+  margin-top: 4rem; /* Đảm bảo khoảng cách đủ để nội dung không bị che khuất bởi header */
+}
+
+.logoContainer {
+  flex: 1;
+}
+
+.logo {
+  width: 50px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.btn{
+  background: linear-gradient(to right, #87CEEB, #1E90FF);
+  border-color: #87CEEB;
+  border-radius: 5px;
+  margin: 2px;
+}

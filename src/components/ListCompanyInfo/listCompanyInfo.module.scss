@@ -1,0 +1,38 @@
+.companylist {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    .companycard {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+      //
+      // background-color: lightblue;
+      padding: 20px;
+      // text-align: center;
+      cursor: pointer;
+    
+      &:hover {
+        background: linear-gradient(to right, #87CEEB, #1E90FF);
+      }
+      //
+  
+      h3 {
+        margin-top: 0;
+      }
+  
+      p {
+        margin: 0.5rem 0;
+      }
+  
+      li {
+        margin-left: 1rem;
+      }
+    }
+  }
+  
+  
