@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
-import SearchBar from '../../components/SearchBar/SearchBar';
 import FeaturedJobs from '../../components/FeaturedJobs/FeaturedJobs';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
@@ -11,7 +10,6 @@ const Home = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <main className={clsx(styles.mainContent)}>
-        <SearchBar />
         <FeaturedJobs />
       </main>
       <Footer />

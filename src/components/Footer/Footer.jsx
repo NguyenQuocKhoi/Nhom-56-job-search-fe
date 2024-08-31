@@ -12,7 +12,7 @@ const Footer = () => {
         </div>
         <div className={clsx(styles.info)}>
           <p>&copy; 2024 KXWork Job Search Website</p>
-          <p>Contact: kxwordjobsearch@gmail.com</p>
+          <p>Contact: kxword@gmail.com</p>
           <p>Address: Go Vap District, Ho Chi Minh City, Vietnam</p>
         </div>
         <div className={clsx(styles.socialMedia)}>

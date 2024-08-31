@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #007bff;
+  color: #fff;
+}
+
+.logo {
+  height: 50px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}

@@ -20,6 +20,7 @@ export const getApiWithToken = (url) => {
         },
       })
   };
+  
   export const postApiWithToken = (url, data) => {
     const token = getUserStorage().token;
     return api.post(url, data, {
@@ -47,9 +48,9 @@ export const getApiWithToken = (url) => {
       },
     });
   };
-  export const deleteApiWithToken = (url, data) => {
+  export const deleteApiWithToken = (url) => {
     const token = getUserStorage().token;
-    return api.delete(url, data, {
+    return api.delete(url, {
       headers: {
         "auth-token": `${token}`,
       },

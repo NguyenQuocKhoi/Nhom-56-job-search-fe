@@ -1,12 +1,12 @@
-// ChangePassword.jsx
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clsx from 'clsx';
 import styles from './changePassword.module.scss';
 import logo from '../../images/logo.jpg';
 import { Link, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import { putApiWithToken } from '../../api';
+import { getUserStorage, validatePassword } from '../../Utils/valid';
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -14,6 +14,9 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const user = getUserStorage().user;
+  console.log(user);
+  
   const handleChangePassword = async (e) => {
     e.preventDefault();
   
@@ -26,13 +29,12 @@ const ChangePassword = () => {
       return;
     }
   
-    const userId = localStorage.getItem('_id');
-    
-    if (!userId) {
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.success) {
       Swal.fire({
         icon: 'error',
-        title: 'No User Found',
-        text: 'User ID is not available. Please log in again.',
+        title: 'Invalid Password Format',
+        text: passwordValidation.message,
       });
       return;
     }
@@ -43,7 +45,7 @@ const ChangePassword = () => {
     };
   
     try {
-      await putApiWithToken(`/change-password/${userId}`, data);
+      await putApiWithToken(`/user/change-password/${user._id}`, data);
   
       Swal.fire({
         icon: 'success',

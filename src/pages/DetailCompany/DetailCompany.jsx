@@ -38,9 +38,10 @@ const DetailCompany = () => {
           <img src={company.avatar} alt="Logo" className={styles.avatar} />
           <h3><strong>Company name:</strong> {company.name}</h3>
         </div>
+        <i class="fa-regular fa-building"></i>
         <p><strong>Address:</strong> {company.address}</p>
         <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
-        <a href={company.website} target="_blank" rel="noopener noreferrer"><p><strong>Website:</strong>{company.website}</p></a>
+        <p><strong>Website:</strong></p><a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a>
         <p><strong>Posted:</strong> {new Date(company.createdAt).toLocaleDateString()}</p>
         <p><strong>Expires:</strong> {new Date(company.expiredAt).toLocaleDateString()}</p>
         <p><strong>Email:</strong> {company.email}</p>

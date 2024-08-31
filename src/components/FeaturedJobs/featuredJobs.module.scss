@@ -1,22 +1,112 @@
-.featuredJobs {
-    padding: 2rem;
-  }
+.searchComponent {
+  padding: 2rem;
+}
+
+.searchBar {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  height: 4rem; /* Slightly taller for better visibility */
+}
+
+.form {
+  display: flex;
+  width: 75%;
+  max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+  border-radius: 50px;
+  height: 100%; /* Ensure full height */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
+  background-color: #ffffff; /* White background for the form */
+}
+
+.jobInput,
+.locationInput {
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 1.25rem; /* Slightly larger padding for better touch target */
+  font-size: 1rem;
+  outline: none;
+  height: 100%;
+}
+
+.jobInput {
+  flex: 2;
+  margin-right: 0.5rem;
+}
+
+.locationInput {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.searchButton {
+  border-radius: 50px;
+  font-size: 1.25rem; /* Slightly larger font for better readability */
+  padding: 0.75rem 2rem;
+  background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient */
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  height: 100%;
   
-  .title {
-    text-align: center;
-    margin-bottom: 1.5rem;
+  &:hover {
+    background: linear-gradient(to right, #0077cc, #005999); /* Hover effect */
+    transform: translateY(-2px); /* Slight lift effect */
   }
-  
-  .jobCard {
-    background: #f5f5f5;
-    padding: 1rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
+}
+
+.suggestBar {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  align-items: center;
+}
+
+.suggest {
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid rgb(236, 231, 231);
+  margin: 10px 5px;
+  background: #e7e1e1;
+}
+
+.results {
+  margin-top: 2rem;
+  max-width: 1292px;
+  padding-left: 6rem; /* Indentation for the results */
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.tabButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: border-bottom 0.3s ease;
+}
+
+.tabButton:hover,
+.active {
+  border-bottom: 2px solid #0077cc;
+}
+
+.tabContent {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .results {
+    padding-left: 2rem; /* Adjust padding for smaller screens */
   }
-
-  .logo {
-    width: 50px;
-    height: auto;
-  }
-
-
+}

@@ -19,6 +19,46 @@
       list-style: disc;
       margin-left: 2rem;
     }
+    .titleContainer{
+      .title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+      }
+  
+      .avatar{
+        width: 100px;
+        height: auto;
+      }
+
+      .btn{
+        width: 80%;
+        height: 40px;
+        background: #1E90FF;
+        border-radius: 5px;
+        border: 1px solid white;
+        color: white;
+      }
+
+      .btnSave{
+        display: flex;
+        width: 17%;
+        height: 40px;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: space-around;
+        border: 1px solid #1E90FF;
+        color: #1E90FF;
+        background: white;
+      }
+
+      .btnDisabled {
+        background-color: #6c757d; // Màu xám cho nút bị vô hiệu hóa
+        cursor: not-allowed;
+      }      
+    }
+
   }
 
 

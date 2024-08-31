@@ -1,0 +1,101 @@
+    .createPostJobPage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    min-width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 6rem; /* Khoảng cách để không bị che khuất bởi header */
+
+  }
+  
+  .pageTitle {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .formGroup label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .formGroup input,
+  .formGroup textarea,
+  .formGroup select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .formGroup textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .createButton,
+  .cancelButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .createButton {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .createButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .cancelButton {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .cancelButton:hover {
+    background-color: #c82333;
+  }
+  
+  .status {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
+  .status span {
+    font-weight: bold;
+  }
+  

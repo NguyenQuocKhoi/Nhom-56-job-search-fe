@@ -6,7 +6,12 @@
       "companies": "Companies",
       "profile": "Profile",
       "logout": "Logout",
-      "changepassword":"Change password"
+      "changepassword":"Change password",
+      "savedJobs":" Saved Jobs",
+      "appliedJobs":"Applied Jobs",
+      "postJob":"Post Job",
+      "postedJobs":"Posted Jobs",
+      "postCreated":"Post Created"
     }
   }
   

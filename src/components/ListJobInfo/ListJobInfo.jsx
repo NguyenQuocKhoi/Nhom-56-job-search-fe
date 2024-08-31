@@ -11,15 +11,14 @@ const ListJobInfo = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 16,
+    limit: 15, //16
   });
 
-  // Sử dụng useCallback để giữ hàm fetchJobs ổn định
   const fetchJobs = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       const result = await getAPiNoneToken(`/job/get-all?page=${page}&limit=${pagination.limit}`);
-      setJobs(result.data.jobs);
+      setJobs(result.data.jobs.filter(job => job.status === true));
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -30,11 +29,11 @@ const ListJobInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [pagination.limit]); // Thêm pagination.limit vào dependencies array
+  }, [pagination.limit]);
 
   useEffect(() => {
     fetchJobs();
-  }, [fetchJobs]); // Thêm fetchJobs vào dependencies array
+  }, [fetchJobs]);
 
   const handlePageChange = (newPage) => {
     fetchJobs(newPage);
@@ -45,16 +44,33 @@ const ListJobInfo = () => {
 
   return (
     <div className={clsx(styles.joblist)}>
-      {jobs.map((job) => (
-        <Link key={job._id} to={`/detailJob/${job._id}`}>
-          <div className={clsx(styles.jobcard)}>
-            <h3>{job.title}</h3>
-            <p><strong>Company:</strong> {job.company.name}</p>
-            <p><strong>Address:</strong> {job.address}</p>
-            <p><strong>Salary:</strong> ${job.salary}</p>
-          </div>
-        </Link>
-      ))}
+      <div className={clsx(styles.jobContainer)}>
+        {jobs.length > 0 ? (
+          jobs.map((job) => (
+            <Link key={job._id} to={`/detailJob/${job._id}`} className={clsx(styles.jobcard)}>
+              <div className={clsx(styles.content)}>
+                <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
+                <div className={clsx(styles.text)}>
+                  <div className={clsx(styles.title)}>
+                    <p><strong>{job.title}</strong></p>
+                    <i className="fa-regular fa-heart"></i>
+                  </div>
+                  <div className={clsx(styles.describe)}>
+                    <p>Company: {job.company.name}</p>
+                    <p>Address: {job.address}</p>
+                    <p>Salary: ${job.salary}</p>
+                    {/* để tạm */}
+                    <p>Number of cruiment: {job.numberOfCruiment}</p>
+                    <p>Category: {job.category}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div>No jobs available</div>
+        )}
+      </div>
       <div className={clsx(styles.pagination)}>
         {pagination.currentPage > 1 && (
           <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>

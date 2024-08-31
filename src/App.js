@@ -10,24 +10,42 @@ import Jobs from './pages/Jobs/Jobs';
 import DetailJob from './pages/DetailJob/DetailJob';
 import DetailCompany from './pages/DetailCompany/DetailCompany';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
+import SavedJobs from './pages/SavedJobs/SavedJobs';
+import AppliedJobs from './pages/AppliedJobs/AppliedJobs';
+import CreatePostJob from './pages/CreatePostJob/CreatePostJob';
+import PostedJobs from './pages/PostedJobs/PostedJobs';
+import PostedDetail from './pages/PostedDetail/PostedDetail';
+import CandidateApply from './pages/CandidateApply/CandidateApply';
+import DetailCandidate from './pages/DetailCandidate/DetailCandidate';
+import EditPost from './pages/EditPost/EditPost';
+import AdminLayout from './pages/Admin/AdminLayout/AdminLayout';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/companies" element={<Companies />} />
-          <Route path="/detailJob/:jobId" element={<DetailJob />}/>
-          <Route path="/detailCompany/:id" element={<DetailCompany />}/>
-          <Route path="/changePassword" element={<ChangePassword />}/>
-        </Routes>
-      </div>
-    </Router>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/companies" element={<Companies />} />
+            <Route path="/detailJob/:jobId" element={<DetailJob />}/>
+            <Route path="/detailCompany/:id" element={<DetailCompany />}/>
+            <Route path="/changePassword" element={<ChangePassword />}/>
+            <Route path="/savedJobs" element={<SavedJobs />}/>
+            <Route path="/appliedJobs" element={<AppliedJobs />}/>
+            <Route path="/createPostJob" element={<CreatePostJob />}/>
+            <Route path="/postedJobs" element={<PostedJobs />}/>
+            <Route path="/postedDetail/:jobId" element={<PostedDetail />}/>
+            <Route path="/candidateApply/:candidateId" element={<CandidateApply />}/>
+            <Route path="/detailCandidate/:candidateId" element={<DetailCandidate />}/>
+            <Route path="/editPost/:jobId" element={<EditPost />}/>
+            <Route path="/admin" element={<AdminLayout />}/>
+          </Routes>
+        </div>
+      </Router>
   );
 }
 
