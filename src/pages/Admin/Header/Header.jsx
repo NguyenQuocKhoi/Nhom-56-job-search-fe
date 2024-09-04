@@ -1,10 +1,14 @@
 import React from 'react';
 import styles from '../Header/header.module.scss';
 import logo from '../../../images/logo.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    // Implement logout logic here
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (

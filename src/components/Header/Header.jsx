@@ -45,6 +45,7 @@ const Header = () => {
             <Link to="/savedJobs" className={clsx(styles.navLink)}>{t('header.savedJobs')}</Link>
             <Link to="/appliedJobs" className={clsx(styles.navLink)}>{t('header.appliedJobs')}</Link>
             <div className={clsx(styles.navLink)}>
+              
               <i className="fas fa-bell"></i>
             </div>
               <Dropdown>

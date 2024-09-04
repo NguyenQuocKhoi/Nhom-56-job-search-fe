@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import styles from '../FeaturedJobs/featuredJobs.module.scss';
 import ListJobInfo from '../ListJobInfo/ListJobInfo';
 import ListCompanyInfo from '../ListCompanyInfo/ListCompanyInfo';
+import { Link } from 'react-router-dom';
 
 const FeaturedJobs = () => {
   const [addressInput, setAddressInput] = useState('');
@@ -11,12 +12,15 @@ const FeaturedJobs = () => {
   const [results, setResults] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
 
+  const [categoryName, setCategoryName] = useState('');
+
   const handleSearch = async (event) => {
     event.preventDefault();
 
     try {
       const searchParams = {
         search: jobInput,
+        categoryName: categoryName,
         ...(addressInput && { address: addressInput })
       };
 
@@ -35,7 +39,7 @@ const FeaturedJobs = () => {
 
   return (
     <div className={clsx(styles.searchComponent)}>
-      <form onSubmit={handleSearch} className={clsx(styles.searchBar)}>
+      <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
           <input
             className={clsx(styles.locationInput)}
@@ -53,7 +57,16 @@ const FeaturedJobs = () => {
             onChange={(e) => setJobInput(e.target.value)}
             placeholder="Enter job title, skill, etc."
           />
-          <button type="submit" className={clsx(styles.searchButton)}>Search</button>
+          {/* category */}
+          <input
+            className={clsx(styles.jobInput)}
+            type="text"
+            id="categoryName"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            placeholder="Enter category"
+          />
+          <button className={clsx(styles.searchButton)} onClick={handleSearch}>Search</button>
         </div>
       </form>
 
@@ -103,19 +116,25 @@ const FeaturedJobs = () => {
                 <h3>Jobs</h3>
                 <ul>
                   {results.jobs.map((job) => (
-                    <li key={job._id}>{job.title}</li>
+                    <Link key={job._id} to={`/detailJob/${job._id}`}>
+                      <li>{job.title}</li>
+                    </Link>
                   ))}
                 </ul>
                 <h3>Companies</h3>
                 <ul>
                   {results.companies.map((company) => (
-                    <li key={company._id}>{company.name}</li>
+                    <Link key={company._id} to={`/detailCompany/${company._id}`}>
+                      <li>{company.name}</li>
+                    </Link>
                   ))}
                 </ul>
                 <h3>Candidates</h3>
                 <ul>
                   {results.candidates.map((candidate) => (
-                    <li key={candidate._id}>{candidate.name}</li>
+                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`}>
+                      <li>{candidate.name}</li>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -125,7 +144,9 @@ const FeaturedJobs = () => {
                 <h3>Jobs</h3>
                 <ul>
                   {results.jobs.map((job) => (
-                    <li key={job._id}>{job.title}</li>
+                    <Link key={job._id} to={`/detailJob/${job._id}`}>
+                      <li>{job.title}</li>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -135,7 +156,9 @@ const FeaturedJobs = () => {
                 <h3>Companies</h3>
                 <ul>
                   {results.companies.map((company) => (
-                    <li key={company._id}>{company.name}</li>
+                    <Link key={company._id} to={`/detailCompany/${company._id}`}>
+                      <li>{company.name}</li>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -145,7 +168,9 @@ const FeaturedJobs = () => {
                 <h3>Candidates</h3>
                 <ul>
                   {results.candidates.map((candidate) => (
-                    <li key={candidate._id}>{candidate.name}</li>
+                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`}>
+                      <li>{candidate.name}</li>
+                    </Link>
                   ))}
                 </ul>
               </div>

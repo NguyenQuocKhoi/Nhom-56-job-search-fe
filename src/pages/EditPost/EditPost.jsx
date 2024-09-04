@@ -25,6 +25,7 @@ const EditPost = () => {
   });
 
   const [categoryName, setCategoryName] = useState('');
+  const [categoryDa, setCategoryDa] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
 
@@ -37,20 +38,25 @@ const EditPost = () => {
         console.log(job.type);
 
         const categoryData = await getApiWithToken(`/category/${job.category}`);
+        const categoryDa = await getApiWithToken(`/category/get-all`);//lấy tất cả
+        setCategoryDa(categoryDa.data.categories);
+        console.log(categoryDa.data.categories);
+        
         const categoryName = categoryData.data.category.name;
+        
 
         setJobData({
-          title: job.title,
-          description: job.description,
-          requirements: job.requirements.join(', '),
-          salary: job.salary,
-          category: job.category, //
-          numberOfCruiment: job.numberOfCruiment,
-          experienceLevel: job.experienceLevel,
-          position: job.position,
-          address: job.address,
-          type: job.type,
-          expiredAt: job.expiredAt.split('T')[0], // Convert date format
+          title: job.title || '',
+          description: job.description || '',
+          requirements: job.requirements ? job.requirements.join(', ') : '',
+          salary: job.salary || '',
+          category: job.category || '', // id
+          numberOfCruiment: job.numberOfCruiment || '',
+          experienceLevel: job.experienceLevel || '',
+          position: job.position || '',
+          address: job.address || '',
+          type: job.type || 'fulltime',
+          expiredAt: job.expiredAt ? job.expiredAt.split('T')[0] : '', // Convert date format
         });
 
         setCategoryName(categoryName); //
@@ -65,7 +71,7 @@ const EditPost = () => {
   const handleChange = (e) => {
     setJobData({
       ...jobData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value || '',
     });
   };
 
@@ -205,6 +211,9 @@ const EditPost = () => {
               disabled={!isEditing}
             >
               <option value={jobData.category}>{categoryName}</option>
+              {categoryDa.filter((category) => category._id !== jobData.category).map((category) => (
+                <option key={category._id} value={category._id}>{category.name}</option>
+              ))}
             </select>
           </div>
           <div className={clsx(styles.formGroup)}>

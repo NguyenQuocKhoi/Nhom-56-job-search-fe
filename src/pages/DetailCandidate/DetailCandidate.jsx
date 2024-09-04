@@ -4,17 +4,14 @@ import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './detailCandidate.module.scss';
 import { getApiWithToken, putApiWithToken } from '../../api';
-// import { useParams } from 'react-router-dom';
 import logo from '../../images/logo.jpg';
 import Swal from 'sweetalert2';
-
 import { useParams, useSearchParams } from 'react-router-dom';
 
 const DetailCandidate = () => {
   const { candidateId } = useParams();
   const [searchParams] = useSearchParams();
   const applicationId = searchParams.get('applicationId');
-
   const [candidate, setCandidate] = useState(null);
   const [error, setError] = useState(null);
   const [buttonState, setButtonState] = useState('pending');
@@ -35,8 +32,20 @@ const DetailCandidate = () => {
   }, [candidateId]);
 
   const handleStatusUpdate = async (status) => {
+    // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
+    Swal.fire({
+      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      text: `Please wait while we ${status} the candidate.`,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     try {
       await putApiWithToken('/application/update-status', { applicationId, status });
+
       setButtonState(status);
       Swal.fire({
         icon: 'success',
@@ -74,23 +83,22 @@ const DetailCandidate = () => {
         <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
         <p><strong>More Information:</strong> {candidate.moreInformation}</p>
         <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
-        
-        <div className={clsx(styles.buttonContainer)}>
-          <button
-            className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
-            onClick={() => handleStatusUpdate('accepted')}
-            disabled={buttonState === 'accepted'}
-          >
-            Accept
-          </button>
-          <button
-            className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
-            onClick={() => handleStatusUpdate('rejected')}
-            disabled={buttonState === 'rejected'}
-          >
-            Reject
-          </button>
-        </div>
+          <div className={clsx(styles.buttonContainer)}>
+            <button
+              className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+              onClick={() => handleStatusUpdate('accepted')}
+              disabled={buttonState === 'accepted'}
+            >
+              Accept
+            </button>
+            <button
+              className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+              onClick={() => handleStatusUpdate('rejected')}
+              disabled={buttonState === 'rejected'}
+            >
+              Reject
+            </button>
+          </div>
       </div>
       <Footer />
     </div>

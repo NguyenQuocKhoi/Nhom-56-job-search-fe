@@ -17,7 +17,7 @@ const ListCompanyInfo = () => {
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
       setLoading(true);
-      const result = await getAPiNoneToken(`/company/get-all?page=${page}&limit=${pagination.limit}`);
+      const result = await getAPiNoneToken(`/company/get-all-companies?page=${page}&limit=${pagination.limit}`);
       setCompanies(result.data.companies);
       setPagination(prev => ({
         ...prev,

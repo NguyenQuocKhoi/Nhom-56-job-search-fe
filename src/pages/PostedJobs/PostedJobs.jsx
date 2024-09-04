@@ -13,7 +13,9 @@ const PostedJobs = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'approved', 'pending'
+  // const [activeTab, setActiveTab] = useState('all'); // 'all', 'approved', 'pending'
+
+  // const [filteredJobs, setFilteredJobs] = useState([]);
 
   const user = getUserStorage()?.user;
   const companyId = user._id;
@@ -24,6 +26,8 @@ const PostedJobs = () => {
         const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
         const { jobs, totalPages } = response.data;
         setJobs(jobs);
+        console.log(jobs);
+        
         setTotalPages(totalPages);
       } catch (error) {
         setError('Error fetching jobs');
@@ -36,16 +40,49 @@ const PostedJobs = () => {
     fetchJobs();
   }, [companyId, currentPage]);
 
+  const All = async () => {
+    const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
+    const { jobs, totalPages } = response.data;
+    setJobs(jobs);
+    setTotalPages(totalPages);
+  }
+
+  const Accept  = async () => {
+    const responseA = await getApiWithToken(`/job/get-jobs/${companyId}?page=${currentPage}&limit=6`);
+    const { jobs, totalPages } = responseA.data;
+    setJobs(jobs);
+    setTotalPages(totalPages);
+  }
+
+  const Reject = async () => {
+    const responseR = await getApiWithToken(`/job/get-jobs-rejected/${companyId}?page=${currentPage}&limit=6`);
+    const { jobs, totalPages } = responseR.data;
+    setJobs(jobs);
+    setTotalPages(totalPages);
+  }
+
+  const Pending = async () => {
+    const responseP = await getApiWithToken(`/job/get-jobs-pending/${companyId}?page=${currentPage}&limit=6`);
+    const { jobs, totalPages } = responseP.data;
+    setJobs(jobs);
+    setTotalPages(totalPages);
+  }
+
+  // useEffect(() => {
+  //   // Lọc công việc dựa trên tab hiện tại
+  //   const filtered = jobs.filter((job) => {
+  //     if (activeTab === 'approved') return job.status === true;
+  //     if (activeTab === 'pending') return job.status === undefined; // Jobs with no 'status' field
+  //     if (activeTab === 'rejected') return job.status === false;
+  //     return true; // 'All' tab
+  //   });
+  //   setFilteredJobs(filtered);
+  // }, [activeTab, jobs]);
+
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
-
-  const filteredJobs = jobs.filter((job) => {
-    if (activeTab === 'approved') return job.status === true;
-    if (activeTab === 'pending') return job.status === false;
-    return true; // for 'all' tab
-  });
 
   return (
     <div className={clsx(styles.homePage)}>
@@ -53,25 +90,30 @@ const PostedJobs = () => {
       <div className={clsx(styles.mainContent)}>
         <h2>Danh sách tin đã đăng</h2>
 
-        {/* Tabs for filtering jobs */}
         <div className={clsx(styles.tabs)}>
           <button
-            className={clsx(styles.tabButton, { [styles.activeTab]: activeTab === 'all' })}
-            onClick={() => setActiveTab('all')}
+            className={clsx(styles.tabButton)}
+            onClick={All}
           >
             Tất cả
           </button>
           <button
-            className={clsx(styles.tabButton, { [styles.activeTab]: activeTab === 'approved' })}
-            onClick={() => setActiveTab('approved')}
+            className={clsx(styles.tabButton)}
+            onClick={Accept}
           >
-            Đã được phê duyệt
+            Đã được đồng ý
           </button>
           <button
-            className={clsx(styles.tabButton, { [styles.activeTab]: activeTab === 'pending' })}
-            onClick={() => setActiveTab('pending')}
+            className={clsx(styles.tabButton)}
+            onClick={Pending}
           >
             Chưa được phê duyệt
+          </button>
+          <button
+            className={clsx(styles.tabButton)}
+            onClick={Reject}
+          >
+            Đã bị từ chối
           </button>
         </div>
 
@@ -79,13 +121,13 @@ const PostedJobs = () => {
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : filteredJobs.length === 0 ? (
+        ) : jobs.length === 0 ? (
           <p>Không có tin đăng nào.</p>
         ) : (
           <>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
-                {filteredJobs.map((job) => (
+                {jobs.map((job) => (
                   <Link key={job._id} to={`/postedDetail/${job._id}`} className={clsx(styles.jobcard)}>
                     <div className={clsx(styles.content)}>
                       <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
@@ -97,7 +139,7 @@ const PostedJobs = () => {
                           <p>Company: {job.company.name}</p>
                           <p>Address: {job.address}</p>
                           <p>Salary: ${job.salary}</p>
-                          <p>Status: {job.status ? 'Approved' : 'Pending'}</p>
+                          <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
                           <p>Category: {job.category}</p>
                         </div>
                       </div>
@@ -127,6 +169,7 @@ const PostedJobs = () => {
       <Footer />
     </div>
   );
+
 };
 
 export default PostedJobs;

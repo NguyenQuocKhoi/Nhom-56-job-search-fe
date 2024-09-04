@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { getAPiNoneToken, getApiWithToken, postApiWithToken, putApiWithToken } from '../../api'; // Assuming you have these API functions
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken, putApiWithToken } from '../../api';
 import styles from './detailJob.module.scss';
 import clsx from 'clsx';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import ListJobInfo from '../../components/ListJobInfo/ListJobInfo';
 import { getUserStorage } from '../../Utils/valid';
 
 const JobDetail = () => {
@@ -19,8 +18,8 @@ const JobDetail = () => {
   const [cvExists, setCvExists] = useState(false);//
   const navigate = useNavigate();
   const [isApplied, setIsApplied] = useState(false);
-
-  const userData = getUserStorage()?.user;//
+  const [isSaved, setIsSaved] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,15 +27,28 @@ const JobDetail = () => {
     const fetchJob = async () => {
       try {
         const result = await getAPiNoneToken(`/job/${jobId}`);
-        setJob(result.data.job);
+        if (result.data.job) {
+          setJob(result.data.job);
+  
+          const categoryId = result.data.job.category;
+          if (categoryId) {
+            const categoryResult = await getAPiNoneToken(`/category/${categoryId}`);
+
+            // console.log(categoryResult.data.category.name);
+            setCategoryName(categoryResult.data.category.name);
+          } else {
+            setCategoryName("Unknown Category");
+          }
+        } else {
+          setError('Job not found');
+        }
       } catch (err) {
         setError('Failed to fetch job details');
       }
     };
-
+    
     fetchJob();
-    // name1();
-
+    
     const userData = getUserStorage()?.user;
     setUserRole(userData?.role);
     setUserId(userData?._id);
@@ -45,138 +57,12 @@ const JobDetail = () => {
     setCvExists(true);//true
   }, [jobId]);
 
-  // const [profile, setProfile] = useState()
-  // const name1 = async () => {
-  //   const candidateProfile = await getApiWithToken(`/candidate/${userData._id}`);
-  //   const profile = candidateProfile.data.candidate;
-  //   setProfile(profile)
-  // }
-
   const handleLoginRedirect = () => {
     navigate('/login', { state: { from: `/detailJob/${jobId}` } });
   };
   
-  //
-  // const [name, setName] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [phoneNumber, setPhoneNumber] = useState('');
-  // const handleProfileUpdate1 = () => {
-    
-  // }
-
-  const handleProfileUpdate = async () => {//chưa cập nhật được profile
-    try {
-      // Gọi API để lấy thông tin profile của ứng viên
-      const candidateProfile = await getApiWithToken(`/candidate/${userData._id}`);
-      const profile = candidateProfile.data.candidate;
-      
-      console.log(profile.email);
-      console.log(1);
-      console.log(profile); 
-      // Chuẩn bị các phần tử HTML cho các trường bị rỗng
-      let htmlContent = '';
-
-      if (profile.name) {
-        htmlContent += `<input id="swal-input1" class="swal2-input" value="${profile.name}">`;
-        console.log(65, profile.name)
-      }
-      if (profile.phoneNumber) {
-        htmlContent += `<input id="swal-input2" class="swal2-input" placeholder="Số điện thoại">`;
-      }
-      if (profile.email) {
-        htmlContent += `${profile.email}`;
-      }
-      // if (!profile.address) {
-      //   htmlContent += `<input id="swal-input2" class="swal2-input" placeholder="Địa chỉ">`;
-      // }
-      // if (!profile.experience) {
-      //   htmlContent += `<input id="swal-input3" class="swal2-input" placeholder="Kinh nghiệm">`;
-      // }
-      // if (!profile.skill) {
-      //   htmlContent += `<input id="swal-input4" class="swal2-input" placeholder="Kỹ năng">`;
-      // }
-      // if (!profile.education) {
-      //   htmlContent += `<input id="swal-input5" class="swal2-input" placeholder="Học vấn">`;
-      // }
-      // if (!profile.moreInformation) {
-      //   htmlContent += `<input id="swal-input6" class="swal2-input" placeholder="Thông tin thêm">`;
-      // }
-      if (!profile.resume) {
-        htmlContent += `<input type="file" id="swal-input3" class="swal2-input" accept="application/pdf">`;
-      }
-  
-      // Nếu có bất kỳ trường nào bị rỗng, hiển thị modal
-      if (htmlContent) {
-        const { value: formValues } = await Swal.fire({
-          title: 'Cập nhật thông tin profile',
-          html: htmlContent,
-          focusConfirm: false,
-          preConfirm: () => {
-            const name = profile.name ? profile.name : document.getElementById('swal-input1')?.value;
-            console.log(99, name)
-            const phoneNumber = profile.phoneNumber ? profile.phoneNumber : document.getElementById('swal-input2')?.value;
-            const email = profile.email;
-            // const address = profile.address ? profile.address : document.getElementById('swal-input2')?.value;
-            // const experience = profile.experience ? profile.experience : document.getElementById('swal-input3')?.value;
-            // const skill = profile.skill ? profile.skill : document.getElementById('swal-input4')?.value;
-            // const education = profile.education ? profile.education : document.getElementById('swal-input5')?.value;
-            // const moreInformation = profile.moreInformation ? profile.moreInformation : document.getElementById('swal-input6')?.value;
-            const cvFile = document.getElementById('swal-input3')?.files[0];
-  
-            // return { phoneNumber, address, experience, skill, education, moreInformation, cvFile };
-            console.log(109, name);
-            return { name, phoneNumber, email, cvFile };
-          }
-        });
-        
-
-        // Nếu người dùng cập nhật thông tin
-        if (formValues) {
-          // const { phoneNumber, address, experience, skill, education, moreInformation, cvFile } = formValues;
-          const { name, phoneNumber, cvFile } = formValues;
-  
-          console.log(118, name)
-          // Cập nhật thông tin profile
-          await putApiWithToken(`/candidate/update/${userData._id}`, {
-            name,
-            phoneNumber,
-            // address,
-            // experience,
-            // skill,
-            // education,
-            // moreInformation,
-          });
-  
-          // Nếu có file CV được chọn, thì upload file CV
-          if (cvFile) {
-            const formData = new FormData();
-            formData.append('resume', cvFile);
-            await putApiWithToken(`/candidate/upload-cv/${userData._id}`, formData);
-          }
-  
-          Swal.fire({
-            icon: 'success',
-            text: 'Profile đã được cập nhật thành công!',
-          });
-        }
-      } else {
-        // Nếu profile đã hoàn tất, tiếp tục với logic ứng tuyển
-        await postApiWithToken(`/application/create`, { 
-          jobId: job._id,
-          candidateId: userId,
-        });
-        Swal.fire('Ứng tuyển thành công!', '', 'success');
-        setIsApplied(true);
-
-        console.log('Profile is complete');
-      }
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-      Swal.fire({
-        icon: 'error',
-        text: 'Đã xảy ra lỗi khi cập nhật profile. Vui lòng thử lại sau.',
-      });
-    }
+  const handleProfileUpdate = async () => {
+    //check cv
   };
 
   const handleCvOption = async () => {
@@ -265,6 +151,53 @@ const JobDetail = () => {
     }
   };
 
+  const handleSaveJob = async () => {
+    const userData = getUserStorage()?.user;
+  
+    if (!userData) {
+      handleLoginRedirect();
+      return;
+    }
+  
+    let savedJobs = [];
+  
+    try {
+      console.log("User data id:", userData._id);
+  
+      // Lấy danh sách công việc đã lưu
+      const savedJobsResponse = await getApiWithToken(`/save-job/gets/${userData._id}`);
+      savedJobs = savedJobsResponse?.data?.savedJobs || [];
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách công việc đã lưu:", error);
+      // Xử lý lỗi: Gán savedJobs thành mảng rỗng nếu không thể lấy được dữ liệu
+      savedJobs = [];
+    }
+  
+    try {
+      // Kiểm tra xem công việc hiện tại đã được lưu chưa
+      const savedJob = savedJobs.find(savedJob => savedJob.job === job._id);
+      console.log("Saved jobs:", savedJobs);
+      console.log("Saved job:", savedJob);//chưa lưu thì undifined
+  
+      if (savedJob) {
+        // Nếu công việc đã được lưu, thực hiện bỏ lưu
+        await deleteApiWithToken(`/save-job/delete/${savedJob._id}`);
+        setIsSaved(false);
+        Swal.fire('Đã bỏ lưu tin!', '', 'success');
+      } else {
+        // Nếu công việc chưa được lưu, thực hiện lưu công việc
+        await postApiWithToken(`/save-job/create`, { 
+          candidateId: userData._id,
+          jobId: job._id
+        });
+        setIsSaved(true);
+        Swal.fire('Lưu tin thành công!', '', 'success');
+      }
+    } catch (error) {
+      Swal.fire('Lỗi', 'Không thể lưu tin hoặc bỏ lưu tin', 'error');
+    }
+  };
+  
   if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
 
@@ -289,9 +222,11 @@ const JobDetail = () => {
               >
                 <strong>Ứng tuyển ngay</strong>
               </button>
-              <button className={clsx(styles.btnSave)}>
-                <i className="fa-regular fa-heart"></i>
-                <p><strong>Lưu tin</strong></p>
+              <button 
+                className={clsx(styles.btnSave)}
+                onClick={handleSaveJob}>
+                <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                <p><strong>{isSaved ? 'Bỏ lưu' : 'Lưu tin'}</strong></p>
               </button>
             </div>
           )}
@@ -305,8 +240,7 @@ const JobDetail = () => {
         <p><strong>Type:</strong> {job.type}</p>
         <p><strong>Position:</strong> {job.position}</p>
         <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
-        {/* chưa lấy được category */}
-        <p><strong>Category: </strong>{job.category}</p>
+        <p><strong>Category: </strong>{categoryName}</p>
         <div>
           <strong>Requirements:</strong>
           <ul>
@@ -317,8 +251,6 @@ const JobDetail = () => {
         </div>
         <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
       </div>
-      <span>Other Jobs</span>
-      <ListJobInfo />
       <Footer />
     </>
   );

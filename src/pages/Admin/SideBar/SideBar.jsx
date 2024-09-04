@@ -5,6 +5,12 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
   return (
     <div className={styles.sidebar}>
       <div
+        className={`${styles.tab} ${selectedTab === 'overview' ? styles.active : ''}`}
+        onClick={() => setSelectedTab('overview')}
+      >
+        Tổng quan
+      </div>
+      <div
         className={`${styles.tab} ${selectedTab === 'job' ? styles.active : ''}`}
         onClick={() => setSelectedTab('job')}
       >
@@ -21,6 +27,12 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
         onClick={() => setSelectedTab('candidate')}
       >
         Quản lí ứng viên
+      </div>
+      <div
+        className={`${styles.tab} ${selectedTab === 'category' ? styles.active : ''}`}
+        onClick={() => setSelectedTab('category')}
+      >
+        Danh mục công việc
       </div>
     </div>
   );

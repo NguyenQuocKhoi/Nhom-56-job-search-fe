@@ -5,7 +5,7 @@ import styles from './detailCompany.module.scss';
 import clsx from 'clsx';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import ListCompanyInfo from '../../components/ListCompanyInfo/ListCompanyInfo';
+// import ListCompanyInfo from '../../components/ListCompanyInfo/ListCompanyInfo';
 
 const DetailCompany = () => {
   const { id } = useParams();
@@ -46,8 +46,9 @@ const DetailCompany = () => {
         <p><strong>Expires:</strong> {new Date(company.expiredAt).toLocaleDateString()}</p>
         <p><strong>Email:</strong> {company.email}</p>
       </div>
-      <span>Other Companies</span>
-      <ListCompanyInfo/>
+      <span>Tin tuyển dụng của công ty:</span>
+      {/* <span>Other Companies</span>
+      <ListCompanyInfo/> */}
       <Footer/>
     </>
   );

@@ -1,0 +1,42 @@
+.jobManagement {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      margin-bottom: 20px;
+    }
+  
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+  
+      button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #f4f4f4;
+        cursor: pointer;
+        flex: 1;
+        text-align: center;
+  
+        &.active {
+          background-color: #3498db;
+          color: white;
+        }
+  
+        &:not(:last-child) {
+          border-right: 1px solid #ddd;
+        }
+  
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+  
+    .tabContent {
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+    }
+  }
+  

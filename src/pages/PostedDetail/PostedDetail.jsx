@@ -11,47 +11,42 @@ const PostedDetail = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
-  const [candidates, setCandidates] = useState([]);
+  // const [candidates, setCandidates] = useState([]);
+  const [apply, setApply] = useState([])
   const navigate = useNavigate();
+
+  const [categoryName, setCategoryName] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const fetchJobAndCandidates = async () => {
       try {
-        const result = await getAPiNoneToken(`/job/${jobId}`);
-        setJob(result.data.job);
+        const resultJobs = await getAPiNoneToken(`/job/${jobId}`);
+        setJob(resultJobs.data.job);
+        console.log(resultJobs);
+        
+        //
+        const categoryData = await getApiWithToken(`/category/${resultJobs.data.job.category}`);
+        const categoryName = categoryData.data.category.name;
+        setCategoryName(categoryName); //
+  
+        const resultApplies = await getApiWithToken(`/application/get-applications-by-job/${jobId}`);
+        const applicationsWithCandidates = await Promise.all(resultApplies.data.applications.map(async (apply) => {
+          const candidateResult = await getApiWithToken(`/candidate/${apply.candidate}`);
+          apply.candidateInfo = candidateResult.data.candidate; // Lưu thông tin ứng viên vào đối tượng apply
+          
+          
 
-        const candidatesData = await Promise.all(
-          result.data.job.applications.map(async (applicationId) => {
-            try {
-              const applicationRes = await getApiWithToken(`/application/${applicationId}`);
-              if (!applicationRes.data.application) {
-                return null;
-              }
-
-              const candidateRes = await getApiWithToken(`/candidate/${applicationRes.data.application.candidate}`);
-              if (!candidateRes.data.candidate) {
-                return null;
-              }
-
-              return {
-                ...candidateRes.data.candidate,
-                applicationId // Add applicationId here
-              };
-            } catch (err) {
-              console.error(`Failed to fetch candidate for application ${applicationId}:`, err);
-              return null;
-            }
-          })
-        );
-
-        setCandidates(candidatesData.filter(candidate => candidate !== null));
+          return apply;
+        }));
+  
+        setApply(applicationsWithCandidates);
+        console.log(applicationsWithCandidates);
+  
       } catch (err) {
-        setError('Failed to fetch job details');
+        setError('Failed');
       }
     };
-
     fetchJobAndCandidates();
   }, [jobId]);
 
@@ -125,6 +120,7 @@ const PostedDetail = () => {
           <p><strong>Type:</strong> {job.type}</p>
           <p><strong>Position:</strong> {job.position}</p>
           <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
+          <p><strong>Category:</strong> {categoryName}</p>
           <div>
             <strong>Requirements:</strong>
             <ul>
@@ -138,24 +134,33 @@ const PostedDetail = () => {
         </div>
 
         <div>
-          <strong>Danh sách ứng viên:</strong>
-          {candidates.length > 0 ? (
-            <ul>
-              {candidates.map((candidate, index) => (
-                <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}>
-                  <div>
-                    <p><strong>Name:</strong> {candidate.name}</p>
-                    <p><strong>Email:</strong> {candidate.email}</p>
-                    <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
-                    <p><strong>Address:</strong> {candidate.address}</p>
-                    <p>Status: {candidate.status}</p>
-                  </div>
-                </Link>
-              ))}
-            </ul>
-          ) : (
-            <p>No candidates found for this job.</p>
-          )}
+{/*  */}
+        <div>
+  <strong>Danh sách ứng viên:</strong>
+  {apply.length > 0 ? (
+    <ul>
+      {apply.map((apply, index) => (
+        <Link key={index} to={`/detailCandidate/${apply.candidate}?applicationId=${apply._id}`}>
+          {/* <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}></Link> */}
+        {/* <li> */}
+          <div>
+            {/* <a href={apply.resume} target='_blank' rel="noopener noreferrer">CV</a> */}
+            <p>{apply.candidateInfo.name}</p> {/* Hiển thị tên ứng viên */}
+            <p>{apply.candidateInfo.email}</p> {/* Hiển thị email của ứng viên */}
+            <p>{apply.status}</p>
+          </div>
+          <hr />
+        {/* </li> */}
+        
+        </Link>
+      ))}
+    </ul>
+  ) : (
+    <p>No candidates found for this job.</p>
+  )}
+</div>
+          {/*  */}
+
         </div>
       </div>
       <Footer />

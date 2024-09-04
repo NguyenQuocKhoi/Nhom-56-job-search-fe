@@ -43,9 +43,15 @@ const Login = () => {
         } else {
           setUserStorage(result.data);
           
-          // Check if there is a redirect URL from the state
-          const redirectTo = location.state?.from || "/";
-          navigate(redirectTo);
+          const userRole = result.data.user.role;
+          // console.log(1);
+          // console.log(userRole);
+          if (userRole === 'admin') {
+            navigate('/admin');
+          } else {
+            const redirectTo = location.state?.from || "/";
+            navigate(redirectTo);
+          }
         }
       } catch (error) {
         console.log("123", error);
@@ -72,7 +78,6 @@ const Login = () => {
 
   const handleSubmitCaptcha = async () => {
     if (captchaInput.toUpperCase() !== captcha) {
-      // Generate a new captcha if the input is incorrect
       setCaptcha(generateCaptcha());
       Swal.fire({
         icon: "error",

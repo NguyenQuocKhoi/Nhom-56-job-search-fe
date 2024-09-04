@@ -1,0 +1,158 @@
+.jobManagement {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    h2 {
+      margin-bottom: 20px;
+    }
+  
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+  
+      button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #f4f4f4;
+        cursor: pointer;
+        flex: 1;
+        text-align: center;
+  
+        &.active {
+          background-color: #3498db;
+          color: white;
+        }
+  
+        &:not(:last-child) {
+          border-right: 1px solid #ddd;
+        }
+  
+        &:hover {
+          background-color: #ddd;
+        }
+      }
+    }
+  
+    .tabContent {
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+    }
+  }
+  
+  //
+  .joblist {
+    padding: 1rem;
+  
+    /* Căn giữa phần chứa nội dung */
+    .jobContainer {
+      max-width: 1200px; /* Đặt chiều rộng tối đa để nội dung không quá rộng */
+      // margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
+      // display: grid;
+      // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      // gap: 1rem;
+    }
+  
+    .jobcard {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      width: 100%; 
+      box-sizing: border-box; 
+      max-width: 1000px; 
+      min-height: 110px; 
+      margin-bottom: 10px;
+  
+      &:hover {
+        // background: linear-gradient(to right, #87CEEB, #1E90FF);
+        background: #87CEEB;
+      }
+  
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #333;
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+      }
+  
+      p {
+        margin: 0;
+        font-size: 15px;
+        color: #555;
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        white-space: nowrap; 
+      }
+  
+      .title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+  
+      .avatar{
+        width: 70px;
+        height: 70px;
+        border-radius: 5px;
+      }
+  
+      .content{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .text{
+        color: #000;
+        margin-left: 10px;
+      }
+  
+      .describe{
+        line-height: 1.2;
+        width: 270px;
+      }
+    }
+  
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+  
+      button {
+        background-color: #1E90FF;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #4682B4;
+        }
+  
+        &:disabled {
+          background-color: #d3d3d3;
+          cursor: not-allowed;
+        }
+      }
+  
+      span {
+        align-self: center;
+        font-size: 1rem;
+      }
+    }
+  }
+  

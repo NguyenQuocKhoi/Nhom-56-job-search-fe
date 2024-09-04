@@ -17,8 +17,8 @@ const ListJobInfo = () => {
   const fetchJobs = useCallback(async (page = 1) => {
     try {
       setLoading(true);
-      const result = await getAPiNoneToken(`/job/get-all?page=${page}&limit=${pagination.limit}`);
-      setJobs(result.data.jobs.filter(job => job.status === true));
+      const result = await getAPiNoneToken(`/job/get-all-job?page=${page}&limit=${pagination.limit}`);
+      setJobs(result.data.jobs.filter(job => job.status === true));////
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
