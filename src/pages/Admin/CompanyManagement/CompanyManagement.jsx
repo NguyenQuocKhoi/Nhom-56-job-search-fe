@@ -3,9 +3,12 @@ import styles from '../CompanyManagement/companyManagement.module.scss';
 import { getAPiNoneToken } from '../../../api';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import { Button, Form } from 'react-bootstrap';
 
 const CompanyManagement = () => {
-  const [activeTab, setActiveTab] = useState('accepted');
+  const [activeTab, setActiveTab] = useState('all');
+
+  const [companiesAll, setCompaniesAll] = useState([]);
   const [companiesAccepted, setCompaniesAccepted] = useState([]);
   const [companiesRejected, setCompaniesRejected] = useState([]);
   const [companiesPending, setCompaniesPending] = useState([]);
@@ -23,7 +26,7 @@ const CompanyManagement = () => {
 
       console.log(result.data.companies);
 
-
+      setCompaniesAll(result.data.companies);
       setCompaniesAccepted(result.data.companies.filter(company => company.status === true));
       setCompaniesRejected(result.data.companies.filter(company => company.status === false));
       setCompaniesPending(result.data.companies.filter(company => company.status === undefined));
@@ -57,9 +60,28 @@ const CompanyManagement = () => {
 
   return (
     <div className={styles.jobManagement}>
-      <h2>Quản lí việc làm</h2>
+      <h2>Quản lí công ty</h2> {/* searchBar */}
+        <div className={clsx(styles.searchBar)}>
+      <Form className={clsx(styles.form)}>
+        <Form.Control
+          type="text"
+          placeholder="Enter company"
+          className={clsx(styles.jobInput)}
+        />
+        <Button variant="primary" className={clsx(styles.searchButton)}>
+          Search
+        </Button>
+      </Form>
+    </div>
+            {/* searchBar */}
       
       <div className={styles.tabs}>
+        <button 
+          className={activeTab === 'all' ? styles.active : ''} 
+          onClick={() => handleTabClick('all')}
+        >
+          Tất cả
+        </button>
         <button 
           className={activeTab === 'accepted' ? styles.active : ''} 
           onClick={() => handleTabClick('accepted')}
@@ -81,6 +103,36 @@ const CompanyManagement = () => {
       </div>
 
       <div className={styles.tabContent}>
+        {activeTab === 'all' && (
+          <div>
+            <p>Danh sách tất cả công ty:</p>
+            <div className={clsx(styles.companylist)}>
+              <div className={clsx(styles.companyContainer)}>
+                {companiesAll.length > 0 ? (
+                  companiesAll.map((company) => (
+                    <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                      <h3>Company name: {company.name}</h3>
+                      <p>Status: {company.status}</p>
+                      {/* <button>Vô hiệu hóa</button> */}
+                      {/* <button>Xóa tài khoản</button> */}
+                    </Link>
+                  ))
+                ) : (
+                  <div>No companies available</div>
+                )}
+              </div>
+              <div className={clsx(styles.pagination)}>
+                {pagination.currentPage > 1 && (
+                  <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
+                )}
+                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                {pagination.currentPage < pagination.totalPages && (
+                  <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         {activeTab === 'accepted' && (
           <div>
             <p>Danh sách công ty đã chấp nhận: {companiesAccepted.length}</p>
@@ -92,6 +144,7 @@ const CompanyManagement = () => {
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {company.status}</p>
                       <button>Vô hiệu hóa</button>
+                      <button>Xóa tài khoản</button>
                     </Link>
                   ))
                 ) : (
@@ -120,6 +173,8 @@ const CompanyManagement = () => {
                     <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {company.status}</p>
+                      {/* <button>Vô hiệu hóa</button> //đã bị từ chối thì không hoạt động được đồng nghĩa bị vô hiệu hóa */}
+                      <button>Xóa tài khoản</button>
                     </Link>
                   ))
                 ) : (
@@ -148,6 +203,8 @@ const CompanyManagement = () => {
                     <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {company.status}</p>
+                      <button>Accept</button>
+                      <button>Reject</button>
                     </Link>
                   ))
                 ) : (

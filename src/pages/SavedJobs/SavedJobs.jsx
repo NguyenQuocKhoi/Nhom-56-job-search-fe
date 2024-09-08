@@ -55,6 +55,7 @@ const SavedJobs = () => {
                   <div className={clsx(styles.jobItem)}>
                     <p>Job ID: {job.job}</p>
                     <p>Saved at: {new Date(job.createdAt).toLocaleDateString()}</p>
+                    <button>Bỏ lưu</button>
                     <hr />
                   </div>
                 </Link>

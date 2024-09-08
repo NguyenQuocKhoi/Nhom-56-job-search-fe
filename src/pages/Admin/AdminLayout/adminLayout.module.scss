@@ -13,4 +13,11 @@
     flex: 1;
     padding: 20px;
     background-color: #f8f9fa;
+    //giữ cho sidebar đứng yên
+    margin-left: 12.5rem;
   }
+
+//giữ cho header nằm yên trên top khi cuộn trang
+.margin{
+  margin-bottom: 5rem;
+}

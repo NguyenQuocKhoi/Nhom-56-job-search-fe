@@ -3,6 +3,7 @@ import styles from '../JobManagement/jobManagement.module.scss';
 import { getAPiNoneToken } from '../../../api';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import { Button, Form } from 'react-bootstrap';
 
 const JobManagement = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -74,6 +75,21 @@ const JobManagement = () => {
   return (
     <div className={styles.jobManagement}>
       <h2>Quản lí việc làm</h2>
+
+        {/* searchBar */}
+        <div className={clsx(styles.searchBar)}>
+      <Form className={clsx(styles.form)}>
+        <Form.Control
+          type="text"
+          placeholder="Enter job title"
+          className={clsx(styles.jobInput)}
+        />
+        <Button variant="primary" className={clsx(styles.searchButton)}>
+          Search
+        </Button>
+      </Form>
+    </div>
+            {/* searchBar */}
       
       <div className={styles.tabs}>
         <button 
@@ -119,6 +135,7 @@ const JobManagement = () => {
                           <div>
                             <p>Company: {job.company.name}</p>
                           </div>
+                          <button>Xóa</button>
                       </div>
                     </Link>
                   ))
@@ -155,6 +172,7 @@ const JobManagement = () => {
                           <div>
                             <p>Company: {job.company.name}</p>
                           </div>
+                          <button>Xóa</button>
                       </div>
                     </Link>
                   ))
@@ -190,6 +208,7 @@ const JobManagement = () => {
                           <div className={clsx(styles.describe)}>
                             <p>Company: {job.company.name}</p>
                         </div>
+                        <button>Xóa</button>
                       </div>
                     </Link>
                   ))
@@ -240,6 +259,7 @@ const JobManagement = () => {
                                 >
                                   Reject
                                 </button>
+                                <button>Xóa</button>
                               </div>
                         </div>
                       </div>

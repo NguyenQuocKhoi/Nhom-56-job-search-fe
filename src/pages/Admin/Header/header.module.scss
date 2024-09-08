@@ -5,6 +5,12 @@
   padding: 1rem 2rem;
   background-color: #007bff;
   color: #fff;
+  //giữ cho header nằm yên trên top khi cuộn trang
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .logo {

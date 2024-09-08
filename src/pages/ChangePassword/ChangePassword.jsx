@@ -33,8 +33,8 @@ const ChangePassword = () => {
     if (!passwordValidation.success) {
       Swal.fire({
         icon: 'error',
-        title: 'Invalid Password Format',
-        text: passwordValidation.message,
+        title: 'Invalid Old Password',
+        // text: passwordValidation.message,
       });
       return;
     }
@@ -52,7 +52,7 @@ const ChangePassword = () => {
         title: 'Password Changed',
         text: 'Your password has been successfully changed',
       }).then(() => {
-        navigate('/');
+        navigate('/login');
       });
   
     } catch (error) {

@@ -30,7 +30,10 @@ const AdminLayout = () => {
 
   return (
     <div className={styles.adminLayout}>
+      <div className={styles.margin}>
+
       <Header />
+      </div>
       <div className={styles.mainContent}>
         <Sidebar setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
         <div className={styles.content}>

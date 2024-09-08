@@ -26,17 +26,15 @@ const PostedDetail = () => {
         console.log(resultJobs);
         
         //
-        const categoryData = await getApiWithToken(`/category/${resultJobs.data.job.category}`);
+        const categoryData = await getApiWithToken(`/category/${resultJobs.data.job.category}`);//đã đăng nhập with hay none đều được
         const categoryName = categoryData.data.category.name;
         setCategoryName(categoryName); //
   
         const resultApplies = await getApiWithToken(`/application/get-applications-by-job/${jobId}`);
         const applicationsWithCandidates = await Promise.all(resultApplies.data.applications.map(async (apply) => {
           const candidateResult = await getApiWithToken(`/candidate/${apply.candidate}`);
-          apply.candidateInfo = candidateResult.data.candidate; // Lưu thông tin ứng viên vào đối tượng apply
+          apply.candidateInfo = candidateResult.data.candidate;
           
-          
-
           return apply;
         }));
   

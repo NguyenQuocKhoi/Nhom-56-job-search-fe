@@ -204,12 +204,17 @@ const CreatePostJob = () => {
           </div>
         </form>
         <div className={clsx(styles.actions)}>
-          {/* nhấn tạo xong xóa rỗng để cho nhập tiếp */}
           <button
             className={clsx(styles.createButton)}
             onClick={handleCreatePostJob}
           >
             Tạo bài đăng
+          </button>
+          <button
+            className={clsx(styles.cancelButton)}
+            onClick={handleCreatePostJob}
+          >
+            Hủy
           </button>
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
