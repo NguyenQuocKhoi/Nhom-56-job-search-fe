@@ -66,7 +66,7 @@ const AppliedJobs = () => {
                 <Link key={application._id} to={`/detailJob/${application.job}`}>
                   <p>Công việc: {job ? job.title : "Loading..."}</p>
                   <p>Công ty: {job ? job.company.name : "Loading..."}</p>
-                  <p>Địa chỉ: {job ? job.address : "Loading..."}</p>
+                  <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
                   <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString()}</p>
                   <p>Trạng thái: {application.status}</p>
                   <hr />

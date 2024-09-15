@@ -5,8 +5,9 @@ import CompanyManagement from '../CompanyManagement/CompanyManagement';
 import CandidateManagement from '../CandidateManagement/CandidateManagement';
 import CategoryManagement from '../CategoryManagement/CategoryManagement.jsx';
 import Sidebar from '../SideBar/SideBar';
-import Header from '../Header/Header';
+import Header from '../HeaderAdmin/HeaderAdmin';
 import Overview from '../Overview/Overview';
+import SkillManagement from '../SkillManagement/SkillManagement.jsx';
 
 const AdminLayout = () => {
   const [selectedTab, setSelectedTab] = useState('overview');
@@ -23,6 +24,8 @@ const AdminLayout = () => {
         return <CandidateManagement />;
       case 'category':
         return <CategoryManagement />;
+      case 'skill':
+        return <SkillManagement />;
       default:
         return <Overview />;
     }

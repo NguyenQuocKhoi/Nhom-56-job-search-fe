@@ -20,6 +20,8 @@ import DetailCandidate from './pages/DetailCandidate/DetailCandidate';
 import EditPost from './pages/EditPost/EditPost';
 import AdminLayout from './pages/Admin/AdminLayout/AdminLayout';
 import DetailCandidateSearch from './pages/DetailCandidateSearch/DetailCandidateSearch.jsx';
+import DetailJobAdmin from './pages/Admin/DetailJobAdmin/DetailJobAdmin.jsx';
+import ViewEdit from './pages/ViewEdit/ViewEdit.jsx';
 
 function App() {
   return (
@@ -43,7 +45,9 @@ function App() {
             <Route path="/candidateApply/:candidateId" element={<CandidateApply />}/>
             <Route path="/detailCandidate/:candidateId" element={<DetailCandidate />}/>
             <Route path="/detail-candidate/:candidateId" element={<DetailCandidateSearch />}/>
+            <Route path="/detailJobAdmin/:jobId" element={<DetailJobAdmin />}/>
             <Route path="/editPost/:jobId" element={<EditPost />}/>
+            <Route path="/viewEdit/:jobId" element={<ViewEdit />}/>
             <Route path="/admin" element={<AdminLayout />}/>
           </Routes>
         </div>

@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './editPost.module.scss';
-import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
+import { getAPiNoneToken, putApiWithToken } from '../../api';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const EditPost = () => {
@@ -37,8 +37,8 @@ const EditPost = () => {
 
         console.log(job.type);
 
-        const categoryData = await getApiWithToken(`/category/${job.category}`);
-        const categoryDa = await getApiWithToken(`/category/get-all`);//lấy tất cả
+        const categoryData = await getAPiNoneToken(`/category/${job.category}`);//sửa lại none token
+        const categoryDa = await getAPiNoneToken(`/category/get-all`);//lấy tất cả
         setCategoryDa(categoryDa.data.categories);
         console.log(categoryDa.data.categories);
         
@@ -75,6 +75,7 @@ const EditPost = () => {
     });
   };
 
+  //edit job xong sửa status lại thành false chờ phê duyệt lại
   const handleEditPostJob = async () => {
     if (isEditing) {
       try {
@@ -201,6 +202,7 @@ const EditPost = () => {
               <option value="intern">Intern</option>
             </select>
           </div>
+          {/*  */}
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="category">Danh mục</label>
             <select

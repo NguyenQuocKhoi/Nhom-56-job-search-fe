@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './createPostJob.module.scss';
-import { postApiWithToken } from '../../api';
+import { getAPiNoneToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const CreatePostJob = () => {
+  const navigate = useNavigate();
+
   const [jobData, setJobData] = useState({
     title: '',
     description: '',
@@ -18,9 +22,24 @@ const CreatePostJob = () => {
     address: '',
     type: 'fulltime', // default to 'fulltime'
     expiredAt: '',
+    category: '', // add category field
   });
 
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [categoryDa, setCategoryDa] = useState([]);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const categoryResponse = await getAPiNoneToken(`/category/get-all`);
+        setCategoryDa(categoryResponse.data.categories);
+      } catch (error) {
+        setError('Failed to fetch categories');
+      }
+    };
+    fetchCategory();
+  }, []);
 
   const handleChange = (e) => {
     setJobData({
@@ -31,7 +50,7 @@ const CreatePostJob = () => {
 
   const handleCreatePostJob = async () => {
     const userData = getUserStorage()?.user;
-
+  
     // Check if all required fields are filled
     const {
       title,
@@ -39,48 +58,61 @@ const CreatePostJob = () => {
       requirements,
       salary,
       numberOfCruiment,
-      category,
       experienceLevel,
       position,
       address,
       type,
       expiredAt,
+      category,
     } = jobData;
-
+  
     if (
       !title ||
       !description ||
       !requirements ||
       !salary ||
-      !numberOfCruiment||
-      !category||
+      !numberOfCruiment ||
       !experienceLevel ||
       !position ||
       !address ||
       !type ||
-      !expiredAt
+      !expiredAt ||
+      !category
     ) {
       setError('Vui lòng nhập đủ thông tin');
+      setSuccessMessage(''); // Reset success message
       return;
     }
-
+  
+    // Convert requirements string into an array by splitting it by commas
+    const requirementsArray = requirements.split(/,;/).map(req => req.trim());
+  
     try {
       const result = await postApiWithToken('/job/create', {
         ...jobData,
-        companyId: userData._id, // Lấy ID của tài khoản hiện tại
-        status: 'pending',
+        requirements: requirementsArray, // Send the array instead of the string
+        companyId: userData._id, // Use the current user's ID
       });
-
+  
       if (result.data.success) {
         setError('');
+        setSuccessMessage('Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.');
+        Swal.fire({
+          icon: 'success',
+          title: 'Tạo bài đăng thành công',
+          text: `Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.`,
+        });
       } else {
-        setError(result.data.message || 'Có lỗi xảy ra');
+        setError(result.data.message);
+        setSuccessMessage('');
       }
     } catch (err) {
       console.error(err);
       setError('Có lỗi xảy ra khi tạo bài đăng');
+      setSuccessMessage('');
     }
   };
+  
 
   return (
     <div className={clsx(styles.createPostJobPage)}>
@@ -115,6 +147,7 @@ const CreatePostJob = () => {
               value={jobData.requirements}
               onChange={handleChange}
             ></textarea>
+            {/* <p>Vui lòng cách bởi dấu phẩy "," để ngăn cách thành từng yêu cầu riêng</p> */}
           </div>
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="salary">Mức lương</label>
@@ -179,17 +212,20 @@ const CreatePostJob = () => {
               <option value="intern">Intern</option>
             </select>
           </div>
-          {/* chưa lấy được category từ dbs ra, để tạm vầy */}
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="category">Danh mục</label>
             <select
               id="category"
               name="category"
-              value={jobData.category}//
+              value={jobData.category}
               onChange={handleChange}
             >
-              <option value="frontend">Front-end</option>
-              <option value="backend">Back-end</option>
+              <option value="">Chọn danh mục</option>
+              {categoryDa.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className={clsx(styles.formGroup)}>
@@ -212,12 +248,13 @@ const CreatePostJob = () => {
           </button>
           <button
             className={clsx(styles.cancelButton)}
-            onClick={handleCreatePostJob}
+            onClick={() => navigate(-1)}
           >
             Hủy
           </button>
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
+        {successMessage && <div className={clsx(styles.successMessage)}>{successMessage}</div>} {/* Success message */}
       </div>
       <Footer />
     </div>

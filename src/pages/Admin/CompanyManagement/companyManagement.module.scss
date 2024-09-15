@@ -93,3 +93,57 @@
     background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
   }
   
+  //search bar
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    height: 3.5rem; /* Set the height to match the form's height */
+  }
+  
+  .form {
+    display: flex;
+    width: 75%;
+    max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+    border-radius: 50px;
+    height: 3.5rem; /* Set the same height as .searchBar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
+  }
+  
+  .jobInput,
+  .locationInput {
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    outline: none; /* Remove outline when the field is focused */
+    height: 100%; /* Ensure input fields take full height of the parent */
+  }
+  
+  .jobInput {
+    flex: 2;
+    margin-right: 0.5rem; /* Add space between input fields */
+  }
+  
+  .locationInput {
+    flex: 1;
+    margin-right: 0.5rem; /* Add space between input fields */
+  }
+  
+  .searchButton {
+    border-radius: 50px;
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    height: 100%; /* Make the button take full height of the parent */
+  }
+  
+  .searchButton:hover {
+    background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+  }
+  
+  

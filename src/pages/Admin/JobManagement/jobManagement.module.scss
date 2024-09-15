@@ -101,11 +101,7 @@
         align-items: center;
       }
   
-      .avatar{
-        width: 70px;
-        height: 70px;
-        border-radius: 5px;
-      }
+ 
   
       .content{
         display: flex;
@@ -121,6 +117,12 @@
         line-height: 1.2;
         width: 270px;
       }
+    }
+
+    .avatar{
+      width: 70px;
+      height: 70px;
+      border-radius: 5px;
     }
   
     .pagination {

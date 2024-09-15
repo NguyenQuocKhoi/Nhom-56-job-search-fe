@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 
 const InfoCompany = () => {
   const [company, setCompany] = useState({
+    avatar: '',
     name: '',
     email: '',
     phoneNumber: '',
@@ -42,37 +43,113 @@ const InfoCompany = () => {
     fetchCompany();
   }, []);
 
-  console.log(company)
+  // console.log(company);
+  // const handleUploadAvatar = async () => {
+  //   try {
+  //     if (!avatarFile) return;
 
-  const handleUploadAvatar = async () => {
-    try {
-      if (!avatarFile) return;
+  //     const formData = new FormData();
+  //     formData.append('avatar', avatarFile);
 
-      const formData = new FormData();
-      formData.append('avatar', avatarFile);
+  //     const companyId = getUserStorage().user._id;
+  //     const response = await putApiWithToken(`/company/upload-avatar/${companyId}`, formData);
 
-      const companyId = getUserStorage().user._id;
-      const response = await putApiWithToken(`/company/upload-avatar/${companyId}`, formData);
+  //     if (response.data.success) {
+  //       setCompany(response.data.company);
+  //       setAvatarPreview(response.data.company.avatarUrl); // Cập nhật ảnh đại diện
+  //     } else {
+  //       setError('Failed to upload avatar');
+  //     }
+  //   } catch (err) {
+  //     setError('An error occurred during avatar upload');
+  //   }
+  // };
 
-      if (response.data.success) {
-        setCompany(response.data.company);
-        setAvatarPreview(response.data.company.avatarUrl); // Cập nhật ảnh đại diện
-      } else {
-        setError('Failed to upload avatar');
-      }
-    } catch (err) {
-      setError('An error occurred during avatar upload');
+  // const handleUpdateInfo = async () => {
+  //   try {
+  //     const companyId = getUserStorage().user._id;
+      
+  //     const response = await putApiWithToken(`/company/update/${companyId}`, company);
+  
+  //     if (response.data.success) {
+  //       setCompany(response.data.company);
+  //       setIsEditing(false);
+  //       Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
+  //     } else {
+  //       setError('Failed to update company information');
+  //       Swal.fire({ icon: 'error', text: 'Failed to update company information' });
+  //     }
+  //   } catch (err) {
+  //     setError('An error occurred during information update');
+  //     Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
+  //   }
+  // };
+//
+
+  // const handleUpdateInfo = async () => {
+  //   try {
+  //     const companyId = getUserStorage().user._id;
+
+  //     // Handle avatar upload if file is selected
+  //     // if (avatarFile) {
+  //     //   const formData = new FormData();
+  //     //   formData.append('avatar', avatarFile);
+
+  //     //   const avatarResponse = await putApiWithToken(`/company/upload-avatar/${companyId}`, formData);
+  //     //   if (avatarResponse.data.success) {
+  //     //     setAvatarPreview(avatarResponse.data.company.avatarUrl);
+  //     //   } else {
+  //     //     setError('Failed to upload avatar');
+  //     //   }
+  //     // }
+
+
+  //     const companyResponse = await putApiWithToken(`/company/update/${companyId}`, company);
+  //     if (companyResponse.data.success) {
+  //       setCompany(companyResponse.data.company);
+  //       setIsEditing(false);
+  //       Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
+  //     } else {
+  //       setError('Failed to update company information');
+  //       Swal.fire({ icon: 'error', text: 'Failed to update company information' });
+  //     }
+  //   } catch (err) {
+  //     setError('An error occurred during information update');
+  //     Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
+  //   }
+  // };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatarFile(file);
     }
   };
 
   const handleUpdateInfo = async () => {
     try {
       const companyId = getUserStorage().user._id;
+      const formData = new FormData();
       
-      const response = await putApiWithToken(`/company/update/${companyId}`, company);
-  
-      if (response.data.success) {
-        setCompany(response.data.company);
+      // Append form data for the company fields
+      formData.append('name', company.name);
+      formData.append('phoneNumber', company.phoneNumber);
+      formData.append('address', company.address);
+      formData.append('website', company.website);
+      
+      // Append avatar file if it exists
+      if (avatarFile) {
+        formData.append('avatar', avatarFile);
+      }
+
+      const companyResponse = await putApiWithToken(`/company/update/${companyId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (companyResponse.data.success) {
+        setCompany(companyResponse.data.company);
         setIsEditing(false);
         Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
       } else {
@@ -96,31 +173,20 @@ const InfoCompany = () => {
 
   return (
     <div className={clsx(styles.companyInfo)}>
-      {/* <h2>Thông tin công ty</h2>
+      <div className={clsx(styles.avatarSection)}>
+        <img src={company.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
+        {/* <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
 
-      <p><strong>Name:</strong> {company.name}</p>
-      <p><strong>Email:</strong> {company.email}</p>
-      <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
-      <p><strong>Address:</strong> {company.address}</p>
-      <p><strong>Website:</strong> {company.website}</p>
+        <input 
+          type="file" 
+          accept="image/*" 
+          // onChange={(e) => handleAvatarChange(e)} 
+          onChange={handleAvatarChange}
+          disabled={!isEditing}
+        />
+      </div>
 
-      <button className={clsx(styles.btnUpdate)}>Update Avatar</button>
-      <button className={clsx(styles.btnUpdate)}>Update</button> */}
-{/* ------ */}
-    <div className={clsx(styles.avatarSection)}>
-      <img src={company.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
-
-      <input 
-            type="file" 
-            accept="image/*" 
-            onChange={(e) => setAvatarFile(e.target.files[0])} 
-          />
-          <button className={clsx(styles.btnUpdate)} onClick={handleUploadAvatar}>
-            Upload Avatar
-          </button>
-    </div>
-
-    <div className={clsx(styles.infoSection)}>
+      <div className={clsx(styles.infoSection)}>
         <h2>Thông tin công ty</h2>
 
         <label>Name:</label>
@@ -167,21 +233,24 @@ const InfoCompany = () => {
           onChange={handleInputChange}
           disabled={!isEditing}
         />
+
         <div className={clsx(styles.btnContainer)}>
-          {isEditing ? (
-            <>
-              <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
-                Xác nhận cập nhật
-              </button>
-              <button className={clsx(styles.btnCancel)} onClick={() => setIsEditing(false)}>
-                Hủy
-              </button>
-            </>
-          ) : (
-            <button className={clsx(styles.btnEdit)} onClick={() => setIsEditing(true)}>
-              Cập nhật thông tin
-            </button>
-          )}
+          <button 
+            className={clsx(styles.btnUpdate)} 
+            onClick={() => {
+              if (isEditing) {
+                handleUpdateInfo();
+              }
+              setIsEditing(!isEditing);
+            }}
+          >
+            {isEditing ? 'Xác nhận cập nhật' : 'Cập nhật thông tin'}
+          </button>
+          <button
+            // className={clsx(styles.btnUpdate)}
+          >
+            Profile đang chờ duyệt
+          </button>
         </div>
       </div>
     </div>

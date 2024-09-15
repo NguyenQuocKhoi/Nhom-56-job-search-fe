@@ -51,24 +51,32 @@ const Header = () => {
   };
 
   const fetchNotifications = useCallback(async () => {
-    if (user && user._id) {  // Chỉ thực hiện nếu user và user._id tồn tại
+    if (user && user._id && role) {
       try {
-        const response = await getApiWithToken(`/notification/${user._id}`, {
-          headers: { 'auth-token': localStorage.getItem('auth-token') }
-        });
-        setNotifications(response.data.data);
-        setUnreadCount(response.data.data.filter(notification => !notification.status).length);
+        let response;
+        if (role === 'candidate') {
+          response = await getApiWithToken(`/notification/${user._id}`, {
+            headers: { 'auth-token': localStorage.getItem('auth-token') }
+          });
+        } else if (role === 'company') {
+          response = await getApiWithToken(`/notification/company/${user._id}`, {
+            headers: { 'auth-token': localStorage.getItem('auth-token') }
+          });
+        }
+
+        const data = response.data.data;
+        setNotifications(data);
+        setUnreadCount(data.filter(notification => !notification.status).length);
       } catch (error) {
         console.error('Error fetching notifications', error);
       }
     }
-  }, [user]);
+  }, [user, role]);
 
   useEffect(() => {
-    if (role === 'candidate') {
-      fetchNotifications(); // Chỉ gọi khi role là candidate
-    }
-  }, [role, fetchNotifications]);
+    fetchNotifications();
+  // }, [fetchNotifications]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -98,47 +106,57 @@ const Header = () => {
               <Link to="/savedJobs" className={clsx(styles.navLink)}>{t('header.savedJobs')}</Link>
               <Link to="/appliedJobs" className={clsx(styles.navLink)}>{t('header.appliedJobs')}</Link>
               <div className={clsx(styles.navLink)}>
+                
                 {/* notify */}
-                <div className={clsx(styles.navLink, styles.notificationContainer)}>
-                  <Dropdown>
-                    <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>
-                      <i className="fas fa-bell"></i>
-                      {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {notifications.length > 0 ? (
-                        notifications.map(notification => (
-                          <Dropdown.Item
-                            key={notification._id}
-                            onClick={() => handleNotificationClick(notification._id)}
-                            className={clsx({ [styles.unreadNotification]: !notification.status })}
-                          >
-                            {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message}
-                            {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
-                          </Dropdown.Item>
-                        ))
-                      ) : (
-                        <Dropdown.Item>{t('header.noNotifications')}</Dropdown.Item>
-                      )}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  {selectedNotification && (
-                    <Modal show={showModal} onHide={handleCloseModal}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Notification Detail</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        <p>{selectedNotification.message}</p>
-                        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseModal}>
-                          Close
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  )}
-                </div>
+<div className={clsx(styles.navLink, styles.notificationContainer)}>
+  <Dropdown>
+  <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>
+    <i className="fas fa-bell"></i>
+    {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
+  </Dropdown.Toggle>
+  <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
+    {notifications.length > 0 ? (
+      notifications.map(notification => (
+        <Dropdown.Item
+          key={notification._id}
+          onClick={() => handleNotificationClick(notification._id)}
+          className={clsx({ [styles.unreadNotification]: !notification.status })}
+        >
+          {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message}
+          {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+        </Dropdown.Item>
+      ))
+    ) : (
+      <Dropdown.Item>{t('header.noNotifications')}</Dropdown.Item>
+    )}
+  </Dropdown.Menu>
+</Dropdown>
+
+  {selectedNotification && (
+    <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Notification Detail</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>{selectedNotification.message}</p>
+        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        {role === 'candidate' && selectedNotification.job && (
+          <Link to={`/detailJob/${selectedNotification.job}`} className={clsx(styles.jobcard)}>
+            <Button variant="secondary">
+              Xem chi tiết công việc
+            </Button>
+          </Link>
+        )}
+      </Modal.Footer>
+    </Modal>
+  )}
+</div>
+
                 {/* notify */}
               </div>
               <Dropdown>
@@ -159,7 +177,54 @@ const Header = () => {
               <Link to="/createPostJob" className={clsx(styles.navLink)}>{t('header.postJob')}</Link>
               <Link to="/postedJobs" className={clsx(styles.navLink)}>{t('header.postedJobs')}</Link>
               <div className={clsx(styles.navLink)}>
-                <i className="fas fa-bell"></i>
+                <div className={clsx(styles.navLink, styles.notificationContainer)}>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>
+                      <i className="fas fa-bell"></i>
+                      {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
+                      {notifications.length > 0 ? (
+                        notifications.map(notification => (
+                          <Dropdown.Item
+                            key={notification._id}
+                            onClick={() => handleNotificationClick(notification._id)}
+                            className={clsx({ [styles.unreadNotification]: !notification.status })}
+                          >
+                            {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message}
+                            {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+                          </Dropdown.Item>
+                        ))
+                      ) : (
+                        <Dropdown.Item>{t('header.noNotifications')}</Dropdown.Item>
+                      )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+
+                  {selectedNotification && (
+                    <Modal show={showModal} onHide={handleCloseModal}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Notification Detail</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <p>{selectedNotification.message}</p>
+                        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                          Close
+                        </Button>
+                        {role === 'company' && selectedNotification.job && (
+                          <Link to={`/detailJob/${selectedNotification.job}`} className={clsx(styles.jobcard)}>
+                            <Button variant="secondary">
+                              Xem chi tiết công việc
+                            </Button>
+                          </Link>
+                        )}
+                      </Modal.Footer>
+                    </Modal>
+                  )}
+                </div>
               </div>
               <Dropdown>
                 <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>

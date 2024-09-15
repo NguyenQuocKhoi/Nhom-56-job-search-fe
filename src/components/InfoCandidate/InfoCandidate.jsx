@@ -26,6 +26,7 @@ const InfoCandidate = () => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [fileName, setFileName] = useState('');
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -35,7 +36,7 @@ const InfoCandidate = () => {
         
         if (response.data.success) {
           setCandidate(response.data.candidate);
-          setAvatarPreview(response.data.candidate.avatarUrl); // Hiển thị ảnh đại diện
+          setAvatarPreview(response.data.candidate.avatarUrl); // Display avatar
         } else {
           setError('Failed to fetch candidate data');
         }
@@ -46,93 +47,88 @@ const InfoCandidate = () => {
 
     fetchCandidate();
   }, []);
-
-  const handleUploadAvatar = async () => {
-    try {
-      if (!avatarFile) return;
-
-      const formData = new FormData();
-      formData.append('avatar', avatarFile);
-
-      const candidateId = getUserStorage().user._id;
-      const response = await putApiWithToken(`/candidate/upload-avatar/${candidateId}`, formData);
-
-      if (response.data.success) {
-        setCandidate(response.data.candidate);
-        setAvatarPreview(response.data.candidate.avatarUrl); // Cập nhật ảnh đại diện
-      } else {
-        setError('Failed to upload avatar');
-      }
-    } catch (err) {
-      setError('An error occurred during avatar upload');
-    }
-  };
-
-  const handleUploadCV = async () => {
-    try {
-      if (!cvFile) return;
-
-      const formData = new FormData();
-      formData.append('resume', cvFile);
-
-      const candidateId = getUserStorage().user._id;
-      const response = await putApiWithToken(`/candidate/upload-cv/${candidateId}`, formData);
-
-      if (response.data.success) {
-        setCandidate(response.data.candidate);
-      } else {
-        setError('Failed to upload CV');
-      }
-    } catch (err) {
-      setError('An error occurred during CV upload');
-    }
-  };
-
-  const handleUpdateInfo = async () => {
-    try {
-      const candidateId = getUserStorage().user._id;
-      
-      const response = await putApiWithToken(`/candidate/update/${candidateId}`, candidate);
   
-      if (response.data.success) {
-        setCandidate(response.data.candidate);
-        setIsEditing(false);
-        Swal.fire({ icon: 'success', text: 'Candidate information updated successfully!' });
-      } else {
+  const handlePublicAccount = () => {
+
+  }
+
+  const handleUpdateAll = async () => {
+    try {
+      const candidateId = getUserStorage().user._id;
+      let success = true;
+
+      // Update candidate info if changes were made
+      const responseInfo = await putApiWithToken(`/candidate/update/${candidateId}`, candidate);
+      if (!responseInfo.data.success) {
         setError('Failed to update candidate information');
-        Swal.fire({ icon: 'error', text: 'Failed to update candidate information' });
+        success = false;
       }
+
+      // Upload avatar if a new file was selected
+      if (avatarFile) {
+        const formDataAvatar = new FormData();
+        formDataAvatar.append('avatar', avatarFile);
+        const responseAvatar = await putApiWithToken(`/candidate/upload-avatar/${candidateId}`, formDataAvatar);
+        if (!responseAvatar.data.success) {
+          setError('Failed to upload avatar');
+          success = false;
+        } else {
+          setAvatarPreview(responseAvatar.data.candidate.avatarUrl);
+        }
+      }
+
+      // Upload CV if a new file was selected
+      if (cvFile) {
+        const formDataCV = new FormData();
+        formDataCV.append('resume', cvFile);
+        const responseCV = await putApiWithToken(`/candidate/upload-cv/${candidateId}`, formDataCV);
+        if (!responseCV.data.success) {
+          setError('Failed to upload CV');
+          success = false;
+        }
+      }
+
+      if (success) {
+        Swal.fire({ icon: 'success', text: 'All updates were successful!' });
+      } else {
+        Swal.fire({ icon: 'error', text: 'Some updates failed. Please try again.' });
+      }
+      
+      setIsEditing(false);
     } catch (err) {
-      setError('An error occurred during information update');
-      Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
+      setError('An error occurred during the update');
+      Swal.fire({ icon: 'error', text: 'An error occurred during the update' });
     }
   };
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCandidate({ ...candidate, [name]: value });
   };
 
-  if (error) return <div className={clsx(styles.error)}>{error}</div>;
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCvFile(file);
+      setFileName(file.name); // Store file name in state
+    }
+  };
 
+  if (error) return <div className={clsx(styles.error)}>{error}</div>;
   if (!candidate) return <div className={clsx(styles.loading)}>Loading...</div>;
 
   return (
     <div className={clsx(styles.candidateInfo)}>
       <div className={clsx(styles.avatarSection)}>
-        {/* <img src={avatarPreview || null} alt="Avatar" className={clsx(styles.avatar)} /> */}
+        {/* <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
         <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
         
         <input 
-            type="file" 
-            accept="image/*" 
-            onChange={(e) => setAvatarFile(e.target.files[0])}
-            value=''// 
-          />
-          <button className={clsx(styles.btnUpdate)} onClick={handleUploadAvatar}>
-            Upload Avatar
-          </button>
+          type="file" 
+          accept="image/*" 
+          onChange={(e) => setAvatarFile(e.target.files[0])}
+          value='' // Clear file input value after selection
+        />
       </div>
 
       <div className={clsx(styles.infoSection)}>
@@ -229,28 +225,24 @@ const InfoCandidate = () => {
           disabled={!isEditing}
         ></textarea>
 
-        <div>
-          <button>Public Account</button>
-        </div>
-
         <div className={clsx(styles.uploadSection)}>
-          <p>CV:</p><a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a>
+          <p>CV:</p>
+          <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a>
           <input 
             type="file" 
             accept=".pdf" 
-            onChange={(e) => setCvFile(e.target.files[0])}
-            value=''
+            onChange={handleFileChange}
           />
-          <button className={clsx(styles.btnUpdate)} onClick={handleUploadCV}>
-            Upload CV
-          </button>
         </div>
 
         <div className={clsx(styles.btnContainer)}>
+<button onClick={handlePublicAccount}>
+  Public account
+</button>
           {isEditing ? (
             <>
-              <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
-                Xác nhận cập nhật
+              <button className={clsx(styles.btnConfirm)} onClick={handleUpdateAll}>
+                Cập nhật
               </button>
               <button className={clsx(styles.btnCancel)} onClick={() => setIsEditing(false)}>
                 Hủy

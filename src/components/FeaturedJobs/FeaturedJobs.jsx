@@ -15,7 +15,7 @@ const FeaturedJobs = () => {
   const [categoryName, setCategoryName] = useState('');
 
   const handleSearch = async (event) => {
-    event.preventDefault();
+    event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
 
     try {
       const searchParams = {
@@ -41,22 +41,6 @@ const FeaturedJobs = () => {
     <div className={clsx(styles.searchComponent)}>
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
-          <input
-            className={clsx(styles.locationInput)}
-            type="text"
-            id="address"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-            placeholder="Enter address"
-          />
-          <input
-            className={clsx(styles.jobInput)}
-            type="text"
-            id="search"
-            value={jobInput}
-            onChange={(e) => setJobInput(e.target.value)}
-            placeholder="Enter job title, skill, etc."
-          />
           {/* category */}
           <input
             className={clsx(styles.jobInput)}
@@ -65,6 +49,34 @@ const FeaturedJobs = () => {
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
             placeholder="Enter category"
+          />
+          {/* <input
+            className={clsx(styles.locationInput)}
+            type="text"
+            id="address"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+            placeholder="Enter address"
+          /> */}
+          <select
+            className={clsx(styles.locationInput)}
+            id="address"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+          >
+            <option value="">All cities</option>
+            <option value="Ha Noi">Hà Nội</option>
+            <option value="Da Nang">Đà Nẵng</option>
+            <option value="Ho Chi Minh">TP.HCM</option>
+            <option value="Others">Others</option>
+          </select>
+          <input
+            className={clsx(styles.jobInput)}
+            type="text"
+            id="search"
+            value={jobInput}
+            onChange={(e) => setJobInput(e.target.value)}
+            placeholder="Enter job title, skill, etc."
           />
           <button className={clsx(styles.searchButton)} onClick={handleSearch}>Search</button>
         </div>

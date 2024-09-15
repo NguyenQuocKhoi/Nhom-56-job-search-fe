@@ -16,6 +16,9 @@ const PostedDetail = () => {
   const navigate = useNavigate();
 
   const [categoryName, setCategoryName] = useState('');
+  const [skills, setSkills] = useState([]);
+
+  // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -25,10 +28,14 @@ const PostedDetail = () => {
         setJob(resultJobs.data.job);
         console.log(resultJobs);
         
-        //
-        const categoryData = await getApiWithToken(`/category/${resultJobs.data.job.category}`);//đã đăng nhập with hay none đều được
-        const categoryName = categoryData.data.category.name;
-        setCategoryName(categoryName); //
+        //Lấy tên category
+        if (resultJobs.data.job.category) {
+          const categoryData = await getAPiNoneToken(`/category/${resultJobs.data.job.category}`);
+          const categoryName = categoryData.data.category.name;
+          setCategoryName(categoryName);
+        } else {
+          setCategoryName('No category');
+        }
   
         const resultApplies = await getApiWithToken(`/application/get-applications-by-job/${jobId}`);
         const applicationsWithCandidates = await Promise.all(resultApplies.data.applications.map(async (apply) => {
@@ -40,7 +47,24 @@ const PostedDetail = () => {
   
         setApply(applicationsWithCandidates);
         console.log(applicationsWithCandidates);
-  
+  // const skillPromises = result.data.job.requirements.map(async (skillId) => {
+          //   const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
+          //   return skillResult.data.skill.skillName;
+          // });
+          
+          // const fetchedSkills = await Promise.all(skillPromises);
+          // setSkills(fetchedSkills);
+          if (resultJobs.data.job.requirements && resultJobs.data.job.requirements.length > 0) {
+            const skillPromises = resultJobs.data.job.requirements.map(async (skillId) => {
+              const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
+              return skillResult.data.skill.skillName;
+            });
+
+            const fetchedSkills = await Promise.all(skillPromises);
+            setSkills(fetchedSkills);
+          } else {
+            setSkills([]); // Không có kỹ năng
+          }
       } catch (err) {
         setError('Failed');
       }
@@ -53,6 +77,21 @@ const PostedDetail = () => {
 
   const handleEditPost = () => {
     navigate(`/editPost/${jobId}`);
+  };
+
+  const handleViewEdit = () => {
+    if (job.pendingUpdates) {
+      navigate(`/viewEdit/${jobId}`);
+    } 
+    // else {
+    //   setIsButtonDisabled(true);
+      // Swal.fire({
+      //   title: 'No Changes',
+      //   text: 'This job does not have any pending updates.',
+      //   icon: 'info',
+      //   confirmButtonText: 'OK',
+      // });
+    // }
   };
 
   const handleDeletePost = async () => {
@@ -109,54 +148,66 @@ const PostedDetail = () => {
               <h1>{job.title}</h1>
             </div>
           </div>
-          <p><strong>Description:</strong> {job.description}</p>
           <p><strong>Address:</strong> {job.address}</p>
           <p><strong>Company:</strong> {job.company.name}</p>
           <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
           <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+          <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
           <p><strong>Salary:</strong> ${job.salary}</p>
           <p><strong>Type:</strong> {job.type}</p>
           <p><strong>Position:</strong> {job.position}</p>
           <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
-          <p><strong>Category:</strong> {categoryName}</p>
+          <p><strong>Category:</strong> {categoryName || 'No Category'}</p>
           <div>
-            <strong>Requirements:</strong>
+          <strong>Requirements: </strong>
+          {skills.length > 0 ? (
             <ul>
-              {job.requirements.map((req, index) => (
-                <li key={index}>{req}</li>
+              {skills.map((skill, index) => (
+                <li key={index}>{skill}</li>
               ))}
             </ul>
-          </div>
+          ) : (
+            <span>No skill</span>
+          )}
+          <p><strong>Description:</strong> {job.description}</p>
+        </div>
           <button onClick={handleEditPost}>Sửa bài đăng</button>
           <button onClick={handleDeletePost}>Xóa bài đăng</button>
+          <button 
+            onClick={handleViewEdit}
+            // disabled={isButtonDisabled}
+            disabled={!job.pendingUpdates}
+          >
+            Xem chi tiết sửa
+          </button>
         </div>
 
         <div>
 {/*  */}
         <div>
-  <strong>Danh sách ứng viên:</strong>
-  {apply.length > 0 ? (
-    <ul>
-      {apply.map((apply, index) => (
-        <Link key={index} to={`/detailCandidate/${apply.candidate}?applicationId=${apply._id}`}>
-          {/* <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}></Link> */}
-        {/* <li> */}
-          <div>
-            {/* <a href={apply.resume} target='_blank' rel="noopener noreferrer">CV</a> */}
-            <p>{apply.candidateInfo.name}</p> {/* Hiển thị tên ứng viên */}
-            <p>{apply.candidateInfo.email}</p> {/* Hiển thị email của ứng viên */}
-            <p>{apply.status}</p>
+            <strong>Danh sách ứng viên:</strong>
+            {apply.length > 0 ? (
+              <ul>
+                {apply.map((apply, index) => (
+                  <Link key={index} to={`/detailCandidate/${apply.candidate}?applicationId=${apply._id}`}>
+                    {/* <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}></Link> */}
+                  {/* <li> */}
+                    <div>
+                      {/* <a href={apply.resume} target='_blank' rel="noopener noreferrer">CV</a> */}
+                      <p>{apply.candidateInfo.name}</p> {/* Hiển thị tên ứng viên */}
+                      <p>{apply.candidateInfo.email}</p> {/* Hiển thị email của ứng viên */}
+                      <p>{apply.status}</p>
+                    </div>
+                    <hr />
+                  {/* </li> */}
+                  
+                  </Link>
+                ))}
+              </ul>
+            ) : (
+              <p>No candidates found for this job.</p>
+            )}
           </div>
-          <hr />
-        {/* </li> */}
-        
-        </Link>
-      ))}
-    </ul>
-  ) : (
-    <p>No candidates found for this job.</p>
-  )}
-</div>
           {/*  */}
 
         </div>

@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../CompanyManagement/companyManagement.module.scss';
-import { getAPiNoneToken } from '../../../api';
+import { getAPiNoneToken, postApiNoneToken, putApiWithToken } from '../../../api';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { Button, Form } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 const CompanyManagement = () => {
   const [activeTab, setActiveTab] = useState('all');
+  const [activeTabSearch, setActiveTabSearch] = useState('all');
 
   const [companiesAll, setCompaniesAll] = useState([]);
   const [companiesAccepted, setCompaniesAccepted] = useState([]);
@@ -19,6 +21,12 @@ const CompanyManagement = () => {
     totalPages: 1,
     limit: 10,
   });
+
+  const [addressInput, setAddressInput] = useState('');
+  const [companyInput, setCompanyInput] = useState('');
+  const [results, setResults] = useState(null);
+  const [buttonState, setButtonState] = useState('pending');
+
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -50,6 +58,67 @@ const CompanyManagement = () => {
     fetchCompanies(newPage);
   };
 
+  const handleStatusUpdate = async ( companyId, status ) => {
+    // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
+    Swal.fire({
+      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      text: `Please wait while ${status} the company.`,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      await putApiWithToken('/company/update-status', { companyId, status });
+
+      setButtonState(status);
+      Swal.fire({
+        icon: 'success',
+        title: status === 'accepted' ? 'Accepted' : 'Rejected',
+        text: `You have ${status} this company.`,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to ${status} the company.`,
+      });
+    }
+  };
+
+  // const handleDisable = async () => {
+  //   //putApiWithToken(`/user/update-status/companyId`)
+  // }
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+  
+    try {
+      const searchParams = {
+        search: companyInput.trim(),
+        address: addressInput.trim() || '',
+      };
+  
+      const response = await postApiNoneToken('/company/search', searchParams);
+
+      console.log("70", searchParams);
+      
+      console.log("72", response.data.companies);
+  
+      if (response.data.success) {
+        setResults(response.data.companies);
+      } else {
+        setResults(null);
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      setResults(null);
+    }
+  };
+  
+
   //
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -60,21 +129,146 @@ const CompanyManagement = () => {
 
   return (
     <div className={styles.jobManagement}>
-      <h2>Quản lí công ty</h2> {/* searchBar */}
-        <div className={clsx(styles.searchBar)}>
+      <h2>Quản lí công ty</h2> 
+      {/* searchBar */}
+    <div className={clsx(styles.searchBar)}>
       <Form className={clsx(styles.form)}>
+        {/* <Form.Control
+          type="text"
+          placeholder="Address"
+          className={clsx(styles.jobInput)}
+          value={addressInput}
+          onChange={(e) => setAddressInput(e.target.value)}
+        /> */}
+        <select
+            className={clsx(styles.locationInput)}
+            id="address"
+            value={addressInput}
+            onChange={(e) => setAddressInput(e.target.value)}
+          >
+            <option value="">All cities</option>
+            <option value="Hà Nội">Hà Nội</option>
+            <option value="Hải Phòng">Hải Phòng</option>
+            <option value="Ho Chi Minh">TP.HCM</option>
+            <option value="Others">Others</option>
+          </select>
         <Form.Control
           type="text"
           placeholder="Enter company"
           className={clsx(styles.jobInput)}
+          value={companyInput}
+          onChange={(e) => setCompanyInput(e.target.value)}
         />
-        <Button variant="primary" className={clsx(styles.searchButton)}>
+        <Button 
+          variant="primary" 
+          className={clsx(styles.searchButton)}
+          onClick={handleSearch}
+        >
           Search
         </Button>
       </Form>
     </div>
             {/* searchBar */}
       
+{/* results search */}
+{results && (
+  <div className={clsx(styles.results)}>
+    <p>Kết quả</p>
+    <div className={clsx(styles.tabs)}>
+      <button
+        className={clsx(styles.tabButton, activeTabSearch === 'all' && styles.active)}
+        onClick={() => setActiveTabSearch('all')}
+      >
+        All
+      </button>
+      <button
+        className={clsx(styles.tabButton, activeTabSearch === 'accepted' && styles.active)}
+        onClick={() => setActiveTabSearch('accepted')}
+      >
+        Accepted
+      </button>
+      <button
+        className={clsx(styles.tabButton, activeTabSearch === 'rejected' && styles.active)}
+        onClick={() => setActiveTabSearch('rejected')}
+      >
+        Rejected
+      </button>
+      <button
+        className={clsx(styles.tabButton, activeTabSearch === 'pending' && styles.active)}
+        onClick={() => setActiveTabSearch('pending')}
+      >
+        Pending
+      </button>
+    </div>
+
+    {/* Tab result content */}
+    <div className={clsx(styles.tabContent)}>
+      {/* All Companies */}
+      {activeTabSearch === 'all' && (
+        <div>
+          <h3>All Jobs</h3>
+          <ul>
+            {results.map((company) => (
+              <Link key={company._id} to={`/detailCompany/${company._id}`}>
+                <li>{company.name}</li>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Accepted Companies */}
+      {activeTabSearch === 'accepted' && (
+        <div>
+          <h3>Accepted</h3>
+          <ul>
+            {results
+              .filter((company) => company.status === true)
+              .map((company) => (
+                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                  <li>{company.name}</li>
+                </Link>
+              ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Rejected Companies */}
+      {activeTabSearch === 'rejected' && (
+        <div>
+          <h3>Rejected</h3>
+          <ul>
+            {results
+              .filter((company) => company.status === false)
+              .map((company) => (
+                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                  <li>{company.name}</li>
+                </Link>
+              ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Pending Companies */}
+      {activeTabSearch === 'pending' && (
+        <div>
+          <h3>Pending</h3>
+          <ul>
+            {results
+              .filter((company) => company.status === undefined)
+              .map((company) => (
+                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                  <li>{company.name}</li>
+                </Link>
+              ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
+      {/* tab content */}
       <div className={styles.tabs}>
         <button 
           className={activeTab === 'all' ? styles.active : ''} 
@@ -112,7 +306,7 @@ const CompanyManagement = () => {
                   companiesAll.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
-                      <p>Status: {company.status}</p>
+                      <p>Status: {""+company.status}</p>
                       {/* <button>Vô hiệu hóa</button> */}
                       {/* <button>Xóa tài khoản</button> */}
                     </Link>
@@ -140,12 +334,14 @@ const CompanyManagement = () => {
               <div className={clsx(styles.companyContainer)}>
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                    <div key={company._id}>
+                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
-                      <p>Status: {company.status}</p>
-                      <button>Vô hiệu hóa</button>
-                      <button>Xóa tài khoản</button>
+                      <p>Status: {""+company.status}</p>
                     </Link>
+                      <button>Vô hiệu hóa</button>
+                      {/* <button>Xóa tài khoản</button> */}
+                    </div>
                   ))
                 ) : (
                   <div>No companies available</div>
@@ -170,12 +366,14 @@ const CompanyManagement = () => {
               <div className={clsx(styles.companyContainer)}>
                 {companiesRejected.length > 0 ? (
                   companiesRejected.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                    <div key={company._id}>
+                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
-                      <p>Status: {company.status}</p>
-                      {/* <button>Vô hiệu hóa</button> //đã bị từ chối thì không hoạt động được đồng nghĩa bị vô hiệu hóa */}
-                      <button>Xóa tài khoản</button>
+                      <p>Status: {""+company.status}</p>
                     </Link>
+                      <button>Vô hiệu hóa</button>
+                      {/* <button>Xóa tài khoản</button> */}
+                    </div>
                   ))
                 ) : (
                   <div>No companies available</div>
@@ -200,12 +398,29 @@ const CompanyManagement = () => {
               <div className={clsx(styles.companyContainer)}>
                 {companiesPending.length > 0 ? (
                   companiesPending.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                    <div key={company._id}>
+                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
-                      <p>Status: {company.status}</p>
-                      <button>Accept</button>
-                      <button>Reject</button>
-                    </Link>
+                      <p>Status: {""+company.status}</p>
+                      </Link>
+                      <button
+                        className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+                        onClick={() => handleStatusUpdate(company._id, true)}
+                        disabled={buttonState === 'accepted'}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+                        onClick={() => handleStatusUpdate(company._id, false)}
+                        disabled={buttonState === 'rejected'}
+                      >
+                        Reject
+                      </button>
+                      <button>Bản cập nhật</button>
+                      <button>Vô hiệu hóa</button>
+                      {/* <button>Xóa Tài Khoản</button> */}
+                    </div>
                   ))
                 ) : (
                   <div>No companies available</div>

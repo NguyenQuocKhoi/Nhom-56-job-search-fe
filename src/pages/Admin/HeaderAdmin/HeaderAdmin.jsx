@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from '../Header/header.module.scss';
+import styles from '../HeaderAdmin/headerAdmin.module.scss';
 import logo from '../../../images/logo.jpg';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,7 +13,9 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      <img src={logo} alt="Logo" className={styles.logo} />
+      <Link to="/admin">
+        <img src={logo} alt="Logo" className={styles.logo} />
+      </Link>
       <div className={styles.title}>Admin</div>
       <button className={styles.logoutButton} onClick={handleLogout}>
         Đăng xuất

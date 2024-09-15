@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './postedJobs.module.scss';
-import { getApiWithToken } from '../../api';
+import { getAPiNoneToken, getApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 
@@ -17,6 +17,8 @@ const PostedJobs = () => {
 
   // const [filteredJobs, setFilteredJobs] = useState([]);
 
+  const [categories, setCategories] = useState({});
+
   const user = getUserStorage()?.user;
   const companyId = user._id;
 
@@ -26,9 +28,29 @@ const PostedJobs = () => {
         const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
         const { jobs, totalPages } = response.data;
         setJobs(jobs);
-        console.log(jobs);
-        
         setTotalPages(totalPages);
+
+        // Fetch category names
+        const categoryIds = jobs
+          .map((job) => job.category)
+          .filter((categoryId) => categoryId); // Filter out undefined or null categories
+
+        const uniqueCategoryIds = [...new Set(categoryIds)];
+
+        // Fetch all categories in parallel
+        const categoryPromises = uniqueCategoryIds.map((categoryId) =>
+          getAPiNoneToken(`/category/${categoryId}`)
+        );
+
+        const categoryResponses = await Promise.all(categoryPromises);
+        const categoryMap = {};
+
+        categoryResponses.forEach((response) => {
+          const { _id, name } = response.data.category;
+          categoryMap[_id] = name;
+        });
+
+        setCategories(categoryMap);
       } catch (error) {
         setError('Error fetching jobs');
         console.error(error);
@@ -140,7 +162,7 @@ const PostedJobs = () => {
                           <p>Address: {job.address}</p>
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
-                          <p>Category: {job.category}</p>
+                          <p>Category: {categories[job.category] || 'No Category'}</p>
                         </div>
                       </div>
                     </div>

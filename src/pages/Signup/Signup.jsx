@@ -17,6 +17,7 @@ const Signup = () => {
   const [password, setPassword] = useState("123456Aa");
   const [confirmPassword, setConfirmPassword] = useState("123456Aa");
   const [passwordErr, setPasswordErr] = useState("");
+  const [verify, setVerify] = useState("");
 
   const handleCheckEmailExit = async (email) => {
     if(validateEmail(email)){
@@ -43,51 +44,116 @@ const Signup = () => {
     }
   };
 
-  const handleSignup = async (e) => {
-    const emailValidation = validateEmail(email);
-    const passwordValidation = validatePassword(password);
-
-    if (emailValidation.success && passwordValidation.success) {
-      try {
-          if (password !== confirmPassword) {
-            Swal.fire({
-                 icon: "warning",
-                 text: "mật khẩu không khớp, vui lòng nhập lại",
-               });
-            return;
-          }
-          const data = {
-            name: name,
-            email: email,
-            password: password,
-            role: key,  // Vai trò: candidate hoặc company
-          };
-          const result = await postApiNoneToken("/user/register", data);
-          if(result.data.message){
-            console.log(result.data);
-            
-            Swal.fire({
-              icon: "warning",
-              text:result.data.message,
-            });
-          }
-          if (result.data) {
-            Swal.fire({
-              icon: "success",
-              text: "Registration successful!",
-            });
-            navigate("/login");
-          } else {
-            Swal.fire({
-              icon: "error",
-              text: result.data.message,
-            });
-          }
-      } catch (error) {
-        console.log("1",error);
+  const handleSignup = async () => {
+    try {
+      const data = {
+        email: email,
+        verificationCode: verify,
+      };
+  
+      const result = await postApiNoneToken("/user/verify", data);
+      if (result.data.success) {
+        // Đăng ký thành công, tự động đăng nhập
+        const loginData = {
+          email: email,
+          password: password,
+        };
+  
+        const loginResult = await postApiNoneToken("/user/login", loginData);
+        if (loginResult.data.token) {
+          // Lưu token và thông tin người dùng
+          localStorage.setItem('token', loginResult.data.token);
+          localStorage.setItem('user', JSON.stringify(loginResult.data.user));
+  
+          Swal.fire({
+            icon: "success",
+            text: "Xác minh và đăng nhập thành công!",
+          });
+  
+          navigate("/login");
+        } else {
+          Swal.fire({
+            icon: "error",
+            text: "Đăng nhập thất bại!",
+          });
+        }
+      } else {
         Swal.fire({
           icon: "error",
-          text: "This email has already been created",
+          text: result.data.message,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        text: "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
+      });
+    }
+  };
+
+  const handleResentVerify = async () => {
+    try {
+      const data = { email: email };
+  
+      const result = await postApiNoneToken("/user/resend-verification", data);
+      if (result.data.success) {
+        Swal.fire({
+          icon: "info",
+          text: "Mã xác minh đã được gửi lại đến email của bạn.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          text: result.data.message,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        text: "Đã có lỗi xảy ra khi gửi lại mã. Vui lòng thử lại sau!",
+      });
+    }
+  };
+  
+
+  const handleSentVerify = async () => {
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+  
+    if (emailValidation.success && passwordValidation.success) {
+      try {
+        if (password !== confirmPassword) {
+          Swal.fire({
+            icon: "warning",
+            text: "Mật khẩu không khớp, vui lòng nhập lại",
+          });
+          return;
+        }
+  
+        const data = {
+          name: name,
+          email: email,
+          password: password,
+          role: key,  // Vai trò: candidate hoặc company
+        };
+  
+        // Gửi yêu cầu đăng ký và gửi mã xác minh qua email
+        const result = await postApiNoneToken("/user/register", data);
+        if (result.data.success) {
+          Swal.fire({
+            icon: "info",
+            text: "Mã xác minh đã được gửi đến email của bạn. Vui lòng kiểm tra email và nhập mã để hoàn tất đăng ký.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            text: result.data.message,
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          text: "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
         });
       }
     } else {
@@ -98,11 +164,11 @@ const Signup = () => {
         setPasswordErr(passwordValidation.message);
       }
       if (password !== confirmPassword) {
-        setPasswordErr("Passwords do not match");
+        setPasswordErr("Mật khẩu không khớp");
       }
     }
   };
-
+  
   return (
     <div className={clsx('container', styles.signupContainer)}>
       {/* logo */}
@@ -180,7 +246,28 @@ const Signup = () => {
                         {passwordErr}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    
+                    <Form.Group className="mb-3">
+                      <Form.Label>Verify Code</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter verify code"
+                        value={verify}
+                        onChange={(e) => {
+                          setVerify(e.target.value);
+                        }}
+                        isInvalid={!!emailErr}
+                      />
+                      <Button
+                        onClick={handleSentVerify}
+                      >
+                        sent verify code
+                      </Button>
+                      <Button
+                        onClick={handleResentVerify}
+                      >
+                        Resent verify code
+                      </Button>
+                    </Form.Group>
                   </Form>
                   <Button variant="primary" className="w-100" onClick={()=>handleSignup()}>
                       Sign Up
@@ -240,6 +327,30 @@ const Signup = () => {
                         {passwordErr}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    
+                    <Form.Group className="mb-3">
+                      <Form.Label>Verify Code</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter verify code"
+                        value={verify}
+                        onChange={(e) => {
+                          setVerify(e.target.value);
+                        }}
+                        isInvalid={!!emailErr}
+                      />
+                      <Button
+                        onClick={handleSentVerify}
+                      >
+                        sent verify code
+                      </Button>
+                      <Button
+                        onClick={handleResentVerify}
+                      >
+                        Resent verify code
+                      </Button>
+                    </Form.Group>
+
                     <Button variant="primary" className="w-100" onClick={()=>handleSignup()}>
                       Sign Up
                     </Button>

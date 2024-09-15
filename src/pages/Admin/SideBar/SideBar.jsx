@@ -34,6 +34,12 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
       >
         Danh mục công việc
       </div>
+      <div
+        className={`${styles.tab} ${selectedTab === 'skill' ? styles.active : ''}`}
+        onClick={() => setSelectedTab('skill')}
+      >
+        Danh mục kỹ năng
+      </div>
     </div>
   );
 };

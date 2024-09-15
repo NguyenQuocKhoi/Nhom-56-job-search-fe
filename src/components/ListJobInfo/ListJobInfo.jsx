@@ -14,16 +14,46 @@ const ListJobInfo = () => {
     limit: 15, //16
   });
 
+  const [categories, setCategories] = useState({});
+
   const fetchJobs = useCallback(async (page = 1) => {
+    window.scrollTo(0, 0);
+
     try {
       setLoading(true);
       const result = await getAPiNoneToken(`/job/get-all-job?page=${page}&limit=${pagination.limit}`);
-      setJobs(result.data.jobs.filter(job => job.status === true));////
+      // setJobs(result.data.jobs.filter(job => job.status === true));////
+      const fetchedJobs = result.data.jobs.filter(job => job.status === true);
+      setJobs(fetchedJobs);
+  
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
         totalPages: result.data.totalPages,
       }));
+
+    
+    // Fetch category names
+      const categoryIds = fetchedJobs
+      .map((job) => job.category)
+      .filter((categoryId) => categoryId); // Filter out undefined or null categories
+
+    const uniqueCategoryIds = [...new Set(categoryIds)];
+
+    // Fetch all categories in parallel
+    const categoryPromises = uniqueCategoryIds.map((categoryId) =>
+      getAPiNoneToken(`/category/${categoryId}`)
+    );
+
+    const categoryResponses = await Promise.all(categoryPromises);
+    const categoryMap = {};
+
+    categoryResponses.forEach((response) => {
+      const { _id, name } = response.data.category;
+      categoryMap[_id] = name;
+    });
+
+    setCategories(categoryMap);
     } catch (err) {
       setError('Failed to fetch jobs');
     } finally {
@@ -59,9 +89,8 @@ const ListJobInfo = () => {
                     <p>Company: {job.company.name}</p>
                     <p>Address: {job.address}</p>
                     <p>Salary: ${job.salary}</p>
-                    {/* để tạm */}
                     <p>Number of cruiment: {job.numberOfCruiment}</p>
-                    <p>Category: {job.category}</p>
+                    <p>Category: {categories[job.category] || 'No Category'}</p>
                   </div>
                 </div>
               </div>
