@@ -12,7 +12,8 @@
       "postJob":"Đăng công việc",
       "postedJobs":"Công việc đã đăng",
       "postCreated":"Công việc đã tạo",
-      "noNotifications":"Không có thông báo"
+      "noNotifications":"Không có thông báo",
+      "savedCandidates": "Ứng viên đã lưu"
     }
   }
   

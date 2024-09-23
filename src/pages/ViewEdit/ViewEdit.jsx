@@ -31,8 +31,8 @@ const ViewEdit = () => {
         }
 
         // Fetch skills
-        if (resultJobs.data.job.requirements && resultJobs.data.job.requirements.length > 0) {
-          const skillPromises = resultJobs.data.job.requirements.map(async (skillId) => {
+        if (resultJobs.data.job.pendingUpdates.requirementSkills && resultJobs.data.job.pendingUpdates.requirementSkills.length > 0) {
+          const skillPromises = resultJobs.data.job.pendingUpdates.requirementSkills.map(async (skillId) => {
             const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
             return skillResult.data.skill.skillName;
           });
@@ -68,8 +68,9 @@ const ViewEdit = () => {
               </h1>
             </div>
           </div>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('address') })}>
-            <strong>Address:</strong> {job.pendingUpdates.address}
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
+            {/* <strong>Address:</strong> {job.pendingUpdates.address} */}
+            <strong>Address:</strong> {job.pendingUpdates.street}, {job.pendingUpdates.city}
           </p>
           <p><strong>Company:</strong> {job.company.name}</p>
           <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
@@ -79,8 +80,14 @@ const ViewEdit = () => {
           <p className={clsx({ [styles.highlight]: isFieldDifferent('numberOfCruiment') })}>
             <strong>Number of Recruitment:</strong> {job.pendingUpdates.numberOfCruiment}
           </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
+            <strong>Requirements:</strong> {job.pendingUpdates.requirements}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
+            <strong>Interest:</strong> {job.pendingUpdates.interest}
+          </p>
           <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
-            <strong>Salary:</strong> ${job.pendingUpdates.salary}
+            <strong>Salary:</strong> {job.pendingUpdates.salary}
           </p>
           <p className={clsx({ [styles.highlight]: isFieldDifferent('type') })}>
             <strong>Type:</strong> {job.pendingUpdates.type}

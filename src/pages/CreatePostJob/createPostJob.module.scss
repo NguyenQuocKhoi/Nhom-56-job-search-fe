@@ -62,7 +62,8 @@
   }
   
   .createButton,
-  .cancelButton {
+  .cancelButton,
+  .disabledButton {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -78,6 +79,10 @@
   
   .createButton:hover {
     background-color: #0056b3;
+  }
+
+  .disabledButton{
+    background-color: #b7b2b2;
   }
   
   .cancelButton {
@@ -98,4 +103,115 @@
   .status span {
     font-weight: bold;
   }
+
+  //modal skill requirement
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+  }
+  
+  .skillsContainer {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .openModalButton,
+  .closeModalButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .selectedSkills {
+    margin-top: 10px;
+  }
+  
+  .selectedSkill {
+    display: inline-block;
+    background-color: #f0f0f0;
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+
+  .errorMessage{
+    color: red;
+  }
+  //modal city
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px; // Maximum width of modal
+  max-height: 80vh; // Maximum height of modal
+  overflow-y: auto; // Vertical scrollbar if content overflows
+  position: relative; // For positioning the close button
+}
+
+.modalContent input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.modalContent ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modalContent li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.modalContent li:hover {
+  background-color: #f0f0f0;
+}
+
+.modalContent .selected {
+  background-color: #d0f0c0; // Highlight selected items
+}
+
+.modalContent button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
   

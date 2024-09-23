@@ -22,6 +22,8 @@ import AdminLayout from './pages/Admin/AdminLayout/AdminLayout';
 import DetailCandidateSearch from './pages/DetailCandidateSearch/DetailCandidateSearch.jsx';
 import DetailJobAdmin from './pages/Admin/DetailJobAdmin/DetailJobAdmin.jsx';
 import ViewEdit from './pages/ViewEdit/ViewEdit.jsx';
+import ViewEditProfile from './pages/ViewEditProfile/ViewEditProfile.jsx';
+import SavedCandidates from './pages/savedCandidates/savedCandidates.jsx';
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
             <Route path="/appliedJobs" element={<AppliedJobs />}/>
             <Route path="/createPostJob" element={<CreatePostJob />}/>
             <Route path="/postedJobs" element={<PostedJobs />}/>
+            <Route path="/savedCandidates" element={<SavedCandidates />}/>
             <Route path="/postedDetail/:jobId" element={<PostedDetail />}/>
             <Route path="/candidateApply/:candidateId" element={<CandidateApply />}/>
             <Route path="/detailCandidate/:candidateId" element={<DetailCandidate />}/>
@@ -48,6 +51,7 @@ function App() {
             <Route path="/detailJobAdmin/:jobId" element={<DetailJobAdmin />}/>
             <Route path="/editPost/:jobId" element={<EditPost />}/>
             <Route path="/viewEdit/:jobId" element={<ViewEdit />}/>
+            <Route path="/viewEditProfile/:companyId" element={<ViewEditProfile />}/>
             <Route path="/admin" element={<AdminLayout />}/>
           </Routes>
         </div>

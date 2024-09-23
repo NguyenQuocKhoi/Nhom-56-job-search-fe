@@ -185,7 +185,7 @@ const Login = () => {
 
                 <div className="text-center mt-4">
                   <button className="btn btn-outline-danger w-100">
-                    <i className="fab fa-google"></i> Log In with Google
+                    <i className="fab fa-google"></i> Log In with Google for candidate
                   </button>
                 </div>
                 <div className={clsx('text-center', 'mt-4', styles.signUpText)}>

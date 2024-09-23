@@ -6,6 +6,22 @@ import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
+const cities = [
+  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
+
 const CandidateManagement = () => {
   const [candidates, setCandidates] = useState([]);
   const [error, setError] = useState(null);
@@ -16,6 +32,12 @@ const CandidateManagement = () => {
     limit: 10,
   });
 
+  //city
+  const [showCityModal, setShowCityModal] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(cities);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  //search
   const [addressInput, setAddressInput] = useState('');
   const [candidateInput, setCandidateInput] = useState('');
   const [results, setResults] = useState(null);
@@ -57,7 +79,7 @@ const CandidateManagement = () => {
     try {
       const searchParams = {
         search: candidateInput.trim(),
-        address: addressInput.trim() || '',
+        city: addressInput.trim() || '',
       };
   
       const response = await postApiNoneToken('/candidate/search', searchParams);
@@ -122,7 +144,25 @@ const CandidateManagement = () => {
     }
   };
   
-  
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    if(city === 'All cities'){
+      setAddressInput(city);
+    } else {
+      setAddressInput(city);
+    }
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -140,7 +180,7 @@ const CandidateManagement = () => {
           value={addressInput}
           onChange={(e) => setAddressInput(e.target.value)}
         /> */}
-        <select
+        {/* <select
             className={clsx(styles.locationInput)}
             id="address"
             value={addressInput}
@@ -151,7 +191,38 @@ const CandidateManagement = () => {
             <option value="Da Nang">Đà Nẵng</option>
             <option value="Ho Chi Minh">TP.HCM</option>
             <option value="Others">Others</option>
-          </select>
+          </select> */}
+          <label>City:</label>
+        <input 
+          type="text" 
+          name="city"
+          value={addressInput || 'All cities'}
+          onClick={handleCityInputClick}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
         <Form.Control
           type="text"
           placeholder="Enter candidate"
@@ -186,7 +257,7 @@ const CandidateManagement = () => {
       )}
 
       {/* content */}
-      <p>Tổng số lượng ứng viên:</p>
+      <p>Tổng số lượng ứng viên: {candidates.length}</p>
       <div className={clsx(styles.candidatelist)}>
       <div className={clsx(styles.candidateContainer)}>
         {candidates.length > 0 ? (

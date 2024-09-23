@@ -1,0 +1,74 @@
+.joblist {
+  padding: 1rem;
+
+  /* Center the content container */
+  .jobContainer {
+    max-width: 1200px; /* Limit the max width */
+    margin: 0 auto;
+    overflow: hidden; /* Hide content overflowing to the left or right */
+    display: flex; /* Use flex for sliding effect */
+    gap: 1rem;
+    position: relative;
+  }
+
+  /* Individual job cards */
+  .jobcard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    min-width: 389px; /* Set minimum width */
+    flex-shrink: 0; /* Prevent flex from shrinking the job cards */
+    height: auto;
+    max-width: 400px;
+
+    &:hover {
+      background: #87CEEB;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 5px;
+    }
+
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .text {
+      color: #000;
+      margin-left: 10px;
+    }
+
+    .describe {
+      line-height: 1.2;
+      width: 270px;
+    }
+
+    .skills{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .skill{
+      background-color: rgb(197, 197, 197);
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+  }
+}

@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './appliedJobs.module.scss';
-import { getApiWithToken } from '../../api';
+import { getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 
@@ -37,6 +37,22 @@ const AppliedJobs = () => {
           setJobDetails(jobs);
         } else {
           setError(result.data.message);
+        }
+
+        //auto apply
+        const response = await getApiWithToken(`/candidate/${user._id}`);
+        if(response.data.success){
+          const candidateData = response.data.candidate;
+          if(candidateData.autoSearchJobs){
+            // const autoApplyResponse = await getApiWithToken(`/candidate/check-and-auto-apply-jobs`, { candidateId: candidateId });
+            const autoApplyResponse = await postApiWithToken(`/candidate/check-and-auto-apply-jobs`, { candidateId: user._id });
+  
+            if (autoApplyResponse.data.success) {
+              console.log(autoApplyResponse.data.message);
+            } else {
+              console.error(autoApplyResponse.data.message);
+            }
+          }
         }
       } catch (error) {
         setError("Error fetching applications");

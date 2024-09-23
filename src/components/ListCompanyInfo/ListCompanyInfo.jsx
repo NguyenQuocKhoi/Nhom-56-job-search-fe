@@ -3,6 +3,8 @@ import { getAPiNoneToken } from '../../api';
 import styles from './listCompanyInfo.module.scss';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
+import logo from '../../images/logo.jpg';
+
 
 const ListCompanyInfo = () => {
   const [companies, setCompanies] = useState([]);
@@ -48,9 +50,11 @@ const ListCompanyInfo = () => {
         {companies.length > 0 ? (
           companies.map((company) => (
             <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
-              <h3><strong>Company name:</strong> {company.name}</h3>
-              <p><strong>Address:</strong> {company.address}</p>
-              <p><strong>Website:</strong> {company.website}</p>
+              <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+              <h3>{company.name}</h3>
+              {/* <h3><strong>Company name:</strong> {company.name}</h3> */}
+              {/* <p><strong>Address:</strong> {company.address}</p> */}
+              {/* <p><strong>Website:</strong> {company.website}</p> */}
             </Link>
           ))
         ) : (

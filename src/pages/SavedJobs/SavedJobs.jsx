@@ -72,7 +72,7 @@ const SavedJobs = () => {
                     <p>Company: {jobDetails[job.job]?.company.name}</p>
                     <p>Address: {jobDetails[job.job]?.street}, {jobDetails[job.job]?.city}</p>
                     <p>Saved at: {new Date(job.createdAt).toLocaleDateString()}</p>
-                    <button>Bỏ lưu</button>
+                    {/* <button>Bỏ lưu</button> */}
                     <hr />
                   </div>
                 </Link>

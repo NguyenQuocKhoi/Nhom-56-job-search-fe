@@ -6,6 +6,22 @@ import clsx from 'clsx';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
+const cities = [
+  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
+
 const CompanyManagement = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [activeTabSearch, setActiveTabSearch] = useState('all');
@@ -27,6 +43,11 @@ const CompanyManagement = () => {
   const [results, setResults] = useState(null);
   const [buttonState, setButtonState] = useState('pending');
 
+  //city
+  const [showCityModal, setShowCityModal] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(cities);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -35,9 +56,9 @@ const CompanyManagement = () => {
       console.log(result.data.companies);
 
       setCompaniesAll(result.data.companies);
-      setCompaniesAccepted(result.data.companies.filter(company => company.status === true));
-      setCompaniesRejected(result.data.companies.filter(company => company.status === false));
-      setCompaniesPending(result.data.companies.filter(company => company.status === undefined));
+      setCompaniesAccepted(result.data.companies.filter(company => company.status === true && company.pendingUpdates === null));
+      setCompaniesRejected(result.data.companies.filter(company => company.status === false && company.pendingUpdates === null));
+      setCompaniesPending(result.data.companies.filter(company => company.status === undefined || company.pendingUpdates !== null));
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -76,7 +97,7 @@ const CompanyManagement = () => {
       setButtonState(status);
       Swal.fire({
         icon: 'success',
-        title: status === 'accepted' ? 'Accepted' : 'Rejected',
+        title: status === true ? 'Accepted' : 'Rejected',
         text: `You have ${status} this company.`,
       });
     } catch (err) {
@@ -98,7 +119,7 @@ const CompanyManagement = () => {
     try {
       const searchParams = {
         search: companyInput.trim(),
-        address: addressInput.trim() || '',
+        city: addressInput.trim() || '',
       };
   
       const response = await postApiNoneToken('/company/search', searchParams);
@@ -124,6 +145,26 @@ const CompanyManagement = () => {
     setActiveTab(tab);
   };
 
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    if(city === 'All cities'){
+      setAddressInput(city);
+    } else {
+      setAddressInput(city);
+    }
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -140,7 +181,7 @@ const CompanyManagement = () => {
           value={addressInput}
           onChange={(e) => setAddressInput(e.target.value)}
         /> */}
-        <select
+        {/* <select
             className={clsx(styles.locationInput)}
             id="address"
             value={addressInput}
@@ -151,7 +192,38 @@ const CompanyManagement = () => {
             <option value="Hải Phòng">Hải Phòng</option>
             <option value="Ho Chi Minh">TP.HCM</option>
             <option value="Others">Others</option>
-          </select>
+          </select> */}
+        <label>City:</label>
+        <input 
+          type="text" 
+          name="city"
+          value={addressInput || 'All cities'}
+          onClick={handleCityInputClick}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
         <Form.Control
           type="text"
           placeholder="Enter company"
@@ -307,6 +379,7 @@ const CompanyManagement = () => {
                     <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {""+company.status}</p>
+                      <hr />
                       {/* <button>Vô hiệu hóa</button> */}
                       {/* <button>Xóa tài khoản</button> */}
                     </Link>
@@ -417,7 +490,7 @@ const CompanyManagement = () => {
                       >
                         Reject
                       </button>
-                      <button>Bản cập nhật</button>
+                      {/* <button>Bản cập nhật</button> */}
                       <button>Vô hiệu hóa</button>
                       {/* <button>Xóa Tài Khoản</button> */}
                     </div>

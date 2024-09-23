@@ -175,7 +175,9 @@ const Header = () => {
           {role === 'company' && (
             <>
               <Link to="/createPostJob" className={clsx(styles.navLink)}>{t('header.postJob')}</Link>
-              <Link to="/postedJobs" className={clsx(styles.navLink)}>{t('header.postedJobs')}</Link>
+              {/* <Link to="/postedJobs" className={clsx(styles.navLink)}>{t('header.postedJobs')}</Link> */}
+              <Link to="/postedJobs" className={clsx(styles.navLink)}>{t('header.postCreated')}</Link>
+              <Link to="/savedCandidates" className={clsx(styles.navLink)}>{t('header.savedCandidates')}</Link>
               <div className={clsx(styles.navLink)}>
                 <div className={clsx(styles.navLink, styles.notificationContainer)}>
                   <Dropdown>

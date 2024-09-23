@@ -8,6 +8,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { getUserStorage } from '../../Utils/valid';
 import { Button, Form, Modal } from 'react-bootstrap';
+import logo from '../../images/logo.jpg';
 
 const JobDetail = () => {
   const { jobId } = useParams();
@@ -72,44 +73,54 @@ const JobDetail = () => {
     const fetchCandidate = async () => {
       try {
         const candidateId = getUserStorage().user._id;
+    
+        // Fetch candidate data
         const response = await getApiWithToken(`/candidate/${candidateId}`);
-
-        const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
-        const applications = applicationResponse?.data?.applications;//lấy ra được những đơn đã ứng tuyển
-        if (applications) {
-          // Kiểm tra xem trong các đơn ứng tuyển có đơn nào ứng viên ứng tuyển cho công việc hiện tại không
-          const isApplied = applications.some(application => 
-            application.candidate === candidateId && application.job === jobId
-          );
-          if (isApplied) {
-            // console.log("The candidate has already applied for this job");
-            setIsApplied(true); // Đặt trạng thái đã ứng tuyển
-          }
-        }
-        
-        const savedJobsResponse = await  getApiWithToken(`/save-job/gets/${candidateId}`);
-        const savedJobs = savedJobsResponse?.data?.savedJobs || [];
-        if(savedJobs){
-          const isSaved = savedJobs.find(savedJob => 
-            savedJob.job === jobId && savedJob.candidate === candidateId
-          );
-          if(isSaved){
-            setIsSaved(true);
-          }
-        }
         if (response.data.success) {
-          // setCandidate(response.data.candidate);
           setCandidateName(response.data.candidate.name);
           setCandidateEmail(response.data.candidate.email);
           setCandidatePhone(response.data.candidate.phoneNumber);
         } else {
           setError('Failed to fetch candidate data');
         }
+    
+        // Fetch application data
+        try {
+          const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
+          const applications = applicationResponse?.data?.applications || [];
+    
+          const isApplied = applications.some(application => 
+            application.candidate === candidateId && application.job === jobId
+          );
+          if (isApplied) {
+            setIsApplied(true); // Set the state if already applied
+          }
+        } catch (applicationError) {
+          console.warn('No applications found for candidate', applicationError);
+          // Optionally handle cases where there are no applications
+        }
+    
+        // Fetch saved jobs data
+        try {
+          const savedJobsResponse = await getApiWithToken(`/save-job/gets/${candidateId}`);
+          const savedJobs = savedJobsResponse?.data?.savedJobs || [];
+    
+          const isSaved = savedJobs.find(savedJob => 
+            savedJob.job === jobId && savedJob.candidate === candidateId
+          );
+          if (isSaved) {
+            setIsSaved(true); // Set the state if job is saved
+          }
+        } catch (savedJobError) {
+          console.warn('No saved jobs found for candidate', savedJobError);
+          // Optionally handle cases where there are no saved jobs
+        }
+    
       } catch (err) {
         setError('An error occurred');
       }
     };
-
+    
     const fetchJob = async () => {
       try {
         const result = await getAPiNoneToken(`/job/${jobId}`);
@@ -133,8 +144,8 @@ const JobDetail = () => {
           
           // const fetchedSkills = await Promise.all(skillPromises);
           // setSkills(fetchedSkills);
-          if (result.data.job.requirements && result.data.job.requirements.length > 0) {
-            const skillPromises = result.data.job.requirements.map(async (skillId) => {
+          if (result.data.job.requirementSkills && result.data.job.requirementSkills.length > 0) {
+            const skillPromises = result.data.job.requirementSkills.map(async (skillId) => {
               const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
               return skillResult.data.skill.skillName;
             });
@@ -151,7 +162,6 @@ const JobDetail = () => {
         setError('Failed to fetch job details');
       }
     };
-    
     
     const userData = getUserStorage()?.user;
     const userRole = userData?.role;
@@ -295,7 +305,6 @@ const JobDetail = () => {
   
     try {
       // Kiểm tra xem công việc hiện tại đã được lưu chưa
-      // const savedJob = savedJobs.find(savedJob => savedJob.job === job._id);
       const savedJob = savedJobs.find(savedJob => 
         savedJob.job === job._id && savedJob.candidate === userData._id
       );
@@ -449,7 +458,7 @@ const JobDetail = () => {
       <div className={clsx(styles.jobDetail)}>
         <div className={clsx(styles.titleContainer)}>
           <div className={clsx(styles.title)}>
-            <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
+            <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
             <h1>{job.title}</h1>
           </div>
           {(userRole === 'candidate' || !userRole) && (
@@ -475,13 +484,15 @@ const JobDetail = () => {
         <p><strong>Address:</strong> {job.street}, {job.city} </p>
         <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
         <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
-        <p><strong>Salary:</strong> ${job.salary}</p>
+        <p><strong>Salary:</strong> {job.salary}</p>
+        <p><strong>Interest:</strong> {job.interest}</p>
         <p><strong>Type:</strong> {job.type}</p>
         <p><strong>Position:</strong> {job.position}</p>
+        <p><strong>Requirements:</strong> {job.requirements}</p>
         <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
         <p><strong>Category: </strong>{categoryName}</p>
         <div>
-          <strong>Requirements: </strong>
+          <strong>Requirements skill: </strong>
           {skills.length > 0 ? (
             <ul>
               {skills.map((skill, index) => (

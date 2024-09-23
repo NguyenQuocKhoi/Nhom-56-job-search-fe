@@ -7,26 +7,52 @@ import { getUserStorage } from '../../Utils/valid';
 
 import logo from '../../images/logo.jpg';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
+const cities = [
+  'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
 
 const InfoCompany = () => {
+  const navigate = useNavigate();
+
   const [company, setCompany] = useState({
     avatar: '',
     name: '',
     email: '',
     phoneNumber: '',
-    address: '',
-    website: ''
+    city: '',
+    street: '',
+    website: '',
+    description: ''
   });
   const [error, setError] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  //city
+  const [showCityModal, setShowCityModal] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(cities);
+  const [searchQuery, setSearchQuery] = useState('');
   
+  const companyId = getUserStorage().user._id;
 
   useEffect(() => {
     const fetchCompany = async () => {
       try {
-        const companyId = getUserStorage().user._id;
         const response = await getApiWithToken(`/company/${companyId}`);
         
         if (response.data.success) {
@@ -41,83 +67,7 @@ const InfoCompany = () => {
     };
 
     fetchCompany();
-  }, []);
-
-  // console.log(company);
-  // const handleUploadAvatar = async () => {
-  //   try {
-  //     if (!avatarFile) return;
-
-  //     const formData = new FormData();
-  //     formData.append('avatar', avatarFile);
-
-  //     const companyId = getUserStorage().user._id;
-  //     const response = await putApiWithToken(`/company/upload-avatar/${companyId}`, formData);
-
-  //     if (response.data.success) {
-  //       setCompany(response.data.company);
-  //       setAvatarPreview(response.data.company.avatarUrl); // Cập nhật ảnh đại diện
-  //     } else {
-  //       setError('Failed to upload avatar');
-  //     }
-  //   } catch (err) {
-  //     setError('An error occurred during avatar upload');
-  //   }
-  // };
-
-  // const handleUpdateInfo = async () => {
-  //   try {
-  //     const companyId = getUserStorage().user._id;
-      
-  //     const response = await putApiWithToken(`/company/update/${companyId}`, company);
-  
-  //     if (response.data.success) {
-  //       setCompany(response.data.company);
-  //       setIsEditing(false);
-  //       Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
-  //     } else {
-  //       setError('Failed to update company information');
-  //       Swal.fire({ icon: 'error', text: 'Failed to update company information' });
-  //     }
-  //   } catch (err) {
-  //     setError('An error occurred during information update');
-  //     Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
-  //   }
-  // };
-//
-
-  // const handleUpdateInfo = async () => {
-  //   try {
-  //     const companyId = getUserStorage().user._id;
-
-  //     // Handle avatar upload if file is selected
-  //     // if (avatarFile) {
-  //     //   const formData = new FormData();
-  //     //   formData.append('avatar', avatarFile);
-
-  //     //   const avatarResponse = await putApiWithToken(`/company/upload-avatar/${companyId}`, formData);
-  //     //   if (avatarResponse.data.success) {
-  //     //     setAvatarPreview(avatarResponse.data.company.avatarUrl);
-  //     //   } else {
-  //     //     setError('Failed to upload avatar');
-  //     //   }
-  //     // }
-
-
-  //     const companyResponse = await putApiWithToken(`/company/update/${companyId}`, company);
-  //     if (companyResponse.data.success) {
-  //       setCompany(companyResponse.data.company);
-  //       setIsEditing(false);
-  //       Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
-  //     } else {
-  //       setError('Failed to update company information');
-  //       Swal.fire({ icon: 'error', text: 'Failed to update company information' });
-  //     }
-  //   } catch (err) {
-  //     setError('An error occurred during information update');
-  //     Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
-  //   }
-  // };
+  }, [companyId]);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -134,8 +84,10 @@ const InfoCompany = () => {
       // Append form data for the company fields
       formData.append('name', company.name);
       formData.append('phoneNumber', company.phoneNumber);
-      formData.append('address', company.address);
+      formData.append('city', company.city);
+      formData.append('street', company.street);
       formData.append('website', company.website);
+      formData.append('description', company.description);
       
       // Append avatar file if it exists
       if (avatarFile) {
@@ -167,20 +119,39 @@ const InfoCompany = () => {
     setCompany({ ...company, [name]: value });
   };
 
-  if (error) return <div className={clsx(styles.error)}>{error}</div>;
+  const handleViewEditProfile = () => {
+    if (company.pendingUpdates) {
+      navigate(`/viewEditProfile/${companyId}`);
+    }
+  };
 
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    setCompany({ ...company, city });
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  };
+
+  if (error) return <div className={clsx(styles.error)}>{error}</div>;
   if (!company) return <div className={clsx(styles.loading)}>Loading...</div>;
 
   return (
     <div className={clsx(styles.companyInfo)}>
       <div className={clsx(styles.avatarSection)}>
         <img src={company.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
-        {/* <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
 
         <input 
           type="file" 
           accept="image/*" 
-          // onChange={(e) => handleAvatarChange(e)} 
           onChange={handleAvatarChange}
           disabled={!isEditing}
         />
@@ -193,7 +164,7 @@ const InfoCompany = () => {
         <input 
           type="text" 
           name="name"
-          value={company.name}
+          value={company.name || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
         />
@@ -202,7 +173,7 @@ const InfoCompany = () => {
         <input 
           type="email" 
           name="email"
-          value={company.email}
+          value={company.email || ""}
           onChange={handleInputChange}
           disabled
         />
@@ -211,16 +182,50 @@ const InfoCompany = () => {
         <input 
           type="text" 
           name="phoneNumber"
-          value={company.phoneNumber}
+          value={company.phoneNumber || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
         />
 
-        <label>Address:</label>
+        <label>City:</label>
         <input 
           type="text" 
-          name="address"
-          value={company.address}
+          name="city"
+          value={company.city || ""}
+          onClick={handleCityInputClick}
+          readOnly
+          disabled={!isEditing}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
+
+        <label>Street:</label>
+        <input 
+          type="text" 
+          name="street"
+          value={company.street || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
         />
@@ -229,25 +234,39 @@ const InfoCompany = () => {
         <input 
           type="text" 
           name="website"
-          value={company.website}
+          value={company.website || ""}
+          onChange={handleInputChange}
+          disabled={!isEditing}
+        />
+
+        <label>Description:</label>
+        <input 
+          type="text" 
+          name="description"
+          value={company.description || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
         />
 
         <div className={clsx(styles.btnContainer)}>
-          <button 
-            className={clsx(styles.btnUpdate)} 
-            onClick={() => {
-              if (isEditing) {
-                handleUpdateInfo();
-              }
-              setIsEditing(!isEditing);
-            }}
-          >
-            {isEditing ? 'Xác nhận cập nhật' : 'Cập nhật thông tin'}
-          </button>
+          {isEditing ? (
+            <>
+              <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
+                Cập nhật
+              </button>
+              <button className={clsx(styles.btnCancel)} onClick={() => setIsEditing(false)}>
+                Hủy
+              </button>
+            </>
+          ) : (
+            <button className={clsx(styles.btnEdit)} onClick={() => setIsEditing(true)}>
+              Cập nhật thông tin
+            </button>
+          )}
+
           <button
-            // className={clsx(styles.btnUpdate)}
+            onClick={handleViewEditProfile}
+            disabled={!company.pendingUpdates}
           >
             Profile đang chờ duyệt
           </button>

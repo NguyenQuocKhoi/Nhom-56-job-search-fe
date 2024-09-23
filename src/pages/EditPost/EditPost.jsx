@@ -3,8 +3,24 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './editPost.module.scss';
-import { getAPiNoneToken, putApiWithToken } from '../../api';
+import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
 import { useParams, useNavigate } from 'react-router-dom';
+
+const cities = [
+  'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
 
 const EditPost = () => {
   const { jobId } = useParams();
@@ -14,12 +30,15 @@ const EditPost = () => {
     title: '',
     description: '',
     requirements: '',
+    interest: '',
+    requiremenSkills: [],
     salary: '',
     category: '',
     numberOfCruiment: '',
     experienceLevel: '',
     position: '',
-    address: '',
+    city: '',
+    street: '',
     type: '',
     expiredAt: '',
   });
@@ -29,32 +48,54 @@ const EditPost = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
 
+  //skill
+  const [skills, setSkills] = useState([]);
+  const [allSkills, setAllSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [showSkillModal, setShowSkillModal] = useState(false);
+  //city
+  const [showCityModal, setShowCityModal] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(cities);
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     const fetchJobData = async () => {
       try {
         const data = await getAPiNoneToken(`/job/${jobId}`);
         const job = data.data.job;
 
-        console.log(job.type);
+        console.log(job.requirementSkills);
 
-        const categoryData = await getAPiNoneToken(`/category/${job.category}`);//sửa lại none token
-        const categoryDa = await getAPiNoneToken(`/category/get-all`);//lấy tất cả
+        const categoryData = await getAPiNoneToken(`/category/${job.category}`);
+        const categoryDa = await getAPiNoneToken(`/category/get-all`);
         setCategoryDa(categoryDa.data.categories);
-        console.log(categoryDa.data.categories);
+        // console.log(categoryDa.data.categories);
         
         const categoryName = categoryData.data.category.name;
         
+        //skill
+        const skillPromises = job.requirementSkills.map(skillId => 
+          getAPiNoneToken(`/skill/${skillId}`)
+        );
+        
+        const skillResponses = await Promise.all(skillPromises);
+        const skillNames = skillResponses.map(res => res.data.skill.skillName);
+        setSkills(skillNames);
+        setSelectedSkills(job.requirementSkills);
 
         setJobData({
           title: job.title || '',
           description: job.description || '',
-          requirements: job.requirements ? job.requirements.join(', ') : '',
+          requirements: job.requirements || '',
+          interest: job.interest || '',
+          requirementSkills: job.requirementSkills,
           salary: job.salary || '',
           category: job.category || '', // id
           numberOfCruiment: job.numberOfCruiment || '',
           experienceLevel: job.experienceLevel || '',
           position: job.position || '',
-          address: job.address || '',
+          city: job.city || '',
+          street: job.street || '',
           type: job.type || 'fulltime',
           expiredAt: job.expiredAt ? job.expiredAt.split('T')[0] : '', // Convert date format
         });
@@ -74,6 +115,14 @@ const EditPost = () => {
       [e.target.name]: e.target.value || '',
     });
   };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   const newValue = Math.max(1, Number(value)); // Ensure value is at least 1
+  //   setJobData((prevData) => ({
+  //     ...prevData,
+  //     [name]: newValue,
+  //   }));
+  // };
 
   //edit job xong sửa status lại thành false chờ phê duyệt lại
   const handleEditPostJob = async () => {
@@ -81,7 +130,7 @@ const EditPost = () => {
       try {
         const updatedJob = {
           ...jobData,
-          requirements: jobData.requirements.split(',').map(req => req.trim()), // Convert requirements back to array
+          requirementSkills: selectedSkills,
         };
 
         await putApiWithToken(`/job/update/${jobId}`, updatedJob);
@@ -93,6 +142,55 @@ const EditPost = () => {
     } else {
       setIsEditing(true);
     }
+  };
+
+  const fetchAllSkills = async () => {
+    try {
+      const response = await getApiWithToken(`/skill/get-all`);
+      if (response.data.success) {
+        setAllSkills(response.data.skills);
+      } else {
+        setError('Failed to fetch skills');
+      }
+    } catch (err) {
+      setError('Error fetching skills');
+    }
+  };
+
+  const handleOpenSkillModal = () => {
+    fetchAllSkills(); // Fetch skills when opening modal
+    setShowSkillModal(true);
+  };
+
+  // Close skill modal
+  const handleCloseSkillModal = () => {
+    setShowSkillModal(false);
+  };
+
+  const handleSkillToggle = (skillId) => {
+    if (selectedSkills.includes(skillId)) {
+      // If skill is already selected, remove it from the list
+      setSelectedSkills(selectedSkills.filter((id) => id !== skillId));
+    } else {
+      // If skill is not selected, add it to the list
+      setSelectedSkills([...selectedSkills, skillId]);
+    }
+  };
+
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    setJobData({ ...jobData, city });
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
   return (
@@ -134,9 +232,64 @@ const EditPost = () => {
             ></textarea>
           </div>
           <div className={clsx(styles.formGroup)}>
+            <label htmlFor="interest">Phúc lợi</label>
+            <textarea
+              id="interest"
+              name="interest"
+              value={jobData.interest}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            ></textarea>
+          </div>
+          <label>Requirements skills:</label>
+          <div className={clsx(styles.skillSection)}>
+            {skills.length > 0 ? (
+              skills.map((skill, index) => (
+                <ul key={index}>
+                  <li>
+                  <span className={clsx(styles.skillTag)}>{skill}</span>
+                  </li>
+                </ul>
+              ))
+            ) : (
+              <p>No requirements skills added</p>
+            )}
+          </div>
+          <button 
+            onClick={handleOpenSkillModal} 
+            // disabled={!isEditing} // Disable button if not editing
+          >
+            Chọn kỹ năng
+          </button>
+          
+          {showSkillModal && (
+            <div className={clsx(styles.modal)}>
+              <div className={clsx(styles.modalContent)}>
+                <ul>
+                  {allSkills.map((skill) => (
+                    <li key={skill._id}>
+                      <label>
+                        <input 
+                          type="checkbox" 
+                          // name="skills" 
+                          // value={skill._id}
+                          checked={selectedSkills.includes(skill._id)}//skill có sẵn 
+                          onChange={() => handleSkillToggle(skill._id)}
+                        />
+                        {skill.skillName}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={handleCloseSkillModal}>Close</button>
+              </div>
+            </div>
+          )}
+
+          <div className={clsx(styles.formGroup)}>
             <label htmlFor="salary">Mức lương</label>
             <input
-              type="number"
+              type="text"
               id="salary"
               name="salary"
               value={jobData.salary}
@@ -152,6 +305,12 @@ const EditPost = () => {
               name="numberOfCruiment"
               value={jobData.numberOfCruiment}
               onChange={handleChange}
+              onInput={(e) => {
+                if (e.target.value < 0) {
+                  e.target.value = 1;
+                }
+              }}
+              min="1"
               readOnly={!isEditing}
             />
           </div>
@@ -177,13 +336,47 @@ const EditPost = () => {
               readOnly={!isEditing}
             />
           </div>
+          <label>City:</label>
+        <input 
+          type="text" 
+          name="city"
+          value={jobData.city || ""}
+          onClick={handleCityInputClick}
+          readOnly
+          disabled={!isEditing}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
+
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="address">Địa chỉ</label>
+            <label htmlFor="street">Đường</label>
             <input
               type="text"
-              id="address"
-              name="address"
-              value={jobData.address}
+              id="street"
+              name="street"
+              value={jobData.street}
               onChange={handleChange}
               readOnly={!isEditing}
             />

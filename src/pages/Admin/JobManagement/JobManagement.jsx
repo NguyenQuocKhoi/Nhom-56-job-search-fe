@@ -6,6 +6,22 @@ import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
+const cities = [
+  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
+
 const JobManagement = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [activeTabSearch, setActiveTabSearch] = useState('all');
@@ -26,6 +42,11 @@ const JobManagement = () => {
   // const [currentPage, setCurrentPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
 
+  //city
+  const [showCityModal, setShowCityModal] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(cities);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [countAll, setCountAll] = useState(0);
 
   const [addressInput, setAddressInput] = useState('');
@@ -44,9 +65,9 @@ const JobManagement = () => {
       setCountAll(result.data.totalJobs);
 
       setJobsAll(result.data.jobs);
-      setJobsAccepted(result.data.jobs.filter(job => job.status === true));
-      setJobsRejected(result.data.jobs.filter(job => job.status === false));
-      setJobsPending(result.data.jobs.filter(job => job.status === undefined));
+      setJobsAccepted(result.data.jobs.filter(job => job.status === true && job.pendingUpdates === null));
+      setJobsRejected(result.data.jobs.filter(job => job.status === false && job.pendingUpdates === null));
+      setJobsPending(result.data.jobs.filter(job => job.pendingUpdates !== null || job.status === undefined));//pendingUpdates khác null thì là pending
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -117,7 +138,7 @@ const JobManagement = () => {
       setButtonState(status);
       Swal.fire({
         icon: 'success',
-        title: status === 'accepted' ? 'Accepted' : 'Rejected',//true
+        title: status === true ? 'Accepted' : 'Rejected',//true
         text: `You have ${status} this job.`,
       });
     } catch (err) {
@@ -177,7 +198,7 @@ const JobManagement = () => {
     try {
       const searchParams = {
         search: jobInput.trim(),
-        address: addressInput.trim() || '',
+        city: addressInput.trim() || '',
       };
   
       const response = await postApiNoneToken('/job/search', searchParams);
@@ -202,6 +223,26 @@ const JobManagement = () => {
     setActiveTab(tab);
   };
 
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    if(city === 'All cities'){
+      setAddressInput(city);
+    } else {
+      setAddressInput(city);
+    }
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -219,7 +260,7 @@ const JobManagement = () => {
               value={addressInput}
               onChange={(e) => setAddressInput(e.target.value)}
             /> */}
-            <select
+            {/* <select
             className={clsx(styles.locationInput)}
             id="address"
             value={addressInput}
@@ -230,7 +271,38 @@ const JobManagement = () => {
             <option value="Hải Phòng">Hải Phòng</option>
             <option value="Ho Chi Minh">TP.HCM</option>
             <option value="Others">Others</option>
-          </select>
+          </select> */}
+            <label>City:</label>
+        <input 
+          type="text" 
+          name="city"
+          value={addressInput || cities}
+          onClick={handleCityInputClick}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
             <Form.Control
               type="text"
               placeholder="Enter job title"
@@ -272,6 +344,7 @@ const JobManagement = () => {
       >
         Rejected
       </button>
+      {/* nếu job có pending update thì là pending */}
       <button
         className={clsx(styles.tabButton, activeTabSearch === 'pending' && styles.active)}
         onClick={() => setActiveTabSearch('pending')}
@@ -494,7 +567,7 @@ const JobManagement = () => {
                 {jobsPending.length > 0 ? (
                   jobsPending.map((job) => (
                     <div key={job._id} className={clsx(styles.content)}>
-                        <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
+                        <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                           <div className={clsx(styles.title)}>
                             <p><strong>{job.title}</strong></p>
@@ -519,7 +592,7 @@ const JobManagement = () => {
                                 >
                                   Reject
                                 </button>
-                                <button>Bản cập nhật</button>
+                                {/* <button>Bản chưa sửa</button> */}
                                 <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>

@@ -269,9 +269,17 @@ const Signup = () => {
                       </Button>
                     </Form.Group>
                   </Form>
+
                   <Button variant="primary" className="w-100" onClick={()=>handleSignup()}>
                       Sign Up
                     </Button>
+                    
+                  <div className="text-center mt-3">
+                <Button variant="outline-danger" className="w-100">
+                  <i className="fab fa-google"></i> Sign Up with Google
+                </Button>
+              </div>
+              
                 </Tab>
 
                 <Tab eventKey="company" title="Company">
@@ -358,11 +366,11 @@ const Signup = () => {
                 </Tab>
               </Tabs>
 
-              <div className="text-center mt-3">
+              {/* <div className="text-center mt-3">
                 <Button variant="outline-danger" className="w-100">
                   <i className="fab fa-google"></i> Sign Up with Google
                 </Button>
-              </div>
+              </div> */}
               <div className="text-center mt-4">
                 <span>Already have an account?</span>
                 <a href="/login" className={styles.loginLink}> Log In</a>

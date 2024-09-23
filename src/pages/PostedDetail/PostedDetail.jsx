@@ -37,7 +37,11 @@ const PostedDetail = () => {
           setCategoryName('No category');
         }
   
+        // console.log(1);
+        
         const resultApplies = await getApiWithToken(`/application/get-applications-by-job/${jobId}`);
+        console.log(resultApplies);
+        
         const applicationsWithCandidates = await Promise.all(resultApplies.data.applications.map(async (apply) => {
           const candidateResult = await getApiWithToken(`/candidate/${apply.candidate}`);
           apply.candidateInfo = candidateResult.data.candidate;
@@ -54,8 +58,8 @@ const PostedDetail = () => {
           
           // const fetchedSkills = await Promise.all(skillPromises);
           // setSkills(fetchedSkills);
-          if (resultJobs.data.job.requirements && resultJobs.data.job.requirements.length > 0) {
-            const skillPromises = resultJobs.data.job.requirements.map(async (skillId) => {
+          if (resultJobs.data.job.requirementSkills && resultJobs.data.job.requirementSkills.length > 0) {
+            const skillPromises = resultJobs.data.job.requirementSkills.map(async (skillId) => {
               const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
               return skillResult.data.skill.skillName;
             });
@@ -148,12 +152,15 @@ const PostedDetail = () => {
               <h1>{job.title}</h1>
             </div>
           </div>
-          <p><strong>Address:</strong> {job.address}</p>
+          {/* <p><strong>Address:</strong> {job.address}</p> */}
+          <p><strong>Address:</strong> {job.street}, {job.city}</p>
           <p><strong>Company:</strong> {job.company.name}</p>
           <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
           <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
           <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
-          <p><strong>Salary:</strong> ${job.salary}</p>
+          <p><strong>Requirements:</strong> {job.requirements}</p>
+          <p><strong>Salary:</strong> {job.salary}</p>
+          <p><strong>Interest:</strong> {job.interest}</p>
           <p><strong>Type:</strong> {job.type}</p>
           <p><strong>Position:</strong> {job.position}</p>
           <p><strong>Experience Level:</strong> {job.experienceLevel}</p>

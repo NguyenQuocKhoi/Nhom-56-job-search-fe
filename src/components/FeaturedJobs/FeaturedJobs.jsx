@@ -5,6 +5,24 @@ import styles from '../FeaturedJobs/featuredJobs.module.scss';
 import ListJobInfo from '../ListJobInfo/ListJobInfo';
 import ListCompanyInfo from '../ListCompanyInfo/ListCompanyInfo';
 import { Link } from 'react-router-dom';
+import JobsRecommended from '../JobsRecommended/JobsRecommended';
+import { getUserStorage } from '../../Utils/valid';
+
+const cities = [
+  'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+  'Vĩnh Phúc', 'Yên Bái'
+];
 
 const FeaturedJobs = () => {
   const [addressInput, setAddressInput] = useState('');
@@ -14,6 +32,20 @@ const FeaturedJobs = () => {
 
   const [categoryName, setCategoryName] = useState('');
 
+  //role
+  const user = getUserStorage()?.user;
+  const role = user ? user.role : null;
+
+   //city
+   const [showCityModal, setShowCityModal] = useState(false);
+   const [filteredCities, setFilteredCities] = useState(cities);
+   const [searchQuery, setSearchQuery] = useState('');
+
+  //candidateId để recommend job
+  const candidateId = user && role === 'candidate' ? user._id : null;
+
+  console.log('candidateId',candidateId);
+  
   const handleSearch = async (event) => {
     event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
 
@@ -21,13 +53,14 @@ const FeaturedJobs = () => {
       const searchParams = {
         search: jobInput,
         categoryName: categoryName,
-        ...(addressInput && { address: addressInput })
+        ...(addressInput && { city: addressInput })
       };
 
       const response = await postApiNoneToken('/user/search', searchParams);
 
       if (response.data.success) {
         setResults(response.data.data);
+        console.log(response.data.data.candidates);
       } else {
         setResults(null);
       }
@@ -37,19 +70,40 @@ const FeaturedJobs = () => {
     }
   };
 
+  //city
+  const handleCityInputClick = () => {
+    setShowCityModal(true);
+  };
+
+  const handleCitySelect = (city) => {
+    if(city === 'All cities'){
+      setAddressInput(city);
+    } else {
+      setAddressInput(city);
+    }
+    setShowCityModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  };
+
   return (
     <div className={clsx(styles.searchComponent)}>
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
           {/* category */}
-          <input
+          {/* <input
             className={clsx(styles.jobInput)}
             type="text"
             id="categoryName"
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
             placeholder="Enter category"
-          />
+          /> */}
+          
           {/* <input
             className={clsx(styles.locationInput)}
             type="text"
@@ -58,18 +112,51 @@ const FeaturedJobs = () => {
             onChange={(e) => setAddressInput(e.target.value)}
             placeholder="Enter address"
           /> */}
-          <select
+          {/* <select
             className={clsx(styles.locationInput)}
-            id="address"
+            id="city"
             value={addressInput}
             onChange={(e) => setAddressInput(e.target.value)}
           >
             <option value="">All cities</option>
-            <option value="Ha Noi">Hà Nội</option>
+            <option value="Hà Nội">Hà Nội</option>
             <option value="Da Nang">Đà Nẵng</option>
             <option value="Ho Chi Minh">TP.HCM</option>
             <option value="Others">Others</option>
-          </select>
+          </select> */}
+
+<label>City:</label>
+        <input 
+          type="text" 
+          name="city"
+          value={addressInput || 'All cities'}
+          onClick={handleCityInputClick}
+        />
+        {/* City Modal */}
+        {showCityModal && (
+          <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalContent)}>
+              <input 
+                type="text"
+                placeholder="Search Cities..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <ul>
+                {filteredCities.map((city) => (
+                  <li 
+                    key={city}
+                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowCityModal(false)}>Close</button>
+            </div>
+          </div>
+        )}
+        
           <input
             className={clsx(styles.jobInput)}
             type="text"
@@ -128,7 +215,7 @@ const FeaturedJobs = () => {
                 <h3>Jobs</h3>
                 <ul>
                   {results.jobs.map((job) => (
-                    <Link key={job._id} to={`/detailJob/${job._id}`}>
+                    <Link key={job._id} to={`/detailJob/${job._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{job.title}</li>
                     </Link>
                   ))}
@@ -136,7 +223,7 @@ const FeaturedJobs = () => {
                 <h3>Companies</h3>
                 <ul>
                   {results.companies.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`}>
+                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{company.name}</li>
                     </Link>
                   ))}
@@ -144,7 +231,7 @@ const FeaturedJobs = () => {
                 <h3>Candidates</h3>
                 <ul>
                   {results.candidates.map((candidate) => (
-                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`}>
+                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{candidate.name}</li>
                     </Link>
                   ))}
@@ -156,7 +243,7 @@ const FeaturedJobs = () => {
                 <h3>Jobs</h3>
                 <ul>
                   {results.jobs.map((job) => (
-                    <Link key={job._id} to={`/detailJob/${job._id}`}>
+                    <Link key={job._id} to={`/detailJob/${job._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{job.title}</li>
                     </Link>
                   ))}
@@ -168,7 +255,7 @@ const FeaturedJobs = () => {
                 <h3>Companies</h3>
                 <ul>
                   {results.companies.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`}>
+                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{company.name}</li>
                     </Link>
                   ))}
@@ -181,6 +268,7 @@ const FeaturedJobs = () => {
                 <ul>
                   {results.candidates.map((candidate) => (
                     <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`}>
+                    {/* <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer"> */}
                       <li>{candidate.name}</li>
                     </Link>
                   ))}
@@ -190,7 +278,16 @@ const FeaturedJobs = () => {
           </div>
         </div>
       )}
+
+      {role === 'candidate' && candidateId && (
+        <div>
+          <p>Jobs for you</p>
+          <JobsRecommended candidateId={candidateId} />
+        </div>
+      )}
+      <p>List jobs</p>
       <ListJobInfo/>
+      <p>List companies</p>
       <ListCompanyInfo/>
     </div>
   );

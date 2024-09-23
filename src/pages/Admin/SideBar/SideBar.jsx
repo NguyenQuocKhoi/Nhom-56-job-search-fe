@@ -8,7 +8,7 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
         className={`${styles.tab} ${selectedTab === 'overview' ? styles.active : ''}`}
         onClick={() => setSelectedTab('overview')}
       >
-        Tổng quan
+        Thống kê
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'job' ? styles.active : ''}`}
