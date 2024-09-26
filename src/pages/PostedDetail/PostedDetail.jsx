@@ -29,13 +29,25 @@ const PostedDetail = () => {
         console.log(resultJobs);
         
         //Lấy tên category
-        if (resultJobs.data.job.category) {
+        // if (resultJobs.data.job.category) {
+        //   const categoryData = await getAPiNoneToken(`/category/${resultJobs.data.job.category}`);
+        //   const categoryName = categoryData.data.category.name;
+        //   setCategoryName(categoryName);
+        // } else {
+        //   setCategoryName('No category');
+        // }
+        if (resultJobs.data.job.pendingUpdates && resultJobs.data.job.pendingUpdates.category) {
+          const categoryData = await getAPiNoneToken(`/category/${resultJobs.data.job.pendingUpdates.category}`);
+          const categoryName = categoryData.data.category.name;
+          setCategoryName(categoryName);
+        } else if (resultJobs.data.job.category) {
           const categoryData = await getAPiNoneToken(`/category/${resultJobs.data.job.category}`);
           const categoryName = categoryData.data.category.name;
           setCategoryName(categoryName);
         } else {
           setCategoryName('No category');
         }
+        
   
         // console.log(1);
         
@@ -58,15 +70,28 @@ const PostedDetail = () => {
           
           // const fetchedSkills = await Promise.all(skillPromises);
           // setSkills(fetchedSkills);
-          if (resultJobs.data.job.requirementSkills && resultJobs.data.job.requirementSkills.length > 0) {
-            const skillPromises = resultJobs.data.job.requirementSkills.map(async (skillId) => {
+
+
+          //
+          // if (resultJobs.data.job.requirementSkills && resultJobs.data.job.requirementSkills.length > 0) {
+          //   const skillPromises = resultJobs.data.job.requirementSkills.map(async (skillId) => {
+          //     const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
+          //     return skillResult.data.skill.skillName;
+          //   });
+
+          //   const fetchedSkills = await Promise.all(skillPromises);
+          //   setSkills(fetchedSkills);
+          const requirementSkills = resultJobs.data.job.pendingUpdates?.requirementSkills || resultJobs.data.job.requirementSkills;
+
+          if (requirementSkills && requirementSkills.length > 0) {
+            const skillPromises = requirementSkills.map(async (skillId) => {
               const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
               return skillResult.data.skill.skillName;
             });
-
+          
             const fetchedSkills = await Promise.all(skillPromises);
-            setSkills(fetchedSkills);
-          } else {
+            setSkills(fetchedSkills);            
+        } else {
             setSkills([]); // Không có kỹ năng
           }
       } catch (err) {
@@ -75,6 +100,8 @@ const PostedDetail = () => {
     };
     fetchJobAndCandidates();
   }, [jobId]);
+
+  const isFieldDifferent = (field) => job && job.pendingUpdates && job[field] !== job.pendingUpdates[field];
 
   if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
@@ -87,15 +114,6 @@ const PostedDetail = () => {
     if (job.pendingUpdates) {
       navigate(`/viewEdit/${jobId}`);
     } 
-    // else {
-    //   setIsButtonDisabled(true);
-      // Swal.fire({
-      //   title: 'No Changes',
-      //   text: 'This job does not have any pending updates.',
-      //   icon: 'info',
-      //   confirmButtonText: 'OK',
-      // });
-    // }
   };
 
   const handleDeletePost = async () => {
@@ -149,11 +167,67 @@ const PostedDetail = () => {
           <div className={clsx(styles.titleContainer)}>
             <div className={clsx(styles.title)}>
               <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
-              <h1>{job.title}</h1>
+              <h1 className={clsx({ [styles.highlight]: isFieldDifferent('title') })}>
+                {job.pendingUpdates?.title || job.title}
+              </h1>
             </div>
           </div>
-          {/* <p><strong>Address:</strong> {job.address}</p> */}
-          <p><strong>Address:</strong> {job.street}, {job.city}</p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
+            <strong>Address:</strong> {job.pendingUpdates?.street || job.street}, {job.pendingUpdates?.city || job.city}
+          </p>
+          <p><strong>Company:</strong> {job.company.name}</p>
+          <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
+            <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('numberOfCruiment') })}>
+            <strong>Number of Recruitment:</strong> {job.pendingUpdates?.numberOfCruiment || job.numberOfCruiment}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
+            <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
+            <strong>Interest:</strong> {job.pendingUpdates?.interest || job.interest}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
+            <strong>Salary:</strong> {job.pendingUpdates?.salary || job.salary}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('type') })}>
+            <strong>Type:</strong> {job.pendingUpdates?.type || job.type}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('position') })}>
+            <strong>Position:</strong> {job.pendingUpdates?.position || job.position}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('experienceLevel') })}>
+            <strong>Experience Level:</strong> {job.pendingUpdates?.experienceLevel || job.experienceLevel}
+          </p>
+          <p className={clsx({ [styles.highlight]: isFieldDifferent('category') })}>
+            <strong>Category:</strong> {categoryName || 'No Category'}
+          </p>
+          <div>
+            <strong>Requirements: </strong>
+            {skills.length > 0 ? (
+              <ul>
+                {skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>No skill</span>
+            )}
+          </div>
+          <div
+              className={clsx({ [styles.highlight]: isFieldDifferent('description') })}
+             dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.description || job.description }}
+          ></div>
+          {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('description') })}>
+            <strong>Description:</strong> {job.pendingUpdates.description}
+          </p> */}
+          {
+            job.pendingUpdates &&
+          (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString()}</p>)
+          }
+          {/* <p><strong>Address:</strong> {job.street}, {job.city}</p>
           <p><strong>Company:</strong> {job.company.name}</p>
           <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
           <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
@@ -164,8 +238,8 @@ const PostedDetail = () => {
           <p><strong>Type:</strong> {job.type}</p>
           <p><strong>Position:</strong> {job.position}</p>
           <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
-          <p><strong>Category:</strong> {categoryName || 'No Category'}</p>
-          <div>
+          <p><strong>Category:</strong> {categoryName || 'No Category'}</p> */}
+          {/* <div>
           <strong>Requirements: </strong>
           {skills.length > 0 ? (
             <ul>
@@ -176,17 +250,20 @@ const PostedDetail = () => {
           ) : (
             <span>No skill</span>
           )}
-          <p><strong>Description:</strong> {job.description}</p>
-        </div>
+        </div> */}
+          {/* <div
+             dangerouslySetInnerHTML={{ __html: job.description }}
+          ></div> */}
           <button onClick={handleEditPost}>Sửa bài đăng</button>
           <button onClick={handleDeletePost}>Xóa bài đăng</button>
-          <button 
+          {job.pendingUpdates && <p>Đang chờ phê duyệt</p>}
+          {/* <button 
             onClick={handleViewEdit}
             // disabled={isButtonDisabled}
             disabled={!job.pendingUpdates}
           >
             Xem chi tiết sửa
-          </button>
+          </button> */}
         </div>
 
         <div>

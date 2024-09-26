@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Tab, Tabs, Form } from 'react-bootstrap';
+import { Button, Tab, Tabs, Form, Modal } from 'react-bootstrap';
 import clsx from 'clsx';
 import styles from './signup.module.scss';
 import logo from '../../images/logo.jpg';
@@ -18,6 +18,9 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("123456Aa");
   const [passwordErr, setPasswordErr] = useState("");
   const [verify, setVerify] = useState("");
+
+  //
+  const [showModal, setShowModal] = useState(false);
 
   const handleCheckEmailExit = async (email) => {
     if(validateEmail(email)){
@@ -166,10 +169,60 @@ const Signup = () => {
       if (password !== confirmPassword) {
         setPasswordErr("Mật khẩu không khớp");
       }
+      return false;
     }
+    return false;
   };
+
+  //modal captcha
+  // const handleShowModal = () => {
+  //   handleSentVerify();
+  //   setShowModal(true);
+  // }
+  const handleShowModal = async () => {
+    const isSent = await handleSentVerify(); // Gọi hàm và chờ kết quả
+    if (isSent) { // Chỉ hiển thị modal nếu gửi thành công
+        setShowModal(true);
+    }
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  }
   
   return (
+    <>
+   <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>XÁC THỰC</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Nhập mã xác thực</p>
+        <input 
+          type="text"
+          id="verify"
+          placeholder='Nhập mã xác thực'
+          className="form-control"
+          value={verify}
+          onChange={(e) => {
+            setVerify(e.target.value);
+          }}
+          aria-invalid={!!emailErr}
+          />
+          <Button variant="secondary" onClick={handleResentVerify}>
+            Gửi lại mã
+        </Button>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={()=>handleSignup()}>
+          Xác thực
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
     <div className={clsx('container', styles.signupContainer)}>
       {/* logo */}
       <div className={styles.logoContainer}>
@@ -246,41 +299,18 @@ const Signup = () => {
                         {passwordErr}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Verify Code</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter verify code"
-                        value={verify}
-                        onChange={(e) => {
-                          setVerify(e.target.value);
-                        }}
-                        isInvalid={!!emailErr}
-                      />
-                      <Button
-                        onClick={handleSentVerify}
-                      >
-                        sent verify code
-                      </Button>
-                      <Button
-                        onClick={handleResentVerify}
-                      >
-                        Resent verify code
-                      </Button>
-                    </Form.Group>
-                  </Form>
-
-                  <Button variant="primary" className="w-100" onClick={()=>handleSignup()}>
+                    
+                  <Button variant="primary" className="w-100" onClick={handleShowModal}>
                       Sign Up
                     </Button>
+                </Form>
                     
                   <div className="text-center mt-3">
                 <Button variant="outline-danger" className="w-100">
                   <i className="fab fa-google"></i> Sign Up with Google
                 </Button>
               </div>
-              
-                </Tab>
+            </Tab>
 
                 <Tab eventKey="company" title="Company">
                   <Form>
@@ -336,30 +366,7 @@ const Signup = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     
-                    <Form.Group className="mb-3">
-                      <Form.Label>Verify Code</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter verify code"
-                        value={verify}
-                        onChange={(e) => {
-                          setVerify(e.target.value);
-                        }}
-                        isInvalid={!!emailErr}
-                      />
-                      <Button
-                        onClick={handleSentVerify}
-                      >
-                        sent verify code
-                      </Button>
-                      <Button
-                        onClick={handleResentVerify}
-                      >
-                        Resent verify code
-                      </Button>
-                    </Form.Group>
-
-                    <Button variant="primary" className="w-100" onClick={()=>handleSignup()}>
+                    <Button variant="primary" className="w-100" onClick={handleShowModal}>
                       Sign Up
                     </Button>
                   </Form>
@@ -380,6 +387,7 @@ const Signup = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -7,6 +7,8 @@ import { getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import ReatQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -95,14 +97,13 @@ const CreatePostJob = () => {
       [e.target.name]: e.target.value,
     });
   };
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   const newValue = Math.max(1, Number(value)); // Ensure value is at least 1
-  //   setJobData((prevData) => ({
-  //     ...prevData,
-  //     [name]: newValue,
-  //   }));
-  // };
+  const handleChangeD = (value) => {
+    setJobData({
+      ...jobData,
+      description: value
+    });
+  };
+
 
   const handleSkillChange = (skillId) => {
     setJobData((prevState) => {
@@ -297,15 +298,6 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="description">Mô tả</label>
-            <textarea
-              id="description"
-              name="description"
-              value={jobData.description}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-          <div className={clsx(styles.formGroup)}>
             <label htmlFor="requirements">Yêu cầu</label>
             <textarea
               id="requirements"
@@ -401,6 +393,19 @@ const CreatePostJob = () => {
             </div>
           </div>
         )}
+{/* <select 
+  id="city" 
+  name="city" 
+  value={jobData.city || ""} 
+  onChange={handleChange} 
+  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
+>
+  {cities.map((city, index) => (
+    <option key={index} value={city}>
+      {city}
+    </option>
+  ))}
+</select> */}
 
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="street">Đường</label>
@@ -493,14 +498,23 @@ const CreatePostJob = () => {
               onChange={handleChange}
             />
           </div>
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="description">Mô tả</label>
+            {/* <textarea
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleChange}
+            ></textarea> */}
+            <ReatQuill
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleChangeD}
+            />
+          </div>
         </form>
         <div className={clsx(styles.actions)}>
-          {/* <button
-            className={clsx(styles.createButton)}
-            onClick={handleCreatePostJob}
-          >
-            Tạo bài đăng
-          </button> */}
     <button
       className={clsx(styles.createButton, { [styles.disabledButton]: companyStatus !== true })}
       onClick={handleCreatePostJob}

@@ -21,9 +21,11 @@ import EditPost from './pages/EditPost/EditPost';
 import AdminLayout from './pages/Admin/AdminLayout/AdminLayout';
 import DetailCandidateSearch from './pages/DetailCandidateSearch/DetailCandidateSearch.jsx';
 import DetailJobAdmin from './pages/Admin/DetailJobAdmin/DetailJobAdmin.jsx';
-import ViewEdit from './pages/ViewEdit/ViewEdit.jsx';
-import ViewEditProfile from './pages/ViewEditProfile/ViewEditProfile.jsx';
+// import ViewEdit from './pages/ViewEdit/ViewEdit.jsx';
+// import ViewEditProfile from './pages/ViewEditProfile/ViewEditProfile.jsx';
 import SavedCandidates from './pages/savedCandidates/savedCandidates.jsx';
+import DetailCompanyAdmin from './pages/Admin/DetailCompanyAdmin/DetailCompanyAdmin.jsx';
+import DetailCandidateAdmin from './pages/Admin/DetailCanidateAdmin/DetailCandidateAdmin.jsx';
 
 function App() {
   return (
@@ -49,9 +51,11 @@ function App() {
             <Route path="/detailCandidate/:candidateId" element={<DetailCandidate />}/>
             <Route path="/detail-candidate/:candidateId" element={<DetailCandidateSearch />}/>
             <Route path="/detailJobAdmin/:jobId" element={<DetailJobAdmin />}/>
+            <Route path="/detailCompanyAdmin/:id" element={<DetailCompanyAdmin />}/>
+            <Route path="/detailCandidateAdmin/:candidateId" element={<DetailCandidateAdmin />}/>
             <Route path="/editPost/:jobId" element={<EditPost />}/>
-            <Route path="/viewEdit/:jobId" element={<ViewEdit />}/>
-            <Route path="/viewEditProfile/:companyId" element={<ViewEditProfile />}/>
+            {/* <Route path="/viewEdit/:jobId" element={<ViewEdit />}/> */}
+            {/* <Route path="/viewEditProfile/:companyId" element={<ViewEditProfile />}/> */}
             <Route path="/admin" element={<AdminLayout />}/>
           </Routes>
         </div>

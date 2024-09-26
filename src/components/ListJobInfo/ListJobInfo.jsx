@@ -178,12 +178,15 @@ const ListJobInfo = () => {
       <div className={clsx(styles.jobContainer)}>
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
+            job && job._id && job.company && job.company._id ? (
             <div key={job._id} className={clsx(styles.jobcard)}>
               <div className={clsx(styles.content)}>
                 <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
                   <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                 </Link>
-                <Link to={`/detailJob/${job._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                <Link to={`/detailJob/${job._id}`} 
+                  // target="_blank" rel="noopener noreferrer" 
+                  className={clsx(styles.linkJob)}>
                   <div className={clsx(styles.text)}>
                     <div className={clsx(styles.title)}>
                       <p><strong>{job.title}</strong></p>
@@ -211,6 +214,7 @@ const ListJobInfo = () => {
                 </Link>
               </div>
             </div>
+            ) : null
           ))
         ) : (
           <div>No jobs available</div>

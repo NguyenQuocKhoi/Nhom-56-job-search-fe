@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import styles from './editPost.module.scss';
 import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReatQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -115,14 +117,12 @@ const EditPost = () => {
       [e.target.name]: e.target.value || '',
     });
   };
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   const newValue = Math.max(1, Number(value)); // Ensure value is at least 1
-  //   setJobData((prevData) => ({
-  //     ...prevData,
-  //     [name]: newValue,
-  //   }));
-  // };
+  const handleChangeD = (value) => {
+    setJobData({
+      ...jobData,
+      description: value
+    });
+  };
 
   //edit job xong sửa status lại thành false chờ phê duyệt lại
   const handleEditPostJob = async () => {
@@ -210,16 +210,6 @@ const EditPost = () => {
               onChange={handleChange}
               readOnly={!isEditing}
             />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="description">Mô tả</label>
-            <textarea
-              id="description"
-              name="description"
-              value={jobData.description}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            ></textarea>
           </div>
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="requirements">Yêu cầu</label>
@@ -420,6 +410,22 @@ const EditPost = () => {
               value={jobData.expiredAt}
               onChange={handleChange}
               readOnly={!isEditing}
+            />
+          </div>
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="description">Mô tả</label>
+            {/* <textarea
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            ></textarea> */}
+            <ReatQuill
+              id="description"
+              name="description"
+              value={jobData.description}
+              onChange={handleChangeD}
             />
           </div>
         </form>

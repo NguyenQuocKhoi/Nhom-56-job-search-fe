@@ -276,8 +276,9 @@ const JobManagement = () => {
         <input 
           type="text" 
           name="city"
-          value={addressInput || cities}
+          value={addressInput || 'All cities'}
           onClick={handleCityInputClick}
+          readOnly
         />
         {/* City Modal */}
         {showCityModal && (
@@ -361,7 +362,7 @@ const JobManagement = () => {
           <h3>All Jobs</h3>
           <ul>
             {results.map((job) => (
-              <Link key={job._id} to={`/detailJob/${job._id}`}>
+              <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
                 <li>{job.title}</li>
               </Link>
             ))}
@@ -375,9 +376,9 @@ const JobManagement = () => {
           <h3>Accepted</h3>
           <ul>
             {results
-              .filter((job) => job.status === true)
+              .filter((job) => job.status === true && job.pendingUpdates === null)
               .map((job) => (
-                <Link key={job._id} to={`/detailJob/${job._id}`}>
+                <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
                   <li>{job.title}</li>
                 </Link>
               ))}
@@ -391,9 +392,9 @@ const JobManagement = () => {
           <h3>Rejected</h3>
           <ul>
             {results
-              .filter((job) => job.status === false)
+              .filter((job) => job.status === false && job.pendingUpdates === null)
               .map((job) => (
-                <Link key={job._id} to={`/detailJob/${job._id}`}>
+                <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
                   <li>{job.title}</li>
                 </Link>
               ))}
@@ -407,9 +408,9 @@ const JobManagement = () => {
           <h3>Pending</h3>
           <ul>
             {results
-              .filter((job) => job.status === undefined)
+              .filter((job) => job.status === undefined || job.pendingUpdates !== null)
               .map((job) => (
-                <Link key={job._id} to={`/detailJob/${job._id}`}>
+                <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
                   <li>{job.title}</li>
                 </Link>
               ))}
@@ -456,6 +457,7 @@ const JobManagement = () => {
               <div className={clsx(styles.jobContainer)}>
                 {jobsAll.length > 0 ? (
                   jobsAll.map((job) => (
+            job && job._id && job.company && job.company._id ? (
                     <div className={clsx(styles.content)}  key={job._id}>
                       <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
@@ -469,6 +471,7 @@ const JobManagement = () => {
                       </Link>
                           <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                     </div>
+            ):null
                   ))
                 ) : (
                   <div>No jobs available</div>
@@ -494,6 +497,7 @@ const JobManagement = () => {
               <div className={clsx(styles.jobContainer)}>
                 {jobsAccepted.length > 0 ? (
                   jobsAccepted.map((job) => (
+            job && job._id && job.company && job.company._id ? (
                       <div  key={job._id} className={clsx(styles.content)}>
                     <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
@@ -506,6 +510,7 @@ const JobManagement = () => {
                     </Link>
                           <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
+            ):null
                   ))
                 ) : (
                   <div>No jobs available</div>
@@ -530,6 +535,7 @@ const JobManagement = () => {
               <div className={clsx(styles.jobContainer)}>
                 {jobsRejected.length > 0 ? (
                   jobsRejected.map((job) => (
+            job && job._id && job.company && job.company._id ? (
                     <div key={job._id} className={clsx(styles.content)}>
                         <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
@@ -542,6 +548,7 @@ const JobManagement = () => {
                     </Link>
                         <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
+            ):null
                   ))
                 ) : (
                   <div>No jobs available</div>
@@ -566,6 +573,7 @@ const JobManagement = () => {
               <div className={clsx(styles.jobContainer)}>
                 {jobsPending.length > 0 ? (
                   jobsPending.map((job) => (
+            job && job._id && job.company && job.company._id ? (
                     <div key={job._id} className={clsx(styles.content)}>
                         <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
@@ -596,6 +604,7 @@ const JobManagement = () => {
                                 <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>
+            ):null
                   ))
                 ) : (
                   <div>No jobs available</div>

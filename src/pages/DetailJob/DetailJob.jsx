@@ -73,6 +73,7 @@ const JobDetail = () => {
     const fetchCandidate = async () => {
       try {
         const candidateId = getUserStorage().user._id;
+        console.log(candidateId);
     
         // Fetch candidate data
         const response = await getApiWithToken(`/candidate/${candidateId}`);
@@ -86,8 +87,12 @@ const JobDetail = () => {
     
         // Fetch application data
         try {
+          console.log(89);
+          
           const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
           const applications = applicationResponse?.data?.applications || [];
+
+          console.log(applications);
     
           const isApplied = applications.some(application => 
             application.candidate === candidateId && application.job === jobId
@@ -106,7 +111,7 @@ const JobDetail = () => {
           const savedJobs = savedJobsResponse?.data?.savedJobs || [];
     
           const isSaved = savedJobs.find(savedJob => 
-            savedJob.job === jobId && savedJob.candidate === candidateId
+            savedJob.job._id === jobId && savedJob.candidate === candidateId
           );
           if (isSaved) {
             setIsSaved(true); // Set the state if job is saved
@@ -123,9 +128,13 @@ const JobDetail = () => {
     
     const fetchJob = async () => {
       try {
+        console.log(1)
+        console.log(2);
+        
         const result = await getAPiNoneToken(`/job/${jobId}`);
         if (result.data.job) {
           setJob(result.data.job);
+          console.log("job",result.data.job);
   
           const categoryId = result.data.job.category;
           if (categoryId) {
@@ -306,7 +315,7 @@ const JobDetail = () => {
     try {
       // Kiểm tra xem công việc hiện tại đã được lưu chưa
       const savedJob = savedJobs.find(savedJob => 
-        savedJob.job === job._id && savedJob.candidate === userData._id
+        savedJob.job._id === job._id && savedJob.candidate === userData._id
       );
       console.log("Saved jobs:", savedJobs);
       console.log("Saved job:", savedJob);//chưa lưu thì undifined
@@ -504,7 +513,10 @@ const JobDetail = () => {
           )}
         </div>
         <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
-        <p><strong>Description:</strong> {job.description}</p>
+        <div
+             dangerouslySetInnerHTML={{ __html: job.description }}
+          ></div>
+        {/* <p><strong>Description:</strong> {job.description}</p> */}
       </div>
       <Footer />
     </>

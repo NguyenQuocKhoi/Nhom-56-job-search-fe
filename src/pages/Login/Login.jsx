@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { setUserStorage, validateEmail } from '../../Utils/valid';
 import { postApiNoneToken } from '../../api';
 import Loading from "../../components/Loading/Loading";
+import { Button, Modal } from 'react-bootstrap';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Login = () => {
   const [emailErr, setEmailErr] = useState("");
   const [password, setPassword] = useState("123456Aa");
   const [loading, setLoading] = useState(false);
+  const [emailForgotPassword, setEmailForgotPassword] = useState("");
 
   const generateCaptcha = () => {
     return Math.random().toString(36).substr(2, 6).toUpperCase();
@@ -24,6 +26,9 @@ const Login = () => {
   const [captcha, setCaptcha] = useState(generateCaptcha());
   const [captchaInput, setCaptchaInput] = useState("");
   const [showCaptcha, setShowCaptcha] = useState(false);
+
+  //
+  const [showModal, setShowModal] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,16 +46,20 @@ const Login = () => {
         if (result.data.error) {
           Swal.fire({ icon: "error", text: result.data.error });
         } else {
-          setUserStorage(result.data);
-          
-          const userRole = result.data.user.role;
-          // console.log(1);
-          // console.log(userRole);
-          if (userRole === 'admin') {
-            navigate('/admin');
+          const { isActive, role } = result.data.user;
+  
+          if (!isActive) {
+            Swal.fire({ icon: "error", text: "Your account has been disabled." });
           } else {
-            const redirectTo = location.state?.from || "/";
-            navigate(redirectTo);
+            setUserStorage(result.data);
+  
+            const userRole = role;
+            if (userRole === 'admin') {
+              navigate('/admin');
+            } else {
+              const redirectTo = location.state?.from || "/";
+              navigate(redirectTo);
+            }
           }
         }
       } catch (error) {
@@ -64,17 +73,80 @@ const Login = () => {
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!validateEmail(email).success) {
-      Swal.fire({
-        icon: "warning",
-        text: "Vui lòng nhập địa chỉ email hợp lệ."
-      });
-      return;
-    }
+  // const handleLoginWithGoogle = async (response) => {
+  //   try {
+  //     setLoading(true);
+      
+  //     // Lấy thông tin từ response
+  //     const { tokenId } = response;
+  
+  //     // Gửi token đến backend
+  //     const result = await postApiNoneToken("/user/auth/google", { accessToken: tokenId });
+      
+  //     if (result.data.success) {
+  //       setUserStorage(result.data);
+  
+  //       const userRole = result.data.user.role;
+  //       // Chuyển hướng theo vai trò người dùng
+  //       if (userRole === 'admin') {
+  //         navigate('/admin');
+  //       } else {
+  //         const redirectTo = location.state?.from || "/";
+  //         navigate(redirectTo);
+  //       }
+  //     } else {
+  //       Swal.fire({
+  //         icon: "error",
+  //         text: result.data.message || "Google login failed"
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Google login error: ", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       text: "Google login failed"
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+    
+//   const handleForgotPassword = async () => {
+//     if (!validateEmail(email).success) {
+//         Swal.fire({
+//             icon: "warning",
+//             text: "Vui lòng nhập địa chỉ email hợp lệ."
+//         });
+//         return;
+//     }
 
-    setShowCaptcha(true);
-  };
+//     try {
+//         const response = await postApiNoneToken('/user/forgot-password', { email });
+//         console.log(response);
+
+//         if (response.status === 403) {
+//             Swal.fire({
+//                 icon: "error",
+//                 text: "Tài khoản của bạn đã bị vô hiệu hóa."
+//             });
+//             return;
+//         }
+
+//         setShowCaptcha(true);
+//     } catch (error) {
+//         if (error.response && error.response.status === 404) {
+//             Swal.fire({
+//                 icon: "error",
+//                 text: "Không tìm thấy tài khoản với địa chỉ email này."
+//             });
+//         } else {
+//             Swal.fire({
+//                 icon: "error",
+//                 text: "Đã có lỗi xảy ra, vui lòng thử lại sau."
+//             });
+//         }
+//     }
+// };
 
   const handleSubmitCaptcha = async () => {
     if (captchaInput.toUpperCase() !== captcha) {
@@ -83,9 +155,9 @@ const Login = () => {
         icon: "error",
         text: "Captcha không chính xác. Vui lòng thử lại."
       });
+      setCaptchaInput('')
       return;
     }
-  
     try {
       setLoading(true);
       const result = await postApiNoneToken("/user/forgot-password", { email });
@@ -96,6 +168,9 @@ const Login = () => {
           text: "Mật khẩu mới đã được gửi đến email của bạn. Vui lòng kiểm tra và đăng nhập với mật khẩu mới."
         });
       }
+      setEmailForgotPassword('');
+      setCaptchaInput('');
+      setShowModal(false);
     } catch (error) {
       setLoading(false);
       Swal.fire({
@@ -105,9 +180,73 @@ const Login = () => {
     }
   };
   
+  //modal captcha
+  const handleShowModal = () => {
+    setCaptcha(generateCaptcha());
+    setShowCaptcha(true);
+    setShowModal(true);
+  }
+  const handleCloseModal = () => {
+    setShowModal(false);
+  }
+
+  //chặn phím tắt copy
+  const handleKeyDown = (event) => {
+    if ((event.ctrlKey && event.key === 'c') || (event.metaKey && event.key === 'c')) {
+      event.preventDefault();
+    }
+  };
 
   return (
     <>
+    <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Quên mật khẩu</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Nhập Email</p>
+        <input 
+          type="text"
+          id="name"
+          placeholder='Nhập email'
+          className="form-control"
+          value={emailForgotPassword}
+          onChange={(e) => {
+            setEmailForgotPassword(e.target.value);
+            setEmailErr('');
+          }}
+          />
+          {showCaptcha && (
+                  <div className="form-group text-center mt-4">
+                    <div 
+                      className="mb-3"
+                      onKeyDown={handleKeyDown} tabIndex="0"//ngăn phím tắt copy
+                    >
+                      <span className="captcha-text">{captcha}</span>
+                      <button className="btn btn-link" onClick={() => setCaptcha(generateCaptcha())}>
+                        Tạo mới
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Nhập captcha"
+                      value={captchaInput}
+                      onChange={(e) => setCaptchaInput(e.target.value)}
+                    />
+                    <button className="btn btn-primary mt-3 w-100" onClick={handleSubmitCaptcha}>
+                      Xác nhận Captcha
+                    </button>
+                  </div>
+                )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
       {loading ? <Loading /> : null}
       <div className={clsx('container', styles.loginContainer)}>
         <div className={styles.logoContainer}>
@@ -159,32 +298,21 @@ const Login = () => {
                 </form>
 
                 <div className="text-center mt-3">
-                  <p className={styles.forgotPassword} onClick={handleForgotPassword}>Forgot password?</p>
+                  <p className={styles.forgotPassword} onClick={handleShowModal}>Forgot password?</p>
                 </div>
 
-                {showCaptcha && (
-                  <div className="form-group text-center mt-4">
-                    <div className="mb-3">
-                      <span className="captcha-text">{captcha}</span>
-                      <button className="btn btn-link" onClick={() => setCaptcha(generateCaptcha())}>
-                        Tạo mới
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Nhập captcha"
-                      value={captchaInput}
-                      onChange={(e) => setCaptchaInput(e.target.value)}
-                    />
-                    <button className="btn btn-primary mt-3 w-100" onClick={handleSubmitCaptcha}>
-                      Xác nhận Captcha
-                    </button>
-                  </div>
-                )}
-
                 <div className="text-center mt-4">
-                  <button className="btn btn-outline-danger w-100">
+                {/* <GoogleLogin
+                  clientId="GOOGLE_CLIENT_ID" // Thay thế bằng client ID của bạn
+                  buttonText="Đăng nhập với Google"
+                  onSuccess={handleLoginWithGoogle}
+                  onFailure={handleLoginWithGoogle} // Cũng có thể xử lý lỗi ở đây
+                  cookiePolicy={'single_host_origin'}
+                /> */}
+                  <button 
+                    className="btn btn-outline-danger w-100" 
+                    // onClick={handleLoginWithGoogle}
+                  >
                     <i className="fab fa-google"></i> Log In with Google for candidate
                   </button>
                 </div>

@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAPiNoneToken } from '../../api';
-import styles from './detailCompany.module.scss';
+import { getAPiNoneToken } from '../../../api';
+import styles from './detailCompanyAdmin.module.scss';
 import clsx from 'clsx';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-import logo from '../../images/logo.jpg';
+import Header from '../HeaderAdmin/HeaderAdmin';
+import logo from '../../../images/logo.jpg';
 
-const DetailCompany = () => {
+const DetailCompanyAdmin = () => {
   const { id } = useParams();
   const [company, setCompany] = useState(null);
   const [error, setError] = useState(null);
-
+  
   // Job data for the company
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categories, setCategories] = useState({});
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -75,7 +73,7 @@ const DetailCompany = () => {
         setLoading(false);
       }
     };
-
+    
     fetchCompany();
     fetchJobs();
   }, [id, currentPage]);
@@ -85,25 +83,47 @@ const DetailCompany = () => {
     setCurrentPage(page);
   };
 
+  const renderField = (label, originalValue, updatedValue) => {
+    return (
+      <p>
+        <strong>{label}:</strong> {originalValue}
+        {updatedValue !== undefined && updatedValue !== originalValue && (
+          <span style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+            (Cập nhật thành: {updatedValue})
+          </span>
+        )}
+      </p>
+    );
+  };
+
   if (error) return <div>{error}</div>;
   if (!company) return <div>Company not found</div>;
 
   return (
     <>
       <Header/>
-      <div className={clsx(styles.companyDetail)}>
-        <div className={clsx(styles.title)}>
-          <img src={company.avatar || logo} alt="Logo" className={styles.avatar} />
-          <h3><strong>Company name:</strong> {company.name}</h3>
+      <div className={clsx(styles.jobDetail)}>
+        <div className={clsx(styles.titleContainer)}>
+          <div className={clsx(styles.title)}>
+            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            <h1>{company.name}</h1>
+            {
+              company.pendingUpdates?.name && company.pendingUpdates.name !== company.name && (
+                <h1 style={{backgroundColor: 'yellow'}}>Tên mới: {company.pendingUpdates.name}</h1>
+              )
+            }
+          </div>
         </div>
-        <i className="fa-regular fa-building"></i>
-        <p><strong>Address:</strong> {company.street}, {company.city}</p>
-        <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
-        <p><strong>Website: </strong><a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
-        {/* <p><strong>Posted:</strong> {new Date(company.createdAt).toLocaleDateString()}</p> */}
-        {/* <p><strong>Expires:</strong> {new Date(company.expiredAt).toLocaleDateString()}</p> */}
-        <p><strong>Email:</strong> {company.email}</p>
-        <p><strong>Description:</strong> {company.description}</p>
+        {renderField('Address', `${company.street}, ${company.city}`, `${company.pendingUpdates?.street}, ${company.pendingUpdates?.city}`)}
+        {renderField('Phone number', company.phoneNumber, company.pendingUpdates?.phoneNumber)}
+        {renderField('Website', company.website, company.pendingUpdates?.website)}
+        {renderField('Email', company.email, company.pendingUpdates?.email)}
+        {renderField('Description', company.description, company.pendingUpdates?.description)}
+      </div>
+      <div className={clsx(styles.button)}>
+        <button>Accept</button>
+        <button>Reject</button>
+        <button>Xóa</button>
       </div>
       <span>Tin tuyển dụng của công ty:</span>
       <div className={clsx(styles.mainContent)}>
@@ -154,9 +174,9 @@ const DetailCompany = () => {
           </>
         )}
       </div>
-      <Footer/>
     </>
   );
 };
 
-export default DetailCompany;
+export default DetailCompanyAdmin;
+

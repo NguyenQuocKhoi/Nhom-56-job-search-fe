@@ -69,7 +69,6 @@ const ViewEdit = () => {
             </div>
           </div>
           <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
-            {/* <strong>Address:</strong> {job.pendingUpdates.address} */}
             <strong>Address:</strong> {job.pendingUpdates.street}, {job.pendingUpdates.city}
           </p>
           <p><strong>Company:</strong> {job.company.name}</p>

@@ -15,6 +15,18 @@ const Header = () => {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  //set user và role là null mỗi lần npm start lại
+  // const [user, setUser] = useState(null);
+  // const [role, setRole] = useState(null);
+
+  // useEffect(() => {
+    // localStorage.removeItem('user')//
+    
+    // const storedUser = getUserStorage()?.user;
+    // setUser(storedUser);
+    // setRole(storedUser ? storedUser.role : null);
+  // }, []);
+
   const handleNotificationClick = (notificationId) => {
     const notification = notifications.find(n => n._id === notificationId);
     setSelectedNotification(notification);
@@ -75,11 +87,14 @@ const Header = () => {
 
   useEffect(() => {
     fetchNotifications();
-  // }, [fetchNotifications]);
-  }, []);
+  }, [fetchNotifications]);
+  // }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    //set user và role null sau khi logout
+    // setUser(null);
+    // setRole(null);
   };
 
   return (

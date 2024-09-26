@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../CompanyManagement/companyManagement.module.scss';
-import { getAPiNoneToken, postApiNoneToken, putApiWithToken } from '../../../api';
+import { getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
 const cities = [
@@ -48,17 +48,65 @@ const CompanyManagement = () => {
   const [filteredCities, setFilteredCities] = useState(cities);
   const [searchQuery, setSearchQuery] = useState('');
 
+  //disable
+  const [isActive, setIsActive] = useState(null);
+
+  //create company
+  const [companyData, setCompanyData] = useState({
+    role: 'company',
+    name: '',
+    email: '',
+    password: '',
+    phoneNumber: '',
+    city: '',
+    street: '',
+    website: '',
+    description: '',
+  });
+  const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       const result = await getAPiNoneToken(`/company/get-all?page=${page}&limit=${pagination.limit}`);
 
       console.log(result.data.companies);
+      const companies = result.data.companies;
+    console.log(companies);
 
-      setCompaniesAll(result.data.companies);
-      setCompaniesAccepted(result.data.companies.filter(company => company.status === true && company.pendingUpdates === null));
-      setCompaniesRejected(result.data.companies.filter(company => company.status === false && company.pendingUpdates === null));
-      setCompaniesPending(result.data.companies.filter(company => company.status === undefined || company.pendingUpdates !== null));
+    // Fetch the isActive status for each company (based on the company._id assuming it corresponds to the userId)
+    const companiesWithIsActive = await Promise.all(
+      companies.map(async (company) => {
+        try {
+          const userIsActiveResponse = await getApiWithToken(`/user/${company._id}`);  // Assuming company._id is the userId
+          console.log("userIsActiveResponse",userIsActiveResponse.data.user.isActive);
+          console.log(company._id);
+          
+          const isActive = userIsActiveResponse.data.user.isActive;
+          setIsActive(isActive);
+          console.log("isActive", isActive);
+          console.log(company._id);
+          
+          return { ...company, isActive };  // Attach isActive status to each company object
+        } catch (error) {
+          console.error(`Failed to fetch isActive status for company ${company._id}`, error);
+          return { ...company, isActive: false }; // Default to false if there's an error
+        }
+      })
+    );
+      
+    console.log(companiesWithIsActive);
+    
+    setCompaniesAll(companiesWithIsActive);
+    setCompaniesAccepted(companiesWithIsActive.filter(company => company.status === true && company.pendingUpdates === null));
+    setCompaniesRejected(companiesWithIsActive.filter(company => company.status === false && company.pendingUpdates === null));
+    setCompaniesPending(companiesWithIsActive.filter(company => company.status === undefined || company.pendingUpdates !== null));
+
+      // setCompaniesAll(result.data.companies);
+      // setCompaniesAccepted(result.data.companies.filter(company => company.status === true && company.pendingUpdates === null));
+      // setCompaniesRejected(result.data.companies.filter(company => company.status === false && company.pendingUpdates === null));
+      // setCompaniesPending(result.data.companies.filter(company => company.status === undefined || company.pendingUpdates !== null));
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -100,6 +148,7 @@ const CompanyManagement = () => {
         title: status === true ? 'Accepted' : 'Rejected',
         text: `You have ${status} this company.`,
       });
+      //refresh màn hình luôn
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -109,9 +158,43 @@ const CompanyManagement = () => {
     }
   };
 
-  // const handleDisable = async () => {
-  //   //putApiWithToken(`/user/update-status/companyId`)
-  // }
+  const handleDisableCompany = async (companyId, currentIsActive) => {
+    try {
+      const newIsActiveState = !currentIsActive;
+      const response = await putApiWithToken(`/company/disable-company/${companyId}`, { isActive: newIsActiveState });
+  
+      console.log(response);
+      
+      if (response.data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: `The user has been ${newIsActiveState ? 'activated' : 'disabled'} successfully!`,
+        });
+        setCompaniesAll(prveCompanies =>
+          prveCompanies.map(company=>
+            company._id === companyId
+            ? {...company, isActive: newIsActiveState}
+            :company
+          )
+        )
+        // setIsActive(newIsActiveState); // Update local state to reflect change
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update the user status.',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while updating the user status.',
+      });
+    }
+  };
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -165,40 +248,288 @@ const CompanyManagement = () => {
     setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
+  //create company
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setCompanyData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
+  const handleChange = (e) => {
+    setCompanyData({
+      ...companyData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCreateCompany = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log(1);
+      console.log(companyData.role);
+      console.log(companyData);
+      
+      const response = await postApiWithToken('/user/create-company', companyData);
+      console.log(response);
+      
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: `Company created successfully!`,
+        });
+      }
+      handleCloseModal();
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'An error occurred while creating the company.';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: errorMessage,
+      });
+    }
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCompanyData({
+      name: '',
+      email: '',
+      password: '',
+      phoneNumber: '',
+      city: '',
+      street: '',
+      website: '',
+      description: '',
+    })
+  };
+
+  const generatePassword = () => {
+    const length = 8;
+    
+    // Separate character sets for lowercase, uppercase, and numbers
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    
+    // Combine all characters for general use
+    const allChars = lowerCase + upperCase + numbers;
+    
+    let password = "";
+  
+    // Ensure at least one character from each set
+    password += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length));
+    password += upperCase.charAt(Math.floor(Math.random() * upperCase.length));
+    password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    
+    // Generate remaining characters randomly from the combined set
+    for (let i = 3; i < length; i++) {
+      password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+    }
+  
+    // Shuffle the password to make the position of the required characters random
+    return password.split('').sort(() => Math.random() - 0.5).join('');
+  };
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  
+  const handleGeneratePassword = () => {
+    const newPassword = generatePassword();
+    setCompanyData({ ...companyData, password: newPassword });
+  };
+  
+  const handleCopyPassword = () => {
+    navigator.clipboard.writeText(companyData.password);
+    // Swal.fire({
+    //   icon: 'success',
+    //   title: 'Copied',
+    //   text: 'Password copied to clipboard!',
+    // });
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+  
+  // name: '',
+  //     password: '',
+  // email
+  //     phoneNumber: '',
+  //     city: '',
+  //     street: '',
+  //     gender: 'male',
+  //     dateOfBirth: '',
+  //     skill: [],
+  //     experience: '',
+  //     education: '',
+  //     moreInformation: ''
 
   return (
+    <>
+    <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Tạo tài khoản công ty</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Name</p>
+        <input 
+          type="text"
+          id="name"
+          name="name"
+          value={companyData.name}
+          onChange={handleChange} 
+          />
+        <p>Mail</p>
+        <input 
+          type="text" 
+          id="email"
+          name="email"
+          value={companyData.email}
+          onChange={handleChange} 
+        />
+        {/* <p>Password</p>
+        <input 
+          type="text"
+          id="password"
+          name="password" 
+          value={companyData.password}
+          onChange={handleChange}
+        /> */}
+        <div style={{ position: 'relative' }}>
+  <input 
+    type={showPassword ? 'text' : 'password'} 
+    id="password"
+    name="password"
+    value={companyData.password}
+    onChange={handleChange}
+    placeholder="Enter password"
+    style={{ paddingRight: '40px' }}
+  />
+
+  <span 
+    onClick={togglePasswordVisibility} 
+    style={{ position: 'absolute', right: '35px', top: '50%', cursor: 'pointer' }}
+  >
+    { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+  </span>
+
+  <button 
+    type="button" 
+    onClick={handleGeneratePassword}
+    style={{ marginLeft: '10px' }}
+  >
+    Generate Password
+  </button>
+
+  <button 
+    type="button" 
+    onClick={handleCopyPassword}
+    style={{ marginLeft: '10px' }}
+  >
+    Copy Password
+  </button>
+</div>
+        <p>Phone number</p>
+        <input 
+          type="text"
+          id="phoneNumber"
+          name="phoneNumber"  
+          value={companyData.phoneNumber}
+          onChange={handleChange}
+        />
+        {/* <p>City</p>
+        <input 
+          type="text" 
+          id="city"
+          name="city" 
+          value={companyData.city}
+          onChange={handleChange}
+        /> */}
+        <p>City</p>
+<select 
+  id="city" 
+  name="city" 
+  value={companyData.city} 
+  onChange={handleChange} 
+  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
+>
+  {cities.map((city, index) => (
+    <option key={index} value={city}>
+      {city}
+    </option>
+  ))}
+</select>
+
+        <p>Street</p>
+        <input 
+          type="text" 
+          id="street"
+          name="street" 
+          value={companyData.street}
+          onChange={handleChange}
+        />
+        <p>Website</p>
+        <input 
+          type="text" 
+          id="website"
+          name="website" 
+          value={companyData.website}
+          onChange={handleChange}
+        />
+        <p>Description</p>
+        <input 
+          type="text" 
+          id="description"
+          name="description" 
+          value={companyData.description}
+          onChange={handleChange}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseModal}>
+          Close
+        </Button>
+        <Button variant="secondary" onClick={handleCreateCompany}>
+          Tạo tài khoản công ty
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
     <div className={styles.jobManagement}>
       <h2>Quản lí công ty</h2> 
+      <div>
+        <button onClick={handleOpenModal}>Thêm công ty</button>
+      </div>
       {/* searchBar */}
     <div className={clsx(styles.searchBar)}>
       <Form className={clsx(styles.form)}>
-        {/* <Form.Control
-          type="text"
-          placeholder="Address"
-          className={clsx(styles.jobInput)}
-          value={addressInput}
-          onChange={(e) => setAddressInput(e.target.value)}
-        /> */}
-        {/* <select
-            className={clsx(styles.locationInput)}
-            id="address"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-          >
-            <option value="">All cities</option>
-            <option value="Hà Nội">Hà Nội</option>
-            <option value="Hải Phòng">Hải Phòng</option>
-            <option value="Ho Chi Minh">TP.HCM</option>
-            <option value="Others">Others</option>
-          </select> */}
+      {/* <select 
+  id="city" 
+  name="city" 
+  value={addressInput || 'All cities'} 
+  onChange={handleChange} 
+  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
+>
+  {cities.map((city, index) => (
+    <option key={index} value={city}>
+      {city}
+    </option>
+  ))}
+</select> */}
+
         <label>City:</label>
         <input 
           type="text" 
           name="city"
           value={addressInput || 'All cities'}
           onClick={handleCityInputClick}
+          readOnly
         />
         {/* City Modal */}
         {showCityModal && (
@@ -281,7 +612,7 @@ const CompanyManagement = () => {
           <h3>All Jobs</h3>
           <ul>
             {results.map((company) => (
-              <Link key={company._id} to={`/detailCompany/${company._id}`}>
+              <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
                 <li>{company.name}</li>
               </Link>
             ))}
@@ -297,7 +628,7 @@ const CompanyManagement = () => {
             {results
               .filter((company) => company.status === true)
               .map((company) => (
-                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
                   <li>{company.name}</li>
                 </Link>
               ))}
@@ -313,7 +644,7 @@ const CompanyManagement = () => {
             {results
               .filter((company) => company.status === false)
               .map((company) => (
-                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
                   <li>{company.name}</li>
                 </Link>
               ))}
@@ -329,7 +660,7 @@ const CompanyManagement = () => {
             {results
               .filter((company) => company.status === undefined)
               .map((company) => (
-                <Link key={company._id} to={`/detailJob/${company._id}`}>
+                <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
                   <li>{company.name}</li>
                 </Link>
               ))}
@@ -376,13 +707,18 @@ const CompanyManagement = () => {
               <div className={clsx(styles.companyContainer)}>
                 {companiesAll.length > 0 ? (
                   companiesAll.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
-                      <h3>Company name: {company.name}</h3>
-                      <p>Status: {""+company.status}</p>
-                      <hr />
-                      {/* <button>Vô hiệu hóa</button> */}
-                      {/* <button>Xóa tài khoản</button> */}
-                    </Link>
+                    <div key={company._id}>
+                      <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
+                        <h3>Company name: {company.name}</h3>
+                        <p>Status: {""+company.status}</p>
+                      </Link>
+                        <button onClick={() => handleDisableCompany(company._id, company.isActive)}>
+                          {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                        </button>
+                        {/* <button>Xóa tài khoản</button> */}
+                          <hr />
+                    </div>
+                      
                   ))
                 ) : (
                   <div>No companies available</div>
@@ -408,39 +744,7 @@ const CompanyManagement = () => {
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
                     <div key={company._id}>
-                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
-                      <h3>Company name: {company.name}</h3>
-                      <p>Status: {""+company.status}</p>
-                    </Link>
-                      <button>Vô hiệu hóa</button>
-                      {/* <button>Xóa tài khoản</button> */}
-                    </div>
-                  ))
-                ) : (
-                  <div>No companies available</div>
-                )}
-              </div>
-              <div className={clsx(styles.pagination)}>
-                {pagination.currentPage > 1 && (
-                  <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
-                )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
-                {pagination.currentPage < pagination.totalPages && (
-                  <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-        {activeTab === 'rejected' && (
-          <div>
-            <p>Danh sách công ty đã từ chối: {companiesRejected.length}</p>
-            <div className={clsx(styles.companylist)}>
-              <div className={clsx(styles.companyContainer)}>
-                {companiesRejected.length > 0 ? (
-                  companiesRejected.map((company) => (
-                    <div key={company._id}>
-                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                    <Link to={`/detailCompanyAdminAdmin/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {""+company.status}</p>
                     </Link>
@@ -472,7 +776,7 @@ const CompanyManagement = () => {
                 {companiesPending.length > 0 ? (
                   companiesPending.map((company) => (
                     <div key={company._id}>
-                    <Link to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+                    <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {""+company.status}</p>
                       </Link>
@@ -513,6 +817,7 @@ const CompanyManagement = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

@@ -21,10 +21,12 @@ const SavedJobs = () => {
         const result = await getApiWithToken(`/save-job/gets/${candidateId}`);
         if (result.data.success) {
           setSavedJobs(result.data.savedJobs);
+          console.log(result.data.savedJobs);
+          
 
           result.data.savedJobs.forEach(async (job) => {
             try {
-              const jobResult = await getAPiNoneToken(`/job/${job.job}`);
+              const jobResult = await getAPiNoneToken(`/job/${job.job._id}`);
               if (jobResult.data.success) {
                 setJobDetails((prevDetails) => ({
                   ...prevDetails,
@@ -66,7 +68,7 @@ const SavedJobs = () => {
               <p>No saved jobs found.</p>
             ) : (
               savedJobs.map((job) => (
-                <Link key={job._id} to={`/detailJob/${job.job}`}>
+                <Link key={job.job._id} to={`/detailJob/${job.job._id}`}>
                   <div className={clsx(styles.jobItem)}>
                     <p>Job Title: {jobDetails[job.job]?.title || 'Loading...'}</p>
                     <p>Company: {jobDetails[job.job]?.company.name}</p>

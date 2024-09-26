@@ -53,3 +53,13 @@ export  const validateName = (name) => {
   export const setUserStorage = (user) =>{
     localStorage.setItem("user", JSON.stringify(user))
   }
+
+//   export const getUserStorage = () => {
+//     const user = sessionStorage.getItem('user');
+//     return user ? JSON.parse(user) : null;
+//   };
+  
+//  export const setUserStorage = (user) => {
+//     sessionStorage.setItem('user', JSON.stringify(user));
+//   };
+  

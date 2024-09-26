@@ -7,7 +7,6 @@ import { getUserStorage } from '../../Utils/valid';
 
 import logo from '../../images/logo.jpg';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -26,8 +25,6 @@ const cities = [
 ];
 
 const InfoCompany = () => {
-  const navigate = useNavigate();
-
   const [company, setCompany] = useState({
     avatar: '',
     name: '',
@@ -36,7 +33,8 @@ const InfoCompany = () => {
     city: '',
     street: '',
     website: '',
-    description: ''
+    description: '',
+    pendingUpdates: null
   });
   const [error, setError] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
@@ -119,12 +117,6 @@ const InfoCompany = () => {
     setCompany({ ...company, [name]: value });
   };
 
-  const handleViewEditProfile = () => {
-    if (company.pendingUpdates) {
-      navigate(`/viewEditProfile/${companyId}`);
-    }
-  };
-
   //city
   const handleCityInputClick = () => {
     setShowCityModal(true);
@@ -141,13 +133,17 @@ const InfoCompany = () => {
     setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
+  const getStyleForField = (fieldName) => {
+    return company.pendingUpdates && company.pendingUpdates[fieldName] !== company[fieldName] ? styles.changed : '';
+  };
+
   if (error) return <div className={clsx(styles.error)}>{error}</div>;
   if (!company) return <div className={clsx(styles.loading)}>Loading...</div>;
 
   return (
     <div className={clsx(styles.companyInfo)}>
       <div className={clsx(styles.avatarSection)}>
-        <img src={company.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
+        <img src={company.avatar || avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} />
 
         <input 
           type="file" 
@@ -164,9 +160,10 @@ const InfoCompany = () => {
         <input 
           type="text" 
           name="name"
-          value={company.name || ""}
+          value={company.pendingUpdates?.name || company.name || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
+          className={clsx(getStyleForField('name'))}
         />
 
         <label>Email:</label>
@@ -176,25 +173,28 @@ const InfoCompany = () => {
           value={company.email || ""}
           onChange={handleInputChange}
           disabled
+          className={clsx(getStyleForField('email'))}
         />
 
         <label>Phone Number:</label>
         <input 
           type="text" 
           name="phoneNumber"
-          value={company.phoneNumber || ""}
+          value={company.pendingUpdates?.phoneNumber || company.phoneNumber || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
+          className={clsx(getStyleForField('phoneNumber'))}
         />
 
         <label>City:</label>
         <input 
           type="text" 
           name="city"
-          value={company.city || ""}
+          value={company.pendingUpdates?.city || company.city || ""}
           onClick={handleCityInputClick}
           readOnly
           disabled={!isEditing}
+          className={clsx(getStyleForField('city'))}
         />
         {/* City Modal */}
         {showCityModal && (
@@ -225,30 +225,34 @@ const InfoCompany = () => {
         <input 
           type="text" 
           name="street"
-          value={company.street || ""}
+          value={company.pendingUpdates?.street || company.street || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
+          className={clsx(getStyleForField('street'))}
         />
 
         <label>Website:</label>
         <input 
           type="text" 
           name="website"
-          value={company.website || ""}
+          value={company.pendingUpdates?.website || company.website || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
+          className={clsx(getStyleForField('website'))}
         />
 
         <label>Description:</label>
         <input 
           type="text" 
           name="description"
-          value={company.description || ""}
+          value={company.pendingUpdates?.description || company.description || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
+          className={clsx(getStyleForField('description'))}
         />
 
         <div className={clsx(styles.btnContainer)}>
+          {company.pendingUpdates && (<p>Đang chờ phê duyệt</p>)}
           {isEditing ? (
             <>
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
@@ -263,13 +267,6 @@ const InfoCompany = () => {
               Cập nhật thông tin
             </button>
           )}
-
-          <button
-            onClick={handleViewEditProfile}
-            disabled={!company.pendingUpdates}
-          >
-            Profile đang chờ duyệt
-          </button>
         </div>
       </div>
     </div>

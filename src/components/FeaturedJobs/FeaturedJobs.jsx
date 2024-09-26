@@ -4,9 +4,10 @@ import clsx from 'clsx';
 import styles from '../FeaturedJobs/featuredJobs.module.scss';
 import ListJobInfo from '../ListJobInfo/ListJobInfo';
 import ListCompanyInfo from '../ListCompanyInfo/ListCompanyInfo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import JobsRecommended from '../JobsRecommended/JobsRecommended';
 import { getUserStorage } from '../../Utils/valid';
+import Swal from 'sweetalert2';
 
 const cities = [
   'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -30,6 +31,8 @@ const FeaturedJobs = () => {
   const [results, setResults] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
 
+  const navigate = useNavigate();
+
   const [categoryName, setCategoryName] = useState('');
 
   //role
@@ -44,7 +47,7 @@ const FeaturedJobs = () => {
   //candidateId để recommend job
   const candidateId = user && role === 'candidate' ? user._id : null;
 
-  console.log('candidateId',candidateId);
+  // console.log('candidateId', candidateId);
   
   const handleSearch = async (event) => {
     event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
@@ -90,47 +93,39 @@ const FeaturedJobs = () => {
     setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
+  //kiểm tra đăng nhập mới cho xem thông tin ứng viên
+  const handleViewCandidate = (candidateId) => {
+    const user = getUserStorage()?.user;
+
+    if (!user) {
+      Swal.fire({
+        title: 'Vui lòng đăng nhập để xem thông tin ứng viên!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đăng nhập',
+        cancelButtonText: 'Hủy bỏ',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login', { state: { from: `/detail-candidate/${candidateId}` } });
+        }
+      });
+    } else {
+      window.open(`/detail-candidate/${candidateId}`, { target: '_blank', rel: 'noopener noreferrer' });
+    }
+  };
+
   return (
     <div className={clsx(styles.searchComponent)}>
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
-          {/* category */}
-          {/* <input
-            className={clsx(styles.jobInput)}
-            type="text"
-            id="categoryName"
-            value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
-            placeholder="Enter category"
-          /> */}
-          
-          {/* <input
-            className={clsx(styles.locationInput)}
-            type="text"
-            id="address"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-            placeholder="Enter address"
-          /> */}
-          {/* <select
-            className={clsx(styles.locationInput)}
-            id="city"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-          >
-            <option value="">All cities</option>
-            <option value="Hà Nội">Hà Nội</option>
-            <option value="Da Nang">Đà Nẵng</option>
-            <option value="Ho Chi Minh">TP.HCM</option>
-            <option value="Others">Others</option>
-          </select> */}
 
-<label>City:</label>
+      <label>City:</label>
         <input 
           type="text" 
           name="city"
           value={addressInput || 'All cities'}
           onClick={handleCityInputClick}
+          readOnly
         />
         {/* City Modal */}
         {showCityModal && (
@@ -229,13 +224,20 @@ const FeaturedJobs = () => {
                   ))}
                 </ul>
                 <h3>Candidates</h3>
-                <ul>
+                {/* <ul>
                   {results.candidates.map((candidate) => (
                     <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{candidate.name}</li>
                     </Link>
                   ))}
-                </ul>
+                </ul> */}
+                <ul>
+      {results.candidates.map((candidate) => (
+        <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
+          {candidate.name}
+        </li>
+      ))}
+    </ul>
               </div>
             )}
             {activeTab === 'jobs' && (
@@ -265,14 +267,20 @@ const FeaturedJobs = () => {
             {activeTab === 'candidates' && (
               <div>
                 <h3>Candidates</h3>
-                <ul>
+                {/* <ul>
                   {results.candidates.map((candidate) => (
-                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`}>
-                    {/* <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer"> */}
+                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer">
                       <li>{candidate.name}</li>
                     </Link>
                   ))}
-                </ul>
+                </ul> */}
+                <ul>
+      {results.candidates.map((candidate) => (
+        <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
+          {candidate.name}
+        </li>
+      ))}
+    </ul>
               </div>
             )}
           </div>
