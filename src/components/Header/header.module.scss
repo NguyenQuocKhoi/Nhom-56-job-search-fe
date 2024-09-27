@@ -3,7 +3,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: linear-gradient(to right, #87CEEB, #1E90FF);
+  // background: linear-gradient(to right, #87CEEB, #1E90FF);
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   position: fixed; /* Fix the header to the top of the page */
   top: 0;
   left: 0;

@@ -8,7 +8,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { getUserStorage } from '../../Utils/valid';
 import { Button, Form, Modal } from 'react-bootstrap';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 
 const JobDetail = () => {
   const { jobId } = useParams();

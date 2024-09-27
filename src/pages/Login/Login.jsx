@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clsx from 'clsx';
 import styles from './login.module.scss';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { setUserStorage, validateEmail } from '../../Utils/valid';

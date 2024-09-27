@@ -4,7 +4,7 @@ import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './detailCandidateSearch.module.scss';
 import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserStorage } from '../../Utils/valid';
 import Swal from 'sweetalert2';

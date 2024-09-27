@@ -3,7 +3,7 @@ import { getAPiNoneToken, postApiWithToken } from '../../api';
 import styles from './jobsRecommended.module.scss';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 
 const JobsRecommended = ({ candidateId }) => {
   const [jobs, setJobs] = useState([]);

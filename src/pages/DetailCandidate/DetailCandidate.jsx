@@ -4,7 +4,7 @@ import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './detailCandidate.module.scss';
 import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 import { useParams, useSearchParams } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ const DetailCandidate = () => {
   const [candidate, setCandidate] = useState(null);
   const [error, setError] = useState(null);
   const [buttonState, setButtonState] = useState('pending'); // Initial button state
+  const [application, setApplication] = useState(null);
 
   const [skills, setSkills] = useState([]);
 
@@ -39,6 +40,9 @@ const DetailCandidate = () => {
         // Fetch application details to get the status
         const applicationResult = await getApiWithToken(`/application/${applicationId}`);
         const applicationStatus = applicationResult.data.application.status;
+        console.log(applicationResult.data.application.resume);
+        
+        setApplication(applicationResult.data.application.resume);
 
         // Set the button state based on the application status
         setButtonState(applicationStatus);
@@ -93,11 +97,6 @@ const DetailCandidate = () => {
         <p><strong>Email:</strong> {candidate.email}</p>
         <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
         <p><strong>Address:</strong> {candidate.address}</p>
-        {/* <ul><strong>Skill:</strong>
-          {candidate.skill.map((req, index) => (
-            <li key={index}>{req}</li>
-          ))}
-        </ul> */}
         <strong>Skill:</strong>
           {skills.length > 0 ? (
             skills.map((skill, index) => (
@@ -114,12 +113,12 @@ const DetailCandidate = () => {
         <p><strong>Education:</strong> {candidate.education}</p>
         <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
         <p><strong>More Information:</strong> {candidate.moreInformation}</p>
-        <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
+        <p><strong>Resume:</strong> <a href={application} target="_blank" rel="noopener noreferrer">View CV</a></p>
         <div className={clsx(styles.buttonContainer)}>
           <button
             className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
             onClick={() => handleStatusUpdate('accepted')}
-            disabled={buttonState === 'accepted'} // Disable if already accepted
+            disabled={buttonState === 'accepted'}
           >
             Accept
           </button>

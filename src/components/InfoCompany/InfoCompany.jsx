@@ -5,7 +5,7 @@ import styles from './infoCompany.module.scss';
 import { getApiWithToken, putApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 
 const cities = [

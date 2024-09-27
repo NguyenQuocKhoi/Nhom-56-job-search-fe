@@ -4,7 +4,7 @@ import { Button, Dropdown, Modal } from 'react-bootstrap';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import styles from './header.module.scss';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import { getUserStorage } from '../../Utils/valid';
 import { getApiWithToken, putApiWithToken } from '../../api';
 import Swal from 'sweetalert2';

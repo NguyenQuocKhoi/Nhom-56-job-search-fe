@@ -4,7 +4,7 @@ import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../../api'
 import styles from './detailCandidateAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
-import logo from '../../../images/logo.jpg';
+import logo from '../../../images/logo.png';
 import Swal from 'sweetalert2';
 
 const DetailCandidateAdmin = () => {

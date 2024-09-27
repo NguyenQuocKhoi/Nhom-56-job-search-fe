@@ -3,7 +3,7 @@ import { getAPiNoneToken } from '../../api';
 import styles from './listJobInfo.module.scss';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 
 const ListJobInfo = () => {
   const [jobs, setJobs] = useState([]);

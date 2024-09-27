@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Tab, Tabs, Form, Modal } from 'react-bootstrap';
 import clsx from 'clsx';
 import styles from './signup.module.scss';
-import logo from '../../images/logo.jpg';
+import logo from '../../images/logo.png';
 import { validateEmail, validatePassword } from '../../Utils/valid';
 import { getAPiNoneToken, postApiNoneToken } from '../../api';
 import Swal from 'sweetalert2';

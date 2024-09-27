@@ -3,7 +3,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #007bff;
+  // background-color: #007bff;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   color: #fff;
   //giữ cho header nằm yên trên top khi cuộn trang
   position: fixed;
