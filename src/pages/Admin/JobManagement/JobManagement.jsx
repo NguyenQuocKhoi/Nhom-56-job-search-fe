@@ -600,7 +600,6 @@ const JobManagement = () => {
                                 >
                                   Reject
                                 </button>
-                                {/* <button>Bản chưa sửa</button> */}
                                 <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>

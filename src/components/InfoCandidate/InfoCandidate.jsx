@@ -180,7 +180,7 @@ const handleAutoApply = async () => {
   };
 
   const handleOpenSkillModal = () => {
-    fetchAllSkills(); // Fetch skills when opening modal
+    fetchAllSkills();
     setShowSkillModal(true);
   };
 

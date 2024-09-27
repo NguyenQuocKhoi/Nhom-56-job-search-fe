@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAPiNoneToken, getApiWithToken } from '../../../api';
+import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../../api';
 import styles from './detailCandidateAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import logo from '../../../images/logo.jpg';
+import Swal from 'sweetalert2';
 
 const DetailCandidateAdmin = () => {
   const { candidateId } = useParams();
   const [candidate, setCandidate] = useState(null);
+  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
@@ -32,6 +33,9 @@ const DetailCandidateAdmin = () => {
         const skillNames = skillResponses.map(res => res.data.skill.skillName);
         setSkills(skillNames);
 
+        const userResult = await getApiWithToken(`/user/${candidateId}`);
+        setUser(userResult.data.user); 
+
       } catch (err) {
         setError('Failed to fetch candidate details');
       }
@@ -40,8 +44,42 @@ const DetailCandidateAdmin = () => {
     fetchCandidate();
   }, [candidateId]);
 
+  const handleDisableCandidate = async (userId, currentIsActive) => {
+    try {
+      const newIsActiveState = !currentIsActive;
+      const response = await putApiWithToken(`/candidate/disable-candidate/${userId}`, { isActive: newIsActiveState });
+  
+      console.log(response);
+      
+      if (response.data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: `The user has been ${newIsActiveState ? 'activated' : 'disabled'} successfully!`,
+        });
+
+        setUser({ ...user, isActive: newIsActiveState });
+        setCandidate({ ...candidate, status: newIsActiveState });
+
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update the user status.',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while updating the user status.',
+      });
+    }
+  };
+
   if (error) return <div>{error}</div>;
-  if (!candidate) return <div>Job not found</div>;
+  if (!candidate || !user) return <div>Job not found</div>;
 
   return (
     <>
@@ -73,7 +111,11 @@ const DetailCandidateAdmin = () => {
         <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
       </div>
       <div className={clsx(styles.button)}>
-        <button>Vô hiệu hóa</button>
+      <button
+        onClick={() => handleDisableCandidate(user._id, user.isActive)}
+      >
+        {user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+      </button>
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Dropdown, Modal } from 'react-bootstrap';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,8 @@ import styles from './header.module.scss';
 import logo from '../../images/logo.jpg';
 import { getUserStorage } from '../../Utils/valid';
 import { getApiWithToken, putApiWithToken } from '../../api';
+import Swal from 'sweetalert2';
+// import jwtDecode from 'jsonwebtoken';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -14,6 +16,7 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   //set user và role là null mỗi lần npm start lại
   // const [user, setUser] = useState(null);
@@ -26,6 +29,9 @@ const Header = () => {
     // setUser(storedUser);
     // setRole(storedUser ? storedUser.role : null);
   // }, []);
+
+  const user = getUserStorage()?.user;
+  const role = user ? user.role : null;
 
   const handleNotificationClick = (notificationId) => {
     const notification = notifications.find(n => n._id === notificationId);
@@ -55,9 +61,6 @@ const Header = () => {
     setShowModal(false);
   };
 
-  const user = getUserStorage()?.user;
-  const role = user ? user.role : null;
-
   const handleLanguageChange = (lang) => {
     i18n.changeLanguage(lang);
   };
@@ -85,10 +88,35 @@ const Header = () => {
     }
   }, [user, role]);
 
+  //
+  // const checkTokenExpiry = () => {
+  //   const token = localStorage.getItem('auth-token');
+  //   if (token) {
+  //     try {
+  //       const decodedToken = jwtDecode.decode(token);
+  //       const currentTime = Date.now() / 1000; // Current time in seconds
+  //       if (decodedToken.exp < currentTime) {
+  //         // Token has expired
+  //         Swal.fire({
+  //           icon: 'warning',
+  //           title: 'Phiên làm việc đã hết hạn',
+  //           confirmButtonText: 'OK'
+  //         }).then(() => {
+  //           localStorage.removeItem('user'); // Clear the user data
+  //           navigate('/login'); // Redirect to login
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error('Error decoding token', error);
+  //     }
+  //   }
+  // };
+
   useEffect(() => {
+    // checkTokenExpiry();
     fetchNotifications();
-  }, [fetchNotifications]);
-  // }, []);
+  // }, [fetchNotifications]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");

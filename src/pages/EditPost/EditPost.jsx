@@ -157,8 +157,9 @@ const EditPost = () => {
     }
   };
 
-  const handleOpenSkillModal = () => {
-    fetchAllSkills(); // Fetch skills when opening modal
+  const handleOpenSkillModal = (event) => {
+    event.preventDefault();
+    fetchAllSkills();
     setShowSkillModal(true);
   };
 
@@ -247,7 +248,8 @@ const EditPost = () => {
           </div>
           <button 
             onClick={handleOpenSkillModal} 
-            // disabled={!isEditing} // Disable button if not editing
+            disabled={!isEditing}
+            type='button'
           >
             Chọn kỹ năng
           </button>
@@ -426,6 +428,7 @@ const EditPost = () => {
               name="description"
               value={jobData.description}
               onChange={handleChangeD}
+              readOnly={!isEditing}
             />
           </div>
         </form>

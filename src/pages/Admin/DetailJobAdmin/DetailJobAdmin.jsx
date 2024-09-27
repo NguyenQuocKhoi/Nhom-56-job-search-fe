@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAPiNoneToken } from '../../../api';
+import { deleteApiWithToken, getAPiNoneToken, putApiWithToken } from '../../../api';
 import styles from './detailJobAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
+import Swal from 'sweetalert2';
 
 const DetailJobAdmin = () => {
   const { jobId } = useParams();
@@ -15,6 +16,10 @@ const DetailJobAdmin = () => {
   const [categoryNameEdited, setCategoryNameEdited] = useState('');
   const [skills, setSkills] = useState([]);
   const [skillsEdited, setSkillsEdited] = useState([]);
+
+  //
+  const [buttonState, setButtonState] = useState('pending');
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -98,6 +103,77 @@ const DetailJobAdmin = () => {
     );
   };
 
+  //accept, reject job
+  const handleStatusUpdate = async ( jobId, status ) => {
+    // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
+    Swal.fire({
+      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      text: `Please wait while ${status} the company.`,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      await putApiWithToken('/job/update-status', { jobId, status });
+
+      setButtonState(status);
+      Swal.fire({
+        icon: 'success',
+        title: status === true ? 'Accepted' : 'Rejected',//true
+        text: `You have ${status} this job.`,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to ${status} the job.`,
+      });
+    }
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa công việc này?',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      });
+  
+      if (result.isConfirmed) {
+        const response = await deleteApiWithToken(`/job/delete/${jobId}`);
+        
+        if (response.data.success) {
+          Swal.fire(
+            'Đã xóa!',
+            'Bài đăng đã được xóa thành công.',
+            'success'
+          );
+        } else {
+          Swal.fire(
+            'Lỗi!',
+            response.data.message,
+            'error'
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Failed to delete job:', error);
+      Swal.fire(
+        'Lỗi!',
+        'Đã xảy ra lỗi khi xóa bài đăng.',
+        'error'
+      );
+    }
+  };
+
   if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
 
@@ -157,9 +233,28 @@ const DetailJobAdmin = () => {
         {renderField('Number of Recruitments', job.numberOfCruiment, job.pendingUpdates?.numberOfCruiment)}
       </div>
       <div className={clsx(styles.button)}>
-        <button>Accept</button>
-        <button>Reject</button>
-        <button>Xóa</button>
+      <button
+        className={clsx(styles.button, {
+          [styles.accepted]: buttonState === 'accepted',
+          [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+        })}
+        onClick={() => handleStatusUpdate(job._id, true)}
+        disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+      >
+        Accept
+      </button>
+      <button
+        className={clsx(styles.button, {
+          [styles.rejected]: buttonState === 'rejected',
+          [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+        })}
+        onClick={() => handleStatusUpdate(job._id, false)}
+        disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+      >
+        Reject
+      </button>
+
+        <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
       </div>
     </>
   );

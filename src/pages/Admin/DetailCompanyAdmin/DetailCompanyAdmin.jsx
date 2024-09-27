@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAPiNoneToken } from '../../../api';
+import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../../api';
 import styles from './detailCompanyAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import logo from '../../../images/logo.jpg';
+import Swal from 'sweetalert2';
 
 const DetailCompanyAdmin = () => {
   const { id } = useParams();
@@ -17,6 +18,10 @@ const DetailCompanyAdmin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categories, setCategories] = useState({});
+
+  const [buttonState, setButtonState] = useState('pending');
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -24,6 +29,10 @@ const DetailCompanyAdmin = () => {
       try {
         const result = await getAPiNoneToken(`/company/${id}`);
         setCompany(result.data.company);
+
+        //
+        const userResult = await getApiWithToken(`/user/${id}`);
+        setUser(userResult.data.user); 
       } catch (err) {
         setError('Failed to fetch company details');
       }
@@ -96,8 +105,79 @@ const DetailCompanyAdmin = () => {
     );
   };
 
+  const handleStatusUpdate = async ( companyId, status ) => {
+    // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
+    Swal.fire({
+      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      text: `Please wait while ${status} the company.`,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      await putApiWithToken('/company/update-status', { companyId, status });
+
+      setButtonState(status);
+      Swal.fire({
+        icon: 'success',
+        title: status === true ? 'Accepted' : 'Rejected',
+        text: `You have ${status} this company.`,
+      });
+      //refresh màn hình luôn
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to ${status} the company.`,
+      });
+    }
+  };
+
+  const handleDisableCompany = async (companyId, currentIsActive) => {
+    try {
+      const newIsActiveState = !currentIsActive;
+      const response = await putApiWithToken(`/company/disable-company/${companyId}`, { isActive: newIsActiveState });
+  
+      console.log(response);
+      
+      if (response.data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: `The user has been ${newIsActiveState ? 'activated' : 'disabled'} successfully!`,
+        });
+        setUser({ ...user, isActive: newIsActiveState });
+        setCompany({...company, status: newIsActiveState});
+        // setCompaniesAll(prveCompanies =>
+        //   prveCompanies.map(company=>
+        //     company._id === companyId
+        //     ? {...company, isActive: newIsActiveState}
+        //     :company
+        //   )
+        // )
+        // setIsActive(newIsActiveState); // Update local state to reflect change
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update the user status.',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while updating the user status.',
+      });
+    }
+  };
+
   if (error) return <div>{error}</div>;
-  if (!company) return <div>Company not found</div>;
+  if (!company || !user) return <div>Company not found</div>;
 
   return (
     <>
@@ -121,9 +201,33 @@ const DetailCompanyAdmin = () => {
         {renderField('Description', company.description, company.pendingUpdates?.description)}
       </div>
       <div className={clsx(styles.button)}>
-        <button>Accept</button>
-        <button>Reject</button>
-        <button>Xóa</button>
+      <button
+        className={clsx(styles.button, {
+          [styles.accepted]: buttonState === 'accepted',
+          [styles.disabled]: buttonState === 'rejected' || company.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+        })}
+        onClick={() => handleStatusUpdate(company._id, true)}
+        disabled={buttonState === 'accepted' || company.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+      >
+        Accept
+      </button>
+      <button
+        className={clsx(styles.button, {
+          [styles.rejected]: buttonState === 'rejected',
+          [styles.disabled]: buttonState === 'accepted' || company.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+        })}
+        onClick={() => handleStatusUpdate(company._id, false)}
+        disabled={buttonState === 'rejected' || company.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+      >
+        Reject
+      </button>
+
+        <button
+        onClick={() => handleDisableCompany(user._id, user.isActive)}
+      >
+        {user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+      </button>
+
       </div>
       <span>Tin tuyển dụng của công ty:</span>
       <div className={clsx(styles.mainContent)}>

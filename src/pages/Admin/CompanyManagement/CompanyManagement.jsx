@@ -744,7 +744,7 @@ const CompanyManagement = () => {
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
                     <div key={company._id}>
-                    <Link to={`/detailCompanyAdminAdmin/${company._id}`} className={clsx(styles.companycard)}>
+                    <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
                       <h3>Company name: {company.name}</h3>
                       <p>Status: {""+company.status}</p>
                     </Link>
