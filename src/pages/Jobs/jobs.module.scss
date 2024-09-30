@@ -6,9 +6,10 @@
   
   .mainContent {
     flex: 1;
-    padding: 2rem;
+    // padding: 2rem;
     background: #f5f5f5;
-    margin-top: 4rem; /* Khoảng cách để không bị che khuất bởi header */
+    margin-top: 4rem;
+    // background-color: blue;
   }
   
   //search bar
@@ -16,16 +17,41 @@
   display: flex;
   justify-content: center;
   margin: 2rem 0;
-  height: 3.5rem; /* Set the height to match the form's height */
+  height: 3.5rem;
+  // background: red;
 }
 
 .form {
+  // margin-top: 40px;
   display: flex;
-  width: 75%;
+  width: 100%;
   max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
-  border-radius: 50px;
-  height: 3.5rem; /* Set the same height as .searchBar */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
+  border-radius: 10px;
+  height: 100%; /* Ensure full height */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
+  background-color: #ffffff; /* White background for the form */
+}
+
+.selectContainer {
+  display: flex;
+  align-items: center;
+  margin: 0 10px; // Khoảng cách giữa các phần tử trong form
+}
+
+.select {
+  padding: 10px; // Khoảng cách bên trong
+  border: 1px solid #ccc; // Đường viền
+  border-radius: 4px; // Bo góc
+  font-size: 16px; // Kích thước chữ
+  width: 200px; // Chiều rộng
+  background-color: #fff; // Màu nền
+  margin: 0 5px; // Khoảng cách giữa select và input
+  outline: none; // Bỏ viền khi chọn
+  transition: border 0.3s; // Hiệu ứng chuyển tiếp
+
+  &:focus {
+    border: 1px solid #007bff; // Màu viền khi chọn
+  }
 }
 
 .jobInput,
@@ -47,22 +73,39 @@
   flex: 1;
   margin-right: 0.5rem; /* Add space between input fields */
 }
-
+.iconPlace{
+  font-size: 25px;
+  padding: 10px;
+  margin-right: -15px;
+}
 .searchButton {
-  border-radius: 50px;
-  font-size: 1rem;
-  padding: 0.75rem 2rem;
-  background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
-  border: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  border: 6px solid white;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
-  height: 100%; /* Make the button take full height of the parent */
+  height: 100%;
+  width: 150px;
+  
+  i{
+    margin-right: 1rem;
+  }
+
+  &:hover {
+    // background: linear-gradient(to right, #0077cc, #005999); /* Hover effect */
+  background: linear-gradient(90deg, rgb(31, 5, 114) 0%, rgb(7, 65, 113) 100%);
+    // transform: translateY(-2px); /* Slight lift effect */
+  }
 }
 
-.searchButton:hover {
-  background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-}
+// .searchButton:hover {
+//   // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+//   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+// }
 
 //modal
 .modal {

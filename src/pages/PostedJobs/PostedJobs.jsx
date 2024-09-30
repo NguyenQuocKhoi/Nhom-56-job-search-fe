@@ -175,14 +175,16 @@ const PostedJobs = () => {
                 onClick={() => handlePageChange(currentPage - 1)} 
                 disabled={currentPage === 1}
               >
-                Previous
+                <i className="fa-solid fa-angle-left"></i>
+                {/* Previous */}
               </button>
-              <span>Page {currentPage} of {totalPages}</span>
+              <span> {currentPage} / {totalPages} trang</span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
               >
-                Next
+                <i className="fa-solid fa-angle-right"></i>
+                {/* Next */}
               </button>
             </div>
           </>

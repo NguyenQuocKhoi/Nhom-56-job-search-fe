@@ -6,6 +6,7 @@ import styles from './appliedJobs.module.scss';
 import { getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
+import logo from '../../images/logo.png';
 
 const AppliedJobs = () => {
   const [applications, setApplications] = useState([]);
@@ -69,27 +70,31 @@ const AppliedJobs = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <h2>Danh sách công việc đã ứng tuyển</h2>
+        <p className={clsx(styles.title)}>Danh sách công việc đã ứng tuyển</p>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
         ) : applications.length > 0 ? (
-          <ul>
+          <div className={clsx(styles.jobContainer)}>
             {applications.map((application) => {
               const job = jobDetails[application.job];
               return (
-                <Link key={application._id} to={`/detailJob/${application.job}`}>
-                  <p>Công việc: {job ? job.title : "Loading..."}</p>
-                  <p>Công ty: {job ? job.company.name : "Loading..."}</p>
-                  <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
-                  <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString()}</p>
-                  <p>Trạng thái: {application.status}</p>
-                  <hr />
-                </Link>
+                <div className={clsx(styles.jobcard)}>
+                  <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
+                    <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+                  </Link>
+                  <Link key={application._id} to={`/detailJob/${application.job}`} className={clsx(styles.linkJob)}>
+                    <p>Công việc: {job ? job.title : "Loading..."}</p>
+                    <p>Công ty: {job ? job.company.name : "Loading..."}</p>
+                    <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
+                    <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString()}</p>
+                    <p>Trạng thái: {application.status}</p>
+                  </Link>
+                </div>
               );
             })}
-          </ul>
+          </div>
         ) : (
           <p>Không có công việc nào đã ứng tuyển.</p>
         )}

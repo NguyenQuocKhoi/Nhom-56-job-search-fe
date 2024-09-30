@@ -39,59 +39,47 @@ const FeaturedJobs = () => {
   const user = getUserStorage()?.user;
   const role = user ? user.role : null;
 
-   //city
-   const [showCityModal, setShowCityModal] = useState(false);
-   const [filteredCities, setFilteredCities] = useState(cities);
-   const [searchQuery, setSearchQuery] = useState('');
-
   //candidateId để recommend job
   const candidateId = user && role === 'candidate' ? user._id : null;
 
   // console.log('candidateId', candidateId);
   
-  const handleSearch = async (event) => {
-    event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
+  // const handleSearch = async (event) => {
+  //   event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
 
-    try {
-      const searchParams = {
-        search: jobInput,
-        categoryName: categoryName,
-        ...(addressInput && { city: addressInput })
-      };
+  //   try {
+  //     const searchParams = {
+  //       search: jobInput,
+  //       categoryName: categoryName,
+  //       ...(addressInput && { city: addressInput })
+  //     };
 
-      const response = await postApiNoneToken('/user/search', searchParams);
+  //     const response = await postApiNoneToken('/user/search', searchParams);
 
-      if (response.data.success) {
-        setResults(response.data.data);
-        console.log(response.data.data.candidates);
-      } else {
-        setResults(null);
-      }
-    } catch (error) {
-      console.error("Search error:", error);
-      setResults(null);
-    }
+  //     if (response.data.success) {
+  //       setResults(response.data.data);
+  //       console.log(response.data.data.candidates);
+  //     } else {
+  //       setResults(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Search error:", error);
+  //     setResults(null);
+  //   }
+  // };
+  const handleSearch = (event) => {
+    event.preventDefault();
+  
+    const searchParams = {
+      search: jobInput,
+      categoryName: categoryName,
+      ...(addressInput && { city: addressInput })
+    };
+  
+    // Chuyển hướng đến trang SearchResult và truyền dữ liệu tìm kiếm qua state
+    navigate('/search-result', { state: { searchParams } });
   };
-
-  //city
-  const handleCityInputClick = () => {
-    setShowCityModal(true);
-  };
-
-  const handleCitySelect = (city) => {
-    if(city === 'All cities'){
-      setAddressInput(city);
-    } else {
-      setAddressInput(city);
-    }
-    setShowCityModal(false);
-  };
-
-  const handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
-  };
+  
 
   //kiểm tra đăng nhập mới cho xem thông tin ứng viên
   const handleViewCandidate = (candidateId) => {
@@ -116,42 +104,30 @@ const FeaturedJobs = () => {
 
   return (
     <div className={clsx(styles.searchComponent)}>
+      <div className={clsx(styles.searchContainer)}>
+
+      
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
 
-      <label>City:</label>
-        <input 
-          type="text" 
-          name="city"
-          value={addressInput || 'All cities'}
-          onClick={handleCityInputClick}
-          readOnly
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
-            </div>
+          <div className={clsx(styles.iconPlace)}>
+            <i className="fa-solid fa-location-dot"></i>
           </div>
-        )}
-        
+          
+          <div className={clsx(styles.selectContainer)}>
+            <select
+                  className={clsx(styles.select)}
+                  value={addressInput}
+                  onChange={(e) => setAddressInput(e.target.value)}
+                >
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+          </div>
+      
           <input
             className={clsx(styles.jobInput)}
             type="text"
@@ -160,21 +136,23 @@ const FeaturedJobs = () => {
             onChange={(e) => setJobInput(e.target.value)}
             placeholder="Enter job title, skill, etc."
           />
-          <button className={clsx(styles.searchButton)} onClick={handleSearch}>Search</button>
+          <button className={clsx(styles.searchButton)} onClick={handleSearch}>
+            <i className="fa-solid fa-magnifying-glass"></i>
+            Search
+          </button>
         </div>
       </form>
 
       <div className={clsx(styles.suggestBar)}>
-        <span>Suggested keyword: </span>
-        <button className={clsx(styles.suggest)}>Project Manager</button>
-        <button className={clsx(styles.suggest)}>Back end</button>
-        <button className={clsx(styles.suggest)}>Front end</button>
-        <button className={clsx(styles.suggest)}>Mobile</button>
-        <button className={clsx(styles.suggest)}>Business Analyst</button>
-        <button className={clsx(styles.suggest)}>UX/UI</button>
-        <button className={clsx(styles.suggest)}>Tester</button>
+        <span className={clsx(styles.suggestTitle)}>Suggested keyword: </span>
+        <button className={clsx(styles.suggest)}>React JS</button>
+        <button className={clsx(styles.suggest)}>Node JS</button>
+        <button className={clsx(styles.suggest)}>React Native</button>
+        <button className={clsx(styles.suggest)}>Spring Boot</button>
       </div>
+    </div>
 
+    {/* kết quả search */}
       {results && (
         <div className={clsx(styles.results)}>
           <div className={clsx(styles.tabs)}>
@@ -232,12 +210,12 @@ const FeaturedJobs = () => {
                   ))}
                 </ul> */}
                 <ul>
-      {results.candidates.map((candidate) => (
-        <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
-          {candidate.name}
-        </li>
-      ))}
-    </ul>
+                  {results.candidates.map((candidate) => (
+                    <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
+                      {candidate.name}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
             {activeTab === 'jobs' && (
@@ -275,27 +253,25 @@ const FeaturedJobs = () => {
                   ))}
                 </ul> */}
                 <ul>
-      {results.candidates.map((candidate) => (
-        <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
-          {candidate.name}
-        </li>
-      ))}
-    </ul>
+                  {results.candidates.map((candidate) => (
+                    <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
+                      {candidate.name}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
         </div>
       )}
+      {/* kết quả search */}
 
       {role === 'candidate' && candidateId && (
         <div>
-          <p>Jobs for you</p>
           <JobsRecommended candidateId={candidateId} />
         </div>
       )}
-      <p>List jobs</p>
       <ListJobInfo/>
-      <p>List companies</p>
       <ListCompanyInfo/>
     </div>
   );

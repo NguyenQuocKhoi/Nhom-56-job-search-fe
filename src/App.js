@@ -26,6 +26,7 @@ import DetailJobAdmin from './pages/Admin/DetailJobAdmin/DetailJobAdmin.jsx';
 import SavedCandidates from './pages/savedCandidates/savedCandidates.jsx';
 import DetailCompanyAdmin from './pages/Admin/DetailCompanyAdmin/DetailCompanyAdmin.jsx';
 import DetailCandidateAdmin from './pages/Admin/DetailCanidateAdmin/DetailCandidateAdmin.jsx';
+import SearchResult from './pages/SearchResult/SearchResult.jsx';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
             <Route path="/editPost/:jobId" element={<EditPost />}/>
             {/* <Route path="/viewEdit/:jobId" element={<ViewEdit />}/> */}
             {/* <Route path="/viewEditProfile/:companyId" element={<ViewEditProfile />}/> */}
+            <Route path="/search-result" element={<SearchResult />}/>
             <Route path="/admin" element={<AdminLayout />}/>
           </Routes>
         </div>

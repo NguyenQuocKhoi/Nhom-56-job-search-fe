@@ -46,12 +46,13 @@ const ListCompanyInfo = () => {
 
   return (
     <div className={clsx(styles.companylist)}>
+      <p className={clsx(styles.textTitle)}>Top công ty hàng đầu</p>
       <div className={clsx(styles.companyContainer)}>
         {companies.length > 0 ? (
           companies.map((company) => (
             <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
               <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
-              <h3>{company.name}</h3>
+              <h3 className={clsx(styles.centeredText)}>{company.name}</h3>
               {/* <h3><strong>Company name:</strong> {company.name}</h3> */}
               {/* <p><strong>Address:</strong> {company.address}</p> */}
               {/* <p><strong>Website:</strong> {company.website}</p> */}
@@ -63,11 +64,17 @@ const ListCompanyInfo = () => {
       </div>
       <div className={clsx(styles.pagination)}>
         {pagination.currentPage > 1 && (
-          <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
+          <button onClick={() => handlePageChange(pagination.currentPage - 1)}>
+            <i className="fa-solid fa-angle-left"></i>
+            Previous
+          </button>
         )}
-        <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+        <span>{pagination.currentPage} / {pagination.totalPages} trang </span>
         {pagination.currentPage < pagination.totalPages && (
-          <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
+          <button onClick={() => handlePageChange(pagination.currentPage + 1)}>
+            <i className="fa-solid fa-angle-right"></i>
+            Next
+          </button>
         )}
       </div>
     </div>

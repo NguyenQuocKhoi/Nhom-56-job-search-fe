@@ -1,5 +1,16 @@
 .joblist {
   padding: 1rem;
+  margin-bottom: 1.5rem;
+  
+  .textTitle{
+    font-size: 25px;
+    font-weight: bold;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    padding-left: 145px;
+  }
 
   /* Center the content container */
   .jobContainer {
@@ -28,7 +39,8 @@
     max-width: 400px;
 
     &:hover {
-      background: #87CEEB;
+      // background: #87CEEB;
+      background: #f3f3f3;
     }
 
     .title {
@@ -70,5 +82,9 @@
       border-radius: 5px;
       padding: 5px 10px;
     }
+    .linkJob{
+      text-decoration: none;
+    }
   }
+
 }

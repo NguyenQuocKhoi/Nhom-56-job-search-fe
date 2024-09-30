@@ -536,6 +536,7 @@ const CreatePostJob = () => {
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
         {successMessage && <div className={clsx(styles.successMessage)}>{successMessage}</div>} {/* Success message */}
       </div>
+
       <Footer />
     </div>
   );

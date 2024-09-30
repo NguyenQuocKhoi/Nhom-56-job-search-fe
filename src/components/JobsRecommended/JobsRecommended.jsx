@@ -1,35 +1,42 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getAPiNoneToken, postApiWithToken } from '../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
 import styles from './jobsRecommended.module.scss';
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.png';
+import Swal from 'sweetalert2';
+import { getUserStorage } from '../../Utils/valid';
 
 const JobsRecommended = ({ candidateId }) => {
+  const navigate = useNavigate();
+
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   // const [categories, setCategories] = useState({});
   const [index, setIndex] = useState(0); // Current index for sliding
 
+  const [savedJobs, setSavedJobs] = useState({});
+  const [userRole, setUserRole] = useState(null);
+
   const fetchJobs = useCallback(async () => {
     window.scrollTo(0, 0);
     try {
       setLoading(true);
 
-      console.log('candidateId recommend', candidateId);
+      // console.log('candidateId recommend', candidateId);
       const result = await postApiWithToken(`/job/recommended-for-candidate`, {candidateId: candidateId});
 
       const fetchedJobs = result.data.matchingJobs || [];
       setJobs(fetchedJobs);
-      console.log(fetchedJobs);
+      // console.log(fetchedJobs);
 
       //lấy chi tiết company theo job
       const jobsWithCompany = await Promise.all(
         fetchedJobs.map(async (job) => {
           if (job.companyId) {
             const companyResult = await getAPiNoneToken(`/company/${job.companyId}`);
-            console.log(companyResult);
+            // console.log(companyResult);
             
             const companyData = companyResult.data.company;
             return {
@@ -42,6 +49,8 @@ const JobsRecommended = ({ candidateId }) => {
         })
       );
       
+      const userData = getUserStorage()?.user;
+      setUserRole(userData?.role || null);
 
       //requirements
       const jobsWithSkills = await Promise.all(
@@ -79,6 +88,19 @@ const JobsRecommended = ({ candidateId }) => {
       // });
 
       // setCategories(categoryMap);
+      
+      if (userData?.role === 'candidate') {
+        const savedJobsResponse = await getApiWithToken(`/save-job/gets/${userData._id}`);
+        const savedJobs = savedJobsResponse?.data?.savedJobs || [];
+        const savedJobMap = savedJobs.reduce((acc, savedJob) => {
+          acc[savedJob.job._id] = {
+            savedJobId: savedJob._id,
+            isSaved: true,
+          };
+          return acc;
+        }, {});
+        setSavedJobs(savedJobMap);
+      }
     } catch (err) {
       setError('Failed to fetch jobs');
     } finally {
@@ -99,6 +121,46 @@ const JobsRecommended = ({ candidateId }) => {
     return () => clearInterval(interval); // Clear interval on unmount
   }, [jobs]);
 
+  const handleSaveJob = async (jobId) => {
+    const userData = getUserStorage()?.user;
+    if (!userData) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
+      
+      if (savedJobs[jobId]) {
+        console.log(1); 
+        const savedJobEntry = savedJobs[jobId];
+        const savedJobId = savedJobEntry.savedJobId;
+        // const savedJodId = Object.keys(savedJobs).find(savedId => savedId === jobId);
+
+        console.log('savedJobs',savedJobs);
+        console.log('savedJobId là id job',savedJobId);
+        
+        if(savedJobId) {
+          console.log(3);
+          
+          await deleteApiWithToken(`/save-job/delete/${savedJobId}`);//savedJobId chứ không phải jobId
+          setSavedJobs(prev => ({ ...prev, [jobId]: false }));
+          Swal.fire('Đã bỏ lưu tin!', '', 'success');
+        }
+      } else {
+        await postApiWithToken(`/save-job/create`, { candidateId: userData._id, jobId });
+        setSavedJobs(prev => ({ ...prev, [jobId]: true }));
+        Swal.fire('Lưu tin thành công!', '', 'success');
+      }
+    } catch (error) {
+      Swal.fire('Lỗi', 'Không thể lưu tin hoặc bỏ lưu tin', 'error');
+    }
+  };
+
+  useEffect(()=>{
+    fetchJobs();
+  }, [fetchJobs]);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -107,16 +169,18 @@ const JobsRecommended = ({ candidateId }) => {
 
   return (
     <div className={clsx(styles.joblist)}>
+        <p className={clsx(styles.textTitle)}>Gợi ý việc làm phù hợp</p>
       <div className={clsx(styles.jobContainer)}>
         {displayedJobs.length > 0 ? (
           displayedJobs.map((job) => (
-            <Link key={job.jobId} to={`/detailJob/${job.jobId}`} className={clsx(styles.jobcard)}>
+            <div key={job.jobId} className={clsx(styles.jobcard)}>
+            <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.content)}>
                 <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)} />
                 <div className={clsx(styles.text)}>
                   <div className={clsx(styles.title)}>
                     <p><strong>{job.title}</strong></p>
-                    <i className="fa-regular fa-heart"></i>
+                    {/* <i className="fa-regular fa-heart"></i> */}
                   </div>
                   <div className={clsx(styles.describe)}>
                     <p>Company: {job.companyName}</p>
@@ -136,6 +200,14 @@ const JobsRecommended = ({ candidateId }) => {
                 </div>
               </div>
             </Link>
+            {(userRole === 'candidate' || !userRole) && (
+                  <div onClick={() => handleSaveJob(job.jobId)}>
+                    {/* <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i> */}
+                    {/* lấy savedJobs của job._id */}
+                    <i className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                  </div>
+                )}
+            </div>
           ))
         ) : (
           <div>No jobs available</div>

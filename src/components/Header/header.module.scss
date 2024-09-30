@@ -3,13 +3,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
+  font-weight: bold;
   // background: linear-gradient(to right, #87CEEB, #1E90FF);
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  background: #fff;
   position: fixed; /* Fix the header to the top of the page */
   top: 0;
   left: 0;
   width: 100%; /* Make sure the header spans the entire width */
   z-index: 1000; /* Ensure the header is above other content */
+  // border-bottom: 1px solid gray;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
 
 .mainContent {
@@ -28,22 +32,43 @@
   display: flex;
   align-items: center;
 }
-
-.navLink {
+.navLinkLS{
   margin-left: 1rem;
   color: white;
   text-decoration: none;
+  transition: color 0.3s ease;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  padding: 0.3rem 1rem;
+  border-radius: 3px;
+}
+.navLinkLS:hover{
+  text-decoration: none;
+  background: blue;
+}
+.navLink {
+  margin-left: 1rem;
+  // color: white;
+  color: black;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .navLink:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  // color: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  color: blue;
+}
+.navLink::after {
+  display: none !important; /* Ẩn mũi tên trỏ xuống */
 }
 
 .btn{
-  background: linear-gradient(to right, #87CEEB, #1E90FF);
+  // background: linear-gradient(to right, #87CEEB, #1E90FF);
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   border-color: #87CEEB;
   border-radius: 5px;
   margin: 2px;
+  color: white;
 }
 
 .btnL{
@@ -95,3 +120,10 @@
   overflow-y: auto;  /* Enable vertical scrolling */
 }
 
+.tb{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -2px;
+  border-bottom: 1px solid #f5f5f5;
+}

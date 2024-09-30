@@ -1,5 +1,17 @@
 .joblist {
   padding: 1rem;
+  background: white;
+  
+
+  .textTitle{
+    font-size: 25px;
+    font-weight: bold;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    padding-left: 145px;
+  }
 
   /* Căn giữa phần chứa nội dung */
   .jobContainer {
@@ -30,7 +42,8 @@
 
     &:hover {
       // background: linear-gradient(to right, #87CEEB, #1E90FF);
-      background: #87CEEB;
+      // background: #87CEEB;
+      background: #f3f3f3;
     }
 
     h3 {
@@ -161,8 +174,14 @@
 }
 
 .locationInput {
-  flex: 1;
-  margin-right: 0.5rem; /* Add space between input fields */
+  // flex: 1;
+  // margin-right: 0.5rem; /* Add space between input fields */
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+.loc{
+  font-weight: bold;
 }
 
 .searchButton {
@@ -189,6 +208,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  margin-left: 145px;
 }
 
 .locationInput {
@@ -218,7 +238,8 @@
 }
 
 .filterOptions button.active {
-  background-color: skyblue; // Highlight color for selected option
+  // background-color: skyblue; // Highlight color for selected option
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   color: white; // Text color for selected option
 }
 

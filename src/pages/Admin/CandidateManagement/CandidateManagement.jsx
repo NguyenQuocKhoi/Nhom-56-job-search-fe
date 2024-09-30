@@ -609,6 +609,7 @@ const CandidateManagement = () => {
           className={clsx(styles.searchButton)}
           onClick={handleSearch}
         >
+          <i className="fa-solid fa-magnifying-glass"></i>
           Search
         </Button>
       </Form>

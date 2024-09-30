@@ -85,53 +85,29 @@ const Companies = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <main className={clsx(styles.mainContent)}>
-        <span>List Companies</span>
+        {/* <span>List Companies</span> */}
         {/* search bar */}
         <div className={clsx(styles.searchBar)}>
-          <Form className={clsx(styles.form)}>
-            {/* <select
-            className={clsx(styles.locationInput)}
-            id="address"
-            value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
-          >
-            <option value="">All cities</option>
-            <option value="Ha Noi">Hà Nội</option>
-            <option value="Hai Phong">Hải Phòng</option>
-            <option value="Ho Chi Minh">TP.HCM</option>
-            <option value="Others">Others</option>
-          </select> */}
-          <label>City:</label>
-        <input 
-          type="text" 
-          name="city"
-          value={addressInput || 'All cities'}
-          onClick={handleCityInputClick}
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city === 'All cities' ? '' : city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
-            </div>
+          <div className={clsx(styles.form)}>
+
+          <div className={clsx(styles.iconPlace)}>
+            <i className="fa-solid fa-location-dot"></i>
           </div>
-        )}
+          
+          <div className={clsx(styles.selectContainer)}>
+            <select
+                  className={clsx(styles.select)}
+                  value={addressInput}
+                  onChange={(e) => setAddressInput(e.target.value)}
+                >
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+          </div>
+
             <Form.Control
               type="text"
               placeholder="Enter job title"
@@ -145,9 +121,10 @@ const Companies = () => {
               className={clsx(styles.searchButton)} 
               onClick={handleSearch}
             >
+          <i className="fa-solid fa-magnifying-glass"></i>
               Search
             </Button>
-          </Form>
+          </div>
         </div>
         {results && (
         <div>

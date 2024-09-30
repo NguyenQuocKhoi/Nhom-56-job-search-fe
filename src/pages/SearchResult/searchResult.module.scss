@@ -1,0 +1,446 @@
+.searchComponent {
+    margin-top: 4rem;
+    // padding: 2rem;
+    // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  }
+  .searchContainer {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    height: 250px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .jobContainer{
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    height: 4rem;
+    width: 75%;
+    max-width: 1200px;
+  }
+  .form {
+    margin-top: 40px;
+    display: flex;
+    width: 100%;
+    max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+    border-radius: 10px;
+    height: 100%; /* Ensure full height */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
+    background-color: #ffffff; /* White background for the form */
+  }
+  
+  .selectContainer {
+    display: flex;
+    align-items: center;
+    margin: 0 10px; // Khoảng cách giữa các phần tử trong form
+  }
+  
+  .select {
+    padding: 10px; // Khoảng cách bên trong
+    border: 1px solid #ccc; // Đường viền
+    border-radius: 4px; // Bo góc
+    font-size: 16px; // Kích thước chữ
+    width: 200px; // Chiều rộng
+    background-color: #fff; // Màu nền
+    margin: 0 5px; // Khoảng cách giữa select và input
+    outline: none; // Bỏ viền khi chọn
+    transition: border 0.3s; // Hiệu ứng chuyển tiếp
+  
+    &:focus {
+      border: 1px solid #007bff; // Màu viền khi chọn
+    }
+  }
+  
+  .jobInput,
+  .locationInput {
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.25rem; /* Slightly larger padding for better touch target */
+    font-size: 1rem;
+    outline: none;
+    height: 100%;
+  }
+  
+  .jobInput {
+    flex: 2;
+    margin-right: 0.5rem;
+  }
+  
+  .locationInput {
+    flex: 1;
+    margin-right: 0.5rem;
+  }
+  
+  .iconPlace{
+    font-size: 25px;
+    padding: 10px;
+    margin-right: -15px;
+  }
+  
+  .searchButton {
+    border-radius: 10px;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient */
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    border: 6px solid white;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    height: 100%;
+    width: 150px;
+  
+    i{
+      margin-right: 1rem;
+    }
+    
+    &:hover {
+      // background: linear-gradient(to right, #0077cc, #005999); /* Hover effect */
+    background: linear-gradient(90deg, rgb(31, 5, 114) 0%, rgb(7, 65, 113) 100%);
+      // transform: translateY(-2px); /* Slight lift effect */
+    }
+  }
+  
+  .suggestBar {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    align-items: center;
+  }
+  .suggestTitle{
+    color: white;
+  }
+  
+  .suggest {
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgb(236, 231, 231);
+    margin: 10px 5px;
+    background: #e7e1e1;
+  }
+  
+  .results {
+    margin-top: 2rem;
+    max-width: 1292px;
+    padding-left: 6rem; /* Indentation for the results */
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    margin-left: 180px;
+  }
+  
+  .tabButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: border-bottom 0.3s ease;
+  }
+  
+  .tabButton:hover,
+  .active {
+    border-bottom: 2px solid #0077cc;
+  }
+  
+  .tabContent {
+    // background: #f5f5f5;
+    padding: 0 4rem;
+    border-radius: 10px;
+    min-width: 1330px;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .results {
+      padding-left: 2rem; /* Adjust padding for smaller screens */
+    }
+  }
+  
+  //modal
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px; // Maximum width of modal
+    max-height: 80vh; // Maximum height of modal
+    overflow-y: auto; // Vertical scrollbar if content overflows
+    position: relative; // For positioning the close button
+  }
+  
+  .modalContent input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .modalContent ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .modalContent li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .modalContent li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .modalContent .selected {
+    background-color: #d0f0c0; // Highlight selected items
+  }
+  
+  .modalContent button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  //job card
+  .jobcard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    width: 100%; 
+    box-sizing: border-box; 
+    // max-width: 400px; 
+    min-height: 110px;
+    margin-bottom: 20px; 
+
+    &:hover {
+      // background: linear-gradient(to right, #87CEEB, #1E90FF);
+      // background: #87CEEB;
+      background: #f3f3f3;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      // color: #555;
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .linkJob{
+      text-decoration: none;
+    }
+
+    .title{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .avatar{
+      width: 100px;
+      height: 100px;
+      border-radius: 5px;
+    }
+
+    .content{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .text{
+      color: #000;
+      margin-left: 10px;
+    }
+
+    .describe{
+      line-height: 1.2;
+      width: 270px;
+    }
+
+    .skills{
+      display: flex;
+    }
+
+    .skill{
+      background-color: rgb(197, 197, 197);
+      border-radius: 5px;
+      margin: 1px;
+      padding: 4px;
+    }
+  }
+
+  //company card
+  .companycard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    // flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    width: 100%; 
+    box-sizing: border-box; 
+    // min-height: 200px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    &:hover {
+      // background: linear-gradient(to right, #87CEEB, #1E90FF);
+  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+      // color: white;
+      background: #f3f3f3;
+    }
+
+    h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      color: #555;
+    }
+
+  }
+  .linkCompany{
+    text-decoration: none;
+  }
+  
+.avatarCompany{
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+}
+
+//card candidate
+.cardCandidate{
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    // flex-direction: column;
+    text-decoration: none;
+    width: 100%; 
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    min-height: 130px;
+
+    &:hover {
+      // background: linear-gradient(to right, #87CEEB, #1E90FF);
+  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+      color: white;
+      background: #f3f3f3;
+    }
+
+    h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      color: black;
+    }
+}
+
+.textCandidate{
+  
+}
+
+.avatarCandidate{
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.textTitle{
+  font-size: 25px;
+  font-weight: bold;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.textTitleTab{
+  font-size: 15px;
+  font-weight: bold;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.textFilter{
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  gap: 20px; /* Khoảng cách giữa các nút radio */
+  margin: 10px 0; /* Khoảng cách trên và dưới */
+  justify-content: center;
+}
+
+.filterContainer p {
+  margin-right: 10px;
+}
+
+.nameCandidate{
+  font-weight: bold;
+}

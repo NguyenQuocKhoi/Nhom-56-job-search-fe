@@ -22,6 +22,8 @@ const Signup = () => {
   //
   const [showModal, setShowModal] = useState(false);
 
+  // const [loading, setLoading] = useState(false);
+
   const handleCheckEmailExit = async (email) => {
     if(validateEmail(email)){
       getAPiNoneToken(`/user/check-email?email=${email}`)
@@ -130,7 +132,7 @@ const Signup = () => {
             icon: "warning",
             text: "Mật khẩu không khớp, vui lòng nhập lại",
           });
-          return;
+          return false;
         }
   
         const data = {
@@ -139,25 +141,30 @@ const Signup = () => {
           password: password,
           role: key,  // Vai trò: candidate hoặc company
         };
-  
+
+        // setLoading(true);//
         // Gửi yêu cầu đăng ký và gửi mã xác minh qua email
         const result = await postApiNoneToken("/user/register", data);
+        // setLoading(false);//
         if (result.data.success) {
           Swal.fire({
             icon: "info",
             text: "Mã xác minh đã được gửi đến email của bạn. Vui lòng kiểm tra email và nhập mã để hoàn tất đăng ký.",
           });
+          return true;
         } else {
           Swal.fire({
             icon: "error",
             text: result.data.message,
           });
+          return false;
         }
       } catch (error) {
         Swal.fire({
           icon: "error",
           text: "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
         });
+        return false;
       }
     } else {
       if (!emailValidation.success) {
@@ -171,10 +178,9 @@ const Signup = () => {
       }
       return false;
     }
-    return false;
   };
 
-  //modal captcha
+  // modal captcha
   // const handleShowModal = () => {
   //   handleSentVerify();
   //   setShowModal(true);
@@ -192,7 +198,11 @@ const Signup = () => {
   
   return (
     <>
-   <Modal show={showModal} onHide={handleCloseModal}>
+   <Modal 
+      show={showModal} 
+      onHide={handleCloseModal}
+      centered
+  >
       <Modal.Header closeButton>
         <Modal.Title>XÁC THỰC</Modal.Title>
       </Modal.Header>
@@ -303,6 +313,11 @@ const Signup = () => {
                   <Button variant="primary" className="w-100" onClick={handleShowModal}>
                       Sign Up
                     </Button>
+                    {/* <Button variant="primary" className="w-100" onClick={handleShowModal} disabled={loading}>
+                      {loading ? 'Đang xử lý...' : 'Sign Up'}
+                    </Button>
+
+                    {loading && <div className="loading-spinner">Đang gửi yêu cầu...</div>} */}
                 </Form>
                     
                   <div className="text-center mt-3">

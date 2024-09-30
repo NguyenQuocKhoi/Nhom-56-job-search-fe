@@ -32,6 +32,7 @@
       // background: linear-gradient(to right, #87CEEB, #1E90FF);
   // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
       color: white;
+      background: #f3f3f3;
     }
 
     h3 {
@@ -137,4 +138,22 @@
 
 .searchButton:hover {
   background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+}
+.textTitle{
+  font-size: 25px;
+  font-weight: bold;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  padding-left: 145px;
+}
+
+.centeredText {
+  justify-content: center;
+  align-items: center;    
+  text-align: center;     
+  width: 100%;            
+  word-wrap: break-word;  
+  padding: 10px;        
 }

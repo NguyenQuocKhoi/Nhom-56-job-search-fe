@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import clsx from 'clsx';
 import styles from './login.module.scss';
@@ -19,13 +19,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [emailForgotPassword, setEmailForgotPassword] = useState("");
 
-  const generateCaptcha = () => {
-    return Math.random().toString(36).substr(2, 6).toUpperCase();
-  };
-
-  const [captcha, setCaptcha] = useState(generateCaptcha());
+  //captcha mới
+  const [captcha, setCaptcha] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
-  const [showCaptcha, setShowCaptcha] = useState(false);
+  const canvasRef = useRef(null);
 
   //
   const [showModal, setShowModal] = useState(false);
@@ -148,63 +145,135 @@ const Login = () => {
 //     }
 // };
 
-  const handleSubmitCaptcha = async () => {
-    if (captchaInput.toUpperCase() !== captcha) {
-      setCaptcha(generateCaptcha());
+//hàm mới
+const generateCaptcha = () => {
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let captchaText = "";
+  for (let i = 0; i < 6; i++) {
+    captchaText += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return captchaText;
+};
+const drawCaptcha = (captchaText) => {
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext("2d");
+  
+  // Set canvas size
+  canvas.width = 200;
+  canvas.height = 50;
+
+  // Background styling
+  ctx.fillStyle = "#f2f2f2";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Text styling
+  ctx.font = "bold 30px Arial";
+  ctx.fillStyle = "#333";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(captchaText, canvas.width / 2, canvas.height / 2);
+
+  // Optionally, add noise lines to make the CAPTCHA more secure
+  for (let i = 0; i < 5; i++) {
+    ctx.strokeStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.stroke();
+  }
+};
+// useEffect(() => {
+//   const newCaptcha = generateCaptcha();
+//   setCaptcha(newCaptcha);
+//   if (canvasRef.current) {
+//     drawCaptcha(newCaptcha);
+//   }
+// }, []);
+useEffect(() => {
+  if (showModal) {
+    const newCaptcha = generateCaptcha();
+    setCaptcha(newCaptcha);
+    drawCaptcha(newCaptcha);
+  }
+}, [showModal]);
+
+// Handle CAPTCHA refresh
+const handleRefreshCaptcha = () => {
+  const newCaptcha = generateCaptcha();
+  setCaptcha(newCaptcha);
+  drawCaptcha(newCaptcha);
+};
+
+// Prevent copy/paste actions in the CAPTCHA input field
+const handleKeyDown = (e) => {
+  if (e.ctrlKey && (e.key === 'c' || e.key === 'C')) {
+    e.preventDefault(); // Prevent copying
+  }
+};
+//
+
+const handleSubmitCaptcha = async () => {
+  // Chuyển captcha và captchaInput thành chữ in hoa trước khi so sánh
+  if (captchaInput.toUpperCase() !== captcha.toUpperCase()) {
+    handleRefreshCaptcha();
+    
+    Swal.fire({
+      icon: "error",
+      text: "Captcha không chính xác. Vui lòng thử lại."
+    });
+    
+    setCaptchaInput('');
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const result = await postApiNoneToken("/user/forgot-password", { email });
+    setLoading(false);
+
+    if (result.status === 200) {
       Swal.fire({
-        icon: "error",
-        text: "Captcha không chính xác. Vui lòng thử lại."
-      });
-      setCaptchaInput('')
-      return;
-    }
-    try {
-      setLoading(true);
-      const result = await postApiNoneToken("/user/forgot-password", { email });
-      setLoading(false);
-      if (result.status === 200) {
-        Swal.fire({
-          icon: "success",
-          text: "Mật khẩu mới đã được gửi đến email của bạn. Vui lòng kiểm tra và đăng nhập với mật khẩu mới."
-        });
-      }
-      setEmailForgotPassword('');
-      setCaptchaInput('');
-      setShowModal(false);
-    } catch (error) {
-      setLoading(false);
-      Swal.fire({
-        icon: "error",
-        text: "Người dùng không tồn tại. Vui lòng kiểm tra lại địa chỉ email của bạn."
+        icon: "success",
+        text: "Mật khẩu mới đã được gửi đến email của bạn. Vui lòng kiểm tra và đăng nhập với mật khẩu mới."
       });
     }
-  };
+
+    setEmailForgotPassword('');
+    setCaptchaInput('');
+    setShowModal(false);
+    
+  } catch (error) {
+    setLoading(false);
+
+    Swal.fire({
+      icon: "error",
+      text: "Người dùng không tồn tại. Vui lòng kiểm tra lại địa chỉ email của bạn."
+    });
+  }
+};
+
   
   //modal captcha
   const handleShowModal = () => {
-    setCaptcha(generateCaptcha());
-    setShowCaptcha(true);
+    setEmailForgotPassword('');
     setShowModal(true);
   }
   const handleCloseModal = () => {
     setShowModal(false);
   }
 
-  //chặn phím tắt copy
-  const handleKeyDown = (event) => {
-    if ((event.ctrlKey && event.key === 'c') || (event.metaKey && event.key === 'c')) {
-      event.preventDefault();
-    }
-  };
-
   return (
     <>
-    <Modal show={showModal} onHide={handleCloseModal}>
+    <Modal 
+      show={showModal} 
+      onHide={handleCloseModal}
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title>Quên mật khẩu</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Nhập Email</p>
         <input 
           type="text"
           id="name"
@@ -216,17 +285,17 @@ const Login = () => {
             setEmailErr('');
           }}
           />
-          {showCaptcha && (
                   <div className="form-group text-center mt-4">
                     <div 
                       className="mb-3"
                       onKeyDown={handleKeyDown} tabIndex="0"//ngăn phím tắt copy
                     >
-                      <span className="captcha-text">{captcha}</span>
-                      <button className="btn btn-link" onClick={() => setCaptcha(generateCaptcha())}>
-                        Tạo mới
+                      <canvas ref={canvasRef}/>
+                      <button
+                        className='btn btn-link' onClick={handleRefreshCaptcha}
+                      >
+                        <i className="fa-solid fa-arrows-rotate"></i>
                       </button>
-                    </div>
                     <input
                       type="text"
                       className="form-control"
@@ -234,13 +303,16 @@ const Login = () => {
                       value={captchaInput}
                       onChange={(e) => setCaptchaInput(e.target.value)}
                     />
-                    <button className="btn btn-primary mt-3 w-100" onClick={handleSubmitCaptcha}>
-                      Xác nhận Captcha
-                    </button>
+                    </div>
+                    {/* <button className="btn btn-primary mt-3 w-100" onClick={handleSubmitCaptcha}>
+                      Xác nhận
+                    </button> */}
                   </div>
-                )}
       </Modal.Body>
       <Modal.Footer>
+        <Button variant="primary" onClick={handleSubmitCaptcha}>
+          Xác nhận
+        </Button>
         <Button variant="secondary" onClick={handleCloseModal}>
           Close
         </Button>
