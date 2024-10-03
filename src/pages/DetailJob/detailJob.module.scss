@@ -1,9 +1,12 @@
 .jobDetail {
-    padding: 2rem;
+  display: flex;
+
+    // padding: 2rem;
     background: #f9f9f9;
+    // background: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     margin-top: 6rem;
     margin-bottom: 1rem;
@@ -21,11 +24,20 @@
       margin-left: 2rem;
     }
     .titleContainer{
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px;
+
       .title{
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-top: 10px;
+      }
+      .tenCV{
+        // background: red;
+        // justify-content: center;
       }
   
       .avatar{
@@ -62,6 +74,62 @@
     }
 
   }
+.utn{
+  margin-left: 10px;
+}
 
+.columnOne{
+  // background: #000;
+  margin-right: 10px;
+  min-width: 900px;
+  max-width: 930px;
+}
+.columnTwo{
+  // background: #000;
+  margin-left: -20px;
+}
 
+.companyContainer{
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
   
+  // display: flex;
+  .titleCongty{
+    display: flex;
+  }
+
+  .avatar{
+    height: 70px;
+    width: 70px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+
+}
+.thongtinchung{
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+
+}
+.thongtinchinh{
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+
+}
+.them{
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+
+}
+.ngang{
+  display: flex;
+  justify-content: space-between;
+}

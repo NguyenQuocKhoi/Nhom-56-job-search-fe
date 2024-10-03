@@ -503,12 +503,10 @@ const CompanyManagement = () => {
 
     <div className={styles.jobManagement}>
       <h2>Quản lí công ty</h2> 
-      <div>
-        <button onClick={handleOpenModal}>Thêm công ty</button>
-      </div>
+      
       {/* searchBar */}
     <div className={clsx(styles.searchBar)}>
-      <Form className={clsx(styles.form)}>
+      <div className={clsx(styles.form)}>
       {/* <select 
   id="city" 
   name="city" 
@@ -523,7 +521,7 @@ const CompanyManagement = () => {
   ))}
 </select> */}
 
-        <label>City:</label>
+        {/* <label>City:</label>
         <input 
           type="text" 
           name="city"
@@ -531,7 +529,6 @@ const CompanyManagement = () => {
           onClick={handleCityInputClick}
           readOnly
         />
-        {/* City Modal */}
         {showCityModal && (
           <div className={clsx(styles.modal)}>
             <div className={clsx(styles.modalContent)}>
@@ -554,25 +551,47 @@ const CompanyManagement = () => {
               <button onClick={() => setShowCityModal(false)}>Close</button>
             </div>
           </div>
-        )}
-        <Form.Control
+        )} */}
+
+      <div className={clsx(styles.iconPlace)}>
+        <i className="fa-solid fa-location-dot"></i>
+      </div>
+      
+      <div className={clsx(styles.selectContainer)}>
+        <select
+              className={clsx(styles.select)}
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+      </div>
+        <input
           type="text"
           placeholder="Enter company"
           className={clsx(styles.jobInput)}
           value={companyInput}
           onChange={(e) => setCompanyInput(e.target.value)}
         />
-        <Button 
+        <button
           variant="primary" 
           className={clsx(styles.searchButton)}
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
           Search
-        </Button>
-      </Form>
+        </button>
+      </div>
     </div>
             {/* searchBar */}
+
+      <div>
+        <button onClick={handleOpenModal}>Thêm công ty</button>
+      </div>
       
 {/* results search */}
 {results && (
@@ -710,7 +729,7 @@ const CompanyManagement = () => {
                   companiesAll.map((company) => (
                     <div key={company._id}>
                       <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
-                        <h3>Company name: {company.name}</h3>
+                        <h3>{company.name}</h3>
                         <p>Status: {""+company.status}</p>
                       </Link>
                         <button onClick={() => handleDisableCompany(company._id, company.isActive)}>

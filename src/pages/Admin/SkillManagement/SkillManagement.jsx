@@ -133,7 +133,7 @@ const SkillManagement = () => {
                   </div>
                 ) : (
                   <div>
-                    <h3>Skill: {skill.skillName}</h3>
+                    <h3>{skill.skillName}</h3>
                     <button onClick={() => {
                       setEditingSkillId(skill._id);
                       setSkillInput(skill.skillName);
@@ -154,7 +154,7 @@ const SkillManagement = () => {
           {pagination.currentPage > 1 && (
             <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
           )}
-          <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+          <span>{pagination.currentPage} / {pagination.totalPages} trang</span>
           {pagination.currentPage < pagination.totalPages && (
             <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
           )}

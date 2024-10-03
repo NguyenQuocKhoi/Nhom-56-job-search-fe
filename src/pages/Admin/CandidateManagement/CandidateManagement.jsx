@@ -545,12 +545,10 @@ const CandidateManagement = () => {
 
     <div>
       <h2>Quản lí ứng viên</h2>
-      <div>
-        <button onClick={handleOpenModal}>Thêm ứng viên</button>
-      </div>
+      
        {/* searchBar */}
-       <div className={clsx(styles.searchBar)}>
-      <Form className={clsx(styles.form)}>
+       <form className={clsx(styles.searchBar)}>
+      <div className={clsx(styles.form)}>
       {/* <select 
   id="city" 
   name="city" 
@@ -565,7 +563,7 @@ const CandidateManagement = () => {
   ))}
 </select> */}
 
-          <label>City:</label>
+          {/* <label>City:</label>
         <input 
           type="text" 
           name="city"
@@ -573,7 +571,7 @@ const CandidateManagement = () => {
           onClick={handleCityInputClick}
           readOnly
         />
-        {/* City Modal */}
+        
         {showCityModal && (
           <div className={clsx(styles.modal)}>
             <div className={clsx(styles.modalContent)}>
@@ -596,32 +594,52 @@ const CandidateManagement = () => {
               <button onClick={() => setShowCityModal(false)}>Close</button>
             </div>
           </div>
-        )}
-        <Form.Control
+        )} */}
+        <div className={clsx(styles.iconPlace)}>
+        <i className="fa-solid fa-location-dot"></i>
+      </div>
+      
+      <div className={clsx(styles.selectContainer)}>
+        <select
+              className={clsx(styles.select)}
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+      </div>
+        <input
           type="text"
           placeholder="Enter candidate"
           className={clsx(styles.jobInput)}
           value={candidateInput}
           onChange={(e) => setCandidateInput(e.target.value)}
         />
-        <Button 
+        <button
           variant="primary" 
           className={clsx(styles.searchButton)}
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
           Search
-        </Button>
-      </Form>
-    </div>
+        </button>
+      </div>
+    </form>
             {/* searchBar */}
+      <div>
+        <button onClick={handleOpenModal}>Thêm ứng viên</button>
+      </div>
 
       {results && (
         <div>
           {results.length > 0 ? (
           results.map((candidate) => (
             <Link key={candidate._id} to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.candidatecard)}>
-              <h3>Candidate name: {candidate.name}</h3>
+              <h3>{candidate.name}</h3>
               <hr />
             </Link>
           ))
@@ -639,7 +657,7 @@ const CandidateManagement = () => {
           candidates.map((candidate) => (
             <div key={candidate._id}>
               <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.candidatecard)}>
-                <h3>Candidate name: {candidate.name}</h3>
+                <h3>{candidate.name}</h3>
                 <p>IsActive: {"" + candidate.isActive}</p>
               </Link>
               <button
@@ -658,7 +676,7 @@ const CandidateManagement = () => {
         {pagination.currentPage > 1 && (
           <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
         )}
-        <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+        <span>{pagination.currentPage} / {pagination.totalPages} trang</span>
         {pagination.currentPage < pagination.totalPages && (
           <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
         )}

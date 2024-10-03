@@ -259,6 +259,7 @@ const JobDetail = () => {
       });
       Swal.fire('Ứng tuyển thành công!', '', 'success');
       setIsApplied(true);
+      setShowModalCV(false);
     } catch (error) {
       Swal.fire('Lỗi', 'Không thể gửi đơn ứng tuyển', 'error');
     }
@@ -272,21 +273,35 @@ const JobDetail = () => {
         email: candidateEmail, 
         phoneNumber: candidatePhone,
        }
-       const formData = new FormData();
-       formData.append('resume', cvFile);
+      //  const formData = new FormData();
+      //  formData.append('resume', cvFile);
   
        await putApiWithToken(`/candidate/update/${candidateId}`, data);
        
-       await putApiWithToken(`/candidate/upload-cv/${candidateId}`, formData);
-       await postApiWithToken(`/application/create`, { 
-          jobId: job._id,
-          candidateId: candidateId,
-        });
+       const formData = new FormData();
+       formData.append('resume', cvFile);
+       formData.append('jobId', job._id);
+       formData.append('candidateId', candidateId);
+      
+       await postApiWithToken(`/application/create-new`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+       })
+
+       //  await putApiWithToken(`/candidate/upload-cv/${candidateId}`, formData);
+      //  await postApiWithToken(`/application/create-new`, { 
+      //     jobId: job._id,
+      //     candidateId: candidateId,
+      //   });
+
       Swal.fire('Ứng tuyển thành công!', '', 'success');
       setShowModalCV(false);
       setIsApplied(true);//
      }catch(error){
-        console.log(error);  
+      console.log('Error during CV upload and application:', error);
+      Swal.fire('Đã có lỗi xảy ra!', 'Vui lòng thử lại sau.', 'error');
+        // console.log(error);  
      }
   };
 
@@ -465,10 +480,13 @@ const JobDetail = () => {
 
       <Header />
       <div className={clsx(styles.jobDetail)}>
+        <div className={clsx(styles.columnOne)}>
         <div className={clsx(styles.titleContainer)}>
           <div className={clsx(styles.title)}>
-            <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            {/* <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
+          <div className={clsx(styles.tenCV)}>
             <h1>{job.title}</h1>
+          </div>
           </div>
           {(userRole === 'candidate' || !userRole) && (
             <div className={clsx(styles.title)}>
@@ -478,7 +496,17 @@ const JobDetail = () => {
                 disabled={isApplied}
                 style={{ backgroundColor: isApplied ? 'gray' : '' }}
               >
-                <strong>{isApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}</strong>
+                {
+                  isApplied ? (
+                    <strong>Đã ứng tuyển</strong>
+                  ): (
+                    <>
+                      <i className="fa-regular fa-paper-plane"></i>
+                      <strong className={clsx(styles.utn)}>Ứng tuyển ngay</strong>
+                    </>
+                  )
+                }
+                {/* <strong>{isApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}</strong> */}
               </button>
               <button 
                 className={clsx(styles.btnSave)}
@@ -488,35 +516,61 @@ const JobDetail = () => {
               </button>
             </div>
           )}
+          <div className={clsx(styles.ngang)}>
+            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+            <p><strong>Lương:</strong> {job.salary}</p>
+            <p><strong>Vị trí làm việc:</strong> {job.position}</p>
+          </div>
         </div>
-        <p><strong>Company:</strong> {job.company.name}</p>
-        <p><strong>Address:</strong> {job.street}, {job.city} </p>
-        <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-        <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
-        <p><strong>Salary:</strong> {job.salary}</p>
-        <p><strong>Interest:</strong> {job.interest}</p>
-        <p><strong>Type:</strong> {job.type}</p>
-        <p><strong>Position:</strong> {job.position}</p>
-        <p><strong>Requirements:</strong> {job.requirements}</p>
-        <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
-        <p><strong>Category: </strong>{categoryName}</p>
-        <div>
-          <strong>Requirements skill: </strong>
-          {skills.length > 0 ? (
-            <ul>
-              {skills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No skill</span>
-          )}
+        
+        <div className={clsx(styles.thongtinchinh)}>
+          <p><strong>Phúc lợi:</strong> {job.interest}</p>
+          <p><strong>Mô tả:</strong></p>
+          <div
+            dangerouslySetInnerHTML={{ __html: job.description }}
+            ></div>
+          <p><strong>Yêu cầu:</strong> {job.requirements}</p>
+          <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+          <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
         </div>
-        <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
-        <div
-             dangerouslySetInnerHTML={{ __html: job.description }}
-          ></div>
-        {/* <p><strong>Description:</strong> {job.description}</p> */}
+      </div>
+
+      <div className={clsx(styles.columnTwo)}>
+        <div className={clsx(styles.companyContainer)}>
+          <div className={clsx(styles.titleCongty)}>
+            <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            <p>
+              {/* <strong>Công ty:</strong>  */}
+              <strong>{job.company.name}</strong>
+            </p>
+          </div>
+            <p><strong>Địa chỉ:</strong> {job.street}, {job.city} </p>
+        </div>
+
+        <div className={clsx(styles.thongtinchung)}>
+          <p><strong>Hình thức làm việc:</strong> {job.type}</p>
+          <p><strong>Số lượng tuyển:</strong> {job.numberOfCruiment}</p>
+          <p><strong>Kinh nghiệm:</strong> {job.experienceLevel}</p>
+        </div>
+
+
+        <div className={clsx(styles.them)}>
+          <p><strong>Lĩnh vực: </strong>{categoryName}</p>
+          <div>
+            <strong>Yêu cầu kỹ năng: </strong>
+            {skills.length > 0 ? (
+              <ul>
+                {skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>No skill</span>
+            )}
+          </div>
+        </div>
+      </div>
+
       </div>
       <Footer />
     </>

@@ -18,6 +18,8 @@ const PostedDetail = () => {
   const [categoryName, setCategoryName] = useState('');
   const [skills, setSkills] = useState([]);
 
+  const [numberApplyPending, setNumberApplyPending] = useState(0);
+
   // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   useEffect(() => {
@@ -63,6 +65,11 @@ const PostedDetail = () => {
   
         setApply(applicationsWithCandidates);
         console.log(applicationsWithCandidates);
+
+        //đếm số lượng ứng viên có trạng thái "pending"
+        const pendingApplications = applicationsWithCandidates.filter(apply => apply.status === 'pending');
+        setNumberApplyPending(pendingApplications.length);
+
   // const skillPromises = result.data.job.requirements.map(async (skillId) => {
           //   const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
           //   return skillResult.data.skill.skillName;
@@ -82,7 +89,6 @@ const PostedDetail = () => {
           //   const fetchedSkills = await Promise.all(skillPromises);
           //   setSkills(fetchedSkills);
           const requirementSkills = resultJobs.data.job.pendingUpdates?.requirementSkills || resultJobs.data.job.requirementSkills;
-
           if (requirementSkills && requirementSkills.length > 0) {
             const skillPromises = requirementSkills.map(async (skillId) => {
               const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
@@ -108,12 +114,6 @@ const PostedDetail = () => {
 
   const handleEditPost = () => {
     navigate(`/editPost/${jobId}`);
-  };
-
-  const handleViewEdit = () => {
-    if (job.pendingUpdates) {
-      navigate(`/viewEdit/${jobId}`);
-    } 
   };
 
   const handleDeletePost = async () => {
@@ -161,114 +161,111 @@ const PostedDetail = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <p>Chi tiết công việc: {jobId}</p>
-
+        {/* <p>Chi tiết công việc: {jobId}</p> */}
         <div className={clsx(styles.jobDetail)}>
+        <div className={clsx(styles.columnOne)}>
           <div className={clsx(styles.titleContainer)}>
             <div className={clsx(styles.title)}>
-              <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
               <h1 className={clsx({ [styles.highlight]: isFieldDifferent('title') })}>
                 {job.pendingUpdates?.title || job.title}
               </h1>
             </div>
+
+            <div className={clsx(styles.ngang)}>
+              <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
+                <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
+              </p>
+              <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
+                <strong>Salary:</strong> {job.pendingUpdates?.salary || job.salary}
+              </p>
+              <p className={clsx({ [styles.highlight]: isFieldDifferent('position') })}>
+                <strong>Position:</strong> {job.pendingUpdates?.position || job.position}
+              </p>
+            </div>
           </div>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
-            <strong>Address:</strong> {job.pendingUpdates?.street || job.street}, {job.pendingUpdates?.city || job.city}
-          </p>
-          <p><strong>Company:</strong> {job.company.name}</p>
-          <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
-            <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('numberOfCruiment') })}>
-            <strong>Number of Recruitment:</strong> {job.pendingUpdates?.numberOfCruiment || job.numberOfCruiment}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
-            <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
-            <strong>Interest:</strong> {job.pendingUpdates?.interest || job.interest}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
-            <strong>Salary:</strong> {job.pendingUpdates?.salary || job.salary}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('type') })}>
-            <strong>Type:</strong> {job.pendingUpdates?.type || job.type}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('position') })}>
-            <strong>Position:</strong> {job.pendingUpdates?.position || job.position}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('experienceLevel') })}>
-            <strong>Experience Level:</strong> {job.pendingUpdates?.experienceLevel || job.experienceLevel}
-          </p>
-          <p className={clsx({ [styles.highlight]: isFieldDifferent('category') })}>
-            <strong>Category:</strong> {categoryName || 'No Category'}
-          </p>
-          <div>
-            <strong>Requirements: </strong>
-            {skills.length > 0 ? (
-              <ul>
-                {skills.map((skill, index) => (
-                  <li key={index}>{skill}</li>
-                ))}
-              </ul>
-            ) : (
-              <span>No skill</span>
-            )}
-          </div>
-          <div
+
+          <div className={clsx(styles.thongtinchinh)}>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
+              <strong>Interest:</strong> {job.pendingUpdates?.interest || job.interest}
+            </p>
+            <p><strong>Mô tả:</strong></p>
+            <div
               className={clsx({ [styles.highlight]: isFieldDifferent('description') })}
-             dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.description || job.description }}
-          ></div>
-          {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('description') })}>
-            <strong>Description:</strong> {job.pendingUpdates.description}
-          </p> */}
-          {
-            job.pendingUpdates &&
-          (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString()}</p>)
-          }
-          {/* <p><strong>Address:</strong> {job.street}, {job.city}</p>
-          <p><strong>Company:</strong> {job.company.name}</p>
-          <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-          <p><strong>Expires:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
-          <p><strong>Number of cruiment:</strong> {job.numberOfCruiment}</p>
-          <p><strong>Requirements:</strong> {job.requirements}</p>
-          <p><strong>Salary:</strong> {job.salary}</p>
-          <p><strong>Interest:</strong> {job.interest}</p>
-          <p><strong>Type:</strong> {job.type}</p>
-          <p><strong>Position:</strong> {job.position}</p>
-          <p><strong>Experience Level:</strong> {job.experienceLevel}</p>
-          <p><strong>Category:</strong> {categoryName || 'No Category'}</p> */}
-          {/* <div>
-          <strong>Requirements: </strong>
-          {skills.length > 0 ? (
-            <ul>
-              {skills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No skill</span>
-          )}
-        </div> */}
-          {/* <div
-             dangerouslySetInnerHTML={{ __html: job.description }}
-          ></div> */}
-          <button onClick={handleEditPost}>Sửa bài đăng</button>
-          <button onClick={handleDeletePost}>Xóa bài đăng</button>
-          {job.pendingUpdates && <p>Đang chờ phê duyệt</p>}
-          {/* <button 
-            onClick={handleViewEdit}
-            // disabled={isButtonDisabled}
-            disabled={!job.pendingUpdates}
-          >
-            Xem chi tiết sửa
-          </button> */}
+              dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.description || job.description }}
+            ></div>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
+              <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
+            </p>
+            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
+              <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
+            </p>
+            {
+              job.pendingUpdates &&
+                (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString()}</p>)
+              }
+          </div>
+
+          <div className={clsx(styles.groupButton)}>
+            <button onClick={handleEditPost} className={clsx(styles.btnSua)}>Sửa bài đăng</button>
+            <button onClick={handleDeletePost} className={clsx(styles.btnXoa)}>Xóa bài đăng</button>
+          </div>
+          <div className={clsx(styles.textChoPheDuyet)}>
+            {job.pendingUpdates && <p>Đang chờ phê duyệt</p>}
+          </div>
+        </div>
+
+          <div className={clsx(styles.columnTwo)}>
+            <div className={clsx(styles.companyContainer)}>
+              <div className={clsx(styles.titleCongty)}>
+                <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
+                <p><strong>Company:</strong> {job.company.name}</p>
+              </div>
+              <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
+                <strong>Address:</strong> {job.pendingUpdates?.street || job.street}, {job.pendingUpdates?.city || job.city}
+              </p>
+            </div>
+          
+
+          <div className={clsx(styles.thongtinchung)}>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('type') })}>
+              <strong>Hình thức làm việc:</strong> {job.pendingUpdates?.type || job.type}
+            </p>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('numberOfCruiment') })}>
+              <strong>Số lượng tuyển:</strong> {job.pendingUpdates?.numberOfCruiment || job.numberOfCruiment}
+            </p>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('experienceLevel') })}>
+              <strong>Kinh nghiệm:</strong> {job.pendingUpdates?.experienceLevel || job.experienceLevel}
+            </p>
+          </div>
+
+          <div className={clsx(styles.them)}>
+            <p className={clsx({ [styles.highlight]: isFieldDifferent('category') })}>
+              <strong>Lĩnh vực:</strong> {categoryName || 'No Category'}
+            </p>
+            <div>
+              <strong>Yêu cầu kỹ năng: </strong>
+              {skills.length > 0 ? (
+                <ul>
+                  {skills.map((skill, index) => (
+                    <li key={index}>{skill}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>No skill</span>
+              )}
+            </div>
+          </div>
+          </div>
+          
         </div>
 
         <div>
 {/*  */}
         <div>
+            <div>
+              <strong>Số lượng ứng viên chờ phê duyệt: {numberApplyPending}</strong>
+            </div>
             <strong>Danh sách ứng viên:</strong>
             {apply.length > 0 ? (
               <ul>

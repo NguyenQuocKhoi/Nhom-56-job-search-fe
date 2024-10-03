@@ -26,7 +26,9 @@ const SavedCandidates = () => {
 
           result.data.saveCandidate.forEach(async (candidate) => {
             try {
-              const candidateResult = await getApiWithToken(`/candidate/${candidate.candidate}`);
+              console.log('29',candidate.candidate._id);
+              
+              const candidateResult = await getApiWithToken(`/candidate/${candidate.candidate._id}`);
               console.log('29',candidateResult);
               
               if (candidateResult.data.success) {
@@ -71,12 +73,12 @@ const SavedCandidates = () => {
               <p>No saved candidates found.</p>
             ) : (
               savedCandidates.map((candidate) => (
-                <Link key={candidate._id} to={`/detail-candidate/${candidate.candidate}`} target="_blank" rel="noopener noreferrer">
+                <Link key={candidate._id} to={`/detail-candidate/${candidate.candidate._id}`} target="_blank" rel="noopener noreferrer">
                   <div className={clsx(styles.jobItem)}>
                     <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>
-                    <p>Address: {candidateDetails[candidate.candidate]?.street}, {candidateDetails[candidate.candidate]?.city}</p>
+                    <p>Email: {candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
+                    <p>Phone: {candidateDetails[candidate.candidate]?.phone || 'Người dùng chưa cập nhật'}</p>
                     <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString()}</p>
-                    {/* <button>Bỏ lưu</button> */}
                     <hr />
                   </div>
                 </Link>

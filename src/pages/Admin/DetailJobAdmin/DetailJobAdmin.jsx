@@ -90,18 +90,43 @@ const DetailJobAdmin = () => {
     // setUserId(userData?._id);
   }, [jobId]);
 
-  const renderField = (label, originalValue, updatedValue) => {
+  // const renderField = (label, originalValue, updatedValue) => {
+  //   return (
+  //     <p>
+  //       <strong>{label}:</strong> {originalValue}
+  //       {updatedValue !== undefined && updatedValue !== originalValue && (
+  //         <span style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+  //           (Cập nhật thành: {updatedValue})
+  //         </span>
+  //       )}
+  //     </p>
+  //   );
+  // };
+  const renderField = (label, value, pendingValue, isHtml = false) => {
     return (
-      <p>
-        <strong>{label}:</strong> {originalValue}
-        {updatedValue !== undefined && updatedValue !== originalValue && (
-          <span style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
-            (Cập nhật thành: {updatedValue})
-          </span>
+      <div>
+        <label><strong>{label}:</strong></label>
+        {pendingValue ? (
+          // <div style={{ color: 'red' }}>
+          <div>
+            {isHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: pendingValue }}></div>
+            ) : (
+              <p>{pendingValue}</p>
+            )}
+          </div>
+        ) : (
+          <div>
+            {isHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: value }}></div>
+            ) : (
+              <p>{value}</p>
+            )}
+          </div>
         )}
-      </p>
+      </div>
     );
-  };
+  };  
 
   //accept, reject job
   const handleStatusUpdate = async ( jobId, status ) => {
@@ -192,7 +217,7 @@ const DetailJobAdmin = () => {
             }
           </div>
         </div>
-        {renderField('Description', job.description, job.pendingUpdates?.description)}
+        {renderField('Description', job.description, job.pendingUpdates?.description, true)}
         {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)}
         <p><strong>Company:</strong> {job.company.name}</p>
         <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>

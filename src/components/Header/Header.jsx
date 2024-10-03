@@ -159,6 +159,7 @@ const Header = () => {
   </Dropdown.Toggle>
   <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
     <p className={clsx(styles.tb)}>Thông báo</p>
+    <p>Thông báo mới</p>
     {notifications.length > 0 ? (
       notifications.map(notification => (
         <Dropdown.Item
@@ -230,6 +231,8 @@ const Header = () => {
                       {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
+                      <p className={clsx(styles.tb)}>Thông báo</p>
+                      <p>Thông báo mới</p>
                       {notifications.length > 0 ? (
                         notifications.map(notification => (
                           <Dropdown.Item

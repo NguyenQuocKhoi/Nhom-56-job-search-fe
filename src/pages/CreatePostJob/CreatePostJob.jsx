@@ -361,7 +361,7 @@ const CreatePostJob = () => {
               onChange={handleChange}
             />
           </div>
-          <label>City:</label>
+          <label>Tỉnh/Thành phố: *</label>
         <input 
           type="text" 
           name="city"

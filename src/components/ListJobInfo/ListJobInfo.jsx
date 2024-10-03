@@ -254,20 +254,21 @@ const ListJobInfo = () => {
                 <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
                   <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                 </Link>
-                <Link to={`/detailJob/${job._id}`} 
-                  // target="_blank" rel="noopener noreferrer" 
-                  className={clsx(styles.linkJob)}>
+                {/* <Link to={`/detailJob/${job._id}`}  */}
+                  {/* target="_blank" rel="noopener noreferrer"  */}
+                  {/* className={clsx(styles.linkJob)}> */}
                   <div className={clsx(styles.text)}>
                     <div className={clsx(styles.title)}>
+                    <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                       <p><strong>{job.title}</strong></p>
-
-                {/* {(userRole === 'candidate' || !userRole) && (
-                  <div onClick={handleSaveJob}>
-                    <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                    </Link>
+                    {(userRole === 'candidate' || !userRole) && (
+                  <div onClick={() => handleSaveJob(job._id)}>
+                    <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
                   </div>
-                )} */}
-                    
+                )}
                     </div>
+                    <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                     <div className={clsx(styles.describe)}>
                       <p>Company: {job.company.name}</p>
                       <p>Address: {job.street}, {job.city}</p>
@@ -286,15 +287,15 @@ const ListJobInfo = () => {
                         <span>No skills</span>
                       )}
                     </div>
+                    </Link>
                   </div>
-                </Link>
-                {(userRole === 'candidate' || !userRole) && (
+                {/* </Link> */}
+
+                {/* {(userRole === 'candidate' || !userRole) && (
                   <div onClick={() => handleSaveJob(job._id)}>
-                    {/* <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i> */}
-                    {/* lấy savedJobs của job._id */}
                     <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             ) : null

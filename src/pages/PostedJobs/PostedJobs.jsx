@@ -19,6 +19,8 @@ const PostedJobs = () => {
 
   const [categories, setCategories] = useState({});
 
+  const [pendingApplications, setPendingApplications] = useState({});
+
   const user = getUserStorage()?.user;
   const companyId = user._id;
 
@@ -49,8 +51,17 @@ const PostedJobs = () => {
           const { _id, name } = response.data.category;
           categoryMap[_id] = name;
         });
-
         setCategories(categoryMap);
+
+        const pendingPromises = jobs.map((job) => 
+          getApiWithToken(`/application/countPending/${job._id}`)
+      );
+      const pendingResponses = await Promise.all(pendingPromises);
+      const pendingMap = {};
+      pendingResponses.forEach((response, index) => {
+        pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
+      });
+      setPendingApplications(pendingMap);
       } catch (error) {
         setError('Error fetching jobs');
         console.error(error);
@@ -163,6 +174,7 @@ const PostedJobs = () => {
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
                           <p>Category: {categories[job.category] || 'No Category'}</p>
+                          <p className={clsx(styles.numberApplyPending)}>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</p>
                         </div>
                       </div>
                     </div>
@@ -178,7 +190,7 @@ const PostedJobs = () => {
                 <i className="fa-solid fa-angle-left"></i>
                 {/* Previous */}
               </button>
-              <span> {currentPage} / {totalPages} trang</span>
+              <span> {currentPage} / {totalPages} trang </span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}

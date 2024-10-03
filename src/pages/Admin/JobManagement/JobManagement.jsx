@@ -118,7 +118,18 @@ const JobManagement = () => {
     fetchJobs(newPage);
   };
 
-  
+  const getJobStatus = (job) => {
+    if (job.pendingUpdates !== null) {
+      return 'Pending';
+    } else if (job.status === true) {
+      return 'Accepted';
+    } else if (job.status === false) {
+      return 'Rejected';
+    } else {
+      return 'Unknown';
+    }
+  };
+    
   //accept, reject job
   const handleStatusUpdate = async ( jobId, status ) => {
     // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
@@ -250,8 +261,8 @@ const JobManagement = () => {
     <div className={styles.jobManagement}>
       <h2>Quản lí việc làm</h2>
         {/* searchBar */}
-        <div className={clsx(styles.searchBar)}>
-          <Form className={clsx(styles.form)}>
+        <form className={clsx(styles.searchBar)}>
+          <div className={clsx(styles.form)}>
             {/* <Form.Control
               type="text"
               placeholder="Address"
@@ -272,7 +283,7 @@ const JobManagement = () => {
             <option value="Ho Chi Minh">TP.HCM</option>
             <option value="Others">Others</option>
           </select> */}
-            <label>City:</label>
+            {/* <label>City:</label>
         <input 
           type="text" 
           name="city"
@@ -280,7 +291,6 @@ const JobManagement = () => {
           onClick={handleCityInputClick}
           readOnly
         />
-        {/* City Modal */}
         {showCityModal && (
           <div className={clsx(styles.modal)}>
             <div className={clsx(styles.modalContent)}>
@@ -303,8 +313,26 @@ const JobManagement = () => {
               <button onClick={() => setShowCityModal(false)}>Close</button>
             </div>
           </div>
-        )}
-            <Form.Control
+        )} */}
+
+<div className={clsx(styles.iconPlace)}>
+        <i className="fa-solid fa-location-dot"></i>
+      </div>
+      
+      <div className={clsx(styles.selectContainer)}>
+        <select
+              className={clsx(styles.select)}
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+      </div>
+            <input
               type="text"
               placeholder="Enter job title"
               className={clsx(styles.jobInput)}
@@ -312,15 +340,15 @@ const JobManagement = () => {
               value={jobInput}
               onChange={(e) => setJobInput(e.target.value)}
             />
-            <Button 
+            <button 
               variant="primary" 
               className={clsx(styles.searchButton)} 
               onClick={handleSearch}
             >
               Search
-            </Button>
-          </Form>
-        </div>
+            </button>
+          </div>
+        </form>
       
       {/* results search */}
       {results && (
@@ -459,17 +487,29 @@ const JobManagement = () => {
                   jobsAll.map((job) => (
             job && job._id && job.company && job.company._id ? (
                     <div className={clsx(styles.content)}  key={job._id}>
-                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
+                      <div className={clsx(styles.jobcard)}>
+                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                      <div className={styles.contentJobcard}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
-                          <div>
-                            <p><strong>{job.title}</strong></p>
-                          </div>
-                          <div>
-                            <p>Company: {job.company.name}</p>
-                            <p>Status: {job.status}</p>
-                          </div>
+                        <div className={styles.contentText}>
+                          <p><strong>{job.title}</strong></p>
+                          <p>Company: {job.company.name}</p>
+                          <p>Address: {job.street}, {job.city}</p>
+                          <p 
+                            style={{
+                              backgroundColor: 
+                                job.pendingUpdates !== null || job.status === undefined ? 'lightgray' : // Pending
+                                job.status === true ? 'lightgreen' : // Accepted
+                                'lightcoral' // Rejected
+                            }}
+                          >
+                            Trạng thái: {getJobStatus(job)}
+                          </p>
+                        </div>
+                      </div>
                       </Link>
-                          <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                          <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                      </div>
                     </div>
             ):null
                   ))
@@ -498,18 +538,21 @@ const JobManagement = () => {
                 {jobsAccepted.length > 0 ? (
                   jobsAccepted.map((job) => (
             job && job._id && job.company && job.company._id ? (
-                      <div  key={job._id} className={clsx(styles.content)}>
-                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
-                        <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
-                          <div>
+                      <div key={job._id} className={clsx(styles.content)}>
+                        <div className={clsx(styles.jobcard)}>
+                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                        <div className={clsx(styles.contentJobcard)}>
+                          <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
+                          <div className={clsx(styles.contentText)}>
                             <p><strong>{job.title}</strong></p>
-                          </div>
-                          <div>
                             <p>Company: {job.company.name}</p>
+                            <p>Address: {job.street},{job.city}</p>
                           </div>
+                        </div>                          
                     </Link>
-                          <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                          <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
+                  </div>
             ):null
                   ))
                 ) : (
@@ -536,18 +579,21 @@ const JobManagement = () => {
                 {jobsRejected.length > 0 ? (
                   jobsRejected.map((job) => (
             job && job._id && job.company && job.company._id ? (
-                    <div key={job._id} className={clsx(styles.content)}>
-                        <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)}>
-                        <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
-                          <div className={clsx(styles.title)}>
-                            <p><strong>{job.title}</strong></p>
-                          </div>
-                          <div className={clsx(styles.describe)}>
-                            <p>Company: {job.company.name}</p>
-                        </div>
-                    </Link>
-                        <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
-                      </div>
+              <div key={job._id} className={clsx(styles.content)}>
+              <div className={clsx(styles.jobcard)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+              <div className={clsx(styles.contentJobcard)}>
+                <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
+                <div className={clsx(styles.contentText)}>
+                  <p><strong>{job.title}</strong></p>
+                  <p>Company: {job.company.name}</p>
+                  <p>Address: {job.street},{job.city}</p>
+                </div>
+              </div>                          
+          </Link>
+                <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+            </div>
+        </div>
             ):null
                   ))
                 ) : (
@@ -574,35 +620,37 @@ const JobManagement = () => {
                 {jobsPending.length > 0 ? (
                   jobsPending.map((job) => (
             job && job._id && job.company && job.company._id ? (
-                    <div key={job._id} className={clsx(styles.content)}>
-                        <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
-                        <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
-                          <div className={clsx(styles.title)}>
-                            <p><strong>{job.title}</strong></p>
-                          </div>
-                          <div className={clsx(styles.describe)}>
-                            <p>Company: {job.company.name}</p>
-                            {/* button */}
-                        </div>
-                    </Link>
+              <div key={job._id} className={clsx(styles.content)}>
+              <div className={clsx(styles.jobcard)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+              <div className={clsx(styles.contentJobcard)}>
+                <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
+                <div className={clsx(styles.contentText)}>
+                  <p><strong>{job.title}</strong></p>
+                  <p>Company: {job.company.name}</p>
+                  <p>Address: {job.street},{job.city}</p>
+                </div>
+              </div>                          
+          </Link>
                               <div className={clsx(styles.buttonContainer)}>
                                 <button
-                                  className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+                                  className={clsx(styles.btnDongY, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
                                   onClick={() => handleStatusUpdate(job._id, true)}
                                   disabled={buttonState === 'accepted'}
                                 >
                                   Accept
                                 </button>
                                 <button
-                                  className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+                                  className={clsx(styles.btnTuChoi, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
                                   onClick={() => handleStatusUpdate(job._id, false)}
                                   disabled={buttonState === 'rejected'}
                                 >
                                   Reject
                                 </button>
-                                <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                                <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>
+                    </div>
             ):null
                   ))
                 ) : (

@@ -77,6 +77,20 @@ const AppliedJobs = () => {
           <p>{error}</p>
         ) : applications.length > 0 ? (
           <div className={clsx(styles.jobContainer)}>
+
+          {/* lọc */}
+                <div className={clsx(styles.filterContainer)}>
+                  <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
+                  <label>
+                    <input type="radio" name="filter" value="new" />
+                    Mới nhất
+                  </label>
+                  <label>
+                    <input type="radio" name="filter" value="old" />
+                    Cũ nhất
+                  </label>
+                </div>
+
             {applications.map((application) => {
               const job = jobDetails[application.job];
               return (
@@ -84,12 +98,31 @@ const AppliedJobs = () => {
                   <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
                     <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                   </Link>
-                  <Link key={application._id} to={`/detailJob/${application.job}`} className={clsx(styles.linkJob)}>
+                  <Link key={application._id} to={`/detailJob/${application.job}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                     <p>Công việc: {job ? job.title : "Loading..."}</p>
                     <p>Công ty: {job ? job.company.name : "Loading..."}</p>
                     <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
                     <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString()}</p>
-                    <p>Trạng thái: {application.status}</p>
+                    {/* <p>Trạng thái: {application.status}</p>
+
+                    <i className="fa-regular fa-clock"></i>
+                    <i className="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-x"></i> */}
+                    <p 
+                      style={{ 
+                        backgroundColor: 
+                          application.status === 'accepted' ? 'lightgreen' : 
+                          application.status === 'rejected' ? 'lightcoral' : 
+                          'lightgray'
+                      }}
+                    >
+                      Trạng thái: {application.status}
+                      
+                      {application.status === 'accepted' && <i className="fa-solid fa-check"></i>}
+                      {application.status === 'rejected' && <i className="fa-solid fa-x"></i>}
+                      {application.status === 'pending' && <i className="fa-regular fa-clock"></i>}
+                    </p>
+
                   </Link>
                 </div>
               );

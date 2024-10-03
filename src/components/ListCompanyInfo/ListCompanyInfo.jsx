@@ -50,7 +50,7 @@ const ListCompanyInfo = () => {
       <div className={clsx(styles.companyContainer)}>
         {companies.length > 0 ? (
           companies.map((company) => (
-            <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)}>
+            <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)} target="_blank" rel="noopener noreferrer">
               <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
               <h3 className={clsx(styles.centeredText)}>{company.name}</h3>
               {/* <h3><strong>Company name:</strong> {company.name}</h3> */}

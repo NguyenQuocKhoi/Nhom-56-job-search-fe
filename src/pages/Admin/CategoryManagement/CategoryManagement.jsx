@@ -133,7 +133,7 @@ const CategoryManagement = () => {
                   </div>
                 ) : (
                   <div>
-                    <h3>Category name: {category.name}</h3>
+                    <h3>{category.name}</h3>
                     <button onClick={() => {
                       setEditingCategoryId(category._id);
                       setCategoryInput(category.name); // Set the input with current category name
@@ -154,7 +154,7 @@ const CategoryManagement = () => {
           {pagination.currentPage > 1 && (
             <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
           )}
-          <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+          <span>{pagination.currentPage} / {pagination.totalPages} trang</span>
           {pagination.currentPage < pagination.totalPages && (
             <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
           )}

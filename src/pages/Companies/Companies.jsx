@@ -108,7 +108,7 @@ const Companies = () => {
                 </select>
           </div>
 
-            <Form.Control
+            <input
               type="text"
               placeholder="Enter job title"
               className={clsx(styles.jobInput)}
@@ -116,14 +116,14 @@ const Companies = () => {
               value={companyInput}
               onChange={(e) => setCompanyInput(e.target.value)}
             />
-            <Button 
+            <button
               variant="primary" 
               className={clsx(styles.searchButton)} 
               onClick={handleSearch}
             >
           <i className="fa-solid fa-magnifying-glass"></i>
               Search
-            </Button>
+            </button>
           </div>
         </div>
         {results && (

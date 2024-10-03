@@ -43,7 +43,7 @@ const DetailCandidateSearch = () => {
           const savedCandidates = savedCandidatesResponse?.data?.saveCandidate || [];
     
           const isSaved = savedCandidates.find(savedCandidate => 
-            savedCandidate.candidate === candidateId && savedCandidate.company === companyId
+            savedCandidate.candidate._id === candidateId && savedCandidate.company === companyId
           );
           if (isSaved) {
             setIsSaved(true); // Set the state if job is saved
@@ -79,7 +79,7 @@ const DetailCandidateSearch = () => {
     let savedCandidates = [];
   
     try {
-      console.log("User data id:", userData._id);
+      // console.log("User data id:", userData._id);
   
       // Lấy danh sách công việc đã lưu
       const savedCandidatesResponse = await getApiWithToken(`/save-candidate/gets/${userData._id}`);
@@ -91,9 +91,12 @@ const DetailCandidateSearch = () => {
     }
   
     try {
+      console.log(candidate._id);
+      console.log(userData._id);
+      
       // Kiểm tra xem công việc hiện tại đã được lưu chưa
       const savedCandidate = savedCandidates.find(savedCandidate => 
-        savedCandidate.candidate === candidate._id && savedCandidate.company === userData._id
+        savedCandidate.candidate._id === candidate._id && savedCandidate.company === userData._id
       );
       console.log("Saved candidates:", savedCandidates);
       console.log("Saved candidate:", savedCandidate);//chưa lưu thì undifined

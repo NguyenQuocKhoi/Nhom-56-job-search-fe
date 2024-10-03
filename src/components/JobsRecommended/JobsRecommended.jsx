@@ -102,7 +102,7 @@ const JobsRecommended = ({ candidateId }) => {
         setSavedJobs(savedJobMap);
       }
     } catch (err) {
-      setError('Failed to fetch jobs');
+      // setError('Failed to fetch jobs');
     } finally {
       setLoading(false);
     }
@@ -169,19 +169,30 @@ const JobsRecommended = ({ candidateId }) => {
 
   return (
     <div className={clsx(styles.joblist)}>
+      {
+        displayedJobs.length > 0 &&
         <p className={clsx(styles.textTitle)}>Gợi ý việc làm phù hợp</p>
+      }
       <div className={clsx(styles.jobContainer)}>
         {displayedJobs.length > 0 ? (
           displayedJobs.map((job) => (
             <div key={job.jobId} className={clsx(styles.jobcard)}>
-            <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.content)}>
+            <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                 <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)} />
+                </Link>
                 <div className={clsx(styles.text)}>
                   <div className={clsx(styles.title)}>
+                    <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                     <p><strong>{job.title}</strong></p>
-                    {/* <i className="fa-regular fa-heart"></i> */}
+                    </Link>
+                    {(userRole === 'candidate' || !userRole) && (
+                  <div onClick={() => handleSaveJob(job.jobId)}>
+                    <i className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
                   </div>
+                )}
+                  </div>
+                  <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                   <div className={clsx(styles.describe)}>
                     <p>Company: {job.companyName}</p>
                     <p>Address: {job.street}, {job.city}</p>
@@ -197,20 +208,14 @@ const JobsRecommended = ({ candidateId }) => {
                         <span>No skills</span>
                     )}
                   </div>
+            </Link>
                 </div>
               </div>
-            </Link>
-            {(userRole === 'candidate' || !userRole) && (
-                  <div onClick={() => handleSaveJob(job.jobId)}>
-                    {/* <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i> */}
-                    {/* lấy savedJobs của job._id */}
-                    <i className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  </div>
-                )}
             </div>
           ))
         ) : (
-          <div>No jobs available</div>
+          null
+          // <div>Vui lòng cập nhật kỹ năng của bạn ở profile để được gợi ý việc làm phù hợp</div>
         )}
       </div>
     </div>

@@ -299,7 +299,8 @@ const SearchResult = () => {
             {activeTab === 'all' && (
               <div className={clsx(styles.jobContainer)}>
                 <p className={clsx(styles.textTitle)}>Việc làm</p>
-                  {results.jobs.map((job) => (
+                {results.jobs.length > 0 ? (
+                  results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
               <div className={clsx(styles.content)}>
                 <Link to={`/detailCompany/${job.company}`} 
@@ -337,20 +338,28 @@ const SearchResult = () => {
                 )}
               </div>
             </div>
-                  ))}
+                  ))
+                ):(
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                  )}
 
                 <p className={clsx(styles.textTitle)}>Công ty</p>
-                  {results.companies.map((company) => (
+                {results.companies.length > 0 ? (
+                  results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
                         <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
                         <h3>{company.name}</h3>
                       </div>
                     </Link>
-                  ))}
+                  ))
+                  ):(
+                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                )}
 
                 <p className={clsx(styles.textTitle)}>Ứng viên</p>
-                  {results.candidates.map((candidate) => (
+                {results.candidates.length > 0 ? (
+                  results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
                         <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatarCandidate)} />
                         <div className={clsx(styles.textCandidate)}>
@@ -359,13 +368,17 @@ const SearchResult = () => {
                           <p>Gender: {candidate.gender}</p>
                         </div>
                     </div>
-                  ))}
+                  ))
+                ):(
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                )}
               </div>
             )}
             {activeTab === 'jobs' && (
               <div>
                 <p className={clsx(styles.textTitle)}>Việc làm</p>
                 {/* Lọc */}
+                {results.jobs.length > 0 && (
                 <div className={clsx(styles.filterContainer)}>
                   <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
                   <label>
@@ -385,12 +398,16 @@ const SearchResult = () => {
                     Lương thấp đến cao
                   </label>
                 </div>
+              )}
 
-                  {results.jobs.map((job) => (
+                {results.jobs.length > 0 ? (
+                  results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
               <div className={clsx(styles.content)}>
-                <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
-                  <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+                <Link to={`/detailCompany/${job.company}`} 
+                  target="_blank" rel="noopener noreferrer"
+                >
+                  <img src={job.companyAvatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                 </Link>
                 <Link to={`/detailJob/${job._id}`} 
                   target="_blank" rel="noopener noreferrer" 
@@ -400,12 +417,12 @@ const SearchResult = () => {
                       <p><strong>{job.title}</strong></p>
                     </div>
                     <div className={clsx(styles.describe)}>
-                      <p>Company: {job.company.name}</p>
+                      <p>Company: {job.companyName}</p>
                       <p>Address: {job.street}, {job.city}</p>
                       <p>Salary: {job.salary}</p>
-                      {job.skills && job.skills.length > 0 ? (
+                      {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
                         <div className={clsx(styles.skills)}>
-                          {job.skills.map((skill, index) => (
+                          {job.requirementSkillsNames.map((skill, index) => (
                             <p key={index} className={clsx(styles.skill)}>{skill}</p>
                           ))}
                         </div>
@@ -422,35 +439,48 @@ const SearchResult = () => {
                 )}
               </div>
             </div>
-                  ))}
+                  ))
+                ):(
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                  )}
               </div>
             )}
+
             {activeTab === 'companies' && (
               <div>
                 <p className={clsx(styles.textTitle)}>Công ty</p>
-                  {results.companies.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}> 
+                {results.companies.length > 0 ? (
+                  results.companies.map((company) => (
+                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
                         <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
                         <h3>{company.name}</h3>
                       </div>
                     </Link>
-                  ))}
+                  ))
+                  ):(
+                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                )}
               </div>
             )}
+
             {activeTab === 'candidates' && (
               <div>
                 <p className={clsx(styles.textTitle)}>Ứng viên</p>
-                  {results.candidates.map((candidate) => (
+                  {results.candidates.length > 0 ? (
+                  results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
-                       <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatarCandidate)} />
+                        <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatarCandidate)} />
                         <div className={clsx(styles.textCandidate)}>
-                          <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
+                        <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
                           <p>Email: {candidate.email}</p>
                           <p>Gender: {candidate.gender}</p>
                         </div>
                     </div>
-                  ))}
+                  ))
+                ):(
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                )}
               </div>
             )}
           </div>
