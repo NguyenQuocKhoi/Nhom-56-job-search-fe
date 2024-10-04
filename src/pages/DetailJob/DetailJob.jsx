@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken, putApiWithToken } from '../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../api';
 import styles from './detailJob.module.scss';
 import clsx from 'clsx';
 import Header from '../../components/Header/Header';
@@ -47,6 +47,8 @@ const JobDetail = () => {
   //khi đã có cv hiện modal có 2 option old, new
   const [selectedOption, setSelectedOption] = useState('option1');
   const [showNewCvFields, setShowNewCvFields] = useState(false);
+
+  const [similarJobs, setSimilarJobs] = useState([]);
 
   const handleApplyWithExistingCvO1 = () => {
     setSelectedOption('option1');
@@ -164,6 +166,25 @@ const JobDetail = () => {
           } else {
             setSkills([]); // Không có kỹ năng
           }
+
+          const similarJobData = await postApiNoneToken('/job/get-similar', { jobId });
+          console.log(similarJobData);
+
+          if (similarJobData.data.success && similarJobData.data.matchingJobs) {
+            const jobsWithCompanyDetails = await Promise.all(
+              similarJobData.data.matchingJobs.map(async (job) => {
+                const companyResult = await getAPiNoneToken(`/company/${job.companyId}`);
+                return {
+                  ...job,
+                  company: companyResult.data.company // Append company details to each job
+                };
+              })
+            );
+            setSimilarJobs(jobsWithCompanyDetails);
+          } else {
+            setSimilarJobs([]);
+          }
+
         } else {
           setError('Job not found');
         }
@@ -533,6 +554,35 @@ const JobDetail = () => {
           <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
           <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
         </div>
+        
+        <div className={clsx(styles.vieclamlienquan)}>
+          <p>Việc làm liên quan</p>
+          
+          <div className={clsx(styles.jobContainer)}>
+            {similarJobs.length === 0 ? (
+              <p>No jobs similar.</p>
+            ) : (
+              similarJobs
+                .filter((job) => job.jobId !== jobId)
+                .map((job) => (
+                <div key={job.jobId} className={clsx(styles.jobcard)}>
+                  <Link to={`/detailCompany/${job.companyId}`} target="_blank" rel="noopener noreferrer">
+                    <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+                  </Link>
+                  <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                    <div className={clsx(styles.describe)}>
+                      <p><strong>Job Title: {job.title || 'Loading...'}</strong></p>
+                      <p>Company: {job.company?.name || 'Unknown Company'}</p>
+                      <p>Address: {job.street}, {job.city}</p>
+                      <p>Posted on: {new Date(job.expiredAt).toLocaleDateString()}</p>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
       </div>
 
       <div className={clsx(styles.columnTwo)}>

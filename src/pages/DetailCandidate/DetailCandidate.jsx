@@ -92,28 +92,41 @@ const DetailCandidate = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
-        <p><strong>Name:</strong> {candidate.name}</p>
-        <p><strong>Email:</strong> {candidate.email}</p>
-        <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
-        <p><strong>Address:</strong> {candidate.address}</p>
-        <strong>Skill:</strong>
-          {skills.length > 0 ? (
-            skills.map((skill, index) => (
-              <ul key={index}>
-                <li>
-                 <span className={clsx(styles.skillTag)}>{skill}</span>
-                </li>
-              </ul>
-            ))
-          ) : (
-            <p>No skills added</p>
-          )}
-        <p><strong>Experience:</strong> {candidate.experience}</p>
-        <p><strong>Education:</strong> {candidate.education}</p>
-        <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
-        <p><strong>More Information:</strong> {candidate.moreInformation}</p>
-        <p><strong>Resume:</strong> <a href={application} target="_blank" rel="noopener noreferrer">View CV</a></p>
+        <div className={clsx(styles.top)}>
+          <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
+          <div className={clsx(styles.topText)}>            
+            <p><strong>Name:</strong> {candidate.name}</p>
+            <p><strong>Email:</strong> {candidate.email}</p>
+            <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
+            <p><strong>Address:</strong> {candidate.address}</p>
+            <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
+          </div>
+        </div>
+
+        <div className={clsx(styles.bot)}>
+          <div className={clsx(styles.botLeft)}>
+            <p><strong>Experience:</strong> {candidate.experience}</p>
+            <p><strong>Education:</strong> {candidate.education}</p>
+            <p><strong>More Information:</strong> {candidate.moreInformation}</p>
+            <p><strong>Resume:</strong> <a href={application} target="_blank" rel="noopener noreferrer">View CV</a></p>
+          </div>
+
+          <div className={clsx(styles.botRight)}>
+            <strong>Skill:</strong>
+              {skills.length > 0 ? (
+                skills.map((skill, index) => (
+                  <ul key={index}>
+                    <li>
+                    <span className={clsx(styles.skillTag)}>{skill}</span>
+                    </li>
+                  </ul>
+                ))
+              ) : (
+                <p>No skills added</p>
+              )}
+          </div>
+        </div>
+
         <div className={clsx(styles.buttonContainer)}>
           <button
             className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}

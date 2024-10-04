@@ -288,7 +288,7 @@ const CreatePostJob = () => {
         <h2 className={clsx(styles.pageTitle)}>Tạo Tin Tuyển Dụng</h2>
         <form className={clsx(styles.form)}>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="title">Tiêu đề</label>
+            <label htmlFor="title">Tiêu đề <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="title"
@@ -298,7 +298,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="requirements">Yêu cầu</label>
+            <label htmlFor="requirements">Yêu cầu <span style={{ color: 'red' }}>*</span></label>
             <textarea
               id="requirements"
               name="requirements"
@@ -307,7 +307,7 @@ const CreatePostJob = () => {
             ></textarea>
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="salary">Mức lương</label>
+            <label htmlFor="salary">Mức lương <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="salary"
@@ -317,7 +317,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="interest">Phúc lợi</label>
+            <label htmlFor="interest">Phúc lợi <span style={{ color: 'red' }}>*</span></label>
             <textarea
               id="interest"
               name="interest"
@@ -326,7 +326,7 @@ const CreatePostJob = () => {
             ></textarea>
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="numberOfCruiment">Số lượng tuyển</label>
+            <label htmlFor="numberOfCruiment">Số lượng tuyển <span style={{ color: 'red' }}>*</span></label>
             <input
               type="number"
               id="numberOfCruiment"
@@ -342,7 +342,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="experienceLevel">Kinh nghiệm</label>
+            <label htmlFor="experienceLevel">Kinh nghiệm <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="experienceLevel"
@@ -352,7 +352,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="position">Vị trí</label>
+            <label htmlFor="position">Vị trí <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="position"
@@ -361,7 +361,7 @@ const CreatePostJob = () => {
               onChange={handleChange}
             />
           </div>
-          <label>Tỉnh/Thành phố: *</label>
+          <label>Tỉnh/Thành phố <span style={{ color: 'red' }}>*</span></label>
         <input 
           type="text" 
           name="city"
@@ -408,7 +408,7 @@ const CreatePostJob = () => {
 </select> */}
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="street">Đường</label>
+            <label htmlFor="street">Đường <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="street"
@@ -418,7 +418,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="type">Loại công việc</label>
+            <label htmlFor="type">Loại công việc <span style={{ color: 'red' }}>*</span></label>
             <select
               id="type"
               name="type"
@@ -438,7 +438,7 @@ const CreatePostJob = () => {
               value={jobData.category}
               onChange={handleChange}
             >
-              <option value="">Chọn danh mục</option>
+              <option value="">Chọn danh mục <span style={{ color: 'red' }}>*</span></option>
               {categoryDa.map((category) => (
                 <option key={category._id} value={category._id}>
                   {category.name}
@@ -449,7 +449,7 @@ const CreatePostJob = () => {
 
            {/* Button to open skills modal */}
            <div className={clsx(styles.formGroup)}>
-            <label>Kỹ năng (Yêu cầu)</label>
+            <label>Kỹ năng (Yêu cầu) <span style={{ color: 'red' }}>*</span></label>
             <button type="button" onClick={openModal} className={styles.openModalButton}>
               Chọn kỹ năng
             </button>
@@ -489,7 +489,7 @@ const CreatePostJob = () => {
       )}
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="expiredAt">Ngày hết hạn</label>
+            <label htmlFor="expiredAt">Ngày hết hạn <span style={{ color: 'red' }}>*</span></label>
             <input
               type="date"
               id="expiredAt"
@@ -499,7 +499,7 @@ const CreatePostJob = () => {
             />
           </div>
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="description">Mô tả</label>
+            <label htmlFor="description">Mô tả <span style={{ color: 'red' }}>*</span></label>
             {/* <textarea
               id="description"
               name="description"

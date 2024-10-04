@@ -86,7 +86,7 @@ const SavedJobs = () => {
                     </Link>
                     <Link to={`/detailJob/${job.job._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
                     <div className={clsx(styles.describe)}>
-                      <p>Job Title: {jobDetails[job.job._id]?.title || 'Loading...'}</p>
+                      <p><strong>Job Title: {jobDetails[job.job._id]?.title || 'Loading...'}</strong></p>
                       <p>Company: {jobDetails[job.job._id]?.company.name}</p>
                       <p>Address: {jobDetails[job.job._id]?.street}, {jobDetails[job.job._id]?.city}</p>
                       <p>Saved at: {new Date(job.createdAt).toLocaleDateString()}</p>

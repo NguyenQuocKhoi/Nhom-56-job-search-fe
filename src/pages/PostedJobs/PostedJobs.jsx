@@ -181,23 +181,25 @@ const PostedJobs = () => {
                   </Link>
                 ))}
               </div>
-            </div>
-            <div className={clsx(styles.pagination)}>
-              <button 
-                onClick={() => handlePageChange(currentPage - 1)} 
-                disabled={currentPage === 1}
-              >
-                <i className="fa-solid fa-angle-left"></i>
-                {/* Previous */}
-              </button>
-              <span> {currentPage} / {totalPages} trang </span>
-              <button 
-                onClick={() => handlePageChange(currentPage + 1)} 
-                disabled={currentPage === totalPages}
-              >
-                <i className="fa-solid fa-angle-right"></i>
-                {/* Next */}
-              </button>
+              {/* <div className={clsx(styles.page)}> */}
+                <div className={clsx(styles.pagination)}>
+                  <button 
+                    onClick={() => handlePageChange(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                  >
+                    <i className="fa-solid fa-angle-left"></i>
+                    {/* Previous */}
+                  </button>
+                  <span> {currentPage} / {totalPages} trang </span>
+                  <button 
+                    onClick={() => handlePageChange(currentPage + 1)} 
+                    disabled={currentPage === totalPages}
+                  >
+                    <i className="fa-solid fa-angle-right"></i>
+                    {/* Next */}
+                  </button>
+                {/* </div> */}
+              </div>
             </div>
           </>
         )}

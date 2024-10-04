@@ -18,6 +18,8 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
+  const [numberNotifyNotRead, setNumberNotifyNotRead] = useState(0);
+
   //set user và role là null mỗi lần npm start lại
   // const [user, setUser] = useState(null);
   // const [role, setRole] = useState(null);
@@ -80,8 +82,15 @@ const Header = () => {
         }
 
         const data = response.data.data;
-        setNotifications(data);
+        //sắp xếp thông báo mới hiện trước
+        const sortedNotifications = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // setNotifications(data);
+        setNotifications(sortedNotifications);
+        
+        // const unreadNotificationsCount = data.filter(notification => !notification.status).length;
+        const unreadNotificationsCount = sortedNotifications.filter(notification => !notification.status).length;
         setUnreadCount(data.filter(notification => !notification.status).length);
+        setNumberNotifyNotRead(unreadNotificationsCount);
       } catch (error) {
         console.error('Error fetching notifications', error);
       }
@@ -159,7 +168,7 @@ const Header = () => {
   </Dropdown.Toggle>
   <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
     <p className={clsx(styles.tb)}>Thông báo</p>
-    <p>Thông báo mới</p>
+    <p>{numberNotifyNotRead} Thông báo mới</p>
     {notifications.length > 0 ? (
       notifications.map(notification => (
         <Dropdown.Item
@@ -232,7 +241,7 @@ const Header = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
                       <p className={clsx(styles.tb)}>Thông báo</p>
-                      <p>Thông báo mới</p>
+                      <p>{numberNotifyNotRead} Thông báo mới</p>
                       {notifications.length > 0 ? (
                         notifications.map(notification => (
                           <Dropdown.Item

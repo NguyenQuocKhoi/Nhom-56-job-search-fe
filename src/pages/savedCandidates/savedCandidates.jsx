@@ -6,6 +6,7 @@ import styles from './savedCandidates.module.scss';
 import { getUserStorage } from '../../Utils/valid';
 import { getApiWithToken } from '../../api';
 import { Link } from 'react-router-dom';
+import logo from '../../images/logo.png';
 
 const SavedCandidates = () => {
   const [savedCandidates, setSavedCandidates] = useState([]);
@@ -59,29 +60,31 @@ const SavedCandidates = () => {
   }, [companyId]);
 
     return (
-    <div className={clsx(styles.homePage)}>
+    <div className={clsx(styles.savedJobsPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <h2>Danh sách ứng viên đã lưu</h2>
+        <p className={clsx(styles.title)}>Danh sách ứng viên đã lưu</p>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
         ) : (
-          <div className={clsx(styles.jobList)}>
+          <div className={clsx(styles.jobContainer)}>
             {savedCandidates.length === 0 ? (
               <p>No saved candidates found.</p>
             ) : (
               savedCandidates.map((candidate) => (
-                <Link key={candidate._id} to={`/detail-candidate/${candidate.candidate._id}`} target="_blank" rel="noopener noreferrer">
-                  <div className={clsx(styles.jobItem)}>
-                    <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>
-                    <p>Email: {candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
-                    <p>Phone: {candidateDetails[candidate.candidate]?.phone || 'Người dùng chưa cập nhật'}</p>
-                    <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString()}</p>
-                    <hr />
-                  </div>
-                </Link>
+                <div key={candidate._id} className={clsx(styles.jobcard)}>
+                  <Link to={`/detail-candidate/${candidate.candidate._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                    <img src={candidateDetails[candidate.candidate]?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />                        
+                    <div className={clsx(styles.describe)}>
+                      <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>
+                      <p>Email: {candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
+                      <p>Phone: {candidateDetails[candidate.candidate]?.phone || 'Người dùng chưa cập nhật'}</p>
+                      <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </Link>
+                </div>
               ))
             )}
           </div>

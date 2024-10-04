@@ -6,6 +6,7 @@ import styles from './postedDetail.module.scss';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getAPiNoneToken, getApiWithToken, deleteApiWithToken } from '../../api';
 import Swal from 'sweetalert2';
+import logo from '../../images/logo.png';
 
 const PostedDetail = () => {
   const { jobId } = useParams();
@@ -263,28 +264,45 @@ const PostedDetail = () => {
         <div>
 {/*  */}
         <div>
-            <div>
-              <strong>Số lượng ứng viên chờ phê duyệt: {numberApplyPending}</strong>
-            </div>
-            <strong>Danh sách ứng viên:</strong>
             {apply.length > 0 ? (
-              <ul>
-                {apply.map((apply, index) => (
-                  <Link key={index} to={`/detailCandidate/${apply.candidate}?applicationId=${apply._id}`}>
-                    {/* <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}></Link> */}
-                  {/* <li> */}
-                    <div>
-                      {/* <a href={apply.resume} target='_blank' rel="noopener noreferrer">CV</a> */}
-                      <p>{apply.candidateInfo.name}</p> {/* Hiển thị tên ứng viên */}
-                      <p>{apply.candidateInfo.email}</p> {/* Hiển thị email của ứng viên */}
-                      <p>{apply.status}</p>
-                    </div>
-                    <hr />
-                  {/* </li> */}
-                  
-                  </Link>
-                ))}
-              </ul>
+              <div className={clsx(styles.joblist)}>
+            <div className={clsx(styles.ds)}>
+              <strong>Số lượng ứng viên chờ phê duyệt: {numberApplyPending}</strong>
+              <strong>Danh sách ứng viên:</strong>
+            </div>
+                  <div className={clsx(styles.jobContainer)}>
+                    {apply.map((apply, index) => (
+                      <Link key={index} to={`/detailCandidate/${apply.candidate}?applicationId=${apply._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
+                        {/* <Link key={index} to={`/detailCandidate/${candidate._id}?applicationId=${candidate.applicationId}`}></Link> */}
+                        {/* <div className={clsx(styles.s)}> */}
+                          <img src={apply.candidateInfo.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />                        
+                          <div>
+                            {/* <a href={apply.resume} target='_blank' rel="noopener noreferrer">CV</a> */}
+                            <p>{apply.candidateInfo.name}</p>
+                            <p>{apply.candidateInfo.email}</p>
+                            <p>{apply.candidateInfo.phoneNumber}</p>
+                            <p>{apply.candidateInfo.street}, {apply.candidateInfo.city}</p>
+                            {/* <p>{apply.status}</p> */}
+                            <p 
+                              style={{ 
+                                backgroundColor: 
+                                  apply.status === 'accepted' ? 'lightgreen' : 
+                                  apply.status === 'rejected' ? 'lightcoral' : 
+                                  'lightgray'
+                              }}
+                            >
+                              Trạng thái: {apply.status}
+                              
+                              {apply.status === 'accepted' && <i className="fa-solid fa-check"></i>}
+                              {apply.status === 'rejected' && <i className="fa-solid fa-x"></i>}
+                              {apply.status === 'pending' && <i className="fa-regular fa-clock"></i>}
+                            </p>
+                          </div>
+                        {/* </div> */}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
             ) : (
               <p>No candidates found for this job.</p>
             )}
