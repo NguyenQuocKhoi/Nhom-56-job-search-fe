@@ -154,7 +154,11 @@ const DetailCandidateSearch = () => {
           <div className={clsx(styles.botLeft)}>
             <p><strong>Experience:</strong> {candidate.experience}</p>
             <p><strong>Education:</strong> {candidate.education}</p>
-            <p><strong>More Information:</strong> {candidate.moreInformation}</p>
+            {/* <p><strong>More Information:</strong> {candidate.moreInformation}</p> */}
+            <p><strong>More Infomation:</strong></p>
+            <div
+              dangerouslySetInnerHTML={{ __html: candidate.moreInformation }}
+            ></div>
             <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
           </div>
 

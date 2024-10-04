@@ -92,21 +92,33 @@ const DetailCompany = () => {
     <>
       <Header/>
       <div className={clsx(styles.companyDetail)}>
-        <div className={clsx(styles.title)}>
+        <div className={clsx(styles.top)}>
           <img src={company.avatar || logo} alt="Logo" className={styles.avatar} />
-          <h3><strong>Company name:</strong> {company.name}</h3>
+          <div className={clsx(styles.title)}>
+            <h2><strong>{company.name}</strong></h2>
+            <p><strong>Address:</strong> {company.street}, {company.city}</p>
+            {/* <i className="fa-regular fa-building"></i> */}
+          </div>
+          
         </div>
-        <i className="fa-regular fa-building"></i>
-        <p><strong>Address:</strong> {company.street}, {company.city}</p>
-        <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
-        <p><strong>Website: </strong><a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
-        {/* <p><strong>Posted:</strong> {new Date(company.createdAt).toLocaleDateString()}</p> */}
-        {/* <p><strong>Expires:</strong> {new Date(company.expiredAt).toLocaleDateString()}</p> */}
-        <p><strong>Email:</strong> {company.email}</p>
-        <p><strong>Description:</strong> {company.description}</p>
+        <div className={clsx(styles.mid)}>
+          <div className={clsx(styles.intro)}>
+            <p><strong>Description:</strong></p>
+            <div
+              dangerouslySetInnerHTML={{ __html: company.description }}
+            ></div>
+          </div>
+
+          <div className={clsx(styles.midRight)}>
+            <div className={clsx(styles.contact)}>
+              <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
+              <p><strong>Website: </strong><a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
+              <p><strong>Email:</strong> {company.email}</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <span>Tin tuyển dụng của công ty:</span>
-      <div className={clsx(styles.mainContent)}>
+      {/* <div className={clsx(styles.mainContent)}> */}
         {loading ? (
           <p>Loading...</p>
         ) : jobs.length === 0 ? (
@@ -114,9 +126,12 @@ const DetailCompany = () => {
         ) : (
           <>
             <div className={clsx(styles.joblist)}>
+              <div className={clsx(styles.ds)}>
+                <strong>Tin tuyển dụng của công ty:</strong>
+              </div>
               <div className={clsx(styles.jobContainer)}>
                 {jobs.map((job) => (
-                  <Link key={job._id} to={`/detailJob/${job._id}`} className={clsx(styles.jobcard)}>
+                  <Link key={job._id} to={`/detailJob/${job._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
                     <div className={clsx(styles.content)}>
                       <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
                       <div className={clsx(styles.text)}>
@@ -135,25 +150,26 @@ const DetailCompany = () => {
                   </Link>
                 ))}
               </div>
-            </div>
+
             <div className={clsx(styles.pagination)}>
               <button 
                 onClick={() => handlePageChange(currentPage - 1)} 
                 disabled={currentPage === 1}
               >
-                Previous
+                <i className="fa-solid fa-angle-left"></i>
               </button>
-              <span>Page {currentPage} of {totalPages}</span>
+              <span>{currentPage} / {totalPages} trang</span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
               >
-                Next
+                <i className="fa-solid fa-angle-right"></i>
               </button>
+            </div>
             </div>
           </>
         )}
-      </div>
+      {/* </div> */}
       <Footer/>
     </>
   );

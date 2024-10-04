@@ -269,7 +269,7 @@ const ListJobInfo = () => {
                 )}
                     </div>
                     <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} 
-                      // target="_blank" rel="noopener noreferrer"
+                      target="_blank" rel="noopener noreferrer"
                     >
                     <div className={clsx(styles.describe)}>
                       <p>Company: {job.company.name}</p>

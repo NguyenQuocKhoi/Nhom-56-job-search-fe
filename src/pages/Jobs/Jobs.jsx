@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import styles from './jobs.module.scss';
 import ListJobInfo from '../../components/ListJobInfo/ListJobInfo';
 import { Button, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { postApiNoneToken } from '../../api';
 
 const cities = [
@@ -35,31 +35,43 @@ const Jobs = () => {
   const [filteredCities, setFilteredCities] = useState(cities);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-  
-    try {
-      const searchParams = {
-        search: jobInput.trim(),
-        city: addressInput.trim() || '',
-      };
-  
-      const response = await postApiNoneToken('/job/search', searchParams);
+  const navigate = useNavigate();
 
-      console.log("82", searchParams);
-      
-      console.log("82", response.data.jobs);
+  // const handleSearch = async (event) => {
+  //   event.preventDefault();
   
-      if (response.data.success) {
-        setResults(response.data.jobs);
-      } else {
-        setResults(null);
-      }
-    } catch (error) {
-      console.error("Search error:", error);
-      setResults(null);
-    }
-  };
+  //   try {
+  //     const searchParams = {
+  //       search: jobInput.trim(),
+  //       city: addressInput.trim() || '',
+  //     };
+  
+  //     const response = await postApiNoneToken('/job/search', searchParams);
+
+  //     console.log("82", searchParams);
+      
+  //     console.log("82", response.data.jobs);
+  
+  //     if (response.data.success) {
+  //       setResults(response.data.jobs);
+  //     } else {
+  //       setResults(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Search error:", error);
+  //     setResults(null);
+  //   }
+  // };
+  const handleSearch = (event) => {
+    event.preventDefault();
+    
+    const searchParams = {
+      search: jobInput.trim(),
+      city: addressInput.trim() || '',
+    };
+
+    navigate('/search-job-result', { state: { searchParams } });
+  }
 
    //city
    const handleCityInputClick = () => {
@@ -85,7 +97,7 @@ const Jobs = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <main className={clsx(styles.mainContent)}>
-          <span>List Jobs</span>
+          {/* <span>List Jobs</span> */}
           {/* search bar */}
           <div className={clsx(styles.searchBar)}>
           <div className={clsx(styles.form)}>

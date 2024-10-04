@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import styles from './infoCompany.module.scss';
-
 import { getApiWithToken, putApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
-
 import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -111,10 +111,18 @@ const InfoCompany = () => {
       Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
     }
   };
-
+  
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCompany({ ...company, [name]: value });
+  };
+  
+  const handleInputChangeD = (value) => {
+    setCompany((prevState)=>({
+      ...prevState,
+      description: value,
+    }));
   };
 
   //city
@@ -242,13 +250,20 @@ const InfoCompany = () => {
         />
 
         <label>Description:</label>
-        <input 
+        {/* <textarea
           type="text" 
           name="description"
           value={company.pendingUpdates?.description || company.description || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
           className={clsx(getStyleForField('description'))}
+        /> */}
+        <ReactQuill
+          id="description"
+          name="description"
+          value={company.pendingUpdates?.description || company.description || ""}
+          onChange={handleInputChangeD}
+          disabled={!isEditing}
         />
 
         <div className={clsx(styles.btnContainer)}>

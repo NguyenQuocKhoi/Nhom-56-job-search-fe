@@ -7,6 +7,8 @@ import { getUserStorage } from '../../Utils/valid';
 //
 import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -270,6 +272,13 @@ const handleAutoApply = async () => {
     setCandidate({ ...candidate, [name]: value });
   };
 
+  const handleInputChangeD = (value) => {
+    setCandidate((prevState)=>({
+      ...prevState,
+      moreInformation: value,
+    }));
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -469,12 +478,19 @@ const handleAutoApply = async () => {
         )}
         
         <label>More Information:</label>
-        <textarea 
+        {/* <textarea 
           name="moreInformation"
           value={candidate.moreInformation || ""}
           onChange={handleInputChange}
           disabled={!isEditing}
-        ></textarea>
+        ></textarea> */}
+        <ReactQuill
+          id="moreInformation"
+          name="moreInformation"
+          value={candidate.moreInformation || ""}
+          onChange={handleInputChangeD}
+          disabled={!isEditing}
+        />
 
         <div className={clsx(styles.uploadSection)}>
           <p>CV:</p>

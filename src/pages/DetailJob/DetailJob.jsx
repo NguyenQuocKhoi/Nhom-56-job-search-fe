@@ -70,7 +70,7 @@ const JobDetail = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
 
     const fetchCandidate = async () => {
       try {
@@ -556,7 +556,7 @@ const JobDetail = () => {
         </div>
         
         <div className={clsx(styles.vieclamlienquan)}>
-          <p>Việc làm liên quan</p>
+          <p><strong>Việc làm liên quan</strong></p>
           
           <div className={clsx(styles.jobContainer)}>
             {similarJobs.length === 0 ? (
@@ -603,9 +603,13 @@ const JobDetail = () => {
           <p><strong>Kinh nghiệm:</strong> {job.experienceLevel}</p>
         </div>
 
-
         <div className={clsx(styles.them)}>
-          <p><strong>Lĩnh vực: </strong>{categoryName}</p>
+          <p><strong>Lĩnh vực: </strong>
+          <Link to={`/listJobByCategoryName?categoryName=${categoryName}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+            {categoryName}
+          </Link>
+          </p>
+
           <div>
             <strong>Yêu cầu kỹ năng: </strong>
             {skills.length > 0 ? (

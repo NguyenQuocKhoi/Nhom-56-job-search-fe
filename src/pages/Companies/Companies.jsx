@@ -6,7 +6,7 @@ import styles from './companies.module.scss';
 import CardCompanyInfo from '../../components/ListCompanyInfo/ListCompanyInfo';
 import { Button, Form } from 'react-bootstrap';
 import { postApiNoneToken } from '../../api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const cities = [
   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -35,31 +35,43 @@ const Companies = () => {
   const [filteredCities, setFilteredCities] = useState(cities);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-  
-    try {
-      const searchParams = {
-        search: companyInput.trim(),
-        city: addressInput.trim() || '',
-      };
-  
-      const response = await postApiNoneToken('/company/search', searchParams);
+  const navigate = useNavigate();
 
-      console.log("70", searchParams);
-      
-      console.log("72", response.data.companies);
+  // const handleSearch = async (event) => {
+  //   event.preventDefault();
   
-      if (response.data.success) {
-        setResults(response.data.companies);
-      } else {
-        setResults(null);
-      }
-    } catch (error) {
-      console.error("Search error:", error);
-      setResults(null);
+  //   try {
+  //     const searchParams = {
+  //       search: companyInput.trim(),
+  //       city: addressInput.trim() || '',
+  //     };
+  
+  //     const response = await postApiNoneToken('/company/search', searchParams);
+
+  //     console.log("70", searchParams);
+      
+  //     console.log("72", response.data.companies);
+  
+  //     if (response.data.success) {
+  //       setResults(response.data.companies);
+  //     } else {
+  //       setResults(null);
+  //     }
+  //   } catch (error) {
+  //     console.error("Search error:", error);
+  //     setResults(null);
+  //   }
+  // };
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    const searchParams = {
+      search: companyInput.trim(),
+      city: addressInput.trim() || '',
     }
-  };
+
+    navigate('/search-company-result', { state: { searchParams } });
+  }
 
   //city
   const handleCityInputClick = () => {
@@ -110,7 +122,7 @@ const Companies = () => {
 
             <input
               type="text"
-              placeholder="Enter job title"
+              placeholder="Enter company name, etc."
               className={clsx(styles.jobInput)}
               id="search"
               value={companyInput}

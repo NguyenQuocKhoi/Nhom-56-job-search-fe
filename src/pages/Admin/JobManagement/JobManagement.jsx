@@ -146,7 +146,14 @@ const JobManagement = () => {
     try {
       await putApiWithToken('/job/update-status', { jobId, status });
 
-      setButtonState(status);
+      // setButtonState(status);
+      setJobsPending(prev => prev.filter(job => job._id !== jobId));
+      if (status === true) {
+        setJobsAccepted(prev => [...prev, jobsPending.find(job => job._id === jobId)]);
+      } else {
+        setJobsRejected(prev => [...prev, jobsPending.find(job => job._id === jobId)]);
+      }
+
       Swal.fire({
         icon: 'success',
         title: status === true ? 'Accepted' : 'Rejected',//true
@@ -178,6 +185,11 @@ const JobManagement = () => {
         const response = await deleteApiWithToken(`/job/delete/${jobId}`);
         
         if (response.data.success) {
+          setJobsAll(prev => prev.filter(job => job._id !== jobId));
+          setJobsAccepted(prev => prev.filter(job => job._id !== jobId));
+          setJobsRejected(prev => prev.filter(job => job._id !== jobId));
+          setJobsPending(prev => prev.filter(job => job._id !== jobId));
+
           Swal.fire(
             'Đã xóa!',
             'Bài đăng đã được xóa thành công.',

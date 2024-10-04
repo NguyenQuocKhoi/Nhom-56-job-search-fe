@@ -27,6 +27,8 @@ import SavedCandidates from './pages/savedCandidates/savedCandidates.jsx';
 import DetailCompanyAdmin from './pages/Admin/DetailCompanyAdmin/DetailCompanyAdmin.jsx';
 import DetailCandidateAdmin from './pages/Admin/DetailCanidateAdmin/DetailCandidateAdmin.jsx';
 import SearchResult from './pages/SearchResult/SearchResult.jsx';
+import SearchJobResult from './pages/SearchJobResult/SearchJobResult.jsx';
+import SearchCompanyResult from './pages/SearchCompanyResult/SearchCompanyResult.jsx';
 
 function App() {
   return (
@@ -58,6 +60,8 @@ function App() {
             {/* <Route path="/viewEdit/:jobId" element={<ViewEdit />}/> */}
             {/* <Route path="/viewEditProfile/:companyId" element={<ViewEditProfile />}/> */}
             <Route path="/search-result" element={<SearchResult />}/>
+            <Route path="/search-job-result" element={<SearchJobResult />}/>
+            <Route path="/search-company-result" element={<SearchCompanyResult />}/>
             <Route path="/admin" element={<AdminLayout />}/>
           </Routes>
         </div>

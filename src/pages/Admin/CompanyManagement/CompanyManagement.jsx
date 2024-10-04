@@ -73,20 +73,20 @@ const CompanyManagement = () => {
 
       console.log(result.data.companies);
       const companies = result.data.companies;
-    console.log(companies);
+      console.log(companies);
 
     // Fetch the isActive status for each company (based on the company._id assuming it corresponds to the userId)
     const companiesWithIsActive = await Promise.all(
       companies.map(async (company) => {
         try {
           const userIsActiveResponse = await getApiWithToken(`/user/${company._id}`);  // Assuming company._id is the userId
-          console.log("userIsActiveResponse",userIsActiveResponse.data.user.isActive);
-          console.log(company._id);
+          // console.log("userIsActiveResponse",userIsActiveResponse.data.user.isActive);
+          // console.log(company._id);
           
           const isActive = userIsActiveResponse.data.user.isActive;
           setIsActive(isActive);
-          console.log("isActive", isActive);
-          console.log(company._id);
+          // console.log("isActive", isActive);
+          // console.log(company._id);
           
           return { ...company, isActive };  // Attach isActive status to each company object
         } catch (error) {
@@ -96,7 +96,7 @@ const CompanyManagement = () => {
       })
     );
       
-    console.log(companiesWithIsActive);
+    // console.log(companiesWithIsActive);
     
     setCompaniesAll(companiesWithIsActive);
     setCompaniesAccepted(companiesWithIsActive.filter(company => company.status === true && company.pendingUpdates === null));
@@ -142,7 +142,14 @@ const CompanyManagement = () => {
     try {
       await putApiWithToken('/company/update-status', { companyId, status });
 
-      setButtonState(status);
+      // setButtonState(status);
+      setCompaniesPending(prev => prev.filter(company => company._id !== companyId));
+      if (status === true) {
+        setCompaniesAccepted(prev => [...prev, companiesPending.find(company => company._id === companyId)]);
+      } else {
+        setCompaniesRejected(prev => [...prev, companiesPending.find(company => company._id === companyId)]);
+      }
+
       Swal.fire({
         icon: 'success',
         title: status === true ? 'Accepted' : 'Rejected',
