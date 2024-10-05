@@ -31,9 +31,9 @@ const Jobs = () => {
   const [results, setResults] = useState(null);
 
   //city
-  const [showCityModal, setShowCityModal] = useState(false);
-  const [filteredCities, setFilteredCities] = useState(cities);
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [showCityModal, setShowCityModal] = useState(false);
+  // const [filteredCities, setFilteredCities] = useState(cities);
+  // const [searchQuery, setSearchQuery] = useState('');
 
   const navigate = useNavigate();
 
@@ -74,24 +74,24 @@ const Jobs = () => {
   }
 
    //city
-   const handleCityInputClick = () => {
-    setShowCityModal(true);
-  };
+  //  const handleCityInputClick = () => {
+  //   setShowCityModal(true);
+  // };
 
-  const handleCitySelect = (city) => {
-    if(city === 'All cities'){
-      setAddressInput(city);
-    } else {
-      setAddressInput(city);
-    }
-    setShowCityModal(false);
-  };
+  // const handleCitySelect = (city) => {
+  //   if(city === 'All cities'){
+  //     setAddressInput(city);
+  //   } else {
+  //     setAddressInput(city);
+  //   }
+  //   setShowCityModal(false);
+  // };
 
-  const handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
-  };
+  // const handleSearchChange = (e) => {
+  //   const query = e.target.value.toLowerCase();
+  //   setSearchQuery(query);
+  //   setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
+  // };
 
   return (
     <div className={clsx(styles.homePage)}>

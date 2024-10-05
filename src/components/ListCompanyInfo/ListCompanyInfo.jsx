@@ -66,14 +66,14 @@ const ListCompanyInfo = () => {
         {pagination.currentPage > 1 && (
           <button onClick={() => handlePageChange(pagination.currentPage - 1)}>
             <i className="fa-solid fa-angle-left"></i>
-            Previous
+            {/* Previous */}
           </button>
         )}
         <span>{pagination.currentPage} / {pagination.totalPages} trang </span>
         {pagination.currentPage < pagination.totalPages && (
           <button onClick={() => handlePageChange(pagination.currentPage + 1)}>
             <i className="fa-solid fa-angle-right"></i>
-            Next
+            {/* Next */}
           </button>
         )}
       </div>

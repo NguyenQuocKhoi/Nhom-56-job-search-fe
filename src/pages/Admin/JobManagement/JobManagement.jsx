@@ -335,7 +335,11 @@ const JobManagement = () => {
         <select
               className={clsx(styles.select)}
               value={addressInput}
-              onChange={(e) => setAddressInput(e.target.value)}
+              // onChange={(e) => setAddressInput(e.target.value)}
+              onChange={(e) => {
+                const selectedCity = e.target.value;
+                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+              }}
             >
               {cities.map((city) => (
                 <option key={city} value={city}>
@@ -366,40 +370,39 @@ const JobManagement = () => {
       {results && (
   <div className={clsx(styles.results)}>
     <p>Kết quả</p>
-    <div className={clsx(styles.tabs)}>
-      <button
+    {/* <div className={clsx(styles.tabs)}> */}
+      {/* <button
         className={clsx(styles.tabButton, activeTabSearch === 'all' && styles.active)}
         onClick={() => setActiveTabSearch('all')}
       >
         All
-      </button>
-      <button
+      </button> */}
+      {/* <button
         className={clsx(styles.tabButton, activeTabSearch === 'accepted' && styles.active)}
         onClick={() => setActiveTabSearch('accepted')}
       >
         Accepted
-      </button>
-      <button
+      </button> */}
+      {/* <button
         className={clsx(styles.tabButton, activeTabSearch === 'rejected' && styles.active)}
         onClick={() => setActiveTabSearch('rejected')}
       >
         Rejected
-      </button>
-      {/* nếu job có pending update thì là pending */}
-      <button
+      </button> */}
+      {/* <button
         className={clsx(styles.tabButton, activeTabSearch === 'pending' && styles.active)}
         onClick={() => setActiveTabSearch('pending')}
       >
         Pending
-      </button>
-    </div>
+      </button> */}
+    {/* </div> */}
 
     {/* Tab result content */}
-    <div className={clsx(styles.tabContent)}>
+    <div className={clsx(styles.tabContentSearch)}>
       {/* All Jobs */}
       {activeTabSearch === 'all' && (
         <div>
-          <h3>All Jobs</h3>
+          {/* <p>All Jobs</p> */}
           <ul>
             {results.map((job) => (
               <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
@@ -410,8 +413,7 @@ const JobManagement = () => {
         </div>
       )}
 
-      {/* Accepted Jobs */}
-      {activeTabSearch === 'accepted' && (
+      {/* {activeTabSearch === 'accepted' && (
         <div>
           <h3>Accepted</h3>
           <ul>
@@ -424,10 +426,9 @@ const JobManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
 
-      {/* Rejected Jobs */}
-      {activeTabSearch === 'rejected' && (
+      {/* {activeTabSearch === 'rejected' && (
         <div>
           <h3>Rejected</h3>
           <ul>
@@ -440,10 +441,9 @@ const JobManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
 
-      {/* Pending Jobs */}
-      {activeTabSearch === 'pending' && (
+      {/* {activeTabSearch === 'pending' && (
         <div>
           <h3>Pending</h3>
           <ul>
@@ -456,7 +456,7 @@ const JobManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   </div>
 )}

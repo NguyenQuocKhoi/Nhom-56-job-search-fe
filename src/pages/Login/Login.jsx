@@ -229,7 +229,7 @@ const handleSubmitCaptcha = async () => {
   try {
     setLoading(true);
 
-    const result = await postApiNoneToken("/user/forgot-password", { email });
+    const result = await postApiNoneToken("/user/forgot-password", { email: emailForgotPassword });
     setLoading(false);
 
     if (result.status === 200) {
@@ -250,6 +250,8 @@ const handleSubmitCaptcha = async () => {
       icon: "error",
       text: "Người dùng không tồn tại. Vui lòng kiểm tra lại địa chỉ email của bạn."
     });
+    handleRefreshCaptcha();
+    setCaptchaInput('');
   }
 };
 
@@ -257,6 +259,7 @@ const handleSubmitCaptcha = async () => {
   //modal captcha
   const handleShowModal = () => {
     setEmailForgotPassword('');
+    setCaptchaInput('');
     setShowModal(true);
   }
   const handleCloseModal = () => {

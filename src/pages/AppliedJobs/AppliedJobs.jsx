@@ -14,6 +14,8 @@ const AppliedJobs = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [sortOrder, setSortOrder] = useState('new');
+
   const user = getUserStorage()?.user;
 
   useEffect(() => {
@@ -22,12 +24,33 @@ const AppliedJobs = () => {
         const result = await getApiWithToken(`/application/get-applications/${user._id}`);
         if (result.data.success) {
           const applications = result.data.applications;
-          setApplications(applications);
+          // setApplications(applications);
 
+          // const jobIds = applications.map(app => app.job);
+          // const jobDetailsPromises = jobIds.map(id => getApiWithToken(`/job/${id}`));
+          // const jobDetailsResults = await Promise.all(jobDetailsPromises);
+
+          // const jobs = {};
+          // jobDetailsResults.forEach((result, index) => {
+          //   if (result.data.success) {
+          //     jobs[jobIds[index]] = result.data.job;
+          //   }
+          // });
+
+          const sortedApplications = applications.sort((a, b) => {
+            if (sortOrder === 'new') {
+              return new Date(b.submittedAt) - new Date(a.submittedAt); // Newest first
+            } else {
+              return new Date(a.submittedAt) - new Date(b.submittedAt); // Oldest first
+            }
+          });
+  
+          setApplications(sortedApplications);
+  
           const jobIds = applications.map(app => app.job);
           const jobDetailsPromises = jobIds.map(id => getApiWithToken(`/job/${id}`));
           const jobDetailsResults = await Promise.all(jobDetailsPromises);
-
+  
           const jobs = {};
           jobDetailsResults.forEach((result, index) => {
             if (result.data.success) {
@@ -64,7 +87,7 @@ const AppliedJobs = () => {
     };
 
     fetchApplications();
-  }, [user._id]);
+  }, [user._id, sortOrder]);
 
   return (
     <div className={clsx(styles.homePage)}>
@@ -80,13 +103,25 @@ const AppliedJobs = () => {
 
           {/* lọc */}
                 <div className={clsx(styles.filterContainer)}>
-                  <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
+                <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
                   <label>
-                    <input type="radio" name="filter" value="new" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="new"
+                      checked={sortOrder === 'new'}
+                      onChange={() => setSortOrder('new')}
+                    />
                     Mới nhất
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="old" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="old"
+                      checked={sortOrder === 'old'}
+                      onChange={() => setSortOrder('old')}
+                    />
                     Cũ nhất
                   </label>
                 </div>

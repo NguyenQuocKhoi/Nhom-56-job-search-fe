@@ -31,6 +31,8 @@ const JobDetail = () => {
   const [candidatePhone, setCandidatePhone] = useState('');
 
   // const [fileName, setFileName] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -75,7 +77,7 @@ const JobDetail = () => {
     const fetchCandidate = async () => {
       try {
         const candidateId = getUserStorage().user._id;
-        console.log(candidateId);
+        // console.log(candidateId);
     
         // Fetch candidate data
         const response = await getApiWithToken(`/candidate/${candidateId}`);
@@ -89,12 +91,10 @@ const JobDetail = () => {
     
         // Fetch application data
         try {
-          console.log(89);
-          
           const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
           const applications = applicationResponse?.data?.applications || [];
 
-          console.log(applications);
+          // console.log(applications);
     
           const isApplied = applications.some(application => 
             application.candidate === candidateId && application.job === jobId
@@ -130,13 +130,13 @@ const JobDetail = () => {
     
     const fetchJob = async () => {
       try {
-        console.log(1)
-        console.log(2);
+        // console.log(1);
+        // console.log(2);
         
         const result = await getAPiNoneToken(`/job/${jobId}`);
         if (result.data.job) {
           setJob(result.data.job);
-          console.log("job",result.data.job);
+          // console.log("job",result.data.job);
   
           const categoryId = result.data.job.category;
           if (categoryId) {
@@ -167,7 +167,7 @@ const JobDetail = () => {
             setSkills([]); // Không có kỹ năng
           }
 
-          const similarJobData = await postApiNoneToken('/job/get-similar', { jobId });
+          const similarJobData = await postApiNoneToken('/job/get-similar', { jobId }, { params: { page: currentPage } });
           console.log(similarJobData);
 
           if (similarJobData.data.success && similarJobData.data.matchingJobs) {
@@ -176,11 +176,13 @@ const JobDetail = () => {
                 const companyResult = await getAPiNoneToken(`/company/${job.companyId}`);
                 return {
                   ...job,
-                  company: companyResult.data.company // Append company details to each job
+                  company: companyResult.data.company,
                 };
               })
             );
             setSimilarJobs(jobsWithCompanyDetails);
+            setTotalPages(similarJobData.data.totalPages);
+            console.log(similarJobData.data.totalPages);            
           } else {
             setSimilarJobs([]);
           }
@@ -205,7 +207,13 @@ const JobDetail = () => {
     // setUserRole(userData?.role);
     setUserRole(userRole);
     setUserId(userData?._id);
-  }, [jobId]);
+  }, [jobId, currentPage]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   const handleLoginRedirect = () => {
     navigate('/login', { state: { from: `/detailJob/${jobId}` } });
@@ -374,6 +382,17 @@ const JobDetail = () => {
       Swal.fire('Lỗi', 'Không thể lưu tin hoặc bỏ lưu tin', 'error');
     }
   };
+
+  const handleNavigateToJobByCategory = (event) => {
+    event.preventDefault();
+    
+    const searchParams = {
+      search: categoryName,
+      // city: addressInput.trim() || '',
+    };
+
+    navigate('/search-job-result', { state: { searchParams } });
+  }
   
   if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
@@ -581,6 +600,18 @@ const JobDetail = () => {
               ))
             )}
           </div>
+
+          <div className={clsx(styles.pagination)}>
+            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+              <i className="fa-solid fa-angle-left"></i>              
+              {/* Previous */}
+            </button>
+            <span> {currentPage} / {totalPages} trang </span>
+            <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+              <i className="fa-solid fa-angle-right"></i>              
+              {/* Next */}
+            </button>
+          </div>
         </div>
 
       </div>
@@ -605,7 +636,7 @@ const JobDetail = () => {
 
         <div className={clsx(styles.them)}>
           <p><strong>Lĩnh vực: </strong>
-          <Link to={`/listJobByCategoryName?categoryName=${categoryName}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+          <Link onClick={handleNavigateToJobByCategory} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
             {categoryName}
           </Link>
           </p>

@@ -236,7 +236,11 @@ const SearchJobResult = () => {
         <select
               className={clsx(styles.select)}
               value={addressInput}
-              onChange={(e) => setAddressInput(e.target.value)}
+              // onChange={(e) => setAddressInput(e.target.value)}
+              onChange={(e) => {
+                const selectedCity = e.target.value;
+                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+              }}
             >
               {cities.map((city) => (
                 <option key={city} value={city}>

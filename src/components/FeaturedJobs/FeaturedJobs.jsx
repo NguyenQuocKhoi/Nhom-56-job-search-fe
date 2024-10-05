@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { postApiNoneToken } from '../../api';
+// import { postApiNoneToken } from '../../api';
 import clsx from 'clsx';
 import styles from '../FeaturedJobs/featuredJobs.module.scss';
 import ListJobInfo from '../ListJobInfo/ListJobInfo';
@@ -7,7 +7,7 @@ import ListCompanyInfo from '../ListCompanyInfo/ListCompanyInfo';
 import { Link, useNavigate } from 'react-router-dom';
 import JobsRecommended from '../JobsRecommended/JobsRecommended';
 import { getUserStorage } from '../../Utils/valid';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 const cities = [
   'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -28,8 +28,8 @@ const cities = [
 const FeaturedJobs = () => {
   const [addressInput, setAddressInput] = useState('');
   const [jobInput, setJobInput] = useState('');
-  const [results, setResults] = useState(null);
-  const [activeTab, setActiveTab] = useState('all');
+  // const [results, setResults] = useState(null);
+  // const [activeTab, setActiveTab] = useState('all');
 
   const navigate = useNavigate();
 
@@ -82,25 +82,25 @@ const FeaturedJobs = () => {
   
 
   //kiểm tra đăng nhập mới cho xem thông tin ứng viên
-  const handleViewCandidate = (candidateId) => {
-    const user = getUserStorage()?.user;
+  // const handleViewCandidate = (candidateId) => {
+  //   const user = getUserStorage()?.user;
 
-    if (!user) {
-      Swal.fire({
-        title: 'Vui lòng đăng nhập để xem thông tin ứng viên!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Đăng nhập',
-        cancelButtonText: 'Hủy bỏ',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/login', { state: { from: `/detail-candidate/${candidateId}` } });
-        }
-      });
-    } else {
-      window.open(`/detail-candidate/${candidateId}`, { target: '_blank', rel: 'noopener noreferrer' });
-    }
-  };
+  //   if (!user) {
+  //     Swal.fire({
+  //       title: 'Vui lòng đăng nhập để xem thông tin ứng viên!',
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonText: 'Đăng nhập',
+  //       cancelButtonText: 'Hủy bỏ',
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         navigate('/login', { state: { from: `/detail-candidate/${candidateId}` } });
+  //       }
+  //     });
+  //   } else {
+  //     window.open(`/detail-candidate/${candidateId}`, { target: '_blank', rel: 'noopener noreferrer' });
+  //   }
+  // };
 
   return (
     <div className={clsx(styles.searchComponent)}>
@@ -153,7 +153,7 @@ const FeaturedJobs = () => {
     </div>
 
     {/* kết quả search */}
-      {results && (
+      {/* {results && (
         <div className={clsx(styles.results)}>
           <div className={clsx(styles.tabs)}>
             <button
@@ -202,13 +202,6 @@ const FeaturedJobs = () => {
                   ))}
                 </ul>
                 <h3>Candidates</h3>
-                {/* <ul>
-                  {results.candidates.map((candidate) => (
-                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer">
-                      <li>{candidate.name}</li>
-                    </Link>
-                  ))}
-                </ul> */}
                 <ul>
                   {results.candidates.map((candidate) => (
                     <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
@@ -245,13 +238,6 @@ const FeaturedJobs = () => {
             {activeTab === 'candidates' && (
               <div>
                 <h3>Candidates</h3>
-                {/* <ul>
-                  {results.candidates.map((candidate) => (
-                    <Link key={candidate._id} to={`/detail-candidate/${candidate._id}`} target="_blank" rel="noopener noreferrer">
-                      <li>{candidate.name}</li>
-                    </Link>
-                  ))}
-                </ul> */}
                 <ul>
                   {results.candidates.map((candidate) => (
                     <li key={candidate._id} onClick={() => handleViewCandidate(candidate._id)}>
@@ -263,7 +249,7 @@ const FeaturedJobs = () => {
             )}
           </div>
         </div>
-      )}
+      )} */}
       {/* kết quả search */}
 
       {role === 'candidate' && candidateId && (

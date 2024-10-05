@@ -12,6 +12,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [key, setKey] = useState('candidate');
   const [name, setName] = useState("Pham Xuan");
+  const [nameErr, setNameErr] = useState("");
   const [email, setEmail] = useState("phamchixuan1605@gmail.com");
   const [emailErr, setEmailErr] = useState("");
   const [password, setPassword] = useState("123456Aa");
@@ -265,6 +266,9 @@ const Signup = () => {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {nameErr}
+                      </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Email</Form.Label>

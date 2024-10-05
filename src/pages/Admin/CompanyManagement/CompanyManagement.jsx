@@ -568,7 +568,11 @@ const CompanyManagement = () => {
         <select
               className={clsx(styles.select)}
               value={addressInput}
-              onChange={(e) => setAddressInput(e.target.value)}
+              // onChange={(e) => setAddressInput(e.target.value)}
+              onChange={(e) => {
+                const selectedCity = e.target.value;
+                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+              }}
             >
               {cities.map((city) => (
                 <option key={city} value={city}>
@@ -604,7 +608,7 @@ const CompanyManagement = () => {
 {results && (
   <div className={clsx(styles.results)}>
     <p>Kết quả</p>
-    <div className={clsx(styles.tabs)}>
+    {/* <div className={clsx(styles.tabs)}>
       <button
         className={clsx(styles.tabButton, activeTabSearch === 'all' && styles.active)}
         onClick={() => setActiveTabSearch('all')}
@@ -629,14 +633,14 @@ const CompanyManagement = () => {
       >
         Pending
       </button>
-    </div>
+    </div> */}
 
     {/* Tab result content */}
     <div className={clsx(styles.tabContent)}>
       {/* All Companies */}
       {activeTabSearch === 'all' && (
         <div>
-          <h3>All Jobs</h3>
+          {/* <h3>All Jobs</h3> */}
           <ul>
             {results.map((company) => (
               <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
@@ -647,8 +651,7 @@ const CompanyManagement = () => {
         </div>
       )}
 
-      {/* Accepted Companies */}
-      {activeTabSearch === 'accepted' && (
+      {/* {activeTabSearch === 'accepted' && (
         <div>
           <h3>Accepted</h3>
           <ul>
@@ -661,10 +664,9 @@ const CompanyManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
 
-      {/* Rejected Companies */}
-      {activeTabSearch === 'rejected' && (
+      {/* {activeTabSearch === 'rejected' && (
         <div>
           <h3>Rejected</h3>
           <ul>
@@ -677,10 +679,9 @@ const CompanyManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
 
-      {/* Pending Companies */}
-      {activeTabSearch === 'pending' && (
+      {/* {activeTabSearch === 'pending' && (
         <div>
           <h3>Pending</h3>
           <ul>
@@ -693,7 +694,7 @@ const CompanyManagement = () => {
               ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   </div>
 )}

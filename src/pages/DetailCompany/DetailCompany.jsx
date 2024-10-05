@@ -94,10 +94,12 @@ const DetailCompany = () => {
       <div className={clsx(styles.companyDetail)}>
         <div className={clsx(styles.top)}>
           <img src={company.avatar || logo} alt="Logo" className={styles.avatar} />
-          <div className={clsx(styles.title)}>
-            <h2><strong>{company.name}</strong></h2>
-            <p><strong>Address:</strong> {company.street}, {company.city}</p>
-            {/* <i className="fa-regular fa-building"></i> */}
+          <div className={clsx(styles.topTitle)}>
+            <p className={clsx(styles.topTitleText)}><strong>{company.name}</strong></p>
+            <div className={clsx(styles.address)}>
+              <i className="fa-solid fa-location-dot"></i>
+              <p><strong>Address:</strong> {company.street}, {company.city}</p>
+            </div>
           </div>
           
         </div>
@@ -122,7 +124,9 @@ const DetailCompany = () => {
         {loading ? (
           <p>Loading...</p>
         ) : jobs.length === 0 ? (
-          <p>Chưa đăng công việc.</p>
+          <div className={clsx(styles.ds)}>
+            <p><strong>Chưa đăng công việc.</strong></p>
+          </div>
         ) : (
           <>
             <div className={clsx(styles.joblist)}>
