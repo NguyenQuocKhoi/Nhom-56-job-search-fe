@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styles from '../CategoryManagement/categoryManagement.module.scss';
+import styles from '../SkillManagement/skillManagement.module.scss';
 import { getApiWithToken, postApiWithToken, putApiWithToken } from '../../../api';
 import clsx from 'clsx';
 // import { Button, Form } from 'react-bootstrap';
@@ -132,7 +132,7 @@ const SkillManagement = () => {
                     <button onClick={() => setEditingSkillId(null)}>Hủy</button>
                   </div>
                 ) : (
-                  <div>
+                  <div className={clsx(styles.skillName)}>
                     <h3>{skill.skillName}</h3>
                     <button onClick={() => {
                       setEditingSkillId(skill._id);

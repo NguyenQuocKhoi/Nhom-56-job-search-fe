@@ -41,8 +41,11 @@ const SearchJobResult = () => {
 
   const navigate = useNavigate();
 
-  const [categoryName, setCategoryName] = useState('');
+  // const [categoryName, setCategoryName] = useState('');
   const [savedJobs, setSavedJobs] = useState({});
+
+  //
+  const [filter, setFilter] = useState('all');
 
   //role
   const user = getUserStorage()?.user;
@@ -216,7 +219,6 @@ const SearchJobResult = () => {
     fetchJobs();
   }, [fetchJobs]);
 
-  // if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
@@ -264,234 +266,137 @@ const SearchJobResult = () => {
           </button>
         </div>
       </form>
-
-      {/* <div className={clsx(styles.suggestBar)}>
-        <span className={clsx(styles.suggestTitle)}>Suggested keyword: </span>
-        <button className={clsx(styles.suggest)}>React JS</button>
-        <button className={clsx(styles.suggest)}>Node JS</button>
-        <button className={clsx(styles.suggest)}>React Native</button>
-        <button className={clsx(styles.suggest)}>Spring Boot</button>
-      </div> */}
     </div>
 
       {results && (
         <div className={clsx(styles.results)}>
-          {/* <div className={clsx(styles.tabs)}>
-            <button
-              className={clsx(styles.tabButton, activeTab === 'all' && styles.active)}
-              onClick={() => setActiveTab('all')}
-            >
-              <p className={clsx(styles.textTitleTab)}>Tất cả</p>
-            </button>
-            <button
-              className={clsx(styles.tabButton, activeTab === 'jobs' && styles.active)}
-              onClick={() => setActiveTab('jobs')}
-            >
-              <p className={clsx(styles.textTitleTab)}>Việc làm</p>
-            </button>
-            <button
-              className={clsx(styles.tabButton, activeTab === 'companies' && styles.active)}
-              onClick={() => setActiveTab('companies')}
-            >
-              <p className={clsx(styles.textTitleTab)}>Công ty</p>
-            </button>
-            <button
-              className={clsx(styles.tabButton, activeTab === 'candidates' && styles.active)}
-              onClick={() => setActiveTab('candidates')}
-            >
-              <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
-            </button>
-          </div> */}
-
           <div className={clsx(styles.tabContent)}>
-            {/* {activeTab === 'all' && (
-              <div className={clsx(styles.jobContainer)}>
-                <p className={clsx(styles.textTitle)}>Việc làm</p>
-                {results.jobs.length > 0 ? (
-                  results.jobs.map((job) => (
-                      <div key={job._id} className={clsx(styles.jobcard)}>
-              <div className={clsx(styles.content)}>
-                <Link to={`/detailCompany/${job.company}`} 
-                  target="_blank" rel="noopener noreferrer"
-                >
-                  <img src={job.companyAvatar || logo} alt="Logo" className={clsx(styles.avatar)} />
-                </Link>
-                <Link to={`/detailJob/${job._id}`} 
-                  target="_blank" rel="noopener noreferrer" 
-                  className={clsx(styles.linkJob)}>
-                  <div className={clsx(styles.text)}>
-                    <div className={clsx(styles.title)}>
-                      <p><strong>{job.title}</strong></p>
-                    </div>
-                    <div className={clsx(styles.describe)}>
-                      <p>Company: {job.companyName}</p>
-                      <p>Address: {job.street}, {job.city}</p>
-                      <p>Salary: {job.salary}</p>
-                      {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
-                        <div className={clsx(styles.skills)}>
-                          {job.requirementSkillsNames.map((skill, index) => (
-                            <p key={index} className={clsx(styles.skill)}>{skill}</p>
-                          ))}
-                        </div>
-                      ) : (
-                        <span>No skills</span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-                {(role === 'candidate' || !role) && (
-                  <div onClick={() => handleSaveJob(job._id)}>
-                    <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  </div>
-                )}
-              </div>
-            </div>
-                  ))
-                ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                  )}
-
-                <p className={clsx(styles.textTitle)}>Công ty</p>
-                {results.companies.length > 0 ? (
-                  results.companies.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
-                      <div className={clsx(styles.companycard)}>
-                        <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
-                        <h3>{company.name}</h3>
-                      </div>
-                    </Link>
-                  ))
-                  ):(
-                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                )}
-
-                <p className={clsx(styles.textTitle)}>Ứng viên</p>
-                {results.candidates.length > 0 ? (
-                  results.candidates.map((candidate) => (
-                    <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
-                        <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatarCandidate)} />
-                        <div className={clsx(styles.textCandidate)}>
-                        <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
-                          <p>Email: {candidate.email}</p>
-                          <p>Gender: {candidate.gender}</p>
-                        </div>
-                    </div>
-                  ))
-                ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                )}
-              </div>
-            )} */}
-
-            {/* {activeTab === 'jobs' && ( */}
               <div>
                 <p className={clsx(styles.textTitle)}>Việc làm</p>
-                {/* Lọc */}
                 {results.jobs.length > 0 && (
                 <div className={clsx(styles.filterContainer)}>
                   <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
                   <label>
-                    <input type="radio" name="filter" value="all" />
-                    Tất cả
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="all"
+                      checked={filter === 'all'}
+                      onChange={() => setFilter('all')}
+                    />
+                    Mặc định
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="expirationDate" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="expirationDate"
+                      checked={filter === 'expirationDate'}
+                      onChange={() => setFilter('expirationDate')}
+                    />
                     Ngày hết hạn
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="postingDate" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="postingDate"
+                      checked={filter === 'postingDate'}
+                      onChange={() => setFilter('postingDate')}
+                    />
                     Ngày đăng
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="salaryAsc" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="salaryAsc"
+                      checked={filter === 'salaryAsc'}
+                      onChange={() => setFilter('salaryAsc')}
+                    />
                     Lương thấp đến cao
                   </label>
                 </div>
               )}
 
-                {results.jobs.length > 0 ? (
-                  results.jobs.map((job) => (
-                      <div key={job._id} className={clsx(styles.jobcard)}>
-              <div className={clsx(styles.content)}>
-                <Link to={`/detailCompany/${job.company}`} 
-                  target="_blank" rel="noopener noreferrer"
-                >
-                  <img src={job.companyAvatar || logo} alt="Logo" className={clsx(styles.avatar)} />
-                </Link>
-                <Link to={`/detailJob/${job._id}`} 
-                  target="_blank" rel="noopener noreferrer" 
-                  className={clsx(styles.linkJob)}>
-                  <div className={clsx(styles.text)}>
-                    <div className={clsx(styles.title)}>
-                      <p><strong>{job.title}</strong></p>
-                    </div>
-                    <div className={clsx(styles.describe)}>
-                      <p>Company: {job.companyName}</p>
-                      <p>Address: {job.street}, {job.city}</p>
-                      <p>Salary: {job.salary}</p>
-                      {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
-                        <div className={clsx(styles.skills)}>
-                          {job.requirementSkillsNames.map((skill, index) => (
-                            <p key={index} className={clsx(styles.skill)}>{skill}</p>
-                          ))}
-                        </div>
-                      ) : (
-                        <span>No skills</span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-                {(role === 'candidate' || !role) && (
-                  <div onClick={() => handleSaveJob(job._id)}>
-                    <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  </div>
-                )}
-              </div>
-            </div>
-                  ))
-                ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                  )}
-              </div>
-            {/* )} */}
-
-            {/* {activeTab === 'companies' && (
-              <div>
-                <p className={clsx(styles.textTitle)}>Công ty</p>
-                {results.companies.length > 0 ? (
-                  results.companies.map((company) => (
-                    <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
-                      <div className={clsx(styles.companycard)}>
-                        <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
-                        <h3>{company.name}</h3>
+{results.jobs.length > 0 ? (
+          results.jobs
+            .sort((a, b) => {
+              if (filter === 'expirationDate') {
+                return new Date(a.expiredAt) - new Date(b.expiredAt);
+              } else if (filter === 'postingDate') {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+              } else if (filter === 'salaryAsc') {
+                const getSalaryValue = (salary) => {
+                  if (salary === 'Thỏa thuận') return Infinity;
+                  return parseFloat(salary.replace(/[^0-9]/g, ''));
+                };
+                return getSalaryValue(a.salary) - getSalaryValue(b.salary);
+              }
+              return 0; // Default for 'all'
+            })
+            .map((job) => (
+              <div key={job._id} className={clsx(styles.jobcard)}>
+                <div className={clsx(styles.content)}>
+                  <Link
+                    to={`/detailCompany/${job.company}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={job.companyAvatar || logo}
+                      alt="Logo"
+                      className={clsx(styles.avatar)}
+                    />
+                  </Link>
+                  <Link
+                    to={`/detailJob/${job._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={clsx(styles.linkJob)}
+                  >
+                    <div className={clsx(styles.text)}>
+                      <div className={clsx(styles.title)}>
+                        <p>
+                          <strong>{job.title}</strong>
+                        </p>
                       </div>
-                    </Link>
-                  ))
-                  ):(
-                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                )}
-              </div>
-            )} */}
-
-            {/* {activeTab === 'candidates' && (
-              <div>
-                <p className={clsx(styles.textTitle)}>Ứng viên</p>
-                  {results.candidates.length > 0 ? (
-                  results.candidates.map((candidate) => (
-                    <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
-                        <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatarCandidate)} />
-                        <div className={clsx(styles.textCandidate)}>
-                        <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
-                          <p>Email: {candidate.email}</p>
-                          <p>Gender: {candidate.gender}</p>
-                        </div>
+                      <div className={clsx(styles.describe)}>
+                        <p>Company: {job.companyName}</p>
+                        <p>Address: {job.street}, {job.city}</p>
+                        <p>Salary: {job.salary}</p>
+                        {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
+                          <div className={clsx(styles.skills)}>
+                            {job.requirementSkillsNames.map((skill, index) => (
+                              <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                            ))}
+                          </div>
+                        ) : (
+                          <span>No skills</span>
+                        )}
+                      </div>
                     </div>
-                  ))
-                ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                )}
+                  </Link>
+                  {(role === 'candidate' || !role) && (
+                    <div onClick={() => handleSaveJob(job._id)}>
+                      <i
+                        className={clsx(
+                          savedJobs[job._id]
+                            ? 'fa-solid fa-heart'
+                            : 'fa-regular fa-heart'
+                        )}
+                      ></i>
+                    </div>
+                  )}
+                </div>
               </div>
-            )} */}
+            ))
+        ) : (
+          <div className={clsx(styles.cardNoResult)}>
+            <p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p>
+          </div>
+        )}
+              </div>
           </div>
         </div>
       )}

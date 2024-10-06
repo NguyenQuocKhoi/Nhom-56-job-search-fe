@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { postApiNoneToken } from '../../api';
 import clsx from 'clsx';
 import styles from '../FeaturedJobs/featuredJobs.module.scss';
@@ -25,6 +25,11 @@ const cities = [
   'Vĩnh Phúc', 'Yên Bái'
 ];
 
+const suggestions = [
+  'ReactJS', 'NodeJS', 'React Native', 'Spring Boot', 'Angular',
+  'Laravel', 'Express JS', 'Vue JS', 'Flutter'
+];
+
 const FeaturedJobs = () => {
   const [addressInput, setAddressInput] = useState('');
   const [jobInput, setJobInput] = useState('');
@@ -34,6 +39,10 @@ const FeaturedJobs = () => {
   const navigate = useNavigate();
 
   const [categoryName, setCategoryName] = useState('');
+
+  //suggest
+  const [currentSuggestions, setCurrentSuggestions] = useState(suggestions.slice(0, 5)); // Initial 5 suggestions
+  const [startIndex, setStartIndex] = useState(0);
 
   //role
   const user = getUserStorage()?.user;
@@ -102,6 +111,27 @@ const FeaturedJobs = () => {
   //   }
   // };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStartIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+    }, 5000); // 5 seconds interval
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    const newSuggestions = [];
+    for (let i = 0; i < 5; i++) {
+      newSuggestions.push(suggestions[(startIndex + i) % suggestions.length]);
+    }
+    setCurrentSuggestions(newSuggestions);
+  }, [startIndex]);
+
+  // Function to add suggestion text to search input
+  const handleSuggestionClick = (suggestion) => {
+    setJobInput((prev) => `${prev}${suggestion} `); // Add space after suggestion
+  };
+
   return (
     <div className={clsx(styles.searchComponent)}>
       <div className={clsx(styles.searchContainer)}>
@@ -145,10 +175,24 @@ const FeaturedJobs = () => {
 
       <div className={clsx(styles.suggestBar)}>
         <span className={clsx(styles.suggestTitle)}>Suggested keyword: </span>
-        <button className={clsx(styles.suggest)}>React JS</button>
+          {currentSuggestions.map((suggestion, index) => (
+            <button
+              key={index}
+              className={clsx(styles.suggest)}
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
+              {suggestion}
+            </button>
+          ))}  
+        {/* <button className={clsx(styles.suggest)}>React JS</button>
         <button className={clsx(styles.suggest)}>Node JS</button>
         <button className={clsx(styles.suggest)}>React Native</button>
         <button className={clsx(styles.suggest)}>Spring Boot</button>
+        <button className={clsx(styles.suggest)}>Angular</button>
+        <button className={clsx(styles.suggest)}>Laravel</button>
+        <button className={clsx(styles.suggest)}>Express JS</button>
+        <button className={clsx(styles.suggest)}>Vue JS</button>
+        <button className={clsx(styles.suggest)}>Flutter</button> */}
       </div>
     </div>
 

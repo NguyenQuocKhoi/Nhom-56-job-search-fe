@@ -26,6 +26,11 @@ const cities = [
   'Vĩnh Phúc', 'Yên Bái'
 ];
 
+const suggestions = [
+  'ReactJS', 'NodeJS', 'React Native', 'Spring Boot', 'Angular',
+  'Laravel', 'Express JS', 'Vue JS', 'Flutter'
+];
+
 const SearchResult = () => {
   const location = useLocation();
   const initialSearchParams = location.state?.searchParams || {};
@@ -43,6 +48,13 @@ const SearchResult = () => {
 
   const [categoryName, setCategoryName] = useState('');
   const [savedJobs, setSavedJobs] = useState({});
+
+  //
+  const [filter, setFilter] = useState('all');
+
+  //suggest
+  const [currentSuggestions, setCurrentSuggestions] = useState(suggestions.slice(0, 5)); // Initial 5 suggestions
+  const [startIndex, setStartIndex] = useState(0);
 
   //role
   const user = getUserStorage()?.user;
@@ -212,6 +224,27 @@ const SearchResult = () => {
     fetchJobs();
   }, [fetchJobs]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStartIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+    }, 5000); // 5 seconds interval
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    const newSuggestions = [];
+    for (let i = 0; i < 5; i++) {
+      newSuggestions.push(suggestions[(startIndex + i) % suggestions.length]);
+    }
+    setCurrentSuggestions(newSuggestions);
+  }, [startIndex]);
+
+  // Function to add suggestion text to search input
+  const handleSuggestionClick = (suggestion) => {
+    setJobInput((prev) => `${prev}${suggestion} `); // Add space after suggestion
+  };
+
   // if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -263,10 +296,19 @@ const SearchResult = () => {
 
       <div className={clsx(styles.suggestBar)}>
         <span className={clsx(styles.suggestTitle)}>Suggested keyword: </span>
-        <button className={clsx(styles.suggest)}>React JS</button>
+          {currentSuggestions.map((suggestion, index) => (
+            <button
+              key={index}
+              className={clsx(styles.suggest)}
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
+              {suggestion}
+            </button>
+          ))}  
+        {/* <button className={clsx(styles.suggest)}>React JS</button>
         <button className={clsx(styles.suggest)}>Node JS</button>
         <button className={clsx(styles.suggest)}>React Native</button>
-        <button className={clsx(styles.suggest)}>Spring Boot</button>
+        <button className={clsx(styles.suggest)}>Spring Boot</button> */}
       </div>
     </div>
 
@@ -386,25 +428,126 @@ const SearchResult = () => {
                 <div className={clsx(styles.filterContainer)}>
                   <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
                   <label>
-                    <input type="radio" name="filter" value="all" />
-                    Tất cả
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="all"
+                      checked={filter === 'all'}
+                      onChange={() => setFilter('all')}
+                    />
+                    Mặc định
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="expirationDate" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="expirationDate"
+                      checked={filter === 'expirationDate'}
+                      onChange={() => setFilter('expirationDate')}
+                    />
                     Ngày hết hạn
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="postingDate" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="postingDate"
+                      checked={filter === 'postingDate'}
+                      onChange={() => setFilter('postingDate')}
+                    />
                     Ngày đăng
                   </label>
                   <label>
-                    <input type="radio" name="filter" value="salaryAsc" />
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="salaryAsc"
+                      checked={filter === 'salaryAsc'}
+                      onChange={() => setFilter('salaryAsc')}
+                    />
                     Lương thấp đến cao
                   </label>
                 </div>
               )}
 
-                {results.jobs.length > 0 ? (
+        {results.jobs.length > 0 ? (
+          results.jobs
+            .sort((a, b) => {
+              if (filter === 'expirationDate') {
+                return new Date(a.expiredAt) - new Date(b.expiredAt);
+              } else if (filter === 'postingDate') {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+              } else if (filter === 'salaryAsc') {
+                const getSalaryValue = (salary) => {
+                  if (salary === 'Thỏa thuận') return Infinity;
+                  return parseFloat(salary.replace(/[^0-9]/g, ''));
+                };
+                return getSalaryValue(a.salary) - getSalaryValue(b.salary);
+              }
+              return 0; // Default for 'all'
+            })
+            .map((job) => (
+              <div key={job._id} className={clsx(styles.jobcard)}>
+                <div className={clsx(styles.content)}>
+                  <Link
+                    to={`/detailCompany/${job.company}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={job.companyAvatar || logo}
+                      alt="Logo"
+                      className={clsx(styles.avatar)}
+                    />
+                  </Link>
+                  <Link
+                    to={`/detailJob/${job._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={clsx(styles.linkJob)}
+                  >
+                    <div className={clsx(styles.text)}>
+                      <div className={clsx(styles.title)}>
+                        <p>
+                          <strong>{job.title}</strong>
+                        </p>
+                      </div>
+                      <div className={clsx(styles.describe)}>
+                        <p>Company: {job.companyName}</p>
+                        <p>Address: {job.street}, {job.city}</p>
+                        <p>Salary: {job.salary}</p>
+                        {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
+                          <div className={clsx(styles.skills)}>
+                            {job.requirementSkillsNames.map((skill, index) => (
+                              <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                            ))}
+                          </div>
+                        ) : (
+                          <span>No skills</span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                  {(role === 'candidate' || !role) && (
+                    <div onClick={() => handleSaveJob(job._id)}>
+                      <i
+                        className={clsx(
+                          savedJobs[job._id]
+                            ? 'fa-solid fa-heart'
+                            : 'fa-regular fa-heart'
+                        )}
+                      ></i>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+        ) : (
+          <div className={clsx(styles.cardNoResult)}>
+            <p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p>
+          </div>
+        )}
+                {/* {results.jobs.length > 0 ? (
                   results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
               <div className={clsx(styles.content)}>
@@ -446,7 +589,7 @@ const SearchResult = () => {
                   ))
                 ):(
                   <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
-                  )}
+                  )} */}
               </div>
             )}
 

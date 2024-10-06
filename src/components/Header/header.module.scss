@@ -116,17 +116,20 @@
 }
 
 .scrollableDropdown {
-  max-height: 200px; /* Set the desired max height */
-  overflow-y: auto;  /* Enable vertical scrolling */
+  max-height: 200px; 
+  overflow-y: auto;  
+  // background: red;
 }
 
 .tb{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: -2px;
+  // margin-bottom: -2px;
   border-bottom: 1px solid #f5f5f5;
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   color: white;
-  padding: 10px 0;
+  padding: 10px 0 0 0;
+  gap: 56px;
+  font-weight: normal;
 }

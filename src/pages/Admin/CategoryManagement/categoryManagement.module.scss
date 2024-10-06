@@ -50,4 +50,9 @@
   .searchButton:hover {
     background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
   }
+
+  .categoryName{
+    display: flex;
+    justify-content: space-between;
+  }
   

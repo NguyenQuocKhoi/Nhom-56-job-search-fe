@@ -132,7 +132,7 @@ const CategoryManagement = () => {
                     <button onClick={() => setEditingCategoryId(null)}>Hủy</button>
                   </div>
                 ) : (
-                  <div>
+                  <div className={clsx(styles.categoryName)}>
                     <h3>{category.name}</h3>
                     <button onClick={() => {
                       setEditingCategoryId(category._id);

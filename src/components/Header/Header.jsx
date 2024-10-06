@@ -167,8 +167,10 @@ const Header = () => {
     {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
   </Dropdown.Toggle>
   <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
-    <p className={clsx(styles.tb)}>Thông báo</p>
-    <p>{numberNotifyNotRead} Thông báo mới</p>
+    <div className={clsx(styles.tb)}>
+      <p>Thông báo</p>
+      <p>{numberNotifyNotRead} Thông báo mới</p>
+    </div>
     {notifications.length > 0 ? (
       notifications.map(notification => (
         <Dropdown.Item
@@ -240,8 +242,10 @@ const Header = () => {
                       {unreadCount > 0 && <span className={clsx(styles.notificationBadge)}></span>}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
-                      <p className={clsx(styles.tb)}>Thông báo</p>
+                    <div className={clsx(styles.tb)}>
+                      <p>Thông báo</p>
                       <p>{numberNotifyNotRead} Thông báo mới</p>
+                    </div>
                       {notifications.length > 0 ? (
                         notifications.map(notification => (
                           <Dropdown.Item

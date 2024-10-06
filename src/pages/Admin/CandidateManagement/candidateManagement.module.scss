@@ -197,3 +197,43 @@
   top: 10px;
   right: 10px;
 }
+
+.btn{
+  height: 40px;
+}
+
+.candidateName{
+  display: flex;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  &:hover{
+    background: #f5f5f5;
+  }
+}
+
+.candidatecard{
+  flex: 1;
+  text-decoration: none;
+  color: #000;
+  // display: flex;
+  // background: red;
+}
+
+.infoCandidate{
+  display: flex;
+}
+
+.infoText{
+  margin-left: 10px;
+}
+
+.avatar{
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+}

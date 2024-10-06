@@ -93,6 +93,25 @@ const DetailCompanyAdmin = () => {
   };
 
   const renderField = (label, originalValue, updatedValue) => {
+    // Check if the label is 'Description'
+    if (label === 'Description') {
+      return (
+        <div>
+          <p><strong>{label}:</strong></p>
+          {/* Render original description as HTML */}
+          <div dangerouslySetInnerHTML={{ __html: originalValue }} />
+          {/* If there is an updated value and it's different from the original, render the updated description */}
+          {updatedValue !== undefined && updatedValue !== originalValue && (
+            <div style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+              <strong>(Cập nhật thành:)</strong>
+              <div dangerouslySetInnerHTML={{ __html: updatedValue }} />
+            </div>
+          )}
+        </div>
+      );
+    }
+  
+    // For non-description fields, render normally
     return (
       <p>
         <strong>{label}:</strong> {originalValue}
@@ -104,6 +123,19 @@ const DetailCompanyAdmin = () => {
       </p>
     );
   };
+  
+  // const renderField = (label, originalValue, updatedValue) => {
+  //   return (
+  //     <p>
+  //       <strong>{label}:</strong> {originalValue}
+  //       {updatedValue !== undefined && updatedValue !== originalValue && (
+  //         <span style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+  //           (Cập nhật thành: {updatedValue})
+  //         </span>
+  //       )}
+  //     </p>
+  //   );
+  // };
 
   const handleStatusUpdate = async ( companyId, status ) => {
     // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
@@ -185,7 +217,13 @@ const DetailCompanyAdmin = () => {
       <div className={clsx(styles.jobDetail)}>
         <div className={clsx(styles.titleContainer)}>
           <div className={clsx(styles.title)}>
-            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            {/* <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
+            <img 
+              src={company.pendingUpdates?.avatar || company.avatar || logo} 
+              alt="Logo" 
+              className={clsx(styles.avatar)} 
+              style={company.pendingUpdates?.avatar && company.pendingUpdates.avatar !== company.avatar ? { border: '5px solid yellow' } : {}}
+            />
             <h1>{company.name}</h1>
             {
               company.pendingUpdates?.name && company.pendingUpdates.name !== company.name && (

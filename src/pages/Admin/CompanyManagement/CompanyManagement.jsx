@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import logo from '../../../images/logo.png';
 
 const cities = [
   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -730,21 +731,26 @@ const CompanyManagement = () => {
       <div className={styles.tabContent}>
         {activeTab === 'all' && (
           <div>
-            <p>Danh sách tất cả công ty:</p>
+            <p>Danh sách tất cả công ty: {companiesAll.length}</p>
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesAll.length > 0 ? (
                   companiesAll.map((company) => (
-                    <div key={company._id}>
+                    <div key={company._id} className={clsx(styles.companyName)}>
                       <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
-                        <h3>{company.name}</h3>
-                        <p>Status: {""+company.status}</p>
+                        <div className={clsx(styles.infoCompany)}>
+                          <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                          <div className={clsx(styles.infoText)}>
+                            <p><strong>{company.name}</strong></p>
+                            <p>{company.website}</p>
+                            <p>{company.street}, {company.city}</p>
+                            <p>Status: {""+company.status}</p>
+                          </div>
+                        </div>
                       </Link>
                         <button onClick={() => handleDisableCompany(company._id, company.isActive)}>
                           {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                         </button>
-                        {/* <button>Xóa tài khoản</button> */}
-                          <hr />
                     </div>
                       
                   ))

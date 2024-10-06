@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import logo from '../../../images/logo.png';
 
 const cities = [
   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -659,17 +660,24 @@ const CandidateManagement = () => {
       <div className={clsx(styles.candidateContainer)}>
         {candidates.length > 0 ? (
           candidates.map((candidate) => (
-            <div key={candidate._id}>
+            <div key={candidate._id} className={clsx(styles.candidateName)}>
               <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.candidatecard)}>
-                <h3>{candidate.name}</h3>
-                <p>IsActive: {"" + candidate.isActive}</p>
+                <div className={clsx(styles.infoCandidate)}>
+                  <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                  <div className={clsx(styles.infoText)}>
+                    <p><strong>{candidate.name}</strong></p>
+                    <p>{candidate.email}</p>
+                    <p>{candidate.phoneNumber}</p>
+                    <p>IsActive: {"" + candidate.isActive}</p>
+                  </div>
+                </div>
               </Link>
               <button
+                className={clsx(styles.btn)}
                 onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
               >
                 {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
               </button>
-              <hr />
             </div>
           ))
         ) : (
