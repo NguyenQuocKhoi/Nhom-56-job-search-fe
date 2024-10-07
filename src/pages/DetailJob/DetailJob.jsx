@@ -521,98 +521,98 @@ const JobDetail = () => {
       <Header />
       <div className={clsx(styles.jobDetail)}>
         <div className={clsx(styles.columnOne)}>
-        <div className={clsx(styles.titleContainer)}>
-          <div className={clsx(styles.title)}>
-            {/* <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
-          <div className={clsx(styles.tenCV)}>
-            <h1>{job.title}</h1>
-          </div>
-          </div>
-          {(userRole === 'candidate' || !userRole) && (
+          <div className={clsx(styles.titleContainer)}>
             <div className={clsx(styles.title)}>
-              <button 
-                className={clsx(styles.btn, { [styles.disabled]: isApplied })} 
-                onClick={handleApply} 
-                disabled={isApplied}
-                style={{ backgroundColor: isApplied ? 'gray' : '' }}
-              >
-                {
-                  isApplied ? (
-                    <strong>Đã ứng tuyển</strong>
-                  ): (
-                    <>
-                      <i className="fa-regular fa-paper-plane"></i>
-                      <strong className={clsx(styles.utn)}>Ứng tuyển ngay</strong>
-                    </>
-                  )
-                }
-                {/* <strong>{isApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}</strong> */}
+              {/* <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
+            <div className={clsx(styles.tenCV)}>
+              <h1>{job.title}</h1>
+            </div>
+            </div>
+            {(userRole === 'candidate' || !userRole) && (
+              <div className={clsx(styles.title)}>
+                <button 
+                  className={clsx(styles.btn, { [styles.disabled]: isApplied })} 
+                  onClick={handleApply} 
+                  disabled={isApplied}
+                  style={{ backgroundColor: isApplied ? 'gray' : '' }}
+                >
+                  {
+                    isApplied ? (
+                      <strong>Đã ứng tuyển</strong>
+                    ): (
+                      <>
+                        <i className="fa-regular fa-paper-plane"></i>
+                        <strong className={clsx(styles.utn)}>Ứng tuyển ngay</strong>
+                      </>
+                    )
+                  }
+                  {/* <strong>{isApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}</strong> */}
+                </button>
+                <button 
+                  className={clsx(styles.btnSave)}
+                  onClick={handleSaveJob}>
+                  <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                  <p><strong>{isSaved ? 'Bỏ lưu' : 'Lưu tin'}</strong></p>
+                </button>
+              </div>
+            )}
+            <div className={clsx(styles.ngang)}>
+              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+              <p><strong>Lương:</strong> {job.salary}</p>
+              <p><strong>Vị trí làm việc:</strong> {job.position}</p>
+            </div>
+          </div>
+        
+          <div className={clsx(styles.thongtinchinh)}>
+            <p><strong>Phúc lợi:</strong> {job.interest}</p>
+            <p><strong>Mô tả:</strong></p>
+            <div
+              dangerouslySetInnerHTML={{ __html: job.description }}
+              ></div>
+            <p><strong>Yêu cầu:</strong> {job.requirements}</p>
+            <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+          </div>
+          
+          <div className={clsx(styles.vieclamlienquan)}>
+            <p><strong>Việc làm liên quan</strong></p>
+            
+            <div className={clsx(styles.jobContainer)}>
+              {similarJobs.length === 0 ? (
+                <p>No jobs similar.</p>
+              ) : (
+                similarJobs
+                  .filter((job) => job.jobId !== jobId)
+                  .map((job) => (
+                  <div key={job.jobId} className={clsx(styles.jobcard)}>
+                    <Link to={`/detailCompany/${job.companyId}`} target="_blank" rel="noopener noreferrer">
+                      <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+                    </Link>
+                    <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                      <div className={clsx(styles.describe)}>
+                        <p><strong>Job Title: {job.title || 'Loading...'}</strong></p>
+                        <p>Company: {job.company?.name || 'Unknown Company'}</p>
+                        <p>Address: {job.street}, {job.city}</p>
+                        <p>Posted on: {new Date(job.expiredAt).toLocaleDateString()}</p>
+                      </div>
+                    </Link>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className={clsx(styles.pagination)}>
+              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+                <i className="fa-solid fa-angle-left"></i>              
+                {/* Previous */}
               </button>
-              <button 
-                className={clsx(styles.btnSave)}
-                onClick={handleSaveJob}>
-                <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                <p><strong>{isSaved ? 'Bỏ lưu' : 'Lưu tin'}</strong></p>
+              <span> {currentPage} / {totalPages} trang </span>
+              <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+                <i className="fa-solid fa-angle-right"></i>              
+                {/* Next */}
               </button>
             </div>
-          )}
-          <div className={clsx(styles.ngang)}>
-            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
-            <p><strong>Lương:</strong> {job.salary}</p>
-            <p><strong>Vị trí làm việc:</strong> {job.position}</p>
           </div>
-        </div>
-        
-        <div className={clsx(styles.thongtinchinh)}>
-          <p><strong>Phúc lợi:</strong> {job.interest}</p>
-          <p><strong>Mô tả:</strong></p>
-          <div
-            dangerouslySetInnerHTML={{ __html: job.description }}
-            ></div>
-          <p><strong>Yêu cầu:</strong> {job.requirements}</p>
-          <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-          <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
-        </div>
-        
-        <div className={clsx(styles.vieclamlienquan)}>
-          <p><strong>Việc làm liên quan</strong></p>
-          
-          <div className={clsx(styles.jobContainer)}>
-            {similarJobs.length === 0 ? (
-              <p>No jobs similar.</p>
-            ) : (
-              similarJobs
-                .filter((job) => job.jobId !== jobId)
-                .map((job) => (
-                <div key={job.jobId} className={clsx(styles.jobcard)}>
-                  <Link to={`/detailCompany/${job.companyId}`} target="_blank" rel="noopener noreferrer">
-                    <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
-                  </Link>
-                  <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
-                    <div className={clsx(styles.describe)}>
-                      <p><strong>Job Title: {job.title || 'Loading...'}</strong></p>
-                      <p>Company: {job.company?.name || 'Unknown Company'}</p>
-                      <p>Address: {job.street}, {job.city}</p>
-                      <p>Posted on: {new Date(job.expiredAt).toLocaleDateString()}</p>
-                    </div>
-                  </Link>
-                </div>
-              ))
-            )}
-          </div>
-
-          <div className={clsx(styles.pagination)}>
-            <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-              <i className="fa-solid fa-angle-left"></i>              
-              {/* Previous */}
-            </button>
-            <span> {currentPage} / {totalPages} trang </span>
-            <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
-              <i className="fa-solid fa-angle-right"></i>              
-              {/* Next */}
-            </button>
-          </div>
-        </div>
 
       </div>
 

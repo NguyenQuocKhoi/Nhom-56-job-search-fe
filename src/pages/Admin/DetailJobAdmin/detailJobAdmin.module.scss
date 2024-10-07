@@ -1,11 +1,13 @@
 .jobDetail {
-    padding: 2rem;
+  display: flex;
+    // padding: 2rem;
     background: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     margin-top: 6rem;
+    margin-bottom: 1rem;
   
     h1 {
       margin-top: 0;
@@ -20,6 +22,11 @@
       margin-left: 2rem;
     }
     .titleContainer{
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 10px;
+
       .title{
         display: flex;
         justify-content: space-between;
@@ -32,38 +39,143 @@
         height: auto;
       }
 
-      .btn{
-        width: 80%;
-        height: 40px;
-        background: #1E90FF;
-        border-radius: 5px;
-        border: 1px solid white;
-        color: white;
-      }
+      // .btn{
+      //   width: 80%;
+      //   height: 40px;
+      //   background: #1E90FF;
+      //   border-radius: 5px;
+      //   border: 1px solid white;
+      //   color: white;
 
-      .btnSave{
-        display: flex;
-        width: 17%;
-        height: 40px;
-        border-radius: 5px;
-        align-items: center;
-        justify-content: space-around;
-        border: 1px solid #1E90FF;
-        color: #1E90FF;
-        background: white;
-      }
+      // }
 
-      .btnDisabled {
-        background-color: #6c757d; // Màu xám cho nút bị vô hiệu hóa
-        cursor: not-allowed;
-      }      
+      // .btnSave{
+      //   display: flex;
+      //   width: 17%;
+      //   height: 40px;
+      //   border-radius: 5px;
+      //   align-items: center;
+      //   justify-content: space-around;
+      //   border: 1px solid #1E90FF;
+      //   color: #1E90FF;
+      //   background: white;
+      // }
+
+      // .btnDisabled {
+      //   background-color: #6c757d; // Màu xám cho nút bị vô hiệu hóa
+      //   cursor: not-allowed;
+      // }      
     }
   }
-  .button{
+  .buttonContainer{
     display: flex;
     justify-content: center;
+    
+    background: #f9f9f9;
+    // background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    padding: 20px;
+    gap: 20px;
+  }
+  .button{
+    height: 50px;
+    width: 140px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid white;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    color: white;
+
+    &:hover{
+      background: blue;
+    }
+  }
+  .button.accepted{
+    background: green;
+  }
+  .button.rejected{
+    background: red;
+  }
+  .button.disabled{
+    background: gray;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .buttonXoa{
+    color: white;
+    border: 1px solid white;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background: rgb(191, 17, 17);
+    width: 140px;
+
+    &:hover{
+      background: rgb(119, 9, 9);
+    }
   }
 
-
+  //
+  .columnOne{
+    // background: #000;
+    margin-right: 10px;
+    min-width: 900px;
+    max-width: 930px;
+  }
+  .columnTwo{
+    // background: #000;
+    margin-left: -20px;
+  }
+  
+  .companyContainer{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px;
+    
+    // display: flex;
+    .titleCongty{
+      display: flex;
+    }
+  
+    .avatar{
+      height: 70px;
+      width: 70px;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+  
+  }
+  .thongtinchung{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px;
+  
+  }
+  .thongtinchinh{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px;
+  
+  }
+  .them{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px;
+  
+  }
+  .ngang{
+    display: flex;
+    justify-content: space-between;
+  }
+  
 
   

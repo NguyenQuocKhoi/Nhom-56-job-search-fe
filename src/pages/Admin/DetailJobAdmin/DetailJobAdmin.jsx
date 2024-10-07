@@ -206,80 +206,102 @@ const DetailJobAdmin = () => {
     <>
       <Header/>
       <div className={clsx(styles.jobDetail)}>
-        <div className={clsx(styles.titleContainer)}>
-          <div className={clsx(styles.title)}>
-            <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
-            <h1>{job.title}</h1>
-            {
-              job.pendingUpdates?.title && job.pendingUpdates.title !== job.title && (
-                <h1 style={{backgroundColor: 'yellow'}}>Title mới: {job.pendingUpdates.title}</h1>
-              )
-            }
+        <div className={clsx(styles.columnOne)}>
+          <div className={clsx(styles.titleContainer)}>
+            <div className={clsx(styles.title)}>
+              <div className={clsx(styles.tenCV)}>
+                <h1>{job.title}</h1>
+                {
+                  job.pendingUpdates?.title && job.pendingUpdates.title !== job.title && (
+                    <h1 style={{backgroundColor: 'yellow'}}>Title mới: {job.pendingUpdates.title}</h1>
+                  )
+                }
+              </div>
+            </div>
+            <div className={clsx(styles.ngang)}>
+              {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}
+              {renderField('Salary', job.salary, job.pendingUpdates?.salary)}
+              {renderField('Position', job.position, job.pendingUpdates?.position)}
+            </div>
+          </div>
+          <div className={clsx(styles.thongtinchinh)}>
+            {renderField('Interest', job.interest, job.pendingUpdates?.interest)}
+            {renderField('Description', job.description, job.pendingUpdates?.description, true)}
+            {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements)}
+            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+            {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}            
           </div>
         </div>
-        {renderField('Description', job.description, job.pendingUpdates?.description, true)}
-        {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)}
-        <p><strong>Company:</strong> {job.company.name}</p>
-        <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-        {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}
-        {/* {renderField('Salary', `${job.salary}`, `${job.pendingUpdates?.salary}`)} */}
-        {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements)}
-        {renderField('Salary', job.salary, job.pendingUpdates?.salary)}
-        {renderField('Interest', job.interest, job.pendingUpdates?.interest)}
-        {renderField('Type', job.type, job.pendingUpdates?.type)}
-        {renderField('Position', job.position, job.pendingUpdates?.position)}
-        {renderField('Experience Level', job.experienceLevel, job.pendingUpdates?.experienceLevel)}
-        {renderField('Category', categoryName, categoryNameEdited)}
-        <div>
-          <strong>Requirements skills: </strong>
-          {skills.length > 0 ? (
-            <ul>
-              {skills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No requirements skills</span>
-          )}
-        </div>
-        <div>
-          <strong>Updated Requirements skills: </strong>
-          {skillsEdited.length > 0 ? (
-            <ul>
-              {skillsEdited.map((skill, index) => (
-                <li key={index} style={{ backgroundColor: 'yellow' }}>{skill}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No updated requirements skills</span>
-          )}
-        </div>
 
-        {renderField('Number of Recruitments', job.numberOfCruiment, job.pendingUpdates?.numberOfCruiment)}
+        <div className={clsx(styles.columnTwo)}>
+          <div className={clsx(styles.companyContainer)}>
+            <div className={clsx(styles.titleCongty)}>
+              <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
+              <p><strong>Company:</strong> {job.company.name}</p>
+            </div>
+            {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)}
+          </div>
+
+          <div className={clsx(styles.thongtinchung)}>
+            {renderField('Type', job.type, job.pendingUpdates?.type)}
+            {renderField('Number of Recruitments', job.numberOfCruiment, job.pendingUpdates?.numberOfCruiment)}
+            {renderField('Experience Level', job.experienceLevel, job.pendingUpdates?.experienceLevel)}
+          </div>
+
+          <div className={clsx(styles.them)}>
+            {renderField('Category', categoryName, categoryNameEdited)}
+            <div>
+              <strong>Requirements skills: </strong>
+              {skills.length > 0 ? (
+                <ul>
+                  {skills.map((skill, index) => (
+                    <li key={index}>{skill}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>No requirements skills</span>
+              )}
+            </div>
+            <div>
+              <strong>Updated Requirements skills: </strong>
+              {skillsEdited.length > 0 ? (
+                <ul>
+                  {skillsEdited.map((skill, index) => (
+                    <li key={index} style={{ backgroundColor: 'yellow' }}>{skill}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>No updated requirements skills</span>
+              )}
+            </div>
+          </div>
+        </div>
+        
       </div>
-      <div className={clsx(styles.button)}>
-      <button
-        className={clsx(styles.button, {
-          [styles.accepted]: buttonState === 'accepted',
-          [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
-        })}
-        onClick={() => handleStatusUpdate(job._id, true)}
-        disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
-      >
-        Accept
-      </button>
-      <button
-        className={clsx(styles.button, {
-          [styles.rejected]: buttonState === 'rejected',
-          [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
-        })}
-        onClick={() => handleStatusUpdate(job._id, false)}
-        disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
-      >
-        Reject
-      </button>
 
-        <button onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+      <div className={clsx(styles.buttonContainer)}>
+        <button
+          className={clsx(styles.button, {
+            [styles.accepted]: buttonState === 'accepted',
+            [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+          })}
+          onClick={() => handleStatusUpdate(job._id, true)}
+          disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+        >
+          Accept
+        </button>
+        <button
+          className={clsx(styles.button, {
+            [styles.rejected]: buttonState === 'rejected',
+            [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+          })}
+          onClick={() => handleStatusUpdate(job._id, false)}
+          disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+        >
+          Reject
+        </button>
+
+        <button onClick={() => handleDeleteJob(job._id)} className={clsx(styles.buttonXoa)}>Xóa</button>
       </div>
     </>
   );

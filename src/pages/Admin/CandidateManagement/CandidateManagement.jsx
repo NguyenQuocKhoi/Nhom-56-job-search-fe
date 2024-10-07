@@ -660,24 +660,26 @@ const CandidateManagement = () => {
       <div className={clsx(styles.candidateContainer)}>
         {candidates.length > 0 ? (
           candidates.map((candidate) => (
-            <div key={candidate._id} className={clsx(styles.candidateName)}>
-              <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.candidatecard)}>
-                <div className={clsx(styles.infoCandidate)}>
-                  <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
-                  <div className={clsx(styles.infoText)}>
-                    <p><strong>{candidate.name}</strong></p>
-                    <p>{candidate.email}</p>
-                    <p>{candidate.phoneNumber}</p>
-                    <p>IsActive: {"" + candidate.isActive}</p>
+            <div key={candidate._id} className={clsx(styles.content)}>
+              <div className={clsx(styles.candidatecard)}>
+                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+                  <div className={clsx(styles.contentCandidatecard)}>
+                    <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                    <div className={clsx(styles.contentText)}>
+                      <p><strong>{candidate.name}</strong></p>
+                      <p>{candidate.email}</p>
+                      <p>{candidate.phoneNumber}</p>
+                      <p>IsActive: {"" + candidate.isActive}</p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-              <button
-                className={clsx(styles.btn)}
-                onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
-              >
-                {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
-              </button>
+                </Link>
+                <button
+                  className={clsx(styles.btn)}
+                  onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
+                >
+                  {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                </button>
+              </div>
             </div>
           ))
         ) : (

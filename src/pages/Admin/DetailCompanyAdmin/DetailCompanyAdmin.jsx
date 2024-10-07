@@ -93,6 +93,10 @@ const DetailCompanyAdmin = () => {
   };
 
   const renderField = (label, originalValue, updatedValue) => {
+    if (!originalValue) {
+      return null;
+    }
+
     // Check if the label is 'Description'
     if (label === 'Description') {
       return (
@@ -116,7 +120,7 @@ const DetailCompanyAdmin = () => {
       <p>
         <strong>{label}:</strong> {originalValue}
         {updatedValue !== undefined && updatedValue !== originalValue && (
-          <span style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+          <span style={{ backgroundColor: 'yellow', color: 'black', paddingLeft: '10px' }}>
             (Cập nhật thành: {updatedValue})
           </span>
         )}
@@ -214,68 +218,94 @@ const DetailCompanyAdmin = () => {
   return (
     <>
       <Header/>
-      <div className={clsx(styles.jobDetail)}>
-        <div className={clsx(styles.titleContainer)}>
-          <div className={clsx(styles.title)}>
-            {/* <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
-            <img 
-              src={company.pendingUpdates?.avatar || company.avatar || logo} 
-              alt="Logo" 
-              className={clsx(styles.avatar)} 
-              style={company.pendingUpdates?.avatar && company.pendingUpdates.avatar !== company.avatar ? { border: '5px solid yellow' } : {}}
-            />
-            <h1>{company.name}</h1>
-            {
-              company.pendingUpdates?.name && company.pendingUpdates.name !== company.name && (
-                <h1 style={{backgroundColor: 'yellow'}}>Tên mới: {company.pendingUpdates.name}</h1>
-              )
-            }
+      <div className={clsx(styles.companyDetail)}>
+        <div className={clsx(styles.top)}>
+          <img 
+            src={company.pendingUpdates?.avatar || company.avatar || logo} 
+            alt="Logo" 
+            className={clsx(styles.avatar)} 
+            style={company.pendingUpdates?.avatar && company.pendingUpdates.avatar !== company.avatar ? { border: '5px solid yellow' } : {}}
+          />
+          <div className={clsx(styles.topTitle)}>
+            <div className={clsx(styles.topTitleText)}>
+              <p><strong>{company.name}</strong></p>
+                {
+                  company.pendingUpdates?.name && company.pendingUpdates.name !== company.name && (
+                    <p style={{backgroundColor: 'yellow'}}>Tên mới: <strong>{company.pendingUpdates.name}</strong></p>
+                  )
+                }
+            </div>
+            <div className={clsx(styles.address)}>
+              {renderField(
+                'Address',
+                company.street && company.city ? `${company.street}, ${company.city}` : '',
+                company.pendingUpdates?.street && company.pendingUpdates?.city &&
+                 (`${company.pendingUpdates?.street}, ${company.pendingUpdates?.city}` !== `${company.street}, ${company.city}`)
+                 ? `${company.pendingUpdates?.street}, ${company.pendingUpdates?.city}`
+                 : undefined
+                )}
+            </div>
           </div>
         </div>
-        {renderField('Address', `${company.street}, ${company.city}`, `${company.pendingUpdates?.street}, ${company.pendingUpdates?.city}`)}
-        {renderField('Phone number', company.phoneNumber, company.pendingUpdates?.phoneNumber)}
-        {renderField('Website', company.website, company.pendingUpdates?.website)}
-        {renderField('Email', company.email, company.pendingUpdates?.email)}
-        {renderField('Description', company.description, company.pendingUpdates?.description)}
-      </div>
-      <div className={clsx(styles.button)}>
-      <button
-        className={clsx(styles.button, {
-          [styles.accepted]: buttonState === 'accepted',
-          [styles.disabled]: buttonState === 'rejected' || company.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
-        })}
-        onClick={() => handleStatusUpdate(company._id, true)}
-        disabled={buttonState === 'accepted' || company.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
-      >
-        Accept
-      </button>
-      <button
-        className={clsx(styles.button, {
-          [styles.rejected]: buttonState === 'rejected',
-          [styles.disabled]: buttonState === 'accepted' || company.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
-        })}
-        onClick={() => handleStatusUpdate(company._id, false)}
-        disabled={buttonState === 'rejected' || company.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
-      >
-        Reject
-      </button>
 
+        <div className={clsx(styles.mid)}>
+          <div className={clsx(styles.intro)}>
+            {renderField('Description', company.description, company.pendingUpdates?.description)}
+          </div>
+
+          <div className={clsx(styles.midRight)}>
+            <div className={clsx(styles.contact)}>
+              {renderField('Phone number', company.phoneNumber, company.pendingUpdates?.phoneNumber)}
+              {renderField('Website', company.website, company.pendingUpdates?.website)}
+              {renderField('Email', company.email, company.pendingUpdates?.email)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={clsx(styles.buttonContainer)}>
         <button
-        onClick={() => handleDisableCompany(user._id, user.isActive)}
-      >
-        {user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
-      </button>
+          className={clsx(styles.button, {
+            [styles.accepted]: buttonState === 'accepted',
+            [styles.disabled]: buttonState === 'rejected' || company.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+          })}
+          onClick={() => handleStatusUpdate(company._id, true)}
+          disabled={buttonState === 'accepted' || company.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+        >
+          Accept
+        </button>
+        <button
+          className={clsx(styles.button, {
+            [styles.rejected]: buttonState === 'rejected',
+            [styles.disabled]: buttonState === 'accepted' || company.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+          })}
+          onClick={() => handleStatusUpdate(company._id, false)}
+          disabled={buttonState === 'rejected' || company.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+        >
+          Reject
+        </button>
 
+          <button
+          onClick={() => handleDisableCompany(user._id, user.isActive)}
+          className={clsx(styles.buttonVoHieuHoa)}
+        >
+          {user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+        </button>
       </div>
-      <span>Tin tuyển dụng của công ty:</span>
-      <div className={clsx(styles.mainContent)}>
+
+      {/* <div className={clsx(styles.mainContent)}> */}
         {loading ? (
           <p>Loading...</p>
         ) : jobs.length === 0 ? (
-          <p>Chưa đăng công việc.</p>
+          <div className={clsx(styles.ds)}>
+            <p><strong>Chưa đăng công việc.</strong></p>
+          </div>
         ) : (
           <>
             <div className={clsx(styles.joblist)}>
+              <div className={clsx(styles.ds)}>
+                <strong>Tin tuyển dụng của công ty:</strong>
+              </div>
               <div className={clsx(styles.jobContainer)}>
                 {jobs.map((job) => (
                   <Link key={job._id} to={`/detailJob/${job._id}`} className={clsx(styles.jobcard)}>
@@ -297,25 +327,26 @@ const DetailCompanyAdmin = () => {
                   </Link>
                 ))}
               </div>
-            </div>
+
             <div className={clsx(styles.pagination)}>
               <button 
                 onClick={() => handlePageChange(currentPage - 1)} 
                 disabled={currentPage === 1}
               >
-                Previous
+                <i className="fa-solid fa-angle-left"></i>
               </button>
               <span>Page {currentPage} of {totalPages}</span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
               >
-                Next
+                <i className="fa-solid fa-angle-right"></i>
               </button>
+            </div>
             </div>
           </>
         )}
-      </div>
+      {/* </div> */}
     </>
   );
 };

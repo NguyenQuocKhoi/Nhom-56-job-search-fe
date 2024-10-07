@@ -1,49 +1,201 @@
-.jobManagement {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  
-    h2 {
-      margin-bottom: 20px;
-    }
-  
-    .tabs {
-      display: flex;
-      margin-bottom: 20px;
-  
-      button {
-        padding: 10px 20px;
-        border: none;
-        background-color: #f4f4f4;
-        cursor: pointer;
-        flex: 1;
-        text-align: center;
-  
-        &.active {
-          // background-color: #3498db;
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-          color: white;
-        }
-  
-        &:not(:last-child) {
-          border-right: 1px solid #ddd;
-        }
-  
-        &:hover {
-          background-color: #ddd;
-        }
+.companyManagement {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .tabs {
+    display: flex;
+    margin-bottom: 20px;
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #f4f4f4;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+
+      &.active {
+        // background-color: #3498db;
+background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+        color: white;
+      }
+
+      &:not(:last-child) {
+        border-right: 1px solid #ddd;
+      }
+
+      &:hover {
+        background-color: #ddd;
       }
     }
-  
-    .tabContent {
-      // padding: 20px;
-      background-color: #f9f9f9;
-      // border: 1px solid #ddd;
+  }
+
+  .tabContentSearch {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    // background: green;
+    margin-bottom: 10px;
+  }
+}
+
+.results{
+  // background: red;
+}
+
+//
+.companylist {
+  padding: 1rem;
+
+  /* Căn giữa phần chứa nội dung */
+  .companyContainer {
+    max-width: 1200px; /* Đặt chiều rộng tối đa để nội dung không quá rộng */
+    // margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
+    // display: grid;
+    // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    // gap: 1rem;
+  }
+
+  .companycard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    // flex-direction: column;
+    gap: 0.5rem;
+    text-decoration: none;
+    width: 100%; 
+    box-sizing: border-box; 
+    max-width: 1200px; 
+    min-height: 110px; 
+    margin-bottom: 10px;
+    
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
+      // background: linear-gradient(to right, #87CEEB, #1E90FF);
+      // background: #87CEEB;
+      background: #f5f5f5;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #333;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      color: #555;
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      white-space: nowrap; 
+    }
+
+    .title{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .content{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .text{
+      color: #000;
+      margin-left: 10px;
+    }
+
+    .describe{
+      line-height: 1.2;
+      width: 270px;
+    }
+    .btnXoa{
+      height: 40px;
+      width: 80px;
+    }
+    .btnDongY{
+      height: 40px;
+      width: 80px;
+      margin-right: 10px;
+      background: green;
+    }
+    .btnTuChoi{
+      height: 40px;
+      width: 80px;
+      margin-right: 10px;
+      background: red;
+    }
+    .contentCompanycard{
+      display: flex;
+    }
+    .contentText{
+      margin-left: 10px;
     }
   }
-  
-  //search bar
-  .searchBar {
+
+  .avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+  }
+
+  .pagination {
     display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 0.5rem;
+
+    button {
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #4682B4;
+      }
+
+      &:disabled {
+        background-color: #d3d3d3;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      align-self: center;
+      font-size: 1rem;
+    }
+  }
+}
+
+.linkCompany{
+  text-decoration: none;
+}
+
+//search bar
+.searchBar {
+  display: flex;
   justify-content: center;
   margin: 2rem 0;
   height: 4rem;
@@ -52,10 +204,10 @@
 
   margin-left: 150px;
   // margin-bottom: 50px;
-  }
-  
-  .form {
-   // margin-top: 40px;
+}
+
+.form {
+  // margin-top: 40px;
   display: flex;
   width: 100%;
   max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
@@ -63,360 +215,127 @@
   height: 100%; /* Ensure full height */
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
   background-color: #ffffff; /* White background for the form */
-  }
-
-  .selectContainer {
-    display: flex;
-    align-items: center;
-    margin: 0 10px; // Khoảng cách giữa các phần tử trong form
-  }
-  
-  .select {
-    padding: 10px; // Khoảng cách bên trong
-    border: 1px solid #ffffff; // Đường viền
-    border-radius: 4px; // Bo góc
-    font-size: 16px; // Kích thước chữ
-    width: 200px; // Chiều rộng
-    background-color: #fff; // Màu nền
-    margin: 0 5px; // Khoảng cách giữa select và input
-    // outline: none; // Bỏ viền khi chọn
-    transition: border 0.3s; // Hiệu ứng chuyển tiếp
-  
-    &:focus {
-      // border: 1px solid #007bff; // Màu viền khi chọn
-    }
-  }  
-  
-  .jobInput,
-  .locationInput {
-    border: none;
-    border-radius: 50px;
-    padding: 0.75rem 1.2rem;
-    font-size: 1rem;
-    outline: none; /* Remove outline when the field is focused */
-    height: 100%; /* Ensure input fields take full height of the parent */
-  }
-  
-  .jobInput {
-    flex: 2;
-    margin-right: 0.5rem; /* Add space between input fields */
-  }
-  
-  .locationInput {
-    flex: 1;
-    margin-right: 0.5rem; /* Add space between input fields */
-  }
-  .iconPlace{
-    font-size: 25px;
-    padding: 10px;
-    margin-right: -15px;
-  }
-  
-  .searchButton {
-    border-radius: 10px;
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
-    // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-    border: 6px solid white;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    height: 100%; /* Make the button take full height of the parent */
-    width: 150px;
-  }
-  
-  .searchButton:hover {
-    // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-  }
-  
-  //
-  .companylist {
-    padding: 1rem;
-  
-    /* Căn giữa phần chứa nội dung */
-    .companyContainer {
-      max-width: 1200px; /* Đặt chiều rộng tối đa để nội dung không quá rộng */
-      // margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
-      // display: grid;
-      // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      // gap: 1rem;
-    }
-  
-    .jobcard {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-      text-align: left;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      display: flex;
-      // flex-direction: column;
-      gap: 0.5rem;
-      text-decoration: none;
-      width: 100%; 
-      box-sizing: border-box; 
-      max-width: 1200px; 
-      min-height: 110px; 
-      margin-bottom: 10px;
-      
-      justify-content: space-between;
-      align-items: center;
-
-      &:hover {
-        // background: linear-gradient(to right, #87CEEB, #1E90FF);
-        // background: #87CEEB;
-        background: #f5f5f5;
-      }
-  
-      h3 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #333;
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-      }
-  
-      p {
-        margin: 0;
-        font-size: 15px;
-        color: #555;
-        overflow: hidden; 
-        text-overflow: ellipsis;
-        white-space: nowrap; 
-      }
-  
-      .title{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-  
-      .content{
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      }
-      .text{
-        color: #000;
-        margin-left: 10px;
-      }
-  
-      .describe{
-        line-height: 1.2;
-        width: 270px;
-      }
-      .btnXoa{
-        height: 40px;
-        width: 80px;
-      }
-      .btnDongY{
-        height: 40px;
-        width: 80px;
-        margin-right: 10px;
-        background: green;
-      }
-      .btnTuChoi{
-        height: 40px;
-        width: 80px;
-        margin-right: 10px;
-        background: red;
-      }
-      .contentJobcard{
-        display: flex;
-      }
-      .contentText{
-        margin-left: 10px;
-      }
-    }
-
-    .avatar{
-      width: 100px;
-      height: 100px;
-      border-radius: 5px;
-    }
-  
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin: 1rem 0;
-      gap: 0.5rem;
-  
-      button {
-        background-color: #1E90FF;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background-color 0.3s;
-  
-        &:hover {
-          background-color: #4682B4;
-        }
-  
-        &:disabled {
-          background-color: #d3d3d3;
-          cursor: not-allowed;
-        }
-      }
-  
-      span {
-        align-self: center;
-        font-size: 1rem;
-      }
-    }
-  }
-
-  .linkJob{
-    text-decoration: none;
-  }
-
-  //search bar
-  // .searchBar {
-  //   display: flex;
-  //   justify-content: center;
-  //   margin: 2rem 0;
-  //   height: 3.5rem; /* Set the height to match the form's height */
-  // }
-  
-  // .form {
-  //   display: flex;
-  //   width: 75%;
-  //   max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
-  //   border-radius: 50px;
-  //   height: 3.5rem; /* Set the same height as .searchBar */
-  //   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
-  // }
-  
-  // .jobInput,
-  // .locationInput {
-  //   border: none;
-  //   border-radius: 50px;
-  //   padding: 0.75rem 1rem;
-  //   font-size: 1rem;
-  //   outline: none; /* Remove outline when the field is focused */
-  //   height: 100%; /* Ensure input fields take full height of the parent */
-  // }
-  
-  // .jobInput {
-  //   flex: 2;
-  //   margin-right: 0.5rem; /* Add space between input fields */
-  // }
-  
-  // .locationInput {
-  //   flex: 1;
-  //   margin-right: 0.5rem; /* Add space between input fields */
-  // }
-  
-  // .searchButton {
-  //   border-radius: 50px;
-  //   font-size: 1rem;
-  //   padding: 0.75rem 2rem;
-  //   // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
-  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-  //   border: none;
-  //   color: #fff;
-  //   cursor: pointer;
-  //   transition: background 0.3s ease;
-  //   height: 100%; /* Make the button take full height of the parent */
-  // }
-  
-  // .searchButton:hover {
-  //   // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-  // }
-  
-  //modal
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+}
+.selectContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  margin: 0 10px; // Khoảng cách giữa các phần tử trong form
+}
+
+.select {
+  padding: 10px; // Khoảng cách bên trong
+  border: 1px solid #ffffff; // Đường viền
+  border-radius: 4px; // Bo góc
+  font-size: 16px; // Kích thước chữ
+  width: 200px; // Chiều rộng
+  background-color: #fff; // Màu nền
+  margin: 0 5px; // Khoảng cách giữa select và input
+  // outline: none; // Bỏ viền khi chọn
+  transition: border 0.3s; // Hiệu ứng chuyển tiếp
+
+  &:focus {
+    // border: 1px solid #007bff; // Màu viền khi chọn
+  }
+}
+
+.jobInput,
+.locationInput {
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  outline: none; /* Remove outline when the field is focused */
+  height: 100%; /* Ensure input fields take full height of the parent */
+}
+
+.jobInput {
+  flex: 2;
+  margin-right: 0.5rem; /* Add space between input fields */
+}
+
+.locationInput {
+  flex: 1;
+  margin-right: 0.5rem; /* Add space between input fields */
+}
+
+.iconPlace{
+  font-size: 25px;
+  padding: 10px;
+  margin-right: -15px;
+}
+
+.searchButton {
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  border: 6px solid white;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  height: 100%; /* Make the button take full height of the parent */
+  width: 150px;
+}
+
+.searchButton:hover {
+  // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+
+}
+
+//modal
+.modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
 }
 
 .modalContent {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px; // Maximum width of modal
-  max-height: 80vh; // Maximum height of modal
-  overflow-y: auto; // Vertical scrollbar if content overflows
-  position: relative; // For positioning the close button
+background: #fff;
+padding: 20px;
+border-radius: 8px;
+max-width: 500px; // Maximum width of modal
+max-height: 80vh; // Maximum height of modal
+overflow-y: auto; // Vertical scrollbar if content overflows
+position: relative; // For positioning the close button
 }
 
 .modalContent input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+width: 100%;
+padding: 10px;
+margin-bottom: 10px;
 }
 
 .modalContent ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+list-style-type: none;
+padding: 0;
+margin: 0;
 }
 
 .modalContent li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
+padding: 10px;
+cursor: pointer;
+border-bottom: 1px solid #ddd;
 }
 
 .modalContent li:hover {
-  background-color: #f0f0f0;
+background-color: #f0f0f0;
 }
 
 .modalContent .selected {
-  background-color: #d0f0c0; // Highlight selected items
+background-color: #d0f0c0; // Highlight selected items
 }
 
 .modalContent button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.companyName{
-  display: flex;
-  background: white;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-
-  &:hover{
-    background: #f5f5f5;
-  }
-}
-
-.companycard{
-  flex: 1;
-  text-decoration: none;
-  color: black;
-  // background: white;
-  // border-radius: 8px;
-  // margin: 10px;/
-  // padding: 20px;
-  // display: flex;
-}
-
-.infoCompany{
-  display: flex;
-}
-
-.infoText{
-  margin-left: 10px;
+position: absolute;
+top: 10px;
+right: 10px;
 }

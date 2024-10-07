@@ -509,7 +509,7 @@ const CompanyManagement = () => {
       </Modal.Footer>
     </Modal>
 
-    <div className={styles.jobManagement}>
+    <div className={styles.companyManagement}>
       <h2>Quản lí công ty</h2> 
       
       {/* searchBar */}
@@ -637,7 +637,7 @@ const CompanyManagement = () => {
     </div> */}
 
     {/* Tab result content */}
-    <div className={clsx(styles.tabContent)}>
+    <div className={clsx(styles.tabContentSearch)}>
       {/* All Companies */}
       {activeTabSearch === 'all' && (
         <div>
@@ -736,21 +736,23 @@ const CompanyManagement = () => {
               <div className={clsx(styles.companyContainer)}>
                 {companiesAll.length > 0 ? (
                   companiesAll.map((company) => (
-                    <div key={company._id} className={clsx(styles.companyName)}>
-                      <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
-                        <div className={clsx(styles.infoCompany)}>
-                          <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
-                          <div className={clsx(styles.infoText)}>
-                            <p><strong>{company.name}</strong></p>
-                            <p>{company.website}</p>
-                            <p>{company.street}, {company.city}</p>
-                            <p>Status: {""+company.status}</p>
+                    <div key={company._id} className={clsx(styles.content)}>
+                      <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                          <div className={clsx(styles.contentCompanycard)}>
+                            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                            <div className={clsx(styles.contentText)}>
+                              <p><strong>{company.name}</strong></p>
+                              <p>{company.website}</p>
+                              <p>{company.street}, {company.city}</p>
+                              <p>Status: {""+company.status}</p>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                        <button onClick={() => handleDisableCompany(company._id, company.isActive)}>
-                          {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
-                        </button>
+                        </Link>
+                          <button onClick={() => handleDisableCompany(company._id, company.isActive)}>
+                            {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                          </button>
+                      </div>
                     </div>
                       
                   ))
