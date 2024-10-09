@@ -104,17 +104,17 @@ const SkillManagement = () => {
   return (
     <div>
       <h2>Quản lí danh mục kỹ năng</h2>
-      <p>Tổng số lượng kỹ năng: {skills.length}</p>
-      <div>
+      <strong>Tổng số lượng kỹ năng: {skills.length}</strong>
+      <div className={clsx(styles.top)}>
         <input
           type="text"
           value={newSkillName}
           onChange={(e) => setNewSkillName(e.target.value)}
           placeholder="Nhập kỹ năng mới"
+          className={clsx(styles.inputSkill)}
         />
-        <button onClick={handleCreateSkill}>Thêm kỹ năng</button>
+        <button onClick={handleCreateSkill} className={clsx(styles.btnSua)}>Thêm kỹ năng</button>
       </div>
-      <hr />
 
       <div className={clsx(styles.categorylist)}>
         <div className={clsx(styles.categoryContainer)}>
@@ -122,27 +122,32 @@ const SkillManagement = () => {
             skills.map((skill) => (
               <div key={skill._id}>
                 {editingSkillId === skill._id ? (
-                  <div>
+                  <div className={clsx(styles.skillName)}>
                     <input
                       type="text"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
+                      className={clsx(styles.inputSkill)}
                     />
-                    <button onClick={() => handleUpdateSkill(skill._id)}>Xác nhận chỉnh sửa</button>
-                    <button onClick={() => setEditingSkillId(null)}>Hủy</button>
+                    <div>
+                      <button onClick={() => handleUpdateSkill(skill._id)} className={clsx(styles.btnSua)}>Xác nhận chỉnh sửa</button>
+                      <button onClick={() => setEditingSkillId(null)} className={clsx(styles.btnHuy)}>Hủy</button>
+                    </div>
                   </div>
                 ) : (
                   <div className={clsx(styles.skillName)}>
                     <h3>{skill.skillName}</h3>
-                    <button onClick={() => {
-                      setEditingSkillId(skill._id);
-                      setSkillInput(skill.skillName);
-                    }}>
+                    <button 
+                      onClick={() => {
+                        setEditingSkillId(skill._id);
+                        setSkillInput(skill.skillName);
+                      }}
+                      className={clsx(styles.btnSua)}
+                    >
                       Sửa kỹ năng
                     </button>
                   </div>
                 )}
-                <hr />
               </div>
             ))
           ) : (

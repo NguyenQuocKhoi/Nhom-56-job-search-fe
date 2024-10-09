@@ -492,7 +492,7 @@ const JobManagement = () => {
       <div className={styles.tabContent}>
         {activeTab === 'all' && (
           <div>
-            <p>Danh sách tất cả việc làm: {countAll}</p>
+            <strong>Danh sách tất cả việc làm: {countAll}</strong>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsAll.length > 0 ? (
@@ -544,7 +544,7 @@ const JobManagement = () => {
         {activeTab === 'accepted' && (
           <div>
             {/* hiện tại số lượng chỉ lấy của 1 trang */}
-            <p>Danh sách công việc đã chấp nhận: {jobsAccepted.length}</p>
+            <strong>Danh sách công việc đã chấp nhận: {jobsAccepted.length}</strong>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsAccepted.length > 0 ? (
@@ -585,7 +585,7 @@ const JobManagement = () => {
         )}
         {activeTab === 'rejected' && (
           <div>
-            <p>Danh sách công việc đã từ chối: {jobsRejected.length}</p>
+            <strong>Danh sách công việc đã từ chối: {jobsRejected.length}</strong>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsRejected.length > 0 ? (
@@ -626,7 +626,7 @@ const JobManagement = () => {
         )}
         {activeTab === 'pending' && (
           <div>
-            <p>Danh sách công việc chưa được phê duyệt: {jobsPending.length}</p>
+            <strong>Danh sách công việc chưa được phê duyệt: {jobsPending.length}</strong>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsPending.length > 0 ? (

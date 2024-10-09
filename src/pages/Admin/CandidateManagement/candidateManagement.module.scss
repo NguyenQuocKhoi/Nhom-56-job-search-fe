@@ -276,66 +276,255 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   transition: background 0.3s ease;
   height: 100%; /* Make the button take full height of the parent */
   width: 150px;
+  &:hover{
+    background: blue;
+  }
 }
 
-.searchButton:hover {
-  // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+.s{
+  margin-left: 10px;
+}
 
+.btnAddCandidate {
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  border: 6px solid white;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  height: 100%; /* Make the button take full height of the parent */
+  width: 210px;
+  &:hover{
+    background: blue;
+  }
+}
+
+.btnVoHieuHoa{
+  height: 40px;
+  width: 120px;
+  border-radius: 5px;
+  border: 1px solid white;
+  &:hover{
+    background: #a9a3a3;
+  }
 }
 
 //modal
 .modal {
+  // background: red;
 position: fixed;
 top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+// background: rgba(0, 0, 0, 0.5); // Semi-transparent background
 display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1000;
+align-items: flex-start;
+justify-content: flex-start;
+// z-index: 1000;
+}
+.modalMainContent{
+  width: 1200px;
+  background: white;
+  border-radius: 8px;
+  position: relative;
+  // padding: 10px;
+  margin-left: -350px;
+}
+.modalHeader{
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // background: green;
+}
+.modalTitle{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // background: red;
+}
+.modalBody{
+  
+}
+.modalName{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.modalNameCard{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.modalNS{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  // background: red;
+  flex: 1;
+}
+.modalText{
+  width: 94px;
+}
+.modalTextE{
+  width: 54px;
+}
+.modalTextNS{
+  // margin-left: 20px;
+}
+.modalNameCardInput{
+  flex: 1;
+}
+.modalAddressCardCity{
+  // flex: 1;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // background: red;
+  gap: 10px;
+}
+.modalAddressCard{
+  flex: 1;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // background: red;
+  gap: 10px;
+}
+.modalAddress{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.modalInfo{
+  display: flex;
+  gap: 10px;
+  // justify-content: space-between;
+}
+.modalPassword{
+  display: flex;
+  // background: red;
+}
+.modalPasswordInputIcon{
+  display: flex;
+  gap: 10px;
+  // justify-content: center;
+  // align-items: center;
+  // background: red;
+}
+.modalPasswordInput{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.modalBtnPassword{
+  margin-left: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid white;
+  &:hover{
+    background: gray;
+  }
+}
+.nsgt{
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+  // justify-content: center;
+  align-items: center;
+  // background: orange;
+}
+.modalGender{
+  // flex: 1;
+  display: flex;
+  // align-items: center;
+  margin-top: 8px;
+  // background: yellow;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.modalTextSkill{
+  margin-top: 8px;
 }
 
-.modalContent {
-background: #fff;
-padding: 20px;
-border-radius: 8px;
-max-width: 500px; // Maximum width of modal
-max-height: 80vh; // Maximum height of modal
-overflow-y: auto; // Vertical scrollbar if content overflows
-position: relative; // For positioning the close button
+//modal skill
+//close
+.knhv{
+  flex: 1;
+  display: flex;
+  // background: yellow;
 }
-
-.modalContent input[type="text"] {
-width: 100%;
-padding: 10px;
-margin-bottom: 10px;
+.formGroup{
+  // background: green;
+  // justify-content: center;
+  // align-items: center;
+  display: flex;
+  flex: 1;
+  gap: 10px;
 }
-
-.modalContent ul {
-list-style-type: none;
-padding: 0;
-margin: 0;
+.modalHocvan{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  // background: red;
 }
-
-.modalContent li {
-padding: 10px;
-cursor: pointer;
-border-bottom: 1px solid #ddd;
+.openModalButton{
+  border-radius: 5px;
+  height: 40px;
+  border: 1px solid white;
+  background: #1E90FF;
+  color: white;
 }
-
-.modalContent li:hover {
-background-color: #f0f0f0;
+.selectedSkills{
+  // background: #1E90FF;
+  // border: 1px solid white;
+  // margin-top: 10px;
+  // margin-bottom: 10px;
 }
-
-.modalContent .selected {
-background-color: #d0f0c0; // Highlight selected items
+.selectedSkill{
+  background: #1E90FF;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  color: white;
 }
-
-.modalContent button {
-position: absolute;
-top: 10px;
-right: 10px;
+//open
+.modalOverlay{
+  display: flex;
+  width: 120px;
+  // margin-right: 80px;
+  // background: red;
+  justify-content: flex-end;
+}
+.modalSkill{
+  display: flex;
+  // justify-content: flex-end;
+  margin-bottom: 10px;
+}
+.modalContent{
+  // background: red;
+}
+.skillsContainer{
+  // background: red;
+}
+.skillCheckbox{
+  // background: red;
+}
+.closeModalButton{
+  background: #1E90FF;
+  border-radius: 5px;
+  border: 1px solid white;
+  color: white;
+  width: 100%;
 }

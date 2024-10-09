@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import logo from '../../../images/logo.png';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -271,6 +273,13 @@ const CompanyManagement = () => {
     });
   };
 
+  const handleInputChangeD = (value) => {
+    setCompanyData((prevState)=>({
+      ...prevState,
+      description: value,
+    }));
+  };
+
   const handleCreateCompany = async (e) => {
     e.preventDefault();
 
@@ -380,133 +389,159 @@ const CompanyManagement = () => {
 
   return (
     <>
-    <Modal show={showModal} onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Tạo tài khoản công ty</Modal.Title>
+    <Modal show={showModal} onHide={handleCloseModal} className={clsx(styles.modal)} centered>
+      <div className={clsx(styles.modalMainContent)}>
+      <Modal.Header closeButton className={styles.modalHeader}>
+        <Modal.Title className={clsx(styles.modalTitle)}>Tạo tài khoản công ty</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p>Name</p>
-        <input 
-          type="text"
-          id="name"
-          name="name"
-          value={companyData.name}
-          onChange={handleChange} 
-          />
-        <p>Mail</p>
-        <input 
-          type="text" 
-          id="email"
-          name="email"
-          value={companyData.email}
-          onChange={handleChange} 
-        />
-        {/* <p>Password</p>
-        <input 
-          type="text"
-          id="password"
-          name="password" 
-          value={companyData.password}
-          onChange={handleChange}
-        /> */}
-        <div style={{ position: 'relative' }}>
-  <input 
-    type={showPassword ? 'text' : 'password'} 
-    id="password"
-    name="password"
-    value={companyData.password}
-    onChange={handleChange}
-    placeholder="Enter password"
-    style={{ paddingRight: '40px' }}
-  />
+      <Modal.Body className={styles.modalBody}>
+        <div className={clsx(styles.modalName)}>
+          <div className={clsx(styles.modalNameCard)}>
+            <p className={clsx(styles.modalText)}>Tên</p>
+            <input 
+              type="text"
+              id="name"
+              name="name"
+              placeholder='Nhập tên công ty'
+              value={companyData.name}
+              onChange={handleChange} 
+              className={clsx(styles.modalNameCardInput)}
+              />
+          </div>
+          <div className={clsx(styles.modalNameCard)}>
+            <p className={clsx(styles.modalTextE)}>Email</p>
+            <input 
+              type="text" 
+              id="email"
+              name="email"
+              placeholder='Nhập email công ty'
+              value={companyData.email}
+              onChange={handleChange} 
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+        </div>
+        <div className={clsx(styles.modalInfo)}>
+          <div className={clsx(styles.modalNameCard)}>
+            <p className={clsx(styles.modalText)}>Số điện thoại</p>
+            <input 
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder='Nhập số điện thoại'  
+              value={companyData.phoneNumber}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+          <div className={clsx(styles.modalNameCard)}>
+            <p className={clsx(styles.modalTextE)}>Website</p>
+            <input 
+              type="text" 
+              id="website"
+              name="website" 
+              placeholder='Nhập địa chỉ website'
+              value={companyData.website}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+        </div>
+        <div className={clsx(styles.modalPassword)}>
+          <div className={clsx(styles.modalPasswordInputIcon)}>
+            <div className={clsx(styles.modalPasswordInput)}>
+              <p className={clsx(styles.modalText)}>Mật khẩu</p>
+              <input 
+                type={showPassword ? 'text' : 'password'} 
+                id="password"
+                name="password"
+                value={companyData.password}
+                onChange={handleChange}
+                placeholder="Nhập mật khẩu"
+                // style={{ paddingRight: '40px' }}
+              />
+            </div>
 
-  <span 
-    onClick={togglePasswordVisibility} 
-    style={{ position: 'absolute', right: '35px', top: '50%', cursor: 'pointer' }}
-  >
-    { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
-  </span>
+            <span 
+              onClick={togglePasswordVisibility} 
+              style={{ marginTop: '8px', cursor: 'pointer' }}
+            >
+              { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+            </span>
+          </div>
 
-  <button 
-    type="button" 
-    onClick={handleGeneratePassword}
-    style={{ marginLeft: '10px' }}
-  >
-    Generate Password
-  </button>
+          <div>
+            <button 
+              type="button" 
+              onClick={handleGeneratePassword}
+              className={clsx(styles.modalBtnPassword)}
+            >
+              Generate Password
+            </button>
 
-  <button 
-    type="button" 
-    onClick={handleCopyPassword}
-    style={{ marginLeft: '10px' }}
-  >
-    Copy Password
-  </button>
-</div>
-        <p>Phone number</p>
-        <input 
-          type="text"
-          id="phoneNumber"
-          name="phoneNumber"  
-          value={companyData.phoneNumber}
-          onChange={handleChange}
+            <button 
+              type="button" 
+              onClick={handleCopyPassword}
+              className={clsx(styles.modalBtnPassword)}
+            >
+              Copy Password
+            </button>
+          </div>
+        </div>
+        <div className={clsx(styles.modalAddress)}>
+          <div className={clsx(styles.modalAddressCardCity)}>
+            <p className={clsx(styles.modalText)}>Tỉnh/TP</p>
+            <select 
+              id="city" 
+              name="city" 
+              value={companyData.city} 
+              onChange={handleChange} 
+              style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
+            >
+              {cities.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={clsx(styles.modalAddressCard)}>
+            <p>Street</p>
+            <input 
+              type="text" 
+              id="street"
+              name="street"
+              placeholder='Nhập địa chỉ cụ thể' 
+              value={companyData.street}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+        </div>
+        <p>Mô tả</p>
+        <ReactQuill
+          id="description"
+          name="description"
+          value={companyData.description}
+          onChange={handleInputChangeD}
         />
-        {/* <p>City</p>
-        <input 
-          type="text" 
-          id="city"
-          name="city" 
-          value={companyData.city}
-          onChange={handleChange}
-        /> */}
-        <p>City</p>
-<select 
-  id="city" 
-  name="city" 
-  value={companyData.city} 
-  onChange={handleChange} 
-  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
->
-  {cities.map((city, index) => (
-    <option key={index} value={city}>
-      {city}
-    </option>
-  ))}
-</select>
-
-        <p>Street</p>
-        <input 
-          type="text" 
-          id="street"
-          name="street" 
-          value={companyData.street}
-          onChange={handleChange}
-        />
-        <p>Website</p>
-        <input 
-          type="text" 
-          id="website"
-          name="website" 
-          value={companyData.website}
-          onChange={handleChange}
-        />
-        <p>Description</p>
-        <input 
+        {/* <input 
           type="text" 
           id="description"
           name="description" 
           value={companyData.description}
           onChange={handleChange}
-        />
+        /> */}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={styles.modalFooter}>
         <Button variant="secondary" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button variant="secondary" onClick={handleCreateCompany}>
+        <Button variant="primary" onClick={handleCreateCompany}>
           Tạo tài khoản công ty
         </Button>
       </Modal.Footer>
+      </div>
     </Modal>
 
     <div className={styles.companyManagement}>
@@ -514,6 +549,9 @@ const CompanyManagement = () => {
       
       {/* searchBar */}
     <div className={clsx(styles.searchBar)}>
+        
+        <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany)}>Thêm công ty</button>
+
       <div className={clsx(styles.form)}>
       {/* <select 
   id="city" 
@@ -595,15 +633,11 @@ const CompanyManagement = () => {
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
-          Search
+          <strong className={clsx(styles.s)}>Search</strong>          
         </button>
       </div>
     </div>
             {/* searchBar */}
-
-      <div>
-        <button onClick={handleOpenModal}>Thêm công ty</button>
-      </div>
       
 {/* results search */}
 {results && (
@@ -731,7 +765,7 @@ const CompanyManagement = () => {
       <div className={styles.tabContent}>
         {activeTab === 'all' && (
           <div>
-            <p>Danh sách tất cả công ty: {companiesAll.length}</p>
+            <strong>Danh sách tất cả công ty: {companiesAll.length}</strong>
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesAll.length > 0 ? (
@@ -749,7 +783,7 @@ const CompanyManagement = () => {
                             </div>
                           </div>
                         </Link>
-                          <button onClick={() => handleDisableCompany(company._id, company.isActive)}>
+                          <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
@@ -774,18 +808,66 @@ const CompanyManagement = () => {
         )}
         {activeTab === 'accepted' && (
           <div>
-            <p>Danh sách công ty đã chấp nhận: {companiesAccepted.length}</p>
+            <strong>Danh sách công ty đã chấp nhận: {companiesAccepted.length}</strong>
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
-                    <div key={company._id}>
-                    <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
-                      <h3>Company name: {company.name}</h3>
-                      <p>Status: {""+company.status}</p>
-                    </Link>
-                      <button>Vô hiệu hóa</button>
-                      {/* <button>Xóa tài khoản</button> */}
+                    <div key={company._id} className={clsx(styles.content)}>
+                      <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                          <div className={clsx(styles.contentCompanycard)}>
+                            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                            <div className={clsx(styles.contentText)}>
+                              <p><strong>{company.name}</strong></p>
+                              <p>Status: {""+company.status}</p>
+                            </div>
+                          </div>
+                        </Link>
+                          <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
+                            {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                          </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div>No companies available</div>
+                )}
+              </div>
+              <div className={clsx(styles.pagination)}>
+                {pagination.currentPage > 1 && (
+                  <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
+                )}
+                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                {pagination.currentPage < pagination.totalPages && (
+                  <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'rejected' && (
+          <div>
+            <strong>Danh sách công ty đã từ chối: {companiesRejected.length}</strong>
+            <div className={clsx(styles.companylist)}>
+              <div className={clsx(styles.companyContainer)}>
+                {companiesRejected.length > 0 ? (
+                  companiesRejected.map((company) => (
+                    <div key={company._id} className={clsx(styles.content)}>
+                      <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                          <div className={clsx(styles.contentCompanycard)}>
+                            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                            <div className={clsx(styles.contentText)}>
+                              <p><strong>{company.name}</strong></p>
+                              <p>Status: {""+company.status}</p>
+                            </div>
+                          </div>
+                        </Link>
+                          <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
+                            {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                          </button>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -806,33 +888,44 @@ const CompanyManagement = () => {
         )}
         {activeTab === 'pending' && (
           <div>
-            <p>Danh sách công ty chưa được phê duyệt: {companiesPending.length}</p>
+            <strong>Danh sách công ty chưa được phê duyệt: {companiesPending.length}</strong>
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesPending.length > 0 ? (
                   companiesPending.map((company) => (
-                    <div key={company._id}>
-                    <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.companycard)}>
-                      <h3>Company name: {company.name}</h3>
-                      <p>Status: {""+company.status}</p>
-                      </Link>
-                      <button
-                        className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
-                        onClick={() => handleStatusUpdate(company._id, true)}
-                        disabled={buttonState === 'accepted'}
-                      >
-                        Accept
-                      </button>
-                      <button
-                        className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
-                        onClick={() => handleStatusUpdate(company._id, false)}
-                        disabled={buttonState === 'rejected'}
-                      >
-                        Reject
-                      </button>
-                      {/* <button>Bản cập nhật</button> */}
-                      <button>Vô hiệu hóa</button>
-                      {/* <button>Xóa Tài Khoản</button> */}
+                    <div key={company._id} className={clsx(styles.content)}>
+                      <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                          <div className={clsx(styles.contentCompanycard)}>
+                            <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                            <div className={clsx(styles.contentText)}>
+                              <h3><strong>{company.name}</strong></h3>
+                              <p>Status: {""+company.status}</p>
+                            </div>
+                          </div>
+                        </Link>
+                        <div className={clsx(styles.buttonGroup)}>
+                          <button
+                            // className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+                            className={clsx(styles.btnDongY)}
+                            onClick={() => handleStatusUpdate(company._id, true)}
+                            disabled={buttonState === 'accepted'}
+                          >
+                            Accept
+                          </button>
+                          <button
+                            // className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+                            className={clsx(styles.btnTuChoi)}                        
+                            onClick={() => handleStatusUpdate(company._id, false)}
+                            disabled={buttonState === 'rejected'}
+                          >
+                            Reject
+                          </button>
+                          <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
+                            {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))
                 ) : (

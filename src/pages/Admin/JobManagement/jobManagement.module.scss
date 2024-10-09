@@ -129,18 +129,35 @@
       .btnXoa{
         height: 40px;
         width: 80px;
+        border-radius: 5px;
+        border: 1px solid white;
+        &:hover{
+          background: #a9a3a3;
+        }
       }
       .btnDongY{
         height: 40px;
         width: 80px;
         margin-right: 10px;
         background: green;
+        border-radius: 5px;
+        border: 1px solid white;
+        color: white;
+        &:hover{
+          background: rgb(23, 215, 23);
+        }
       }
       .btnTuChoi{
         height: 40px;
         width: 80px;
         margin-right: 10px;
         background: red;
+        border-radius: 5px;
+        border: 1px solid white;
+        color: white;
+        &:hover{
+          background: rgb(252, 84, 84);
+        }
       }
       .contentJobcard{
         display: flex;

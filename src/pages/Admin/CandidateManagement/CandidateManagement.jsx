@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import logo from '../../../images/logo.png';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const cities = [
   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -210,7 +212,8 @@ const CandidateManagement = () => {
   };
 
   //create candidate
-  const handleOpenModal = () => {
+  const handleOpenModal = (event) => {
+    event.preventDefault();
     setShowModal(true);
   };
   const handleCloseModal = () => {
@@ -283,6 +286,13 @@ const CandidateManagement = () => {
     });
   };
 
+  const handleInputChangeD = (value) => {
+    setCandidateData((prevState)=>({
+      ...prevState,
+      moreInformation: value,
+    }));
+  };
+
   const handleCreateCandidate = async (e) => {
     e.preventDefault();
 
@@ -335,125 +345,91 @@ const CandidateManagement = () => {
 
   return (
     <>
-    <Modal show={showModal} onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Tạo tài khoản ứng viên</Modal.Title>
+    <Modal show={showModal} onHide={handleCloseModal} className={clsx(styles.modal)} centered>
+      <div className={clsx(styles.modalMainContent)}>
+      <Modal.Header closeButton className={clsx(styles.modalHeader)}>
+        <Modal.Title className={clsx(styles.modalTitle)}>Tạo tài khoản ứng viên</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p>Name</p>
-        <input 
-          type="text"
-          id="name"
-          name="name"
-          value={candidateData.name}
-          onChange={handleChange} 
-          />
-        <p>Mail</p>
-        <input 
-          type="text" 
-          id="email"
-          name="email"
-          value={candidateData.email}
-          onChange={handleChange} 
-        />
-        {/* <p>Password</p>
-        <input 
-          type="text"
-          id="password"
-          name="password" 
-          value={candidateData.password}
-          onChange={handleChange}
-        /> */}
-        <div style={{ position: 'relative' }}>
-  <input 
-    type={showPassword ? 'text' : 'password'} 
-    id="password"
-    name="password"
-    value={candidateData.password}
-    onChange={handleChange}
-    placeholder="Enter password"
-    style={{ paddingRight: '40px' }}
-  />
+      <Modal.Body className={clsx(styles.modalBody)}>
+        <div className={clsx(styles.modalName)}>
+          <div className={clsx(styles.modalNameCard)}>
+            <p className={clsx(styles.modalText)}>Họ tên</p>
+            <input 
+              type="text"
+              id="name"
+              name="name"
+              placeholder='Nhập họ tên'
+              value={candidateData.name}
+              onChange={handleChange} 
+              className={clsx(styles.modalNameCardInput)}
+              />
+            <p 
+              // className={clsx(styles.modalText)}
+            >Email</p>
+            <input 
+              type="text" 
+              id="email"
+              name="email"
+              placeholder='Nhập email'
+              value={candidateData.email}
+              onChange={handleChange} 
+              className={clsx(styles.modalNameCardInput)}
+            />
+            <p className={clsx(styles.modalText)}>Số điện thoại</p>
+            <input 
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"  
+              placeholder='Nhập số điện thoại'  
+              value={candidateData.phoneNumber}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+        </div>
+        <div className={clsx(styles.modalPassword)}>
+          <div className={clsx(styles.modalPasswordInputIcon)}>
+            <div className={clsx(styles.modalPasswordInput)}>            
+              <p className={clsx(styles.modalText)}>Mật khẩu</p>
+              <input 
+                type={showPassword ? 'text' : 'password'} 
+                id="password"
+                name="password"
+                value={candidateData.password}
+                onChange={handleChange}
+                placeholder="Nhập mật khẩu"
+                // style={{ paddingRight: '40px' }}
+              />
+            </div>
 
-  <span 
-    onClick={togglePasswordVisibility} 
-    style={{ position: 'absolute', right: '35px', top: '50%', cursor: 'pointer' }}
-  >
-    { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
-  </span>
+            <span 
+              onClick={togglePasswordVisibility} 
+              style={{ marginTop: '8px', cursor: 'pointer' }}
+            >
+              { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+            </span>
+          </div>
 
-  <button 
-    type="button" 
-    onClick={handleGeneratePassword}
-    style={{ marginLeft: '10px' }}
-  >
-    Generate Password
-  </button>
+          <div>            
+            <button 
+              type="button" 
+              onClick={handleGeneratePassword}
+              className={clsx(styles.modalBtnPassword)}              
+            >
+              Generate Password
+            </button>
 
-  <button 
-    type="button" 
-    onClick={handleCopyPassword}
-    style={{ marginLeft: '10px' }}
-  >
-    Copy Password
-  </button>
-</div>
-        <p>Phone number</p>
-        <input 
-          type="text"
-          id="phoneNumber"
-          name="phoneNumber"  
-          value={candidateData.phoneNumber}
-          onChange={handleChange}
-        />
-        {/* <p>City</p>
-        <input 
-          type="text" 
-          id="city"
-          name="city" 
-          value={candidateData.city}
-          onChange={handleChange}
-        /> */}
-        <select 
-  id="city" 
-  name="city" 
-  value={candidateData.city} 
-  onChange={handleChange} 
-  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
->
-  {cities.map((city, index) => (
-    <option key={index} value={city}>
-      {city}
-    </option>
-  ))}
-</select>
+            <button 
+              type="button" 
+              onClick={handleCopyPassword}
+              className={clsx(styles.modalBtnPassword)}            
+            >
+              Copy Password
+            </button>
+          </div>
 
-        <p>Street</p>
-        <input 
-          type="text" 
-          id="street"
-          name="street" 
-          value={candidateData.street}
-          onChange={handleChange}
-        />
-        <p>Gender</p>
-        <input 
-          type="text" 
-          id="gender"
-          name="gender" 
-          value={candidateData.gender}
-          onChange={handleChange}
-        />
-        {/* <p>Date of birth</p>
-        <input 
-          type="text" 
-          id="dateOfBirth"
-          name="dateOfBirth" 
-          value={candidateData.dateOfBirth}
-          onChange={handleChange}
-        /> */}
-        <div className={clsx(styles.formGroup)}>
-            <label htmlFor="expiredAt">Date of birth</label>
+          <div className={clsx(styles.modalNS)}>
+            <p className={clsx(styles.modalTextNS)}>Ngày sinh</p>
             <input
               type="date"
               id="dateOfBirth"
@@ -462,93 +438,253 @@ const CandidateManagement = () => {
               onChange={handleChange}
             />
           </div>
-        {/* <p>Skill</p>
-        <input 
-          type="text" 
-          id="description"
-          name="description" 
-          value={candidateData.skill}
-          onChange={handleChange}
-        /> */}
-        <div className={clsx(styles.formGroup)}>
-            <label>Kỹ năng (Yêu cầu)</label>
-            <button type="button" onClick={openModal} className={styles.openModalButton}>
-              Chọn kỹ năng
-            </button>
-            <div className={styles.selectedSkills}>
-              {skillsData
-                .filter(skill => candidateData.skill.includes(skill._id))
-                .map(skill => (
-                  <span key={skill._id} className={styles.selectedSkill}>
-                    {skill.skillName}
-                  </span>
-              ))}
-            </div>
-          </div>
-          {/* Modal for selecting skills */}
-      {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            {/* <h3>Chọn kỹ năng</h3> */}
-            <div className={styles.skillsContainer}>
-              {skillsData.map((skill) => (
-                <div key={skill._id} className={clsx(styles.skillCheckbox)}>
-                  <input
-                    type="checkbox"
-                    id={`skill-${skill._id}`}
-                    checked={candidateData.skill.includes(skill._id)}
-                    onChange={() => handleSkillChange(skill._id)}
-                  />
-                  <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
-                </div>
-              ))}
-            </div>
-            <button onClick={closeModal} className={styles.closeModalButton}>
-              Đóng
-            </button>
+
+          <div className={clsx(styles.modalGender)}>            
+            <p>Giới tính</p>
+            <div>
+              <label>
+                <input 
+                  type="radio" 
+                  id="male" 
+                  name="gender" 
+                  value="male" 
+                  checked={candidateData.gender === "male"} 
+                  onChange={handleChange} 
+                />
+                Male
+              </label>
+
+              <label style={{ marginLeft: '15px' }}>
+                <input 
+                  type="radio" 
+                  id="female" 
+                  name="gender" 
+                  value="female" 
+                  checked={candidateData.gender === "female"} 
+                  onChange={handleChange} 
+                />
+                Female
+              </label>
+            </div>        
           </div>
         </div>
-      )}
-        <p>Experience</p>
-        <input 
-          type="text" 
-          id="experience"
-          name="experience" 
-          value={candidateData.experience}
-          onChange={handleChange}
+        <div className={clsx(styles.modalAddress)}>
+          <div className={clsx(styles.modalAddressCardCity)}>
+            <p className={clsx(styles.modalText)}>Tỉnh/TP</p>
+            <select 
+              id="city" 
+              name="city" 
+              value={candidateData.city} 
+              onChange={handleChange} 
+              style={{ maxHeight: '150px', overflowY: 'auto' }}
+            >
+              {cities.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className={clsx(styles.modalAddressCard)}>
+            <p>Street</p>
+            <input 
+              type="text" 
+              id="street"
+              name="street" 
+              placeholder='Nhập địa chỉ cụ thể' 
+              value={candidateData.street}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+        </div>
+
+        <div className={clsx(styles.nsgt)}>
+          {/* <div className={clsx(styles.formGroup)}> */}
+            {/* <label htmlFor="expiredAt">Ngày sinh</label> */}
+            {/* <div className={clsx(styles.modalAddressCardCity)}>
+              <p className={clsx(styles.modalText)}>Ngày sinh</p>
+              <input
+                type="date"
+                id="dateOfBirth"
+                name="dateOfBirth"
+                value={candidateData.dateOfBirth}
+                onChange={handleChange}
+              />
+            </div> */}
+          {/* </div> */}
+
+          {/* <div className={clsx(styles.modalGender)}>            
+            <p>Giới tính</p>
+            <div>
+              <label>
+                <input 
+                  type="radio" 
+                  id="male" 
+                  name="gender" 
+                  value="male" 
+                  checked={candidateData.gender === "male"} 
+                  onChange={handleChange} 
+                />
+                Male
+              </label>
+
+              <label style={{ marginLeft: '15px' }}>
+                <input 
+                  type="radio" 
+                  id="female" 
+                  name="gender" 
+                  value="female" 
+                  checked={candidateData.gender === "female"} 
+                  onChange={handleChange} 
+                />
+                Female
+              </label>
+            </div>        
+          </div> */}
+          
+          <div className={clsx(styles.knhv)}>
+            <div className={clsx(styles.formGroup)}>
+              <p className={clsx(styles.modalTextSkill)}>Kỹ năng</p>
+              <button type="button" onClick={openModal} className={styles.openModalButton}>
+                Chọn kỹ năng
+              </button>
+              {/* <div className={styles.selectedSkills}>
+                {skillsData
+                  .filter(skill => candidateData.skill.includes(skill._id))
+                  .map(skill => (
+                    <span key={skill._id} className={styles.selectedSkill}>
+                      {skill.skillName}
+                    </span>
+                ))}
+              </div> */}
+
+              <div className={clsx(styles.modalHocvan)}>                
+                <p 
+                // className={clsx(styles.modalText)}
+                >Học vấn</p>
+                <input 
+                  type="text" 
+                  id="education"
+                  name="education" 
+                  value={candidateData.education}
+                  onChange={handleChange}
+                  className={clsx(styles.modalNameCardInput)}
+                />
+              </div>
+            </div>
+
+
+            {/* {isModalOpen && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modalContent}>
+                  <div className={styles.skillsContainer}>
+                    {skillsData.map((skill) => (
+                      <div key={skill._id} className={clsx(styles.skillCheckbox)}>
+                        <input
+                          type="checkbox"
+                          id={`skill-${skill._id}`}
+                          checked={candidateData.skill.includes(skill._id)}
+                          onChange={() => handleSkillChange(skill._id)}
+                        />
+                        <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={closeModal} className={styles.closeModalButton}>
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            )} */}
+          </div>
+        </div>
+
+        <div className={styles.selectedSkills}>
+          {skillsData
+            .filter(skill => candidateData.skill.includes(skill._id))
+            .map(skill => (
+              <span key={skill._id} className={styles.selectedSkill}>
+                {skill.skillName}
+              </span>
+          ))}
+        </div>
+
+        <div className={clsx(styles.modalSkill)}>
+        {isModalOpen && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modalContent}>
+                  <div className={styles.skillsContainer}>
+                    {skillsData.map((skill) => (
+                      <div key={skill._id} className={clsx(styles.skillCheckbox)}>
+                        <input
+                          type="checkbox"
+                          id={`skill-${skill._id}`}
+                          checked={candidateData.skill.includes(skill._id)}
+                          onChange={() => handleSkillChange(skill._id)}
+                        />
+                        <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={closeModal} className={styles.closeModalButton}>
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            )}
+        </div>
+
+      <div className={clsx(styles.modalNameCard)}>
+        {/* <div className={clsx(styles.modalEx)}> */}
+          <p className={clsx(styles.modalText)}>Kinh nghiệm</p>
+          <input 
+            type="text" 
+            id="experience"
+            name="experience" 
+            value={candidateData.experience}
+            onChange={handleChange}
+            className={clsx(styles.modalNameCardInput)}
+          />
+          
+        {/* </div> */}
+      </div>
+
+        <p>Thông tin thêm</p>
+        <ReactQuill
+          id="moreInformation"
+          name="moreInformation"
+          value={candidateData.moreInformation}
+          onChange={handleInputChangeD}
         />
-        <p>Education</p>
-        <input 
-          type="text" 
-          id="education"
-          name="education" 
-          value={candidateData.education}
-          onChange={handleChange}
-        />
-        <p>More information</p>
-        <input 
+        {/* <input 
           type="text" 
           id="moreInformation"
           name="moreInformation" 
           value={candidateData.moreInformation}
           onChange={handleChange}
-        />
+        /> */}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className={clsx(styles.modalFooter)}>
         <Button variant="secondary" onClick={handleCloseModal}>
           Close
         </Button>
-        <Button variant="secondary" onClick={handleCreateCandidate}>
+        <Button variant="primary" onClick={handleCreateCandidate}>
           Tạo tài khoản ứng viên
         </Button>
       </Modal.Footer>
+      </div>
     </Modal>
 
-    <div>
+    <div className={clsx(styles.candidateManagement)}>
       <h2>Quản lí ứng viên</h2>
       
        {/* searchBar */}
        <form className={clsx(styles.searchBar)}>
+
+       <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate)}>Thêm ứng viên</button>
+
       <div className={clsx(styles.form)}>
       {/* <select 
   id="city" 
@@ -630,14 +766,14 @@ const CandidateManagement = () => {
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
-          Search
+          <strong className={clsx(styles.s)}>Search</strong>          
         </button>
       </div>
     </form>
             {/* searchBar */}
-      <div>
-        <button onClick={handleOpenModal}>Thêm ứng viên</button>
-      </div>
+      {/* <div>
+        <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate)}>Thêm ứng viên</button>
+      </div> */}
 
       {results && (
         <div>
@@ -655,7 +791,7 @@ const CandidateManagement = () => {
       )}
 
       {/* content */}
-      <p>Tổng số lượng ứng viên: {candidates.length}</p>
+      <strong>Tổng số lượng ứng viên: {candidates.length}</strong>
       <div className={clsx(styles.candidatelist)}>
       <div className={clsx(styles.candidateContainer)}>
         {candidates.length > 0 ? (
@@ -674,7 +810,7 @@ const CandidateManagement = () => {
                   </div>
                 </Link>
                 <button
-                  className={clsx(styles.btn)}
+                  className={clsx(styles.btnVoHieuHoa)}
                   onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
                 >
                   {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}

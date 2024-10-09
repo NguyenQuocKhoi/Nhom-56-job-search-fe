@@ -54,5 +54,59 @@
   .skillName{
     display: flex;
     justify-content: space-between;
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
+    &:hover{
+      background: #f5f5f5;
+    }
   }
-  
+
+  //
+  .top{
+    display: flex;
+    padding: 10px;
+    margin: 10px;
+    height: 80px;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: white;
+    // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  }
+
+  .inputSkill{
+    flex: 1;
+    margin-right: 10px;
+    height: 40px;
+    margin-bottom: -1px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+  }
+  .btnSua{
+    height: 40px;
+    width: 180px;
+    margin-right: 10px;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    border-radius: 5px;
+    border: 1px solid white;
+    color: white;
+    &:hover{
+      background: blue;
+    }
+  }
+  .btnHuy{
+    height: 40px;
+    width: 80px;
+    margin-right: 10px;
+    background: red;
+    border-radius: 5px;
+    color: white;
+    border: 1px solid white;
+    &:hover{
+      background: rgb(252, 84, 84);
+    }
+  }

@@ -126,21 +126,38 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
       line-height: 1.2;
       width: 270px;
     }
-    .btnXoa{
+    .btnVoHieuHoa{
       height: 40px;
-      width: 80px;
+      width: 120px;
+      border-radius: 5px;
+      border: 1px solid white;
+      &:hover{
+        background: #a9a3a3;
+      }
     }
     .btnDongY{
       height: 40px;
       width: 80px;
       margin-right: 10px;
       background: green;
+      border-radius: 5px;
+      border: 1px solid white;
+      color: white;
+      &:hover{
+        background: rgb(23, 215, 23);
+      }
     }
     .btnTuChoi{
       height: 40px;
       width: 80px;
       margin-right: 10px;
       background: red;
+      border-radius: 5px;
+      border: 1px solid white;
+      color: white;
+      &:hover{
+        background: rgb(252, 84, 84);
+      }
     }
     .contentCompanycard{
       display: flex;
@@ -269,73 +286,152 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   font-size: 1.2rem;
   padding: 0.5rem 1rem;
   // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
-background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   border: 6px solid white;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
   height: 100%; /* Make the button take full height of the parent */
   width: 150px;
+  &:hover{
+    background: blue;
+  }
 }
 
-.searchButton:hover {
-  // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-
+.s{
+  margin-left: 10px;
 }
+
+.btnAddCompany {
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  border: 6px solid white;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  height: 100%; /* Make the button take full height of the parent */
+  width: 200px;
+  &:hover{
+    background: blue;
+  }
+}
+
+// .btnAddCompany:hover {
+//   background: red;
+// }
 
 //modal
 .modal {
+  // background: red;
 position: fixed;
 top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+// background: rgba(0, 0, 0, 0.5); // Semi-transparent background
 display: flex;
-align-items: center;
-justify-content: center;
-z-index: 1000;
+align-items: flex-start;
+justify-content: flex-start;
+// z-index: 1000;
 }
-
-.modalContent {
-background: #fff;
-padding: 20px;
-border-radius: 8px;
-max-width: 500px; // Maximum width of modal
-max-height: 80vh; // Maximum height of modal
-overflow-y: auto; // Vertical scrollbar if content overflows
-position: relative; // For positioning the close button
+.modalMainContent{
+  width: 1200px;
+  background: white;
+  border-radius: 8px;
+  position: relative;
+  // padding: 10px;
+  margin-left: -350px;
 }
-
-.modalContent input[type="text"] {
-width: 100%;
-padding: 10px;
-margin-bottom: 10px;
+.modalHeader{
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // background: green;
 }
-
-.modalContent ul {
-list-style-type: none;
-padding: 0;
-margin: 0;
+.modalTitle{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // background: red;
 }
-
-.modalContent li {
-padding: 10px;
-cursor: pointer;
-border-bottom: 1px solid #ddd;
+.modalName{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
-
-.modalContent li:hover {
-background-color: #f0f0f0;
+.modalNameCard{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
-
-.modalContent .selected {
-background-color: #d0f0c0; // Highlight selected items
+.modalText{
+  width: 94px;
 }
-
-.modalContent button {
-position: absolute;
-top: 10px;
-right: 10px;
+.modalTextE{
+  width: 54px;
+}
+.modalNameCardInput{
+  flex: 1;
+}
+.modalAddressCardCity{
+  // flex: 1;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // background: red;
+  gap: 10px;
+}
+.modalAddressCard{
+  flex: 1;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // background: red;
+  gap: 10px;
+}
+.modalAddress{
+  display: flex;
+  // background: red;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.modalInfo{
+  display: flex;
+  gap: 10px;
+  // justify-content: space-between;
+}
+.modalPassword{
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // background: red;
+}
+.modalPasswordInputIcon{
+  display: flex;
+  gap: 10px;
+  // justify-content: center;
+  // align-items: center;
+  // background: red;
+}
+.modalPasswordInput{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.modalBtnPassword{
+  margin-left: 10px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid white;
+  &:hover{
+    background: gray;
+  }
 }

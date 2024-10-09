@@ -104,17 +104,17 @@ const CategoryManagement = () => {
   return (
     <div>
       <h2>Quản lí danh mục công việc</h2>
-      <p>Tổng số lượng danh mục: {categories.length}</p>
-      <div>
+      <strong>Tổng số lượng danh mục: {categories.length}</strong>
+      <div className={clsx(styles.top)}>
         <input
           type="text"
           value={newCategoryName}
           onChange={(e) => setNewCategoryName(e.target.value)}
           placeholder="Nhập tên danh mục mới"
+          className={clsx(styles.inputCategory)}
         />
-        <button onClick={handleCreateCategory}>Thêm danh mục</button>
+        <button onClick={handleCreateCategory} className={clsx(styles.btnSua)}>Thêm danh mục</button>
       </div>
-      <hr />
 
       <div className={clsx(styles.categorylist)}>
         <div className={clsx(styles.categoryContainer)}>
@@ -122,14 +122,17 @@ const CategoryManagement = () => {
             categories.map((category) => (
               <div key={category._id}>
                 {editingCategoryId === category._id ? (
-                  <div>
+                  <div className={clsx(styles.categoryName)}>
                     <input
                       type="text"
                       value={categoryInput}
                       onChange={(e) => setCategoryInput(e.target.value)}
+                      className={clsx(styles.inputCategory)}
                     />
-                    <button onClick={() => handleUpdateCategory(category._id)}>Xác nhận chỉnh sửa</button>
-                    <button onClick={() => setEditingCategoryId(null)}>Hủy</button>
+                    <div>
+                      <button onClick={() => handleUpdateCategory(category._id)} className={clsx(styles.btnSua)}>Xác nhận chỉnh sửa</button>
+                      <button onClick={() => setEditingCategoryId(null)} className={clsx(styles.btnHuy)}>Hủy</button>
+                    </div>
                   </div>
                 ) : (
                   <div className={clsx(styles.categoryName)}>
@@ -137,12 +140,13 @@ const CategoryManagement = () => {
                     <button onClick={() => {
                       setEditingCategoryId(category._id);
                       setCategoryInput(category.name); // Set the input with current category name
-                    }}>
+                    }}
+                      className={clsx(styles.btnSua)}
+                    >
                       Sửa danh mục
                     </button>
                   </div>
                 )}
-                <hr />
               </div>
             ))
           ) : (
