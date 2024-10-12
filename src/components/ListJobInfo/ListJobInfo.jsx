@@ -64,9 +64,9 @@ const ListJobInfo = () => {
       setFilteredJobs(jobsWithSkills);//
 
       const userData = getUserStorage()?.user;
+      setUserRole(userData?.role || null);
       // const userRole = userData?.role;
       // setUserRole(userRole);
-      setUserRole(userData?.role || null);
 
     // // Fetch category names
     //   const categoryIds = fetchedJobs
@@ -135,18 +135,62 @@ const ListJobInfo = () => {
     setFilterValue(value);
   };
 
+  // const handleFilterValueChange = (value) => {
+  //   setFilterValue(value.toLowerCase()); // Lưu giá trị ở dạng chữ thường
+  //   applyFilters(); // Gọi applyFilters để làm mới danh sách công việc đã lọc
+  // };  
+
   const applyFilters = useCallback(() => {
     let filtered = [...jobs];
 
+    const parseSalary = (salary) => {
+      if (salary.toLowerCase().includes('thỏa thuận')) {
+        return null;       }
+  
+      const cleanSalary = salary.replace(/[^0-9]/g, ''); // Remove all non-numeric characters
+      const salaryValue = parseInt(cleanSalary, 10);
+  
+      return salaryValue || 0; // Return 0 if parsing fails
+    };
+
     if (filterValue !== 'All') {
       filtered = filtered.filter(job => {
-        if (filterCriteria === 'salary') return job.salary.includes(filterValue);
+        const jobSalaryValue = parseSalary(job.salary);
+
+      // Kiểm tra cho "thỏa thuận" không phân biệt hoa thường
+      if (filterValue.toLowerCase() === 'thỏa thuận') {
+        // Nếu bộ lọc là "thỏa thuận", kiểm tra xem lương của công việc có là null không
+        return jobSalaryValue === null;
+      }
+
+      // Đối với các giá trị bộ lọc khác (như khoảng lương), thực hiện logic tiếp theo
+      const [minSalary, maxSalary] = filterValue.split('-').map(val => {
+        return parseSalary(val.trim().replace(/\$|triệu|tr/g, '').trim() + ' triệu');
+      });
+
+      if (filterCriteria === 'salary') {
+        // Kiểm tra xem lương của công việc có nằm trong khoảng được chọn không
+        return jobSalaryValue !== null && jobSalaryValue >= minSalary && jobSalaryValue <= maxSalary;
+      }
+
         if (filterCriteria === 'expiredAt') {
-          const monthYear = new Date(job.expiredAt).toLocaleString('default', { month: 'long', year: 'numeric' });
-          return monthYear === filterValue;
+          const jobExpiredDate = new Date(job.expiredAt);
+          const jobMonth = jobExpiredDate.getMonth() + 1; // getMonth() is 0-based, so add 1 to get the correct month.
+          const jobYear = jobExpiredDate.getFullYear();
+  
+          // Assuming filterValue is in format "MM/YYYY"
+          const [selectedMonth, selectedYear] = filterValue.split('/');
+  
+          return jobMonth === parseInt(selectedMonth) && jobYear.toString() === selectedYear;
         }
         if (filterCriteria === 'type') return job.type === filterValue;
-        if (filterCriteria === 'position') return job.position === filterValue;
+        
+        if (filterCriteria === 'position') {
+          const normalizedJobPosition = job.position.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
+          const normalizedFilterValue = filterValue.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
+          return normalizedJobPosition === normalizedFilterValue; // So sánh
+        }  
+        
         return true;
       });
     }
@@ -219,27 +263,38 @@ const ListJobInfo = () => {
             <>
               <button onClick={() => handleFilterValueChange('1000 - 2000$')} className={clsx(filterValue === '1000 - 2000$' && styles.active)}>1000 - 2000$</button>
               <button onClick={() => handleFilterValueChange('2000 - 3000$')} className={clsx(filterValue === '2000 - 3000$' && styles.active)}>2000 - 3000$</button>
-              <button onClick={() => handleFilterValueChange('Thỏa thuận')} className={clsx(filterValue === 'Thỏa thuận' && styles.active)}>Thỏa thuận</button>
+              <button onClick={() => handleFilterValueChange('10-15 triệu')} className={clsx(filterValue === '10-15 triệu' && styles.active)}>10-15 triệu</button>
+              <button onClick={() => handleFilterValueChange('15-25 triệu')} className={clsx(filterValue === '15-25 triệu' && styles.active)}>15-25 triệu</button>
+              {/* <button onClick={() => handleFilterValueChange('trên 50 triệu')} className={clsx(filterValue === 'trên 50 triệu' && styles.active)}>trên 50 triệu</button> */}
+              {/* <button onClick={() => handleFilterValueChange('Thỏa thuận')} className={clsx(filterValue === 'Thỏa thuận' && styles.active)}>Thỏa thuận</button> */}
+              <button 
+                onClick={() => handleFilterValueChange('Thỏa thuận')} 
+                className={clsx(filterValue === 'thỏa thuận' && styles.active)} // So sánh với chữ thường
+              >
+                Thỏa thuận
+              </button>
             </>
           )}
           {filterCriteria === 'expiredAt' && (
             <>
-              <button onClick={() => handleFilterValueChange('9/2024')} className={clsx(filterValue === '9/2024' && styles.active)}>9/2024</button>
-              <button onClick={() => handleFilterValueChange('10/2024')} className={clsx(filterValue === '10/2024' && styles.active)}>10/2024</button>
               <button onClick={() => handleFilterValueChange('11/2024')} className={clsx(filterValue === '11/2024' && styles.active)}>11/2024</button>
               <button onClick={() => handleFilterValueChange('12/2024')} className={clsx(filterValue === '12/2024' && styles.active)}>12/2024</button>
+              <button onClick={() => handleFilterValueChange('01/2025')} className={clsx(filterValue === '01/2025' && styles.active)}>01/2025</button>
+              <button onClick={() => handleFilterValueChange('02/2025')} className={clsx(filterValue === '02/2025' && styles.active)}>02/2025</button>
             </>
           )}
           {filterCriteria === 'type' && (
             <>
               <button onClick={() => handleFilterValueChange('fulltime')} className={clsx(filterValue === 'fulltime' && styles.active)}>Full time</button>
               <button onClick={() => handleFilterValueChange('parttime')} className={clsx(filterValue === 'parttime' && styles.active)}>Part time</button>
+              <button onClick={() => handleFilterValueChange('intern')} className={clsx(filterValue === 'intern' && styles.active)}>Intern</button>
             </>
           )}
           {filterCriteria === 'position' && (
             <>
-              <button onClick={() => handleFilterValueChange('Full Stack Developer')} className={clsx(filterValue === 'Full Stack Developer' && styles.active)}>Full Stack Developer</button>
+              <button onClick={() => handleFilterValueChange('Fullstack developer')} className={clsx(filterValue === 'Fullstack developer' && styles.active)}>Fullstack developer</button>
               <button onClick={() => handleFilterValueChange('Senior Developer')} className={clsx(filterValue === 'Senior Developer' && styles.active)}>Senior Developer</button>
+              <button onClick={() => handleFilterValueChange('lập trình viên')} className={clsx(filterValue === 'lập trình viên' && styles.active)}>Lập trình viên</button>
             </>
           )}
         </div>

@@ -1,156 +1,296 @@
 .createPostJobPage {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .mainContent {
-    flex: 1;
-    padding: 20px;
-    max-width: 1200px;
-    min-width: 1000px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 6rem; /* Khoảng cách để không bị che khuất bởi header */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
+.mainContent {
+  flex: 1;
+  padding: 20px;
+  // width: 1200px;
+  width: 80%;
+  // max-width: 1200px;
+  // min-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 6rem; /* Khoảng cách để không bị che khuất bởi header */
+
+  margin-bottom: 1rem;
+}
+
+.topThongBaoChuaPheDuyet{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.thongBaoTaoThanhCong{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: blue;
+  background: #f5f5f5;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.pageTitle {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroupTT {
+  display: flex;
+  flex-direction: column;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.formGroupLuong {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  width: 25%;
+}
+
+// .formGroup label {
+//   font-weight: 600;
+//   margin-bottom: 5px;
+//   font-size: 14px;
+// }
+
+// .formGroup input,
+// .formGroup textarea,
+// .formGroup select {
+//   padding: 10px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+//   font-size: 14px;
+// }
+
+// .formGroup textarea {
+//   resize: vertical;
+//   min-height: 100px;
+// }
+
+.midAddress{
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+}
+.midAddressCity{
+  display: flex;
+  flex-direction: column;
+}
+.midAddressStreet{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  // background: green;
+  // margin-left: 31px;
+  .street{
+    // margin-left: 10px;
+    // width: 88.5%;
+    // background: red;
   }
-  
-  .pageTitle {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .formGroup {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  
-  .formGroup label {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 14px;
-  }
-  
-  .formGroup input,
-  .formGroup textarea,
-  .formGroup select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .formGroup textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .createButton,
-  .cancelButton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .createButton {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
-  .createButton:hover {
-    background-color: #0056b3;
-  }
-  
-  .cancelButton {
-    background-color: #dc3545;
-    color: #fff;
-  }
-  
-  .cancelButton:hover {
-    background-color: #c82333;
-  }
-  
-  .status {
-    text-align: center;
-    font-size: 16px;
-    margin-top: 20px;
-  }
-  
-  .status span {
-    font-weight: bold;
-  }
-  
-  //modal
-.modal {
+}
+.midLuong{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: -10px;
+  // background: red;
+}
+.midVitri{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  // background: red;
+  // margin-top: 20px;
+}
+
+.createButton,
+.cancelButton,
+.disabledButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.createButton {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.createButton:hover {
+  background-color: #0056b3;
+}
+
+.disabledButton{
+  background-color: #b7b2b2;
+}
+
+.cancelButton {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.cancelButton:hover {
+  background-color: #c82333;
+}
+
+.status {
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.status span {
+  font-weight: bold;
+}
+
+//modal skill requirement
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
 }
 
 .modalContent {
-  background: #fff;
+  background: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 500px; // Maximum width of modal
-  max-height: 80vh; // Maximum height of modal
-  overflow-y: auto; // Vertical scrollbar if content overflows
-  position: relative; // For positioning the close button
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.skillsContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.openModalButton,
+.closeModalButton {
+  background-color: #007bff;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.selectedSkills {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.selectedSkill {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.errorMessage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+//modal city
+.modal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5); // Semi-transparent background
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
+}
+
+.modalContent {
+background: #fff;
+padding: 20px;
+border-radius: 8px;
+max-width: 500px; // Maximum width of modal
+max-height: 80vh; // Maximum height of modal
+overflow-y: auto; // Vertical scrollbar if content overflows
+position: relative; // For positioning the close button
 }
 
 .modalContent input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+width: 100%;
+padding: 10px;
+margin-bottom: 10px;
 }
 
 .modalContent ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+list-style-type: none;
+padding: 0;
+margin: 0;
 }
 
 .modalContent li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
+padding: 10px;
+cursor: pointer;
+border-bottom: 1px solid #ddd;
 }
 
 .modalContent li:hover {
-  background-color: #f0f0f0;
+background-color: #f0f0f0;
 }
 
 .modalContent .selected {
-  background-color: #d0f0c0; // Highlight selected items
+background-color: #d0f0c0; // Highlight selected items
 }
 
 .modalContent button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+position: absolute;
+top: 10px;
+right: 10px;
 }
+
+

@@ -55,7 +55,8 @@ const InfoCompany = () => {
         
         if (response.data.success) {
           setCompany(response.data.company);
-          setAvatarPreview(response.data.company.avatarUrl);
+          // setAvatarPreview(response.data.company.avatarUrl);
+          setAvatarPreview(response.data.company.avatar);
         } else {
           setError('Failed to fetch company data');
         }
@@ -126,6 +127,18 @@ const InfoCompany = () => {
   };
 
   //city
+  // mới
+  // const handleCitySelect = (selectedCity) => {
+  //   setCompany((prev) => ({
+  //     ...prev,
+  //     pendingUpdates: {
+  //       ...prev.pendingUpdates,
+  //       city: selectedCity,
+  //     },
+  //   }));
+  // };
+  
+  // cũ
   const handleCityInputClick = () => {
     setShowCityModal(true);
   };
@@ -150,104 +163,137 @@ const InfoCompany = () => {
 
   return (
     <div className={clsx(styles.companyInfo)}>
-      <div className={clsx(styles.avatarSection)}>
-        <img src={company.avatar || avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} />
+      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>Thông tin công ty</h2>
+      
+      <div className={clsx(styles.top)}>
+        <div className={clsx(styles.avatarSection)}>
+          {/* <img src={company.avatar || avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
+          <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} />
 
-        <input 
-          type="file" 
-          accept="image/*" 
-          onChange={handleAvatarChange}
-          disabled={!isEditing}
-        />
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleAvatarChange}
+            disabled={!isEditing}
+          />
+        </div>
+
+        <div className={clsx(styles.topInfo)}>
+          <label>Name:</label>
+          <input 
+            type="text" 
+            name="name"
+            value={company.pendingUpdates?.name || company.name || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            className={clsx(getStyleForField('name'))}
+          />
+
+          <label>Email:</label>
+          <input 
+            type="email" 
+            name="email"
+            value={company.email || ""}
+            onChange={handleInputChange}
+            disabled
+            className={clsx(getStyleForField('email'))}
+          />
+
+          <label>Phone Number:</label>
+          <input 
+            type="text" 
+            name="phoneNumber"
+            value={company.pendingUpdates?.phoneNumber || company.phoneNumber || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            className={clsx(getStyleForField('phoneNumber'))}
+          />
+        </div>
+      </div>
+
+      <div className={clsx(styles.mid)}>
+        <div className={clsx(styles.midAddress)}>
+          <p className={clsx(styles.textStreet)}>City:</p>
+          
+          {/* mới */}
+          {/* <div className={clsx(styles.selectContainer)}>
+            <select
+              name='city'
+              className={clsx(styles.select, getStyleForField('city'))}
+              value={company.pendingUpdates?.city || company.city || ""}
+              onChange={handleCitySelect}
+              disabled={!isEditing}
+            >
+              <option value="">Select a city</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div> */}
+
+
+
+          {/* cũ */}
+          <input 
+            type="text" 
+            name="city"
+            value={company.pendingUpdates?.city || company.city || ""}
+            onClick={handleCityInputClick}
+            readOnly
+            disabled={!isEditing}
+            className={clsx(getStyleForField('city'))}
+          />
+          {showCityModal && (
+            <div className={clsx(styles.modal)}>
+              <div className={clsx(styles.modalContent)}>
+                <input 
+                  type="text"
+                  placeholder="Search Cities..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+                <ul>
+                  {filteredCities.map((city) => (
+                    <li 
+                      key={city}
+                      onClick={() => handleCitySelect(city)}
+                    >
+                      {city}
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={() => setShowCityModal(false)}>Close</button>
+              </div>
+            </div>
+          )}
+
+{/*  */}
+          <div className={clsx(styles.midAddressStreet)}>
+            <p className={clsx(styles.textStreet)}>Street:</p>
+            <input 
+              type="text" 
+              name="street"
+              value={company.pendingUpdates?.street || company.street || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className={clsx(styles.street, getStyleForField('street'))}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={clsx(styles.infoSection)}>
-        <h2>Thông tin công ty</h2>
-
-        <label>Name:</label>
-        <input 
-          type="text" 
-          name="name"
-          value={company.pendingUpdates?.name || company.name || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-          className={clsx(getStyleForField('name'))}
-        />
-
-        <label>Email:</label>
-        <input 
-          type="email" 
-          name="email"
-          value={company.email || ""}
-          onChange={handleInputChange}
-          disabled
-          className={clsx(getStyleForField('email'))}
-        />
-
-        <label>Phone Number:</label>
-        <input 
-          type="text" 
-          name="phoneNumber"
-          value={company.pendingUpdates?.phoneNumber || company.phoneNumber || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-          className={clsx(getStyleForField('phoneNumber'))}
-        />
-
-        <label>City:</label>
-        <input 
-          type="text" 
-          name="city"
-          value={company.pendingUpdates?.city || company.city || ""}
-          onClick={handleCityInputClick}
-          readOnly
-          disabled={!isEditing}
-          className={clsx(getStyleForField('city'))}
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
-            </div>
-          </div>
-        )}
-
-        <label>Street:</label>
-        <input 
-          type="text" 
-          name="street"
-          value={company.pendingUpdates?.street || company.street || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-          className={clsx(getStyleForField('street'))}
-        />
-
-        <label>Website:</label>
-        <input 
-          type="text" 
-          name="website"
-          value={company.pendingUpdates?.website || company.website || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-          className={clsx(getStyleForField('website'))}
-        />
+          <label>Website:</label>
+          <input 
+            type="text" 
+            name="website"
+            value={company.pendingUpdates?.website || company.website || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            className={clsx(getStyleForField('website'))}
+          />
 
         <label>Description:</label>
         {/* <textarea
@@ -267,7 +313,6 @@ const InfoCompany = () => {
         />
 
         <div className={clsx(styles.btnContainer)}>
-          {company.pendingUpdates && (<p>Đang chờ phê duyệt</p>)}
           {isEditing ? (
             <>
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
@@ -284,6 +329,11 @@ const InfoCompany = () => {
           )}
         </div>
       </div>
+
+      {company.pendingUpdates && (
+      <div className={clsx(styles.dangchopheduyet)}>
+        <h3>Đang chờ phê duyệt</h3>
+      </div>)}
     </div>
   );
 };

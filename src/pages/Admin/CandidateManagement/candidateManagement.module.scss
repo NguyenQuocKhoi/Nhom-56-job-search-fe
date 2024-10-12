@@ -285,6 +285,14 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   margin-left: 10px;
 }
 
+.createCandidate{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin-left: 18px;
+}
+
 .btnAddCandidate {
   border-radius: 10px;
   font-size: 1.2rem;
@@ -301,10 +309,24 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
     background: blue;
   }
 }
+.btnAddCandidate2 {
+  border-radius: 5px;
+  height: 40px;
+  width: 130px;
+  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  border: 1px solid white;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 20px;
+  &:hover{
+    background: blue;
+  }
+}
 
 .btnVoHieuHoa{
   height: 40px;
-  width: 120px;
+  width: 130px;
   border-radius: 5px;
   border: 1px solid white;
   &:hover{

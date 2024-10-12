@@ -118,12 +118,26 @@ const EditPost = () => {
     });
   };
   const handleChangeD = (value) => {
-    setJobData({
-      ...jobData,
+    setJobData((prevJobData) => ({
+      ...prevJobData,
       description: value
-    });
+    }));
   };
-
+  
+  const handleChangeI = (value) => {
+    setJobData((prevJobData) => ({
+      ...prevJobData,
+      interest: value
+    }));
+  };
+  
+  const handleChangeR = (value) => {
+    setJobData((prevJobData) => ({
+      ...prevJobData,
+      requirements: value
+    }));
+  };
+  
   //edit job xong sửa status lại thành false chờ phê duyệt lại
   const handleEditPostJob = async () => {
     if (isEditing) {
@@ -199,9 +213,8 @@ const EditPost = () => {
       <Header />
       <div className={clsx(styles.mainContent)}>
         <h2 className={clsx(styles.pageTitle)}>Sửa Tin Tuyển Dụng</h2>
-        <form className={clsx(styles.form)}>
-          
-          <div className={clsx(styles.formGroup)}>
+        <form className={clsx(styles.form)}>          
+          <div className={clsx(styles.formGroupTT)}>
             <label htmlFor="title">Tiêu đề</label>
             <input
               type="text"
@@ -212,208 +225,7 @@ const EditPost = () => {
               readOnly={!isEditing}
             />
           </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="requirements">Yêu cầu</label>
-            <textarea
-              id="requirements"
-              name="requirements"
-              value={jobData.requirements}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            ></textarea>
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="interest">Phúc lợi</label>
-            <textarea
-              id="interest"
-              name="interest"
-              value={jobData.interest}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            ></textarea>
-          </div>
-          <label>Requirements skills:</label>
-          <div className={clsx(styles.skillSection)}>
-            {skills.length > 0 ? (
-              skills.map((skill, index) => (
-                <ul key={index}>
-                  <li>
-                  <span className={clsx(styles.skillTag)}>{skill}</span>
-                  </li>
-                </ul>
-              ))
-            ) : (
-              <p>No requirements skills added</p>
-            )}
-          </div>
-          <button 
-            onClick={handleOpenSkillModal} 
-            disabled={!isEditing}
-            type='button'
-          >
-            Chọn kỹ năng
-          </button>
-          
-          {showSkillModal && (
-            <div className={clsx(styles.modal)}>
-              <div className={clsx(styles.modalContent)}>
-                <ul>
-                  {allSkills.map((skill) => (
-                    <li key={skill._id}>
-                      <label>
-                        <input 
-                          type="checkbox" 
-                          // name="skills" 
-                          // value={skill._id}
-                          checked={selectedSkills.includes(skill._id)}//skill có sẵn 
-                          onChange={() => handleSkillToggle(skill._id)}
-                        />
-                        {skill.skillName}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-                <button onClick={handleCloseSkillModal}>Close</button>
-              </div>
-            </div>
-          )}
 
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="salary">Mức lương</label>
-            <input
-              type="text"
-              id="salary"
-              name="salary"
-              value={jobData.salary}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="numberOfCruiment">Số lượng tuyển</label>
-            <input
-              type="number"
-              id="numberOfCruiment"
-              name="numberOfCruiment"
-              value={jobData.numberOfCruiment}
-              onChange={handleChange}
-              onInput={(e) => {
-                if (e.target.value < 0) {
-                  e.target.value = 1;
-                }
-              }}
-              min="1"
-              readOnly={!isEditing}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="experienceLevel">Kinh nghiệm</label>
-            <input
-              type="text"
-              id="experienceLevel"
-              name="experienceLevel"
-              value={jobData.experienceLevel}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="position">Vị trí</label>
-            <input
-              type="text"
-              id="position"
-              name="position"
-              value={jobData.position}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <label>City:</label>
-        <input 
-          type="text" 
-          name="city"
-          value={jobData.city || ""}
-          onClick={handleCityInputClick}
-          readOnly
-          disabled={!isEditing}
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
-            </div>
-          </div>
-        )}
-
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="street">Đường</label>
-            <input
-              type="text"
-              id="street"
-              name="street"
-              value={jobData.street}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="type">Loại công việc</label>
-            <select
-              id="type"
-              name="type"
-              value={jobData.type}
-              onChange={handleChange}
-              disabled={!isEditing}
-            >
-              <option value="fulltime">Full-time</option>
-              <option value="parttime">Part-time</option>
-              <option value="intern">Intern</option>
-            </select>
-          </div>
-          {/*  */}
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="category">Danh mục</label>
-            <select
-              id="category"
-              name="category"
-              value={jobData.category}
-              onChange={handleChange}
-              disabled={!isEditing}
-            >
-              <option value={jobData.category}>{categoryName}</option>
-              {categoryDa.filter((category) => category._id !== jobData.category).map((category) => (
-                <option key={category._id} value={category._id}>{category.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="expiredAt">Ngày hết hạn</label>
-            <input
-              type="date"
-              id="expiredAt"
-              name="expiredAt"
-              value={jobData.expiredAt}
-              onChange={handleChange}
-              readOnly={!isEditing}
-            />
-          </div>
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="description">Mô tả</label>
             {/* <textarea
@@ -431,7 +243,260 @@ const EditPost = () => {
               readOnly={!isEditing}
             />
           </div>
+
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="requirements">Yêu cầu</label>
+            {/* <textarea
+              id="requirements"
+              name="requirements"
+              value={jobData.requirements}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            ></textarea> */}
+            <ReatQuill
+              id="requirements"
+              name="requirements"
+              value={jobData.requirements}
+              onChange={handleChangeR}
+              readOnly={!isEditing}
+            />
+          </div>
+
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="interest">Phúc lợi</label>
+            {/* <textarea
+              id="interest"
+              name="interest"
+              value={jobData.interest}
+              onChange={handleChange}
+              readOnly={!isEditing}
+            ></textarea> */}
+            <ReatQuill
+              id="interest"
+              name="interest"
+              value={jobData.interest}
+              onChange={handleChangeI}
+              readOnly={!isEditing}
+            />
+          </div>
+
+          <div className={clsx(styles.midAddress)}>
+              <div className={clsx(styles.midAddressCity)}>
+              <label>Tỉnh/Thành phố:</label>
+              {/* <input 
+                type="text" 
+                name="city"
+                value={jobData.city || ""}
+                onClick={handleCityInputClick}
+                readOnly
+                disabled={!isEditing}
+              />
+
+              {showCityModal && (
+                <div className={clsx(styles.modal)}>
+                  <div className={clsx(styles.modalContent)}>
+                    <input 
+                      type="text"
+                      placeholder="Search Cities..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                    />
+                    <ul>
+                      {filteredCities.map((city) => (
+                        <li 
+                          key={city}
+                          onClick={() => handleCitySelect(city)}
+                        >
+                          {city}
+                        </li>
+                      ))}
+                    </ul>
+                    <button onClick={() => setShowCityModal(false)}>Close</button>
+                  </div>
+                </div>
+              )} */}
+
+          <select 
+              id="city" 
+              name="city" 
+              value={jobData.city || ""} 
+              onChange={handleChange} 
+              style={{ maxHeight: '150px', overflowY: 'auto' }}
+            >
+              {cities.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+
+              <div className={clsx(styles.midAddressStreet)}>
+                <label htmlFor="street">Đường:</label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  value={jobData.street}
+                  onChange={handleChange}
+                  readOnly={!isEditing}
+                />
+              </div>
+            {/* </div> */}
+          </div>
+
+          <div className={clsx(styles.midLuong)}>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="salary">Mức lương</label>
+              <input
+                type="text"
+                id="salary"
+                name="salary"
+                value={jobData.salary}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="numberOfCruiment">Số lượng tuyển</label>
+              <input
+                type="number"
+                id="numberOfCruiment"
+                name="numberOfCruiment"
+                value={jobData.numberOfCruiment}
+                onChange={handleChange}
+                onInput={(e) => {
+                  if (e.target.value < 0) {
+                    e.target.value = 1;
+                  }
+                }}
+                min="1"
+                readOnly={!isEditing}
+              />
+            </div>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="experienceLevel">Kinh nghiệm</label>
+              <input
+                type="text"
+                id="experienceLevel"
+                name="experienceLevel"
+                value={jobData.experienceLevel}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="expiredAt">Ngày hết hạn</label>
+              <input
+                type="date"
+                id="expiredAt"
+                name="expiredAt"
+                value={jobData.expiredAt}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+          </div>
+
+          <div className={clsx(styles.midVitri)}>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label>Requirements skills:</label>
+              <button 
+                className={clsx(styles.openModalButton)}
+                onClick={handleOpenSkillModal} 
+                disabled={!isEditing}
+                type='button'
+              >
+                Chọn kỹ năng
+              </button>
+              <div className={clsx(styles.selectedSkills)}>
+                {skills.length > 0 ? (
+                  skills.map((skill, index) => (
+                    // <p key={index}>
+                      <span key={index} className={clsx(styles.selectedSkill)}>
+                        {skill}
+                      </span>
+                    // </p>
+                  ))
+                ) : (
+                  <p>No requirements skills added</p>
+                )}
+              </div>
+              
+            </div>
+              
+              {showSkillModal && (
+                <div className={clsx(styles.modalOverlay)}>
+                  <div className={clsx(styles.modalContent)}>
+                    <div className={styles.skillsContainer}>
+                      {allSkills.map((skill) => (
+                        <div key={skill._id} className={clsx(styles.skillCheckbox)}>
+                          {/* <label> */}
+                            <input 
+                              type="checkbox" 
+                              // name="skills" 
+                              // value={skill._id}
+                              checked={selectedSkills.includes(skill._id)}//skill có sẵn 
+                              onChange={() => handleSkillToggle(skill._id)}
+                            />
+                            <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
+                            {/* {skill.skillName} */}
+                          {/* </label> */}
+                        </div>
+                      ))}
+                    </div>
+                    <button onClick={handleCloseSkillModal}>Đóng</button>
+                  </div>
+                </div>
+              )}
+
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="position">Vị trí</label>
+              <input
+                type="text"
+                id="position"
+                name="position"
+                value={jobData.position}
+                onChange={handleChange}
+                readOnly={!isEditing}
+              />
+            </div>
+            
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="type">Loại công việc</label>
+              <select
+                id="type"
+                name="type"
+                value={jobData.type}
+                onChange={handleChange}
+                disabled={!isEditing}
+              >
+                <option value="fulltime">Full-time</option>
+                <option value="parttime">Part-time</option>
+                <option value="intern">Intern</option>
+              </select>
+            </div>
+            {/*  */}
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="category">Danh mục</label>
+              <select
+                id="category"
+                name="category"
+                value={jobData.category}
+                onChange={handleChange}
+                disabled={!isEditing}
+              >
+                <option value={jobData.category}>{categoryName}</option>
+                {categoryDa.filter((category) => category._id !== jobData.category).map((category) => (
+                  <option key={category._id} value={category._id}>{category.name}</option>
+                ))}
+              </select>
+            </div>
+
+          </div>
+                                                  
         </form>
+
         <div className={clsx(styles.actions)}>
           <button className={clsx(styles.createButton)} onClick={handleEditPostJob}>
             {isEditing ? 'Xác nhận chỉnh sửa' : 'Sửa bài đăng'}

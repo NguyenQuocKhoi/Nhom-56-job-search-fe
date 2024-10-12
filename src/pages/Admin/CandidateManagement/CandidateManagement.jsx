@@ -683,7 +683,7 @@ const CandidateManagement = () => {
        {/* searchBar */}
        <form className={clsx(styles.searchBar)}>
 
-       <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate)}>Thêm ứng viên</button>
+        {/* <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate)}>Thêm ứng viên</button> */}
 
       <div className={clsx(styles.form)}>
       {/* <select 
@@ -791,7 +791,11 @@ const CandidateManagement = () => {
       )}
 
       {/* content */}
+    <div className={clsx(styles.createCandidate)}>
       <strong>Tổng số lượng ứng viên: {candidates.length}</strong>
+      <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate2)}>Thêm ứng viên</button>
+    </div>
+
       <div className={clsx(styles.candidatelist)}>
       <div className={clsx(styles.candidateContainer)}>
         {candidates.length > 0 ? (

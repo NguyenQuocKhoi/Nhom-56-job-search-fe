@@ -7,14 +7,40 @@
   .mainContent {
     flex: 1;
     padding: 20px;
-    max-width: 1200px;
-    min-width: 1000px;
+    // width: 1200px;
+    width: 80%;
+    // max-width: 1200px;
+    // min-width: 1000px;
     margin: 0 auto;
-    background: #fff;
-    border-radius: 10px;
+    // background: #fff;
+    border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-top: 6rem; /* Khoảng cách để không bị che khuất bởi header */
 
+    margin-bottom: 1rem;
+  }
+
+  .topThongBaoChuaPheDuyet{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+
+  .thongBaoTaoThanhCong{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: blue;
+    background: #f5f5f5;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
   }
   
   .pageTitle {
@@ -29,36 +55,82 @@
     flex-direction: column;
   }
   
+  .formGroupTT {
+    display: flex;
+    flex-direction: column;
+  }
   .formGroup {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+  }
+  .formGroupLuong {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 25%;
   }
   
-  .formGroup label {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 14px;
-  }
+  // .formGroup label {
+  //   font-weight: 600;
+  //   margin-bottom: 5px;
+  //   font-size: 14px;
+  // }
   
-  .formGroup input,
-  .formGroup textarea,
-  .formGroup select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
+  // .formGroup input,
+  // .formGroup textarea,
+  // .formGroup select {
+  //   padding: 10px;
+  //   border: 1px solid #ccc;
+  //   border-radius: 5px;
+  //   font-size: 14px;
+  // }
   
-  .formGroup textarea {
-    resize: vertical;
-    min-height: 100px;
+  // .formGroup textarea {
+  //   resize: vertical;
+  //   min-height: 100px;
+  // }
+
+  .midAddress{
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
   }
-  
-  .actions {
+  .midAddressCity{
+    display: flex;
+    flex-direction: column;
+  }
+  .midAddressStreet{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    // background: green;
+    // margin-left: 31px;
+    .street{
+      // margin-left: 10px;
+      // width: 88.5%;
+      // background: red;
+    }
+  }
+  .midLuong{
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    gap: 10px;
+    margin-bottom: -10px;
+    // background: red;
+  }
+  .midVitri{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    // background: red;
+    // margin-top: 20px;
   }
   
   .createButton,
@@ -135,14 +207,15 @@
   .closeModalButton {
     background-color: #007bff;
     color: white;
-    padding: 10px;
+    padding: 8px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
   
   .selectedSkills {
-    margin-top: 10px;
+    // margin-top: 10px;
+    margin-bottom: 20px;
   }
   
   .selectedSkill {
@@ -155,7 +228,14 @@
   }
 
   .errorMessage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: red;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
   }
   //modal city
 .modal {

@@ -8,6 +8,7 @@ import Sidebar from '../SideBar/SideBar';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import Overview from '../Overview/Overview';
 import SkillManagement from '../SkillManagement/SkillManagement.jsx';
+import ChangePasswordAdmin from '../ChangePasswordAdmin/ChangePasswordAdmin.jsx';
 
 const AdminLayout = () => {
   const [selectedTab, setSelectedTab] = useState('overview');
@@ -26,6 +27,8 @@ const AdminLayout = () => {
         return <CategoryManagement />;
       case 'skill':
         return <SkillManagement />;
+      case 'changePasswordAdmin':
+        return <ChangePasswordAdmin />;
       default:
         return <Overview />;
     }

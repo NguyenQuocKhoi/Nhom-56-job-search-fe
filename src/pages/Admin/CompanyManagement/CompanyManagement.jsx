@@ -550,7 +550,7 @@ const CompanyManagement = () => {
       {/* searchBar */}
     <div className={clsx(styles.searchBar)}>
         
-        <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany)}>Thêm công ty</button>
+        {/* <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany)}>Thêm công ty</button> */}
 
       <div className={clsx(styles.form)}>
       {/* <select 
@@ -758,14 +758,19 @@ const CompanyManagement = () => {
           className={activeTab === 'pending' ? styles.active : ''} 
           onClick={() => handleTabClick('pending')}
         >
-          Chưa phê duyệt
+          Chưa phê duyệt{`(${companiesPending.length})`}
         </button>
       </div>
 
       <div className={styles.tabContent}>
         {activeTab === 'all' && (
           <div>
-            <strong>Danh sách tất cả công ty: {companiesAll.length}</strong>
+
+        <div className={clsx(styles.createCompany)}>
+          <strong>Danh sách tất cả công ty: {companiesAll.length}</strong>
+          <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany2)}>Thêm công ty</button>
+        </div>
+
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesAll.length > 0 ? (

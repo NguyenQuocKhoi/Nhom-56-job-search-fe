@@ -186,17 +186,27 @@ const PostedDetail = () => {
           </div>
 
           <div className={clsx(styles.thongtinchinh)}>
-            <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
+            {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
               <strong>Interest:</strong> {job.pendingUpdates?.interest || job.interest}
-            </p>
+            </p> */}
             <p><strong>Mô tả:</strong></p>
             <div
               className={clsx({ [styles.highlight]: isFieldDifferent('description') })}
               dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.description || job.description }}
             ></div>
-            <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
+            <p><strong>Yêu cầu:</strong></p>            
+            <div
+              className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}
+              dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.requirements || job.requirements }}
+            ></div>
+            <p><strong>Phúc lợi:</strong></p>            
+            <div
+              className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}
+              dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.interest || job.interest }}
+            ></div>
+            {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
               <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
-            </p>
+            </p> */}
             <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
               <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
@@ -304,7 +314,9 @@ const PostedDetail = () => {
                   </div>
                 </div>
             ) : (
-              <p>No candidates found for this job.</p>
+              <div className={clsx(styles.ds)}>
+                <strong>No candidates applied for this job.</strong>
+              </div>
             )}
           </div>
           {/*  */}

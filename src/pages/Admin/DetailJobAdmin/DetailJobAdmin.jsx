@@ -225,9 +225,9 @@ const DetailJobAdmin = () => {
             </div>
           </div>
           <div className={clsx(styles.thongtinchinh)}>
-            {renderField('Interest', job.interest, job.pendingUpdates?.interest)}
+            {renderField('Interest', job.interest, job.pendingUpdates?.interest, true)}
             {renderField('Description', job.description, job.pendingUpdates?.description, true)}
-            {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements)}
+            {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements, true)}
             <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
             {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}            
           </div>
@@ -282,21 +282,21 @@ const DetailJobAdmin = () => {
       <div className={clsx(styles.buttonContainer)}>
         <button
           className={clsx(styles.button, {
-            [styles.accepted]: buttonState === 'accepted',
-            [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+            // [styles.accepted]: buttonState === 'accepted',
+            // [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
           })}
           onClick={() => handleStatusUpdate(job._id, true)}
-          disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+          // disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
         >
           Accept
         </button>
         <button
           className={clsx(styles.button, {
-            [styles.rejected]: buttonState === 'rejected',
-            [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+            // [styles.rejected]: buttonState === 'rejected',
+            // [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
           })}
           onClick={() => handleStatusUpdate(job._id, false)}
-          disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+          // disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
         >
           Reject
         </button>

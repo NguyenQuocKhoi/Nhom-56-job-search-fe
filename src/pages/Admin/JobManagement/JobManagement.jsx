@@ -485,7 +485,7 @@ const JobManagement = () => {
           className={activeTab === 'pending' ? styles.active : ''} 
           onClick={() => handleTabClick('pending')}
         >
-          Chưa phê duyệt
+          Chưa phê duyệt{`(${jobsPending.length})`}
         </button>
       </div>
 

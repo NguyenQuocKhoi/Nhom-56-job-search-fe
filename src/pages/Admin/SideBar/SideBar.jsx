@@ -40,6 +40,12 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
       >
         Danh mục kỹ năng
       </div>
+      <div
+        className={`${styles.tab} ${selectedTab === 'changePasswordAdmin' ? styles.active : ''}`}
+        onClick={() => setSelectedTab('changePasswordAdmin')}
+      >
+        Đổi mật khẩu admin
+      </div>
     </div>
   );
 };

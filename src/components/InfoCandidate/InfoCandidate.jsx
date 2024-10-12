@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import styles from './infoCandidate.module.scss';
 
@@ -51,7 +51,11 @@ const InfoCandidate = () => {
   const [error, setError] = useState(null);
   const [cvFile, setCvFile] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  // const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(logo);
+  const [initialAvatar, setInitialAvatar] = useState(logo); // Lưu trữ avatar ban đầu
+  const avatarInputRef = useRef(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [fileName, setFileName] = useState('');
 
@@ -74,7 +78,10 @@ const InfoCandidate = () => {
         if (response.data.success) {
           const candidateData = response.data.candidate;
           setCandidate(response.data.candidate);
-          setAvatarPreview(response.data.candidate.avatarUrl); // Hiện avatar
+          // setAvatarPreview(response.data.candidate.avatarUrl); // Hiện avatar
+          setAvatarPreview(response.data.candidate.avatar); 
+          console.log(response.data.candidate.avatar);
+          
 
           setButtonState(response.data.candidate.status);// Lấy status của candidate
           setAutoSearchJobs(response.data.candidate.autoSearchJobs); // Lấy giá trị của auto search job
@@ -89,8 +96,8 @@ const InfoCandidate = () => {
           setSkills(skillNames);
           setSelectedSkills(candidateData.skill);
 
-          console.log("90",candidateData.autoSearchJobs);
-          console.log("91", candidateId);
+          // console.log("90",candidateData.autoSearchJobs);
+          // console.log("91", candidateId);
            
           //auto apply
           // if(candidateData.autoSearchJobs){
@@ -219,9 +226,10 @@ const handleAutoApply = async () => {
         const responseAvatar = await putApiWithToken(`/candidate/upload-avatar/${candidateId}`, formDataAvatar);
         if (!responseAvatar.data.success) {
           setError('Failed to upload avatar');
-          success = false;
+          success = false;          
         } else {
-          setAvatarPreview(responseAvatar.data.candidate.avatarUrl);
+          // setAvatarPreview(responseAvatar.data.candidate.avatarUrl);
+          setAvatarPreview(responseAvatar.data.candidate.avatar);
         }
       }
 
@@ -267,6 +275,36 @@ const handleAutoApply = async () => {
     }
   };
 
+  //đổi ảnh đại diện thấy ngay
+  const handleEdit = () => {
+    setIsEditing(true);
+    setInitialAvatar(avatarPreview); // Lưu lại avatar hiện tại trước khi chỉnh sửa
+  };
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    setAvatarFile(file);
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatarPreview(reader.result);
+    };
+    
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };  
+  const handleCancel = () => {
+    setIsEditing(false);
+    setShowSkillModal(false);
+    setAvatarPreview(initialAvatar); // Khôi phục lại avatar ban đầu
+    setAvatarFile(null); // Hủy bỏ file đã chọn
+
+    if (avatarInputRef.current) {
+      avatarInputRef.current.value = ''; // Đặt lại giá trị input file
+    }
+  };
+  //  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCandidate({ ...candidate, [name]: value });
@@ -288,14 +326,21 @@ const handleAutoApply = async () => {
   };
 
   //city
-  const handleCityInputClick = () => {
-    setShowCityModal(true);
+  const handleCitySelect = (city) => {
+    setCandidate(prevState => ({
+      ...prevState,
+      city,
+    }));
   };
 
-  const handleCitySelect = (city) => {
-    setCandidate({ ...candidate, city });
-    setShowCityModal(false);
-  };
+  // const handleCityInputClick = () => {
+  //   setShowCityModal(true);
+  // };
+
+  // const handleCitySelect = (city) => {
+  //   setCandidate({ ...candidate, city });
+  //   setShowCityModal(false);
+  // };
 
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
@@ -308,112 +353,224 @@ const handleAutoApply = async () => {
 
   return (
     <div className={clsx(styles.candidateInfo)}>
-      <div className={clsx(styles.avatarSection)}>
-        {/* <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
-        <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
-        
-        <input 
-          type="file" 
-          accept="image/*" 
-          onChange={(e) => setAvatarFile(e.target.files[0])}
-          value='' // Clear file input value after selection
-          disabled={!isEditing}
-        />
+      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>Thông tin cá nhân</h2>
+
+      <div className={clsx(styles.top)}>
+        <div className={clsx(styles.avatarSection)}>
+          {/* <img src={avatarPreview || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
+          {/* <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} /> */}
+          
+          {/* <input 
+            type="file" 
+            accept="image/*" 
+            onChange={(e) => setAvatarFile(e.target.files[0])}
+            value='' // Clear file input value after selection
+            disabled={!isEditing}
+          /> */}
+
+          {/* đổi ảnh đại diện thấy ngay */}
+          <img 
+            src={avatarPreview || logo} 
+            alt="Avatar" 
+            className={clsx(styles.avatar)} 
+          />
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleAvatarChange}
+            ref={avatarInputRef}
+            disabled={!isEditing}
+            // style={{width: '240px'}}            
+          />
+        </div>
+
+        <div className={clsx(styles.topInfo)}>
+          <label>Name:</label>
+          <input 
+            type="text" 
+            name="name"
+            value={candidate.name || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+
+          <label>Email:</label>
+          <input 
+            type="email" 
+            name="email"
+            value={candidate.email || ""}
+            onChange={handleInputChange}
+            disabled
+          />
+
+          <label>Phone Number:</label>
+          <input 
+            type="text" 
+            name="phoneNumber"
+            value={candidate.phoneNumber || ""}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+          />
+        </div>
       </div>
 
-      <div className={clsx(styles.infoSection)}>
-        <h2>Thông tin cá nhân</h2>
+      <div className={clsx(styles.mid)}>
+        <div className={clsx(styles.midAddress)}>
+          <p className={clsx(styles.textStreet)}>City:</p>
+          
+          {/* mới */}
+          <div className={clsx(styles.selectContainer)}>
+            <select
+              className={clsx(styles.select)}
+              value={candidate.city || ""}
+              onChange={(e) => handleCitySelect(e.target.value)}
+              disabled={!isEditing}
+            >
+              <option value="">Select a city</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <label>Name:</label>
-        <input 
-          type="text" 
-          name="name"
-          value={candidate.name || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        />
+          {/* cũ */}
+          {/* <input 
+            type="text" 
+            name="city"
+            value={candidate.city || ""}
+            onClick={handleCityInputClick}
+            readOnly
+            disabled={!isEditing}
+          />
+          {showCityModal && (
+            <div className={clsx(styles.modal)}>
+              <div className={clsx(styles.modalContent)}>
+                <input 
+                  type="text"
+                  placeholder="Search Cities..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+                <ul>
+                  {filteredCities.map((city) => (
+                    <li 
+                      key={city}
+                      onClick={() => handleCitySelect(city)}
+                    >
+                      {city}
+                    </li>
+                  ))}
+                </ul>
+                <button onClick={() => setShowCityModal(false)}>Close</button>
+              </div>
+            </div>
+          )} */}
 
-        <label>Email:</label>
-        <input 
-          type="email" 
-          name="email"
-          value={candidate.email || ""}
-          onChange={handleInputChange}
-          disabled
-        />
+          <div className={clsx(styles.midAddressStreet)}>            
+            <p className={clsx(styles.textStreet)}>Street:</p>
+            <input 
+              type="text" 
+              name="street"
+              value={candidate.street || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className={clsx(styles.street)}
+            />
+          </div>
+        </div>
 
-        <label>Phone Number:</label>
-        <input 
-          type="text" 
-          name="phoneNumber"
-          value={candidate.phoneNumber || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        />
+        <div className={clsx(styles.midInfo)}>          
+          <div className={clsx(styles.midInfoSkill)}>
+            <label>Skills:</label>
+            <div className={clsx(styles.skillSection)}>
+              {skills.length > 0 ? (
+                skills.map((skill, index) => (
+                  <ul key={index}>
+                    <li>
+                    <span className={clsx(styles.skillTag)}>{skill}</span>
+                    </li>
+                  </ul>
+                ))
+              ) : (
+                <p>No skills added</p>
+              )}
+            </div>
+            <button 
+              // style={{height: '40px', borderRadius: '5px', border: '1px solid white'}}
+              className={clsx(styles.btnChooseSkill)}
+              onClick={handleOpenSkillModal} 
+              disabled={!isEditing} // Disable button if not editing
+            >
+              Chọn kỹ năng
+            </button>
+            
+            {showSkillModal && (
+              <div className={clsx(styles.modal)}>
+                <div className={clsx(styles.modalContent)}>
+                  <ul>
+                    {allSkills.map((skill) => (
+                      <li key={skill._id}>
+                        <label>
+                          <input 
+                            type="checkbox" 
+                            // name="skills" 
+                            // value={skill._id}
+                            checked={selectedSkills.includes(skill._id)}//skill có sẵn 
+                            onChange={() => handleSkillToggle(skill._id)}
+                          />
+                          {skill.skillName}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={handleCloseSkillModal}>Close</button>
+                </div>
+              </div>
+            )}
+          </div>
 
-        <label>City:</label>
-        <input 
-          type="text" 
-          name="city"
-          value={candidate.city || ""}
-          onClick={handleCityInputClick}
-          readOnly
-          disabled={!isEditing}
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
+          <div className={clsx(styles.midInfoDGC)}>            
+            <p>Date of Birth:</p>
+            <input 
+              type="date" 
+              name="dateOfBirth"
+              value={candidate.dateOfBirth ? new Date(candidate.dateOfBirth).toISOString().substr(0, 10) : ''}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            />
+
+            <p>Gender:</p>
+            <select 
+              name="gender" 
+              value={candidate.gender || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+
+            <div className={clsx(styles.uploadSection)}>
+              <div className={clsx(styles.textCV)}>
+                <p>CV:</p>
+                <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a>
+              </div>
               <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
+                type="file" 
+                accept=".pdf" 
+                onChange={handleFileChange}
+                disabled={!isEditing}
+                style={{width: '240px'}}
               />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
             </div>
           </div>
-        )}
+        </div>
 
-        <label>Street:</label>
-        <input 
-          type="text" 
-          name="street"
-          value={candidate.street || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        />
+      </div>
 
-        <label>Date of Birth:</label>
-        <input 
-          type="date" 
-          name="dateOfBirth"
-          value={candidate.dateOfBirth ? new Date(candidate.dateOfBirth).toISOString().substr(0, 10) : ''}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        />
-
-        <label>Gender:</label>
-        <select 
-          name="gender" 
-          value={candidate.gender || ""}
-          onChange={handleInputChange}
-          disabled={!isEditing}
-        >
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-
+      <div className={clsx(styles.infoSection)}>                        
         <label>Experience:</label>
         <input 
           type="text" 
@@ -432,51 +589,7 @@ const handleAutoApply = async () => {
           disabled={!isEditing}
         />
 
-        <label>Skills:</label>
-        <div className={clsx(styles.skillSection)}>
-          {skills.length > 0 ? (
-            skills.map((skill, index) => (
-              <ul key={index}>
-                <li>
-                 <span className={clsx(styles.skillTag)}>{skill}</span>
-                </li>
-              </ul>
-            ))
-          ) : (
-            <p>No skills added</p>
-          )}
-        </div>
-        <button 
-          onClick={handleOpenSkillModal} 
-          disabled={!isEditing} // Disable button if not editing
-        >
-          Chọn kỹ năng
-        </button>
-        
-        {showSkillModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <ul>
-                {allSkills.map((skill) => (
-                  <li key={skill._id}>
-                    <label>
-                      <input 
-                        type="checkbox" 
-                        // name="skills" 
-                        // value={skill._id}
-                        checked={selectedSkills.includes(skill._id)}//skill có sẵn 
-                        onChange={() => handleSkillToggle(skill._id)}
-                      />
-                      {skill.skillName}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-              <button onClick={handleCloseSkillModal}>Close</button>
-            </div>
-          </div>
-        )}
-        
+                
         <label>More Information:</label>
         {/* <textarea 
           name="moreInformation"
@@ -490,34 +603,26 @@ const handleAutoApply = async () => {
           value={candidate.moreInformation || ""}
           onChange={handleInputChangeD}
           disabled={!isEditing}
-        />
-
-        <div className={clsx(styles.uploadSection)}>
-          <p>CV:</p>
-          <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a>
-          <input 
-            type="file" 
-            accept=".pdf" 
-            onChange={handleFileChange}
-            disabled={!isEditing}
-          />
-        </div>
+        />        
 
         <div className={clsx(styles.btnContainer)}>
 
-        <button onClick={handlePublicAccount}>
+        <button onClick={handlePublicAccount} 
+          // style={{
+          //   borderRadius: '5px',
+          //   border: '1px solid white',
+          // }}
+          className={clsx(styles.btnPublicAccount, {[styles.active]: buttonState})}
+        >
           {buttonState ? 'Private Account' : 'Public Account'}
         </button>
 
         <button
-      onClick={handleAutoApply}
-      style={{
-        backgroundColor: autoSearchJobs ? 'blue' : 'green',
-        color: 'white',
-      }}
-    >
-      {autoSearchJobs ? 'Stop Auto Apply' : 'Auto Apply'}
-    </button>
+          onClick={handleAutoApply}
+          className={clsx(styles.btnAutoApply, { [styles.active]: autoSearchJobs })}
+        >
+          {autoSearchJobs ? 'Stop Auto Apply' : 'Auto Apply'}
+        </button>
         {/* <button onClick={handleAutoApply}>
           Auto Apply
         </button> */}
@@ -529,14 +634,18 @@ const handleAutoApply = async () => {
               <button className={clsx(styles.btnCancel)} 
                 onClick={() => 
                 {
-                  setIsEditing(false)
-                  setShowSkillModal(false)
+                  handleCancel()
+                  // setIsEditing(false)
+                  // setShowSkillModal(false)
                  }}>
                 Hủy
               </button>
             </>
           ) : (
-            <button className={clsx(styles.btnEdit)} onClick={() => setIsEditing(true)}>
+            <button className={clsx(styles.btnEdit)} onClick={() => {
+              setIsEditing(true) 
+              handleEdit()
+              }}>
               Cập nhật thông tin
             </button>
           )}

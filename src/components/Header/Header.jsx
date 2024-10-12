@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import styles from './header.module.scss';
 import logo from '../../images/logo.png';
+import logoUser from '../../images/logoUser.jpeg';
 import { getUserStorage } from '../../Utils/valid';
 import { getApiWithToken, putApiWithToken } from '../../api';
 import Swal from 'sweetalert2';
@@ -32,8 +33,46 @@ const Header = () => {
     // setRole(storedUser ? storedUser.role : null);
   // }, []);
 
+  //avatar mặc định
+  const [avatarPreview, setAvatarPreview] = useState(logo);
+
   const user = getUserStorage()?.user;
   const role = user ? user.role : null;
+
+  //lấy avatar
+  useEffect(() => {
+    const fetchUserAvatar = async () => {
+      if (role === 'candidate') {
+        const candidateId = user._id;
+        try {
+          const response = await getApiWithToken(`/candidate/${candidateId}`);
+          if (response.data.success) {
+            const candidateData = response.data.candidate;
+            setAvatarPreview(candidateData.avatar || logoUser); // Set avatar or default
+          }
+        } catch (error) {
+          console.error('Error fetching candidate avatar', error);
+          setAvatarPreview(logoUser); // Fallback to default on error
+        }
+      } else if (role === 'company') {
+        const companyId = user._id;
+        try {
+          const response = await getApiWithToken(`/company/${companyId}`);
+          if (response.data.success) {
+            const companyData = response.data.company;
+            setAvatarPreview(companyData.avatar || logoUser); // Set avatar or default
+          }
+        } catch (error) {
+          console.error('Error fetching company avatar', error);
+          setAvatarPreview(logoUser); // Fallback to default on error
+        }
+      } else {
+        setAvatarPreview(logoUser); // Set default avatar if no role
+      }
+    };
+
+    fetchUserAvatar();
+  }, [role, user]);
 
   const handleNotificationClick = (notificationId) => {
     const notification = notifications.find(n => n._id === notificationId);
@@ -121,8 +160,28 @@ const Header = () => {
   //   }
   // };
 
+  const checkAndDeleteCV = useCallback(async () => {
+    if (role === 'candidate') {
+      try {
+        const response = await getApiWithToken(`/check-and-delete-cv`, {
+          headers: { 'auth-token': localStorage.getItem('auth-token') }
+        });
+        if (response.data.removedUsers > 0) {
+          Swal.fire({
+            icon: 'warning',
+            title: `${response.data.removedUsers} CV(s) have been deleted due to inactivity.`,
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error checking and deleting CVs', error);
+      }
+    }
+  }, [role]);
+
   useEffect(() => {
     // checkTokenExpiry();
+    checkAndDeleteCV();
     fetchNotifications();
   // }, [fetchNotifications]);
   }, []);
@@ -178,8 +237,19 @@ const Header = () => {
           onClick={() => handleNotificationClick(notification._id)}
           className={clsx({ [styles.unreadNotification]: !notification.status })}
         >
-          {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message}
-          {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+          <div className={clsx(styles.notificationRow)}>
+              <div className={clsx(styles.notificationContent)}>
+                <p>
+                  {notification.message.length > 60 
+                    ? `${notification.message.substring(0, 60)}...` 
+                    : notification.message}
+                </p>
+                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+              </div>
+              {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+            </div>
+          {/* {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message} */}
+          {/* <hr /> */}
         </Dropdown.Item>
       ))
     ) : (
@@ -217,7 +287,8 @@ const Header = () => {
               </div>
               <Dropdown>
                 <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>
-                  <i className="fas fa-user"></i>
+                  {/* <i className="fas fa-user"></i> */}
+                  <img src={avatarPreview} alt="Avatar" className={clsx(styles.avatar)} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/profile">{t('header.profile')}</Dropdown.Item>
@@ -253,8 +324,17 @@ const Header = () => {
                             onClick={() => handleNotificationClick(notification._id)}
                             className={clsx({ [styles.unreadNotification]: !notification.status })}
                           >
-                            {notification.message.length > 30 ? `${notification.message.substring(0, 30)}...` : notification.message}
-                            {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+                            <div className={clsx(styles.notificationRow)}>
+                              <div className={clsx(styles.notificationContent)}>
+                                <p>
+                                  {notification.message.length > 60 
+                                    ? `${notification.message.substring(0, 60)}...` 
+                                    : notification.message}
+                                </p>
+                                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+                              </div>
+                              {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
+                            </div>
                           </Dropdown.Item>
                         ))
                       ) : (
@@ -290,7 +370,8 @@ const Header = () => {
               </div>
               <Dropdown>
                 <Dropdown.Toggle variant="link" className={clsx(styles.navLink)}>
-                  <i className="fas fa-user"></i>
+                  {/* <i className="fas fa-user"></i> */}
+                  <img src={avatarPreview} alt="Avatar" className={clsx(styles.avatar)} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item as={Link} to="/profile">{t('header.profile')}</Dropdown.Item>

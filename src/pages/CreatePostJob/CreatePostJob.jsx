@@ -103,6 +103,18 @@ const CreatePostJob = () => {
       description: value
     });
   };
+  const handleChangeI = (value) => {
+    setJobData({
+      ...jobData,
+      interest: value
+    });
+  };
+  const handleChangeR = (value) => {
+    setJobData({
+      ...jobData,
+      requirements: value
+    });
+  };
 
 
   const handleSkillChange = (skillId) => {
@@ -285,9 +297,12 @@ const CreatePostJob = () => {
     <div className={clsx(styles.createPostJobPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
+      {companyStatus !== true && (
+        <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
+      )}
         <h2 className={clsx(styles.pageTitle)}>Tạo Tin Tuyển Dụng</h2>
         <form className={clsx(styles.form)}>
-          <div className={clsx(styles.formGroup)}>
+          <div className={clsx(styles.formGroupTT)}>
             <label htmlFor="title">Tiêu đề <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
@@ -297,207 +312,7 @@ const CreatePostJob = () => {
               onChange={handleChange}
             />
           </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="requirements">Yêu cầu <span style={{ color: 'red' }}>*</span></label>
-            <textarea
-              id="requirements"
-              name="requirements"
-              value={jobData.requirements}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="salary">Mức lương <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="text"
-              id="salary"
-              name="salary"
-              value={jobData.salary}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="interest">Phúc lợi <span style={{ color: 'red' }}>*</span></label>
-            <textarea
-              id="interest"
-              name="interest"
-              value={jobData.interest}
-              onChange={handleChange}
-            ></textarea>
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="numberOfCruiment">Số lượng tuyển <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="number"
-              id="numberOfCruiment"
-              name="numberOfCruiment"
-              value={jobData.numberOfCruiment}
-              onInput={(e) => {
-                if (e.target.value < 0) {
-                  e.target.value = 1;
-                }
-              }}
-              min="1"
-              onChange={handleChange}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="experienceLevel">Kinh nghiệm <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="text"
-              id="experienceLevel"
-              name="experienceLevel"
-              value={jobData.experienceLevel}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="position">Vị trí <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="text"
-              id="position"
-              name="position"
-              value={jobData.position}
-              onChange={handleChange}
-            />
-          </div>
-          <label>Tỉnh/Thành phố <span style={{ color: 'red' }}>*</span></label>
-        <input 
-          type="text" 
-          name="city"
-          value={jobData.city || ""}
-          onClick={handleCityInputClick}
-          readOnly
-        />
-        {/* City Modal */}
-        {showCityModal && (
-          <div className={clsx(styles.modal)}>
-            <div className={clsx(styles.modalContent)}>
-              <input 
-                type="text"
-                placeholder="Search Cities..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <ul>
-                {filteredCities.map((city) => (
-                  <li 
-                    key={city}
-                    onClick={() => handleCitySelect(city)}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => setShowCityModal(false)}>Close</button>
-            </div>
-          </div>
-        )}
-{/* <select 
-  id="city" 
-  name="city" 
-  value={jobData.city || ""} 
-  onChange={handleChange} 
-  style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
->
-  {cities.map((city, index) => (
-    <option key={index} value={city}>
-      {city}
-    </option>
-  ))}
-</select> */}
 
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="street">Đường <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="text"
-              id="street"
-              name="street"
-              value={jobData.street}
-              onChange={handleChange}
-            />
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="type">Loại công việc <span style={{ color: 'red' }}>*</span></label>
-            <select
-              id="type"
-              name="type"
-              value={jobData.type}
-              onChange={handleChange}
-            >
-              <option value="fulltime">Full-time</option>
-              <option value="parttime">Part-time</option>
-              <option value="intern">Intern</option>
-            </select>
-          </div>
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="category">Danh mục</label>
-            <select
-              id="category"
-              name="category"
-              value={jobData.category}
-              onChange={handleChange}
-            >
-              <option value="">Chọn danh mục <span style={{ color: 'red' }}>*</span></option>
-              {categoryDa.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-           {/* Button to open skills modal */}
-           <div className={clsx(styles.formGroup)}>
-            <label>Kỹ năng (Yêu cầu) <span style={{ color: 'red' }}>*</span></label>
-            <button type="button" onClick={openModal} className={styles.openModalButton}>
-              Chọn kỹ năng
-            </button>
-            <div className={styles.selectedSkills}>
-              {skillsData
-                .filter(skill => jobData.requirementSkills.includes(skill._id))
-                .map(skill => (
-                  <span key={skill._id} className={styles.selectedSkill}>
-                    {skill.skillName}
-                  </span>
-              ))}
-            </div>
-          </div>
-          {/* Modal for selecting skills */}
-      {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            {/* <h3>Chọn kỹ năng</h3> */}
-            <div className={styles.skillsContainer}>
-              {skillsData.map((skill) => (
-                <div key={skill._id} className={clsx(styles.skillCheckbox)}>
-                  <input
-                    type="checkbox"
-                    id={`skill-${skill._id}`}
-                    checked={jobData.requirementSkills.includes(skill._id)}
-                    onChange={() => handleSkillChange(skill._id)}
-                  />
-                  <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
-                </div>
-              ))}
-            </div>
-            <button onClick={closeModal} className={styles.closeModalButton}>
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
-
-          <div className={clsx(styles.formGroup)}>
-            <label htmlFor="expiredAt">Ngày hết hạn <span style={{ color: 'red' }}>*</span></label>
-            <input
-              type="date"
-              id="expiredAt"
-              name="expiredAt"
-              value={jobData.expiredAt}
-              onChange={handleChange}
-            />
-          </div>
           <div className={clsx(styles.formGroup)}>
             <label htmlFor="description">Mô tả <span style={{ color: 'red' }}>*</span></label>
             {/* <textarea
@@ -513,28 +328,266 @@ const CreatePostJob = () => {
               onChange={handleChangeD}
             />
           </div>
-        </form>
-        <div className={clsx(styles.actions)}>
-    <button
-      className={clsx(styles.createButton, { [styles.disabledButton]: companyStatus !== true })}
-      onClick={handleCreatePostJob}
-      disabled={companyStatus !== true}
+
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="requirements">Yêu cầu <span style={{ color: 'red' }}>*</span></label>
+            {/* <textarea
+              id="requirements"
+              name="requirements"
+              value={jobData.requirements}
+              onChange={handleChange}
+            ></textarea> */}
+            <ReatQuill
+              id="requirements"
+              name="requirements"
+              value={jobData.requirements}
+              onChange={handleChangeR}
+            />
+          </div>
+          
+          <div className={clsx(styles.formGroup)}>
+            <label htmlFor="interest">Phúc lợi <span style={{ color: 'red' }}>*</span></label>
+            {/* <textarea
+              id="interest"
+              name="interest"
+              value={jobData.interest}
+              onChange={handleChange}
+            ></textarea> */}
+            <ReatQuill
+              id="interest"
+              name="interest"
+              value={jobData.interest}
+              onChange={handleChangeI}
+            />
+          </div>
+
+          <div className={clsx(styles.midAddress)}>
+          <div className={clsx(styles.midAddressCity)}>
+            <label>Tỉnh/Thành phố <span style={{ color: 'red' }}>*</span></label>
+            {/* <input 
+              type="text" 
+              name="city"
+              value={jobData.city || ""}
+              onClick={handleCityInputClick}
+              readOnly
+            />
+            {showCityModal && (
+              <div className={clsx(styles.modal)}>
+                <div className={clsx(styles.modalContent)}>
+                  <input 
+                    type="text"
+                    placeholder="Search Cities..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
+                  <ul>
+                    {filteredCities.map((city) => (
+                      <li 
+                        key={city}
+                        onClick={() => handleCitySelect(city)}
+                      >
+                        {city}
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={() => setShowCityModal(false)}>Close</button>
+                </div>
+              </div>
+            )} */}
+
+    <select 
+      id="city" 
+      name="city" 
+      value={jobData.city || ""} 
+      onChange={handleChange} 
+      style={{ maxHeight: '150px', overflowY: 'auto' }} // Scrollable dropdown
     >
-      Tạo bài đăng
-    </button>
-    {companyStatus !== true && (
-      <p className={clsx(styles.errorMessage)}>Tài khoản chưa được phê duyệt!</p>
-    )}
+      {cities.map((city, index) => (
+        <option key={index} value={city}>
+          {city}
+        </option>
+      ))}
+    </select>
+          </div>
+
+            <div className={clsx(styles.midAddressStreet)}>
+              <label>Đường <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                value={jobData.street}
+                onChange={handleChange}
+                className={clsx(styles.street)}
+              />
+            </div>
+        </div>
+
+          <div className={clsx(styles.midLuong)}>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="salary">Mức lương <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="text"
+                id="salary"
+                name="salary"
+                value={jobData.salary}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="numberOfCruiment">Số lượng tuyển <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="number"
+                id="numberOfCruiment"
+                name="numberOfCruiment"
+                value={jobData.numberOfCruiment}
+                onInput={(e) => {
+                  if (e.target.value < 0) {
+                    e.target.value = 1;
+                  }
+                }}
+                min="1"
+                onChange={handleChange}
+              />
+            </div>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="experienceLevel">Kinh nghiệm <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="text"
+                id="experienceLevel"
+                name="experienceLevel"
+                value={jobData.experienceLevel}
+                onChange={handleChange}
+              />
+            </div>
+            <div className={clsx(styles.formGroupLuong)}>
+            <label htmlFor="expiredAt">Ngày hết hạn <span style={{ color: 'red' }}>*</span></label>
+            <input
+                type="date"
+                id="expiredAt"
+                name="expiredAt"
+                value={jobData.expiredAt}
+                onChange={handleChange}
+              />
+            </div>
             
+          </div>
+
+          <div className={clsx(styles.midVitri)}>
+            <div className={clsx(styles.formGroupLuong)}>
+              <label>Kỹ năng (Yêu cầu) <span style={{ color: 'red' }}>*</span></label>
+              <button type="button" onClick={openModal} className={styles.openModalButton}>
+                Chọn kỹ năng
+              </button>
+              {/* <div className={styles.selectedSkills}>
+                {skillsData
+                  .filter(skill => jobData.requirementSkills.includes(skill._id))
+                  .map(skill => (
+                    <span key={skill._id} className={styles.selectedSkill}>
+                      {skill.skillName}
+                    </span>
+                ))}
+              </div> */}
+            </div>
+
+          <div className={clsx(styles.formGroupLuong)}>
+            <label htmlFor="position">Vị trí <span style={{ color: 'red' }}>*</span></label>
+            <input
+              type="text"
+              id="position"
+              name="position"
+              value={jobData.position}
+              onChange={handleChange}
+            />
+            </div>
+          
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="type">Loại công việc <span style={{ color: 'red' }}>*</span></label>
+              <select
+                id="type"
+                name="type"
+                value={jobData.type}
+                onChange={handleChange}
+              >
+                <option value="fulltime">Full-time</option>
+                <option value="parttime">Part-time</option>
+                <option value="intern">Intern</option>
+              </select>
+            </div>
+
+            <div className={clsx(styles.formGroupLuong)}>
+              <label htmlFor="category">Danh mục <span style={{ color: 'red' }}>*</span></label>
+              <select
+                id="category"
+                name="category"
+                value={jobData.category}
+                onChange={handleChange}
+              >
+                <option value="">Chọn danh mục</option>
+                {categoryDa.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+          </div>
+
+          <div className={styles.selectedSkills}>
+            {skillsData
+              .filter(skill => jobData.requirementSkills.includes(skill._id))
+              .map(skill => (
+                <span key={skill._id} className={styles.selectedSkill}>
+                  {skill.skillName}
+                </span>
+            ))}
+          </div>
+
+            {isModalOpen && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modalContent}>
+                  <div className={styles.skillsContainer}>
+                    {skillsData.map((skill) => (
+                      <div key={skill._id} className={clsx(styles.skillCheckbox)}>
+                        <input
+                          type="checkbox"
+                          id={`skill-${skill._id}`}
+                          checked={jobData.requirementSkills.includes(skill._id)}
+                          onChange={() => handleSkillChange(skill._id)}
+                        />
+                        <label htmlFor={`skill-${skill._id}`}>{skill.skillName}</label>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={closeModal} className={styles.closeModalButton}>
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            )}                            
+          
+        </form>
+
+        <div className={clsx(styles.actions)}>
+          <button
+            className={clsx(styles.createButton, { [styles.disabledButton]: companyStatus !== true })}
+            onClick={handleCreatePostJob}
+            disabled={companyStatus !== true}
+          >
+            Tạo bài đăng
+          </button>        
+                  
           <button
             className={clsx(styles.cancelButton)}
             onClick={() => navigate(-1)}
           >
-            Hủy
+            Thoát
           </button>
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
-        {successMessage && <div className={clsx(styles.successMessage)}>{successMessage}</div>} {/* Success message */}
+        {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{successMessage}</div>} {/* Success message */}
       </div>
 
       <Footer />

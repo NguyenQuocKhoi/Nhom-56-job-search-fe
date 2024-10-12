@@ -170,7 +170,7 @@ const PostedJobs = () => {
                         </div>
                         <div className={clsx(styles.describe)}>
                           <p>Company: {job.company.name}</p>
-                          <p>Address: {job.address}</p>
+                          <p>Address: {job.street}, {job.city}</p>
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
                           <p>Category: {categories[job.category] || 'No Category'}</p>

@@ -564,12 +564,21 @@ const JobDetail = () => {
           </div>
         
           <div className={clsx(styles.thongtinchinh)}>
-            <p><strong>Phúc lợi:</strong> {job.interest}</p>
+            {/* <p><strong>Phúc lợi:</strong> {job.interest}</p> */}
             <p><strong>Mô tả:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: job.description }}
               ></div>
-            <p><strong>Yêu cầu:</strong> {job.requirements}</p>
+            <p><strong>Phúc lợi:</strong></p>
+            <div
+              dangerouslySetInnerHTML={{ __html: job.interest }}
+              ></div>
+            <p><strong>Yêu cầu:</strong></p>
+            <div
+              dangerouslySetInnerHTML={{ __html: job.requirements }}
+              ></div>
+            {/* <p><strong>Yêu cầu:</strong> {job.requirements}</p> */}
+
             <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
             <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
           </div>
