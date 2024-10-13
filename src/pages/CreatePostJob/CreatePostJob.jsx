@@ -297,9 +297,9 @@ const CreatePostJob = () => {
     <div className={clsx(styles.createPostJobPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-      {companyStatus !== true && (
+      {/* {companyStatus !== true && (
         <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
-      )}
+      )} */}
         <h2 className={clsx(styles.pageTitle)}>Tạo Tin Tuyển Dụng</h2>
         <form className={clsx(styles.form)}>
           <div className={clsx(styles.formGroupTT)}>
@@ -588,6 +588,9 @@ const CreatePostJob = () => {
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
         {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{successMessage}</div>} {/* Success message */}
+        {companyStatus !== true && (
+          <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
+        )}
       </div>
 
       <Footer />

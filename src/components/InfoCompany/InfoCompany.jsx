@@ -213,9 +213,9 @@ const InfoCompany = () => {
 
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
-          <p className={clsx(styles.textStreet)}>City:</p>
           
           {/* mới */}
+          {/* <p className={clsx(styles.textStreet)}>City:</p> */}
           {/* <div className={clsx(styles.selectContainer)}>
             <select
               name='city'
@@ -236,40 +236,49 @@ const InfoCompany = () => {
 
 
           {/* cũ */}
-          <input 
-            type="text" 
-            name="city"
-            value={company.pendingUpdates?.city || company.city || ""}
-            onClick={handleCityInputClick}
-            readOnly
-            disabled={!isEditing}
-            className={clsx(getStyleForField('city'))}
-          />
-          {showCityModal && (
-            <div className={clsx(styles.modal)}>
-              <div className={clsx(styles.modalContent)}>
-                <input 
-                  type="text"
-                  placeholder="Search Cities..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-                <ul>
-                  {filteredCities.map((city) => (
-                    <li 
-                      key={city}
-                      onClick={() => handleCitySelect(city)}
-                    >
-                      {city}
-                    </li>
-                  ))}
-                </ul>
-                <button onClick={() => setShowCityModal(false)}>Close</button>
-              </div>
+          <div className={clsx(styles.midAddressCity)}>
+            <div className={clsx(styles.midCityContainer)}>
+              <p className={clsx(styles.textStreet)}>City:</p>
+              <input 
+                type="text" 
+                name="city"
+                value={company.pendingUpdates?.city || company.city || ""}
+                onClick={handleCityInputClick}
+                readOnly
+                disabled={!isEditing}
+                className={clsx(getStyleForField('city'))}
+              />
             </div>
-          )}
 
-{/*  */}
+            <div className={clsx(styles.modalChooseCity)}>            
+              {showCityModal && !company.pendingUpdates && (
+                // <div className={clsx(styles.modal)}>
+                  <div className={clsx(styles.modalContent)}>
+                    <div className={clsx(styles.searchCityContainer)}>
+                      <input 
+                        type="text"
+                        placeholder="Search Cities..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                      />
+                      <button onClick={() => setShowCityModal(false)} className={clsx(styles.btnCloseModalCity)}>X</button>
+                    </div>
+
+                      {filteredCities.map((city) => (
+                        <li 
+                          key={city}
+                          onClick={() => handleCitySelect(city)}
+                        >
+                          {city}
+                        </li>
+                      ))}
+                    {/* <button onClick={() => setShowCityModal(false)}>Close</button> */}
+                  </div>
+                // </div>
+              )}
+            </div>
+          </div>
+
           <div className={clsx(styles.midAddressStreet)}>
             <p className={clsx(styles.textStreet)}>Street:</p>
             <input 

@@ -52,6 +52,15 @@
   border-radius: 8px;
   padding: 20px 20px 0 20px;
 }
+.midAddressCity{
+  // display: flex;
+  gap: 10px;
+  // background: red;
+}
+.midCityContainer{
+  display: flex;
+  gap: 10px;
+}
 .midAddressStreet{
   flex: 1;
   // background: green;
@@ -61,6 +70,7 @@
   display: flex;
   // justify-content: center;
   .street{
+    height: 40px;
     width: 91.5%;
     // background: #000;
     margin-left: 10px;
@@ -68,7 +78,8 @@
 }
 .textStreet{
   // background: red;
-  align-self: center;
+  // align-self: center;
+  margin-top: 8px;
 }
 .midInfo{
   // background: blue;
@@ -81,6 +92,24 @@
 .midInfoSkill{
   display: flex;
   padding: 20px;
+}
+.modalChooseCity{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  background: white;
+  // background: red;
+}
+.searchCityContainer{
+  // background: red;
+  display: flex;
+  justify-content: space-around;
+}
+.btnCloseModalCity{
+  background: lightgray;
+  border-radius: 49%;
+  color: white;
+  border: 1px solid white;
 }
 .midInfoDGC{
   // background: gray;

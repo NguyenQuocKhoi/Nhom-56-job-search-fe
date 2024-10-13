@@ -385,7 +385,7 @@ const handleAutoApply = async () => {
         </div>
 
         <div className={clsx(styles.topInfo)}>
-          <label>Name:</label>
+          <label>Họ và tên:</label>
           <input 
             type="text" 
             name="name"
@@ -403,7 +403,7 @@ const handleAutoApply = async () => {
             disabled
           />
 
-          <label>Phone Number:</label>
+          <label>Số điện thoại:</label>
           <input 
             type="text" 
             name="phoneNumber"
@@ -416,7 +416,7 @@ const handleAutoApply = async () => {
 
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
-          <p className={clsx(styles.textStreet)}>City:</p>
+          <p className={clsx(styles.textStreet)}>Tỉnh/Thành phố:</p>
           
           {/* mới */}
           <div className={clsx(styles.selectContainer)}>
@@ -469,7 +469,7 @@ const handleAutoApply = async () => {
           )} */}
 
           <div className={clsx(styles.midAddressStreet)}>            
-            <p className={clsx(styles.textStreet)}>Street:</p>
+            <p className={clsx(styles.textStreet)}>Địa chỉ cụ thể:</p>
             <input 
               type="text" 
               name="street"
@@ -483,74 +483,79 @@ const handleAutoApply = async () => {
 
         <div className={clsx(styles.midInfo)}>          
           <div className={clsx(styles.midInfoSkill)}>
-            <label>Skills:</label>
+            <div className={clsx(styles.midBtnSkill)}>
+              <label>Kỹ năng:</label>
+              <button 
+                className={clsx(styles.btnChooseSkill)}
+                onClick={handleOpenSkillModal} 
+                disabled={!isEditing}
+              >
+                Chọn kỹ năng
+              </button>
+            </div>
+
+            <div className={clsx(styles.modalSkill)}>
+              {showSkillModal && (
+                <div className={clsx(styles.modalOverlay)}>
+                  {/* <div className={clsx(styles.modalContent)}> */}
+                      {allSkills.map((skill) => (
+                        <div key={skill._id} className={clsx(styles.skillcard)}>
+                            <input 
+                              type="checkbox" 
+                              checked={selectedSkills.includes(skill._id)}//skill có sẵn 
+                              onChange={() => handleSkillToggle(skill._id)}
+                              className={clsx(styles.skillCheckbox)}
+                            />
+                            <div className={clsx(styles.skillname)}>
+                              {skill.skillName}
+                            </div>
+                        </div>
+                      ))}
+                  {/* </div> */}
+                  <button onClick={handleCloseSkillModal} className={styles.closeModalButton}>Close</button>
+                </div>
+              )}
+            </div>
+            
             <div className={clsx(styles.skillSection)}>
               {skills.length > 0 ? (
                 skills.map((skill, index) => (
-                  <ul key={index}>
-                    <li>
+                  <div key={index} className={clsx(styles.skillContainer)}>
                     <span className={clsx(styles.skillTag)}>{skill}</span>
-                    </li>
-                  </ul>
+                  </div>
                 ))
               ) : (
-                <p>No skills added</p>
+                <p>Chưa cập nhật</p>
               )}
             </div>
-            <button 
-              // style={{height: '40px', borderRadius: '5px', border: '1px solid white'}}
-              className={clsx(styles.btnChooseSkill)}
-              onClick={handleOpenSkillModal} 
-              disabled={!isEditing} // Disable button if not editing
-            >
-              Chọn kỹ năng
-            </button>
             
-            {showSkillModal && (
-              <div className={clsx(styles.modal)}>
-                <div className={clsx(styles.modalContent)}>
-                  <ul>
-                    {allSkills.map((skill) => (
-                      <li key={skill._id}>
-                        <label>
-                          <input 
-                            type="checkbox" 
-                            // name="skills" 
-                            // value={skill._id}
-                            checked={selectedSkills.includes(skill._id)}//skill có sẵn 
-                            onChange={() => handleSkillToggle(skill._id)}
-                          />
-                          {skill.skillName}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                  <button onClick={handleCloseSkillModal}>Close</button>
-                </div>
-              </div>
-            )}
+            
           </div>
 
-          <div className={clsx(styles.midInfoDGC)}>            
-            <p>Date of Birth:</p>
-            <input 
-              type="date" 
-              name="dateOfBirth"
-              value={candidate.dateOfBirth ? new Date(candidate.dateOfBirth).toISOString().substr(0, 10) : ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
+          <div className={clsx(styles.midInfoDGC)}> 
+            <div className={clsx(styles.textNSGT)}>            
+              <p>Ngày sinh:</p>
+              <input 
+                type="date" 
+                name="dateOfBirth"
+                value={candidate.dateOfBirth ? new Date(candidate.dateOfBirth).toISOString().substr(0, 10) : ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </div>           
 
-            <p>Gender:</p>
-            <select 
-              name="gender" 
-              value={candidate.gender || ""}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+            <div className={clsx(styles.textNSGT)}>
+              <p>Giới tính:</p>
+              <select 
+                name="gender" 
+                value={candidate.gender || ""}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
 
             <div className={clsx(styles.uploadSection)}>
               <div className={clsx(styles.textCV)}>
@@ -562,7 +567,6 @@ const handleAutoApply = async () => {
                 accept=".pdf" 
                 onChange={handleFileChange}
                 disabled={!isEditing}
-                style={{width: '240px'}}
               />
             </div>
           </div>
@@ -571,7 +575,7 @@ const handleAutoApply = async () => {
       </div>
 
       <div className={clsx(styles.infoSection)}>                        
-        <label>Experience:</label>
+        <label>Kinh nghiệm:</label>
         <input 
           type="text" 
           name="experience"
@@ -580,7 +584,7 @@ const handleAutoApply = async () => {
           disabled={!isEditing}
         />
 
-        <label>Education:</label>
+        <label>Học vấn:</label>
         <input 
           type="text" 
           name="education"
@@ -590,7 +594,7 @@ const handleAutoApply = async () => {
         />
 
                 
-        <label>More Information:</label>
+        <label>Thông tin thêm:</label>
         {/* <textarea 
           name="moreInformation"
           value={candidate.moreInformation || ""}

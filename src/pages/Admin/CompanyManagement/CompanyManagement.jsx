@@ -642,7 +642,8 @@ const CompanyManagement = () => {
 {/* results search */}
 {results && (
   <div className={clsx(styles.results)}>
-    <p>Kết quả</p>
+    {/* <p>Kết quả</p> */}
+
     {/* <div className={clsx(styles.tabs)}>
       <button
         className={clsx(styles.tabButton, activeTabSearch === 'all' && styles.active)}
@@ -671,18 +672,36 @@ const CompanyManagement = () => {
     </div> */}
 
     {/* Tab result content */}
-    <div className={clsx(styles.tabContentSearch)}>
+    {/* <div className={clsx(styles.tabContentSearch)}> */}
       {/* All Companies */}
       {activeTabSearch === 'all' && (
-        <div>
-          {/* <h3>All Jobs</h3> */}
-          <ul>
-            {results.map((company) => (
-              <Link key={company._id} to={`/detailCompanyAdmin/${company._id}`}>
-                <li>{company.name}</li>
-              </Link>
-            ))}
-          </ul>
+        <div className={clsx(styles.companylist)}>
+          <div className={clsx(styles.companyContainer)}>
+            {/* <h3>All Jobs</h3> */}
+            {results.length > 0 ? (
+              results.map((company) => (
+              <div key={company._id} className={clsx(styles.content)}>
+                <div className={clsx(styles.companycard)}>
+                  <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                    <div className={clsx(styles.contentCompanycard)}>
+                      <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                      <div className={clsx(styles.contentText)}>
+                        <p><strong>{company.name}</strong></p>
+                        <p>{company.website}</p>
+                        <p>{company.street}, {company.city}</p>
+                        <p>Status: {""+company.status}</p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            ))
+          ):(
+                <div className={clsx(styles.companycardK)}>
+                  <p className={clsx(styles.khongtimthay)}>Không tìm thấy kết quả phù hợp</p>
+                </div>
+          )}
+          </div>
         </div>
       )}
 
@@ -731,7 +750,7 @@ const CompanyManagement = () => {
         </div>
       )} */}
     </div>
-  </div>
+  // </div>
 )}
 
       {/* tab content */}

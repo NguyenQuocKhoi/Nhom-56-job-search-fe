@@ -487,7 +487,7 @@ const CandidateManagement = () => {
           </div>
 
           <div className={clsx(styles.modalAddressCard)}>
-            <p>Street</p>
+            <p>Địa chỉ cụ thể:</p>
             <input 
               type="text" 
               id="street"
@@ -776,17 +776,31 @@ const CandidateManagement = () => {
       </div> */}
 
       {results && (
-        <div>
+        <div className={clsx(styles.candidatelist)}>
+          <div className={clsx(styles.candidateContainer)}>
           {results.length > 0 ? (
           results.map((candidate) => (
-            <Link key={candidate._id} to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.candidatecard)}>
-              <h3>{candidate.name}</h3>
-              <hr />
-            </Link>
+            <div key={candidate._id} className={clsx(styles.content)}>
+              <div className={clsx(styles.candidatecard)}>
+                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+                  <div className={clsx(styles.contentCandidatecard)}>
+                    <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
+                    <div className={clsx(styles.contentText)}>
+                      <p><strong>{candidate.name}</strong></p>
+                      <p>{candidate.email}</p>
+                      <p>{candidate.phoneNumber}</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
           ))
         ) : (
-          <div>No candidates available</div>
+          <div className={clsx(styles.candidatecardK)}>
+            <p className={clsx(styles.khongtimthay)}>Không tìm thấy kết quả phù hợp</p>
+          </div>
         )}
+        </div>
         </div>
       )}
 

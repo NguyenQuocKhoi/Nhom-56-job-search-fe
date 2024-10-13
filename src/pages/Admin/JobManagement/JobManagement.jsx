@@ -225,16 +225,46 @@ const JobManagement = () => {
       };
   
       const response = await postApiNoneToken('/job/search', searchParams);
-
-      console.log("82", searchParams);
-      
-      console.log("82", response.data.jobs);
-  
       if (response.data.success) {
-        setResults(response.data.jobs);
-      } else {
+        const jobs = response.data.jobs;
+
+        // Fetch company and skill information for each job
+        const updatedJobs = await Promise.all(
+            jobs.map(async (job) => {
+                // Fetch company details using company ID from the job
+                const companyResponse = await getAPiNoneToken(`/company/${job.company}`);
+                const company = companyResponse.data.company;
+
+                // Fetch skill names based on the job's requirementSkills field
+                const skillsResponses = await Promise.all(
+                    job.requirementSkills.map((skillId) =>
+                        getAPiNoneToken(`/skill/${skillId}`)
+                    )
+                );
+                const skills = skillsResponses.map((res) => res.data.skill.skillName);
+
+                return {
+                    ...job,
+                    companyName: company.name,
+                    companyAvatar: company.avatar,
+                    companyCity: company.city,
+                    companyStreet: company.street,
+                    requirementSkillsNames: skills, // Skill names array
+                };
+            })
+        );
+
+        setResults(updatedJobs); // Update the results with job and company details
+    } else {
         setResults(null);
-      }
+    }
+      // console.log("82", searchParams);
+      // console.log("82", response.data.jobs);
+      // if (response.data.success) {
+      //   setResults(response.data.jobs);
+      // } else {
+      //   setResults(null);
+      // }
     } catch (error) {
       console.error("Search error:", error);
       setResults(null);
@@ -369,7 +399,8 @@ const JobManagement = () => {
       {/* results search */}
       {results && (
   <div className={clsx(styles.results)}>
-    <p>Kết quả</p>
+    {/* <p>Kết quả</p> */}
+
     {/* <div className={clsx(styles.tabs)}> */}
       {/* <button
         className={clsx(styles.tabButton, activeTabSearch === 'all' && styles.active)}
@@ -398,18 +429,45 @@ const JobManagement = () => {
     {/* </div> */}
 
     {/* Tab result content */}
-    <div className={clsx(styles.tabContentSearch)}>
+    {/* <div className={clsx(styles.tabContentSearch)}> */}
       {/* All Jobs */}
       {activeTabSearch === 'all' && (
-        <div>
+        <div className={clsx(styles.joblist)}>
+        <div className={clsx(styles.jobContainer)}>
           {/* <p>All Jobs</p> */}
-          <ul>
-            {results.map((job) => (
-              <Link key={job._id} to={`/detailJobAdmin/${job._id}`}>
-                <li>{job.title}</li>
-              </Link>
-            ))}
-          </ul>
+            {results.length > 0 ? (
+              results.map((job) => (
+              <div key={job._id} className={clsx(styles.content)}>
+                  <div className={clsx(styles.jobcard)}>
+                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                    <div className={clsx(styles.contentJobcard)}>
+                        <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)}/>
+                        <div className={styles.contentText}>
+                          <p>{job.title}</p>
+                          <p>Company: {job.companyName}</p>
+                          <p>Address: {job.street}, {job.city}</p>
+                          <p 
+                            style={{
+                              backgroundColor: 
+                                job.pendingUpdates !== null || job.status === undefined ? 'lightgray' : // Pending
+                                job.status === true ? 'lightgreen' : // Accepted
+                                'lightcoral' // Rejected
+                            }}
+                          >
+                            Trạng thái: {getJobStatus(job)}
+                          </p>
+                        </div>
+                    </div>
+                      </Link>
+                  </div>
+                </div>
+            ))
+          ):(
+            <div className={clsx(styles.jobcardK)}>
+              <p className={clsx(styles.khongtimthay)}>Không tìm thấy kết quả phù hợp</p>
+            </div>
+          )}
+        </div>
         </div>
       )}
 
@@ -458,7 +516,7 @@ const JobManagement = () => {
         </div>
       )} */}
     </div>
-  </div>
+  // </div>
 )}
 
       {/* tab content*/}

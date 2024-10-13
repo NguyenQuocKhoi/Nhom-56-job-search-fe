@@ -50,6 +50,7 @@
   //
   .joblist {
     padding: 1rem;
+    // background: green;
   
     /* Căn giữa phần chứa nội dung */
     .jobContainer {
@@ -58,6 +59,7 @@
       // display: grid;
       // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       // gap: 1rem;
+      // background: red;
     }
   
     .jobcard {
@@ -203,6 +205,32 @@
         align-self: center;
         font-size: 1rem;
       }
+    }
+  }
+
+  .jobcardK {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    cursor: pointer;
+    width: 100%; 
+    max-width: 1200px; 
+    margin-bottom: 10px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+    .khongtimthay{
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 25px;
+      color: gray;
     }
   }
 

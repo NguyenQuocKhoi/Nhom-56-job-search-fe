@@ -21,6 +21,7 @@
   }
 
   .topThongBaoChuaPheDuyet{
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -155,6 +156,7 @@
 
   .disabledButton{
     background-color: #b7b2b2;
+    cursor: not-allowed;
   }
   
   .cancelButton {

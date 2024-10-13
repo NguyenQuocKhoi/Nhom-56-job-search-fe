@@ -261,15 +261,14 @@ const ListJobInfo = () => {
           <button onClick={() => handleFilterValueChange('All')} className={clsx(filterValue === 'All' && styles.active)}>Tất cả</button>
           {filterCriteria === 'salary' && (
             <>
-              <button onClick={() => handleFilterValueChange('1000 - 2000$')} className={clsx(filterValue === '1000 - 2000$' && styles.active)}>1000 - 2000$</button>
-              <button onClick={() => handleFilterValueChange('2000 - 3000$')} className={clsx(filterValue === '2000 - 3000$' && styles.active)}>2000 - 3000$</button>
+              {/* <button onClick={() => handleFilterValueChange('1000 - 2000$')} className={clsx(filterValue === '1000 - 2000$' && styles.active)}>1000 - 2000$</button> */}
+              {/* <button onClick={() => handleFilterValueChange('2000 - 3000$')} className={clsx(filterValue === '2000 - 3000$' && styles.active)}>2000 - 3000$</button> */}
               <button onClick={() => handleFilterValueChange('10-15 triệu')} className={clsx(filterValue === '10-15 triệu' && styles.active)}>10-15 triệu</button>
               <button onClick={() => handleFilterValueChange('15-25 triệu')} className={clsx(filterValue === '15-25 triệu' && styles.active)}>15-25 triệu</button>
               {/* <button onClick={() => handleFilterValueChange('trên 50 triệu')} className={clsx(filterValue === 'trên 50 triệu' && styles.active)}>trên 50 triệu</button> */}
-              {/* <button onClick={() => handleFilterValueChange('Thỏa thuận')} className={clsx(filterValue === 'Thỏa thuận' && styles.active)}>Thỏa thuận</button> */}
               <button 
                 onClick={() => handleFilterValueChange('Thỏa thuận')} 
-                className={clsx(filterValue === 'thỏa thuận' && styles.active)} // So sánh với chữ thường
+                className={clsx(filterValue === 'thỏa thuận' && styles.active)}
               >
                 Thỏa thuận
               </button>
@@ -358,7 +357,7 @@ const ListJobInfo = () => {
             ) : null
           ))
         ) : (
-          <div>No jobs available</div>
+          <div>Không tìm thấy việc làm phù hợp</div>
         )}
       </div>
 
