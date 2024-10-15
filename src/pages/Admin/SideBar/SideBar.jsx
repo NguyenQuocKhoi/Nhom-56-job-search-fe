@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '../SideBar/sideBar.module.scss';
+import clsx from 'clsx';
 
 const Sidebar = ({ setSelectedTab, selectedTab }) => {
   return (
@@ -8,43 +9,50 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
         className={`${styles.tab} ${selectedTab === 'overview' ? styles.active : ''}`}
         onClick={() => setSelectedTab('overview')}
       >
-        Thống kê
+        <i className="fa-solid fa-chart-simple"></i>
+        <p className={clsx(styles.text)}>Thống kê</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'job' ? styles.active : ''}`}
         onClick={() => setSelectedTab('job')}
       >
-        Quản lí việc làm
+        <i className="fa-solid fa-briefcase"></i>
+        <p className={clsx(styles.text)}>Quản lí việc làm</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'company' ? styles.active : ''}`}
         onClick={() => setSelectedTab('company')}
       >
-        Quản lí công ty
+        <i className="fa-solid fa-building"></i>
+        <p className={clsx(styles.text)}>Quản lí công ty</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'candidate' ? styles.active : ''}`}
         onClick={() => setSelectedTab('candidate')}
       >
-        Quản lí ứng viên
+        <i className="fa-solid fa-user"></i>
+        <p className={clsx(styles.text)}>Quản lí ứng viên</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'category' ? styles.active : ''}`}
         onClick={() => setSelectedTab('category')}
       >
-        Danh mục công việc
+        <i className="fa-solid fa-list"></i>
+        <p className={clsx(styles.text)}>Danh mục công việc</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'skill' ? styles.active : ''}`}
         onClick={() => setSelectedTab('skill')}
       >
-        Danh mục kỹ năng
+        <i className="fa-solid fa-bars"></i>
+        <p className={clsx(styles.text)}>Danh mục kỹ năng</p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'changePasswordAdmin' ? styles.active : ''}`}
         onClick={() => setSelectedTab('changePasswordAdmin')}
       >
-        Đổi mật khẩu admin
+        <i className="fa-solid fa-unlock"></i>
+        <p className={clsx(styles.text)}>Đổi mật khẩu admin</p>
       </div>
     </div>
   );

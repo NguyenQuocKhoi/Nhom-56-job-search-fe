@@ -10,6 +10,7 @@
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.4",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "clsx": "^2.1.1",
     "i18next": "^23.14.0",
     "jsonwebtoken": "^9.0.2",

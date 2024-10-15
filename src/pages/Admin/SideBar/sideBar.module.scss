@@ -11,6 +11,8 @@
 }
 
 .tab {
+  display: flex;
+  align-items: center;
   padding: 10px;
   cursor: pointer;
   color: #333;
@@ -21,4 +23,12 @@
   // background-color: #007bff;
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   color: #fff;
+}
+
+.text{
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  // background: red;
+  margin-top: 12px;
 }

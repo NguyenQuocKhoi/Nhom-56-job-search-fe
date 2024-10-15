@@ -13,6 +13,9 @@ import {
   Legend
 } from 'chart.js';
 import { getAPiNoneToken, getApiWithToken } from '../../../api';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
 
 // Đăng ký các thành phần cần thiết cho biểu đồ
 ChartJS.register(
@@ -133,21 +136,44 @@ const Overview = () => {
   //   ],
   // };
 
+  // const options = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: {
+  //       position: 'top',
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: 'Thống kê tổng quan',
+  //       font: {
+  //         size: 20,
+  //       }
+  //     },
+  //   },
+  // };
+
   const options = {
-    responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Thống kê tổng quan',
+      datalabels: {
+        color: '#666', // Màu chữ
+        formatter: (value, context) => {
+          return value; // Hiển thị giá trị
+        },
         font: {
-          size: 20,
+          weight: 'bold', // Định dạng chữ
+          size: 16, // Kích thước chữ
+        },
+        anchor: 'center', // Vị trí
+        align: 'center', // Căn lề
+        formatter: (value, context) => {
+          return value === 0 ? '' : value;
         }
       },
     },
-  };
+    tooltips: {
+      enabled: false,
+    }
+  };  
 
   const [companiesData, setCompaniesData] = useState({ accepted: 0, rejected: 0, pending: 0, total: 0 });
   const [jobsData, setJobsData] = useState({ accepted: 0, rejected: 0, pending: 0, total: 0 });
@@ -285,22 +311,22 @@ const Overview = () => {
 
       <h3>Thống kê tổng quan</h3>
       <div style={{maxWidth: '1000px', margin: '0 auto'}}>
-        <Bar data={barData} />
+        <Bar data={barData} options={options}/>
       </div>
       
       <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '40px' }}>
         <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
-          <Pie data={companyPieData} />
+          <Pie data={companyPieData} options={options} />
           <p>Công ty</p>
         </div>
 
         <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
-          <Pie data={jobPieData} />
+          <Pie data={jobPieData} options={options} />
           <p>Công việc</p>
         </div>
 
         <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
-          <Pie data={candidatePieData} />
+          <Pie data={candidatePieData} options={options} />
           <p>Ứng viên</p>
         </div>
       </div>
