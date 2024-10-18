@@ -96,6 +96,7 @@ const ListJobInfo = () => {
       const savedJobs = savedJobsResponse?.data?.savedJobs || [];
       // console.log('savedJobs',savedJobs);
       
+      console.log("savedJobs.length",savedJobs.length);    
       if(savedJobs.length > 0){
         const savedJobMap = savedJobs.reduce((acc, savedJob) => {
           acc[savedJob.job._id] = {
@@ -318,7 +319,10 @@ const ListJobInfo = () => {
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (
                   <div onClick={() => handleSaveJob(job._id)}>
-                    <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                    <i 
+                      className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')} 
+                      style={{color: savedJobs[job._id]?'red':'gray'}}
+                    ></i>
                   </div>
                 )}
                     </div>

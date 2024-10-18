@@ -469,8 +469,21 @@ const CandidateManagement = () => {
           </div>
         </div>
         <div className={clsx(styles.modalAddress)}>
+        <div className={clsx(styles.modalAddressCard)}>
+            <p className={clsx(styles.modalText)}>Địa chỉ:</p>
+            <input 
+              type="text" 
+              id="street"
+              name="street" 
+              placeholder='Nhập địa chỉ' 
+              value={candidateData.street}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+
           <div className={clsx(styles.modalAddressCardCity)}>
-            <p className={clsx(styles.modalText)}>Tỉnh/TP</p>
+            <p>Tỉnh/TP</p>
             <select 
               id="city" 
               name="city" 
@@ -486,18 +499,7 @@ const CandidateManagement = () => {
             </select>
           </div>
 
-          <div className={clsx(styles.modalAddressCard)}>
-            <p>Địa chỉ cụ thể:</p>
-            <input 
-              type="text" 
-              id="street"
-              name="street" 
-              placeholder='Nhập địa chỉ cụ thể' 
-              value={candidateData.street}
-              onChange={handleChange}
-              className={clsx(styles.modalNameCardInput)}
-            />
-          </div>
+          
         </div>
 
         <div className={clsx(styles.nsgt)}>
@@ -781,8 +783,8 @@ const CandidateManagement = () => {
           {results.length > 0 ? (
           results.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>
-              <div className={clsx(styles.candidatecard)}>
                 <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+              <div className={clsx(styles.candidatecard)}>
                   <div className={clsx(styles.contentCandidatecard)}>
                     <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                     <div className={clsx(styles.contentText)}>
@@ -791,8 +793,8 @@ const CandidateManagement = () => {
                       <p>{candidate.phoneNumber}</p>
                     </div>
                   </div>
-                </Link>
               </div>
+                </Link>
             </div>
           ))
         ) : (
@@ -815,25 +817,31 @@ const CandidateManagement = () => {
         {candidates.length > 0 ? (
           candidates.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>
-              <div className={clsx(styles.candidatecard)}>
                 <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+              <div className={clsx(styles.candidatecard)}>
                   <div className={clsx(styles.contentCandidatecard)}>
                     <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                     <div className={clsx(styles.contentText)}>
                       <p><strong>{candidate.name}</strong></p>
                       <p>{candidate.email}</p>
                       <p>{candidate.phoneNumber}</p>
-                      <p>IsActive: {"" + candidate.isActive}</p>
+                      <p>
+                        Trạng thái: 
+                        {candidate.isActive === true 
+                          ? " Đang hoạt động" 
+                          : " Đã bị vô hiệu hóa"}
+                      </p>
+                      {/* <p>IsActive: {"" + candidate.isActive}</p> */}
                     </div>
                   </div>
-                </Link>
                 <button
                   className={clsx(styles.btnVoHieuHoa)}
                   onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
-                >
+                  >
                   {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                 </button>
               </div>
+                  </Link>
             </div>
           ))
         ) : (

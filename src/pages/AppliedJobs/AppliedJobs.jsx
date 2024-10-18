@@ -134,15 +134,11 @@ const AppliedJobs = () => {
                     <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                   </Link>
                   <Link key={application._id} to={`/detailJob/${application.job}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
+                  <div className={clsx(styles.textInfoJob)}>
                     <p>Công việc: {job ? job.title : "Loading..."}</p>
                     <p>Công ty: {job ? job.company.name : "Loading..."}</p>
                     <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
-                    <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString()}</p>
-                    {/* <p>Trạng thái: {application.status}</p>
-
-                    <i className="fa-regular fa-clock"></i>
-                    <i className="fa-solid fa-check"></i>
-                    <i className="fa-solid fa-x"></i> */}
+                    <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString('vi-VN')}</p>                    
                     <p 
                       style={{ 
                         backgroundColor: 
@@ -157,6 +153,7 @@ const AppliedJobs = () => {
                       {application.status === 'rejected' && <i className="fa-solid fa-x"></i>}
                       {application.status === 'pending' && <i className="fa-regular fa-clock"></i>}
                     </p>
+                  </div>
 
                   </Link>
                 </div>

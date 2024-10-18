@@ -213,6 +213,18 @@ const InfoCompany = () => {
 
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
+
+        <div className={clsx(styles.midAddressStreet)}>
+            <p className={clsx(styles.textStreet)}>Địa chỉ:</p>
+            <input 
+              type="text" 
+              name="street"
+              value={company.pendingUpdates?.street || company.street || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className={clsx(styles.street, getStyleForField('street'))}
+            />
+          </div>
           
           {/* mới */}
           {/* <p className={clsx(styles.textStreet)}>City:</p> */}
@@ -238,7 +250,7 @@ const InfoCompany = () => {
           {/* cũ */}
           <div className={clsx(styles.midAddressCity)}>
             <div className={clsx(styles.midCityContainer)}>
-              <p className={clsx(styles.textStreet)}>City:</p>
+              <p className={clsx(styles.textStreet)}>Tỉnh/Thành phố:</p>
               <input 
                 type="text" 
                 name="city"
@@ -279,7 +291,7 @@ const InfoCompany = () => {
             </div>
           </div>
 
-          <div className={clsx(styles.midAddressStreet)}>
+          {/* <div className={clsx(styles.midAddressStreet)}>
             <p className={clsx(styles.textStreet)}>Street:</p>
             <input 
               type="text" 
@@ -289,7 +301,7 @@ const InfoCompany = () => {
               disabled={!isEditing}
               className={clsx(styles.street, getStyleForField('street'))}
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

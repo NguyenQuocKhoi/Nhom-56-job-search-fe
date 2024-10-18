@@ -76,6 +76,8 @@ const PostedJobs = () => {
   const All = async () => {
     const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
     const { jobs, totalPages } = response.data;
+    console.log(jobs);
+    
     setJobs(jobs);
     setTotalPages(totalPages);
   }
@@ -89,7 +91,7 @@ const PostedJobs = () => {
 
   const Reject = async () => {
     const responseR = await getApiWithToken(`/job/get-jobs-rejected/${companyId}?page=${currentPage}&limit=6`);
-    const { jobs, totalPages } = responseR.data;
+    const { jobs, totalPages } = responseR.data;    
     setJobs(jobs);
     setTotalPages(totalPages);
   }
@@ -97,6 +99,8 @@ const PostedJobs = () => {
   const Pending = async () => {
     const responseP = await getApiWithToken(`/job/get-jobs-pending/${companyId}?page=${currentPage}&limit=6`);
     const { jobs, totalPages } = responseP.data;
+    console.log(jobs);
+
     setJobs(jobs);
     setTotalPages(totalPages);
   }
@@ -121,7 +125,7 @@ const PostedJobs = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <h2>Danh sách tin đã đăng</h2>
+        <p className={clsx(styles.titleLon)}>Danh sách tin đã đăng</p>
 
         <div className={clsx(styles.tabs)}>
           <button
@@ -150,12 +154,21 @@ const PostedJobs = () => {
           </button>
         </div>
 
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : jobs.length === 0 ? (
-          <p>Không có tin đăng nào.</p>
+        {
+        // loading ? (
+        //   <p>Loading...</p>
+        // ) : error ? (
+        //   <p>{error}</p>
+        // ) : 
+        jobs === undefined ? (
+        // jobs.length === 0 ? (
+          <div className={clsx(styles.joblist)}>
+            <div className={clsx(styles.jobContainer)}>
+              <div className={clsx(styles.khongCoTin)}>
+                <p>Không có công việc nào nào.</p>
+              </div>
+            </div>        
+          </div>
         ) : (
           <>
             <div className={clsx(styles.joblist)}>

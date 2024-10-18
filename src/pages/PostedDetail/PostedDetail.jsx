@@ -174,7 +174,7 @@ const PostedDetail = () => {
 
             <div className={clsx(styles.ngang)}>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
-                <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
+                <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
               </p>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
                 <strong>Salary:</strong> {job.pendingUpdates?.salary || job.salary}
@@ -207,13 +207,13 @@ const PostedDetail = () => {
             {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
               <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
             </p> */}
-            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
+            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
-              <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString()}
+              <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
             </p>
             {
               job.pendingUpdates &&
-                (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString()}</p>)
+                (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString('vi-VN')}</p>)
               }
           </div>
 

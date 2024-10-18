@@ -81,7 +81,7 @@ const SavedCandidates = () => {
                       <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>
                       <p>Email: {candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
                       <p>Phone: {candidateDetails[candidate.candidate]?.phone || 'Người dùng chưa cập nhật'}</p>
-                      <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString()}</p>
+                      <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString('vi-VN')}</p>
                     </div>
                   </Link>
                 </div>

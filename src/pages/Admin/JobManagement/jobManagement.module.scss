@@ -167,6 +167,16 @@
       .contentText{
         margin-left: 10px;
       }
+      .skills{
+        display: flex;
+      }
+  
+      .skill{
+        background-color: rgb(197, 197, 197);
+        border-radius: 5px;
+        margin: 5px 5px 5px 0;
+        padding: 2px;
+      }
     }
 
     .avatar{
@@ -206,6 +216,10 @@
         font-size: 1rem;
       }
     }
+  }
+
+  .s{
+    margin-left: 10px;
   }
 
   .jobcardK {

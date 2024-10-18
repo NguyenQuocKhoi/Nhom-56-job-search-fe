@@ -18,6 +18,10 @@ const CategoryManagement = () => {
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
 
+  const [categorySearchInput, setCategorySearchInput] = useState('');
+  const [results, setResults] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const fetchCategories = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -98,12 +102,78 @@ const CategoryManagement = () => {
     }
   };  
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    if (!categorySearchInput) {
+      setErrorMessage('Please provide a Category name');
+      setResults(null);
+      return;
+    }
+
+    try {
+      // Make the POST request to the backend API
+      const response = await postApiWithToken('/category/get-category-by-name', { name: categorySearchInput });
+
+      console.log(response);
+      
+
+      if (response.data.success) {
+        setResults(response.data.data);  // Set the results to display on the interface
+        setErrorMessage('');        // Clear any previous error message
+      } else {
+        setResults(null);           // Clear previous results
+        setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
+      }
+    } catch (error) {
+      console.error("Error during category search:", error);
+      setResults(null);
+      setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
+      // setErrorMessage('Error occurred while searching. Please try again later.');
+    }
+  };  
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div>
       <h2>Quản lí danh mục công việc</h2>
+
+      <form className={clsx(styles.searchBar)}>
+        <div className={clsx(styles.form)}>
+          <input
+            type="text"
+            placeholder="Nhập tên danh mục"
+            className={clsx(styles.jobInput)}
+            id="search"
+            value={categorySearchInput}
+            onChange={(e) => setCategorySearchInput(e.target.value)}
+          />
+          <button 
+            variant="primary" 
+            className={clsx(styles.searchButton)} 
+            onClick={handleSearch}
+          >
+            <i className="fa-solid fa-magnifying-glass"></i>
+            <strong className={clsx(styles.s)}>Search</strong>  
+          </button>
+        </div>
+      </form>
+
+      {results ? (
+        <div>
+          <p>Kết quả:</p>
+          <ul>
+            {results.map((category) => (
+              <li key={category._id}>{category.name}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        errorMessage && <p>{errorMessage}</p>
+      )}
+
       <strong>Tổng số lượng danh mục: {categories.length}</strong>
       <div className={clsx(styles.top)}>
         <input

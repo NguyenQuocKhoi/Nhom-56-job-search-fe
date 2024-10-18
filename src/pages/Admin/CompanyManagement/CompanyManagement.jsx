@@ -215,7 +215,8 @@ const CompanyManagement = () => {
         city: addressInput.trim() || '',
       };
   
-      const response = await postApiNoneToken('/company/search', searchParams);
+      // const response = await postApiNoneToken('/company/search', searchParams);
+      const response = await postApiWithToken('/company/search-by-admin', searchParams);
 
       console.log("70", searchParams);
       
@@ -489,8 +490,21 @@ const CompanyManagement = () => {
           </div>
         </div>
         <div className={clsx(styles.modalAddress)}>
+        <div className={clsx(styles.modalAddressCard)}>
+            <p className={clsx(styles.modalText)}>Địa chỉ:</p>
+            <input 
+              type="text" 
+              id="street"
+              name="street"
+              placeholder='Nhập địa chỉ' 
+              value={companyData.street}
+              onChange={handleChange}
+              className={clsx(styles.modalNameCardInput)}
+            />
+          </div>
+
           <div className={clsx(styles.modalAddressCardCity)}>
-            <p className={clsx(styles.modalText)}>Tỉnh/TP</p>
+            <p>Tỉnh/TP</p>
             <select 
               id="city" 
               name="city" 
@@ -505,18 +519,7 @@ const CompanyManagement = () => {
               ))}
             </select>
           </div>
-          <div className={clsx(styles.modalAddressCard)}>
-            <p>Street</p>
-            <input 
-              type="text" 
-              id="street"
-              name="street"
-              placeholder='Nhập địa chỉ cụ thể' 
-              value={companyData.street}
-              onChange={handleChange}
-              className={clsx(styles.modalNameCardInput)}
-            />
-          </div>
+          
         </div>
         <p>Mô tả</p>
         <ReactQuill
@@ -681,8 +684,8 @@ const CompanyManagement = () => {
             {results.length > 0 ? (
               results.map((company) => (
               <div key={company._id} className={clsx(styles.content)}>
-                <div className={clsx(styles.companycard)}>
                   <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                <div className={clsx(styles.companycard)}>
                     <div className={clsx(styles.contentCompanycard)}>
                       <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                       <div className={clsx(styles.contentText)}>
@@ -692,8 +695,8 @@ const CompanyManagement = () => {
                         <p>Status: {""+company.status}</p>
                       </div>
                     </div>
-                  </Link>
                 </div>
+                  </Link>
               </div>
             ))
           ):(
@@ -795,22 +798,31 @@ const CompanyManagement = () => {
                 {companiesAll.length > 0 ? (
                   companiesAll.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                      <div className={clsx(styles.companycard)}>
                         <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                      <div className={clsx(styles.companycard)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <p><strong>{company.name}</strong></p>
                               <p>{company.website}</p>
                               <p>{company.street}, {company.city}</p>
-                              <p>Status: {""+company.status}</p>
+                              <p>
+                                Trạng thái: 
+                                {company.status === true 
+                                  ? " Đồng ý" 
+                                  : company.status === false 
+                                  ? " Từ chối" 
+                                  : " Chưa phê duyệt"}
+                              </p>
+
+                              {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
-                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
+                        </Link>
                     </div>
                       
                   ))
@@ -838,20 +850,29 @@ const CompanyManagement = () => {
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                      <div className={clsx(styles.companycard)}>
                         <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                      <div className={clsx(styles.companycard)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <p><strong>{company.name}</strong></p>
-                              <p>Status: {""+company.status}</p>
+                              <p>
+                                Trạng thái: 
+                                {company.status === true 
+                                  ? " Đồng ý" 
+                                  : company.status === false 
+                                  ? " Từ chối" 
+                                  : " Chưa phê duyệt"}
+                              </p>
+
+                              {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
-                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
+                        </Link>
                     </div>
                   ))
                 ) : (
@@ -878,20 +899,28 @@ const CompanyManagement = () => {
                 {companiesRejected.length > 0 ? (
                   companiesRejected.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                      <div className={clsx(styles.companycard)}>
                         <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                      <div className={clsx(styles.companycard)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <p><strong>{company.name}</strong></p>
-                              <p>Status: {""+company.status}</p>
+                              <p>
+                                Trạng thái: 
+                                {company.status === true 
+                                  ? " Đồng ý" 
+                                  : company.status === false 
+                                  ? " Từ chối" 
+                                  : " Chưa phê duyệt"}
+                              </p>
+                              {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
-                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
+                        </Link>
                     </div>
                   ))
                 ) : (
@@ -918,16 +947,23 @@ const CompanyManagement = () => {
                 {companiesPending.length > 0 ? (
                   companiesPending.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                      <div className={clsx(styles.companycard)}>
                         <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                      <div className={clsx(styles.companycard)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <h3><strong>{company.name}</strong></h3>
-                              <p>Status: {""+company.status}</p>
+                              <p>
+                                Trạng thái: 
+                                {company.status === true 
+                                  ? " Đồng ý" 
+                                  : company.status === false 
+                                  ? " Từ chối" 
+                                  : " Chưa phê duyệt"}
+                              </p>
+                              {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
-                        </Link>
                         <div className={clsx(styles.buttonGroup)}>
                           <button
                             // className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
@@ -950,6 +986,7 @@ const CompanyManagement = () => {
                           </button>
                         </div>
                       </div>
+                      </Link>
                     </div>
                   ))
                 ) : (

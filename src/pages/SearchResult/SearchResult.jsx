@@ -348,15 +348,19 @@ const SearchResult = () => {
                 {results.jobs.length > 0 ? (
                   results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
+                        <Link to={`/detailJob/${job._id}`} 
+                  target="_blank" rel="noopener noreferrer" 
+                  className={clsx(styles.linkJob)}>
+
               <div className={clsx(styles.content)}>
                 <Link to={`/detailCompany/${job.company}`} 
                   target="_blank" rel="noopener noreferrer"
                 >
                   <img src={job.companyAvatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                 </Link>
-                <Link to={`/detailJob/${job._id}`} 
+                {/* <Link to={`/detailJob/${job._id}`} 
                   target="_blank" rel="noopener noreferrer" 
-                  className={clsx(styles.linkJob)}>
+                  className={clsx(styles.linkJob)}> */}
                   <div className={clsx(styles.text)}>
                     <div className={clsx(styles.title)}>
                       <p><strong>{job.title}</strong></p>
@@ -376,13 +380,17 @@ const SearchResult = () => {
                       )}
                     </div>
                   </div>
-                </Link>
+                {/* </Link> */}
                 {(role === 'candidate' || !role) && (
                   <div onClick={() => handleSaveJob(job._id)}>
-                    <i className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                    <i 
+                      className={clsx(savedJobs[job._id] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}
+                      style={{color: savedJobs[job._id]?'red':'gray'}}
+                    ></i>
                   </div>
                 )}
               </div>
+              </Link>
             </div>
                   ))
                 ):(
@@ -488,6 +496,12 @@ const SearchResult = () => {
             })
             .map((job) => (
               <div key={job._id} className={clsx(styles.jobcard)}>
+                <Link
+                    to={`/detailJob/${job._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={clsx(styles.linkJob)}
+                  >
                 <div className={clsx(styles.content)}>
                   <Link
                     to={`/detailCompany/${job.company}`}
@@ -500,12 +514,12 @@ const SearchResult = () => {
                       className={clsx(styles.avatar)}
                     />
                   </Link>
-                  <Link
+                  {/* <Link
                     to={`/detailJob/${job._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={clsx(styles.linkJob)}
-                  >
+                  > */}
                     <div className={clsx(styles.text)}>
                       <div className={clsx(styles.title)}>
                         <p>
@@ -527,7 +541,7 @@ const SearchResult = () => {
                         )}
                       </div>
                     </div>
-                  </Link>
+                  {/* </Link> */}
                   {(role === 'candidate' || !role) && (
                     <div onClick={() => handleSaveJob(job._id)}>
                       <i
@@ -536,10 +550,12 @@ const SearchResult = () => {
                             ? 'fa-solid fa-heart'
                             : 'fa-regular fa-heart'
                         )}
+                        style={{color: savedJobs[job._id]?'red':'gray'}}
                       ></i>
                     </div>
                   )}
                 </div>
+                </Link>
               </div>
             ))
         ) : (

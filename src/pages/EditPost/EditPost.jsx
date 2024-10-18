@@ -281,6 +281,18 @@ const EditPost = () => {
           </div>
 
           <div className={clsx(styles.midAddress)}>
+              <div className={clsx(styles.midAddressStreet)}>
+                <label htmlFor="street">Đường:</label>
+                <input
+                  type="text"
+                  id="street"
+                  name="street"
+                  value={jobData.street}
+                  onChange={handleChange}
+                  readOnly={!isEditing}
+                />
+              </div>
+
               <div className={clsx(styles.midAddressCity)}>
               <label>Tỉnh/Thành phố:</label>
               {/* <input 
@@ -331,17 +343,7 @@ const EditPost = () => {
             </select>
           </div>
 
-              <div className={clsx(styles.midAddressStreet)}>
-                <label htmlFor="street">Đường:</label>
-                <input
-                  type="text"
-                  id="street"
-                  name="street"
-                  value={jobData.street}
-                  onChange={handleChange}
-                  readOnly={!isEditing}
-                />
-              </div>
+              
             {/* </div> */}
           </div>
 

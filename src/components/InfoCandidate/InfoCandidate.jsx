@@ -416,6 +416,18 @@ const handleAutoApply = async () => {
 
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
+        <div className={clsx(styles.midAddressStreet)}>            
+            <p className={clsx(styles.textStreet)}>Địa chỉ:</p>
+            <input 
+              type="text" 
+              name="street"
+              value={candidate.street || ""}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className={clsx(styles.street)}
+            />
+          </div>
+
           <p className={clsx(styles.textStreet)}>Tỉnh/Thành phố:</p>
           
           {/* mới */}
@@ -468,17 +480,7 @@ const handleAutoApply = async () => {
             </div>
           )} */}
 
-          <div className={clsx(styles.midAddressStreet)}>            
-            <p className={clsx(styles.textStreet)}>Địa chỉ cụ thể:</p>
-            <input 
-              type="text" 
-              name="street"
-              value={candidate.street || ""}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className={clsx(styles.street)}
-            />
-          </div>
+          
         </div>
 
         <div className={clsx(styles.midInfo)}>          

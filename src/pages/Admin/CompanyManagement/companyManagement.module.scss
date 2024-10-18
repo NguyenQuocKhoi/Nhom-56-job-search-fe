@@ -131,8 +131,10 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
       width: 130px;
       border-radius: 5px;
       border: 1px solid white;
+      background: lightcoral;
+      color: white;
       &:hover{
-        background: #a9a3a3;
+        background: red;
       }
     }
     .btnDongY{

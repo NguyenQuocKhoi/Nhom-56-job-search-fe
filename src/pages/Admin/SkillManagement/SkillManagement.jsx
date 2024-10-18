@@ -18,6 +18,10 @@ const SkillManagement = () => {
   const [editingSkillId, setEditingSkillId] = useState(null);
   const [skillInput, setSkillInput] = useState('');
 
+  const [skillSearchInput, setSkillSearchInput] = useState('');
+  const [results, setResults] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const fetchSkills = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -96,6 +100,35 @@ const SkillManagement = () => {
     } catch (err) {
       Swal.fire('Error', 'Failed to update skill', 'error');
     }
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault(); // Prevent the page from reloading on form submit
+  
+    if (!skillSearchInput) {
+      setErrorMessage('Please provide a Skill name');
+      setResults({ candidates: [], jobs: [] });
+      return;
+    }
+  
+    try {
+      // Make the POST request to the backend API
+      const response = await postApiWithToken('/skill/get-candidate-and-job-by-skill', { name: skillSearchInput });
+  
+      if (response.data && response.data.success) {
+        const { candidates, jobs } = response.data;
+        setResults({ candidates, jobs }); // Set candidates and jobs to display
+        setErrorMessage('');              // Clear any previous error message
+      } else {
+        setResults({ candidates: [], jobs: [] }); // Clear previous results
+        setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
+      }
+    } catch (error) {
+      console.error("Error during skill search:", error);
+      setResults({ candidates: [], jobs: [] });
+      setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
+      // setErrorMessage('Error occurred while searching. Please try again later.');
+    }
   };  
 
   if (loading) return <div>Loading...</div>;
@@ -104,6 +137,52 @@ const SkillManagement = () => {
   return (
     <div>
       <h2>Quản lí danh mục kỹ năng</h2>
+
+      <form className={clsx(styles.searchBar)}>
+        <div className={clsx(styles.form)}>
+          <input
+            type="text"
+            placeholder="Nhập tên kỹ năng"
+            className={clsx(styles.jobInput)}
+            id="search"
+            value={skillSearchInput}
+            onChange={(e) => setSkillSearchInput(e.target.value)}
+          />
+          <button 
+            variant="primary" 
+            className={clsx(styles.searchButton)} 
+            onClick={handleSearch}
+          >
+            <i className="fa-solid fa-magnifying-glass"></i>
+            <strong className={clsx(styles.s)}>Search</strong>  
+          </button>
+        </div>
+      </form>
+
+      {results && (results.candidates.length > 0 || results.jobs.length > 0) ? (
+        <div>
+          <p>Kết quả:</p>
+          <div>
+            <p>Candidates:</p>
+            <ul>
+              {results.candidates.map((candidate) => (
+                <li key={candidate._id}>{candidate.name}</li> // Assuming candidate has a "name" field
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p>Jobs:</p>
+            <ul>
+              {results.jobs.map((job) => (
+                <li key={job._id}>{job.title}</li> // Assuming job has a "title" field
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : (
+        errorMessage && <p>{errorMessage}</p>  // Display error message when no results are found
+      )}
+
       <strong>Tổng số lượng kỹ năng: {skills.length}</strong>
       <div className={clsx(styles.top)}>
         <input

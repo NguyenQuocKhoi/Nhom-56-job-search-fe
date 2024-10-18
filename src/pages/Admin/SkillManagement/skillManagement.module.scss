@@ -110,3 +110,51 @@
       background: rgb(252, 84, 84);
     }
   }
+
+  .s{
+    margin-left: 10px;
+  }
+
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    height: 4rem;
+    width: 75%;
+    max-width: 1200px;
+  
+    margin-left: 150px;
+    // margin-bottom: 50px;
+  }
+  
+  .form {
+    // margin-top: 40px;
+    display: flex;
+    width: 100%;
+    max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+    border-radius: 10px;
+    height: 100%; /* Ensure full height */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
+    background-color: #ffffff; /* White background for the form */
+  }
+
+  .searchButton {
+    border-radius: 10px;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    border: 6px solid white;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    height: 100%; /* Make the button take full height of the parent */
+    width: 150px;
+  }
+  
+  .searchButton:hover {
+    // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+
+  }
+  

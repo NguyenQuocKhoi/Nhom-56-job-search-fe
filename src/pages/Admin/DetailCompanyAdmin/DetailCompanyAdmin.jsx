@@ -41,7 +41,10 @@ const DetailCompanyAdmin = () => {
     const fetchJobs = async () => {
       try {
         const response = await getAPiNoneToken(`/job/get-jobs/${id}?page=${currentPage}&limit=6`);
-        if (response.data.jobs.length === 0) {
+        console.log(response.data.jobs);
+        
+        // if (response.data.jobs.length === 0) {
+        if (response.data.jobs === undefined) {
           setJobs([]);  // No jobs found
           setTotalPages(1); // Ensure pagination is reset
         } else {

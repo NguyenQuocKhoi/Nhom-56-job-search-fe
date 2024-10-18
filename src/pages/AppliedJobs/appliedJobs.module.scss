@@ -34,7 +34,8 @@
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    // background-color: #fff;
+    // background: red;
     text-align: left;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -46,6 +47,7 @@
     box-sizing: border-box; 
     // max-width: 400px; 
     min-height: 110px; 
+    // align-items: flex-start;
 
     &:hover {
       // background: linear-gradient(to right, #87CEEB, #1E90FF);
@@ -74,6 +76,10 @@
     .linkJob{
       text-decoration: none;
       color: black;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .title{
@@ -112,6 +118,10 @@
       border-radius: 5px;
       margin: 1px;
     }
+  }
+  .textInfoJob{
+    // background: green;
+    // flex: 1;
   }
 
   .filterContainer {

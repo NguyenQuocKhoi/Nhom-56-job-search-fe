@@ -219,7 +219,12 @@ const DetailJobAdmin = () => {
               </div>
             </div>
             <div className={clsx(styles.ngang)}>
-              {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}
+              {/* {renderField('Expires', new Date(job.expiredAt).toLocaleDateString('vi-VN'), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString('vi-VN'))} */}
+              {renderField(
+                'Expires', 
+                job.expiredAt ? new Date(job.expiredAt).toLocaleDateString('vi-VN') : 'Chưa có ngày hết hạn', 
+                job.pendingUpdates?.expiredAt ? new Date(job.pendingUpdates.expiredAt).toLocaleDateString('vi-VN') : null
+              )}
               {renderField('Salary', job.salary, job.pendingUpdates?.salary)}
               {renderField('Position', job.position, job.pendingUpdates?.position)}
             </div>
@@ -228,8 +233,13 @@ const DetailJobAdmin = () => {
             {renderField('Interest', job.interest, job.pendingUpdates?.interest, true)}
             {renderField('Description', job.description, job.pendingUpdates?.description, true)}
             {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements, true)}
-            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-            {renderField('Expires', new Date(job.expiredAt).toLocaleDateString(), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString())}            
+            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
+            {/* {renderField('Expires', new Date(job.expiredAt).toLocaleDateString('vi-VN'), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString('vi-VN'))}             */}
+            {renderField(
+              'Expires', 
+              job.expiredAt ? new Date(job.expiredAt).toLocaleDateString('vi-VN') : 'Chưa có ngày hết hạn', 
+              job.pendingUpdates?.expiredAt ? new Date(job.pendingUpdates.expiredAt).toLocaleDateString('vi-VN') : null
+            )}
           </div>
         </div>
 
@@ -239,7 +249,12 @@ const DetailJobAdmin = () => {
               <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
               <p><strong>Company:</strong> {job.company.name}</p>
             </div>
-            {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)}
+            {/* {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)} */}
+            {renderField(
+              'Address', 
+              `${job.street || 'Chưa có địa chỉ'}, ${job.city || ''}`, 
+              job.pendingUpdates ? `${job.pendingUpdates.street || 'Chưa cập nhật địa chỉ'}, ${job.pendingUpdates.city || ''}` : null
+            )}
           </div>
 
           <div className={clsx(styles.thongtinchung)}>

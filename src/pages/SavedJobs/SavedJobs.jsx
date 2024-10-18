@@ -23,26 +23,36 @@ const SavedJobs = () => {
         if (result.data.success) {
           const fetchedSavedJobs = result.data.savedJobs || [];
           setSavedJobs(result.data.savedJobs);
-          console.log(result.data.savedJobs);
+          console.log(savedJobs);
+          
+          // console.log(result.data.savedJobs);
+          // console.log(fetchedSavedJobs);          
           
           if (fetchedSavedJobs.length > 0) {
             const jobDetailPromises = fetchedSavedJobs.map(async (job) => {
               try {
                 const jobResult = await getAPiNoneToken(`/job/${job.job._id}`);
+                console.log(jobResult);
+                
                 if (jobResult.data.success) {
-                  return { jobId: job.job._id, jobDetail: jobResult.data.job }; // Return job ID and job details
+                  // console.log(job.job);                  
+                  // console.log("job.job._id",job.job._id);
+                  // console.log(jobResult.data.job);                  
+                  
+                  return { jobId: job.job._id, jobDetail: jobResult.data.job }; //Trả về ID công việc và chi tiết công việc
                 }
+                
               } catch (err) {
                 console.error(err);
-                return null; // In case of error, return null
+                return null; // Trong trường hợp có lỗi, trả về null
               }
             });
 
           const jobDetailsArray = await Promise.all(jobDetailPromises);
-          const validJobDetails = jobDetailsArray.filter(Boolean); // Filter out any null values
+          const validJobDetails = jobDetailsArray.filter(Boolean); //Lọc ra bất kỳ giá trị null nào
           
           const updatedJobDetails = validJobDetails.reduce((acc, { jobId, jobDetail }) => {
-            acc[jobId] = jobDetail; // Build a map of job details using job ID as key
+            acc[jobId] = jobDetail; //gắn chi tiết công việc bằng cách sử dụng ID công việc làm key
             return acc;
           }, {});
           
@@ -70,14 +80,19 @@ const SavedJobs = () => {
       <Header />
       <div className={clsx(styles.mainContent)}>
         <p className={clsx(styles.title)}>Danh sách công việc đã lưu</p>
-        {loading ? (
+        {/* {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : (
+        ) : ( */}
           <div className={clsx(styles.jobContainer)}>
             {savedJobs.length === 0 ? (
-              <p>No saved jobs found.</p>
+              <>              
+                <p>
+                  Bạn chưa lưu công việc nào. <Link to="/jobs">Nhấn vào đây để khám phá nhiều công việc hấp dẫn.</Link>
+                </p>
+                
+              </>
             ) : (
               savedJobs.map((job) => (
                 <div key={job.job._id} className={clsx(styles.jobcard)}>
@@ -89,14 +104,14 @@ const SavedJobs = () => {
                       <p><strong>Job Title: {jobDetails[job.job._id]?.title || 'Loading...'}</strong></p>
                       <p>Company: {jobDetails[job.job._id]?.company.name}</p>
                       <p>Address: {jobDetails[job.job._id]?.street}, {jobDetails[job.job._id]?.city}</p>
-                      <p>Saved at: {new Date(job.createdAt).toLocaleDateString()}</p>
+                      <p>Saved at: {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
                     </div>
                 </Link>
                   </div>
               ))
             )}
           </div>
-        )}
+        {/* )} */}
       </div>
       <Footer />
     </div>

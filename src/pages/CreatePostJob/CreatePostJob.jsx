@@ -362,6 +362,18 @@ const CreatePostJob = () => {
           </div>
 
           <div className={clsx(styles.midAddress)}>
+          <div className={clsx(styles.midAddressStreet)}>
+              <label>Đường <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                value={jobData.street}
+                onChange={handleChange}
+                className={clsx(styles.street)}
+              />
+            </div>
+            
           <div className={clsx(styles.midAddressCity)}>
             <label>Tỉnh/Thành phố <span style={{ color: 'red' }}>*</span></label>
             {/* <input 
@@ -410,7 +422,7 @@ const CreatePostJob = () => {
     </select>
           </div>
 
-            <div className={clsx(styles.midAddressStreet)}>
+            {/* <div className={clsx(styles.midAddressStreet)}>
               <label>Đường <span style={{ color: 'red' }}>*</span></label>
               <input
                 type="text"
@@ -420,7 +432,7 @@ const CreatePostJob = () => {
                 onChange={handleChange}
                 className={clsx(styles.street)}
               />
-            </div>
+            </div> */}
         </div>
 
           <div className={clsx(styles.midLuong)}>

@@ -10,7 +10,7 @@ const Footer = () => {
         <div className={clsx(styles.info)}>
           <h3>Liên hệ với chúng tôi</h3>
           <p>Email: kxword@gmail.com</p>
-          <p>Hotline: 099 9999 9999</p>
+          <p>Hotline: 033 2787 756</p>
           <p>Address: Go Vap District, Ho Chi Minh City, Vietnam</p>
         </div>
         <div className={clsx(styles.info)}>

@@ -92,7 +92,8 @@ const DetailCandidateAdmin = () => {
             <p><strong>Email:</strong> {candidate.email}</p>
             <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
             <p><strong>Address:</strong> {candidate.street}, {candidate.city}</p>
-            <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
+            <p><strong>Date of Birth:</strong> {new Date(candidate.dateOfBirth).toLocaleDateString('vi-VN')}</p>
+            {/* <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p> */}
           </div>
         </div>
 

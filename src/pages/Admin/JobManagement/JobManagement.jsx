@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../JobManagement/jobManagement.module.scss';
-import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiNoneToken, putApiWithToken } from '../../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
@@ -55,19 +55,41 @@ const JobManagement = () => {
 
   const [buttonState, setButtonState] = useState('pending');
 
+  const fetchSkills = async (skillIds) => {
+    try {
+      const skillRequests = skillIds.map(skillId => getAPiNoneToken(`/skill/${skillId}`));
+      const skillResponses = await Promise.all(skillRequests);
+      return skillResponses.map(response => response.data.skill.skillName);
+    } catch (err) {
+      console.error('Error fetching skills', err);
+      return [];
+    }
+  };
+
   const fetchJobs = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       const result = await getAPiNoneToken(`/job/get-all?page=${page}&limit=${pagination.limit}`);
+      const jobs = result.data.jobs;
 
-      // console.log(result.data.jobs);
-      // console.log(result.data.totalJobs);
+      // Fetch skills for each job
+      const jobsWithSkills = await Promise.all(
+        jobs.map(async (job) => {
+          const skills = await fetchSkills(job.requirementSkills);
+          return { ...job, skillNames: skills };
+        })
+      );
+
       setCountAll(result.data.totalJobs);
+      setJobsAll(jobsWithSkills);
+      setJobsAccepted(jobsWithSkills.filter(job => job.status === true && job.pendingUpdates === null));
+      setJobsRejected(jobsWithSkills.filter(job => job.status === false && job.pendingUpdates === null));
+      setJobsPending(jobsWithSkills.filter(job => job.pendingUpdates !== null || job.status === undefined));      
+      // setJobsAll(result.data.jobs);
+      // setJobsAccepted(result.data.jobs.filter(job => job.status === true && job.pendingUpdates === null));
+      // setJobsRejected(result.data.jobs.filter(job => job.status === false && job.pendingUpdates === null));
+      // setJobsPending(result.data.jobs.filter(job => job.pendingUpdates !== null || job.status === undefined));//pendingUpdates khác null thì là pending      
 
-      setJobsAll(result.data.jobs);
-      setJobsAccepted(result.data.jobs.filter(job => job.status === true && job.pendingUpdates === null));
-      setJobsRejected(result.data.jobs.filter(job => job.status === false && job.pendingUpdates === null));
-      setJobsPending(result.data.jobs.filter(job => job.pendingUpdates !== null || job.status === undefined));//pendingUpdates khác null thì là pending
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -119,7 +141,7 @@ const JobManagement = () => {
   };
 
   const getJobStatus = (job) => {
-    if (job.pendingUpdates !== null) {
+    if (job.pendingUpdates !== null || job.status === undefined) {
       return 'Pending';
     } else if (job.status === true) {
       return 'Accepted';
@@ -224,7 +246,8 @@ const JobManagement = () => {
         city: addressInput.trim() || '',
       };
   
-      const response = await postApiNoneToken('/job/search', searchParams);
+      // const response = await postApiNoneToken('/job/search', searchParams);
+      const response = await postApiWithToken('/job/search-by-admin', searchParams);
       if (response.data.success) {
         const jobs = response.data.jobs;
 
@@ -391,7 +414,8 @@ const JobManagement = () => {
               className={clsx(styles.searchButton)} 
               onClick={handleSearch}
             >
-              Search
+              <i className="fa-solid fa-magnifying-glass"></i>
+              <strong className={clsx(styles.s)}>Search</strong>          
             </button>
           </div>
         </form>
@@ -438,8 +462,8 @@ const JobManagement = () => {
             {results.length > 0 ? (
               results.map((job) => (
               <div key={job._id} className={clsx(styles.content)}>
-                  <div className={clsx(styles.jobcard)}>
                       <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                  <div className={clsx(styles.jobcard)}>
                     <div className={clsx(styles.contentJobcard)}>
                         <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
@@ -458,8 +482,8 @@ const JobManagement = () => {
                           </p>
                         </div>
                     </div>
-                      </Link>
                   </div>
+                      </Link>
                 </div>
             ))
           ):(
@@ -557,8 +581,8 @@ const JobManagement = () => {
                   jobsAll.map((job) => (
             job && job._id && job.company && job.company._id ? (
                     <div className={clsx(styles.content)}  key={job._id}>
-                      <div className={clsx(styles.jobcard)}>
                       <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                      <div className={clsx(styles.jobcard)}>
                       <div className={styles.contentJobcard}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
@@ -575,11 +599,20 @@ const JobManagement = () => {
                           >
                             Trạng thái: {getJobStatus(job)}
                           </p>
+                          {job.skillNames && job.skillNames.length > 0 ? (
+                            <div className={clsx(styles.skills)}>
+                              {job.skillNames.map((skill, index) => (
+                                <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                              ))}
+                            </div>
+                          ) : (
+                            <span>No skills</span>
+                          )}
                         </div>
                       </div>
-                      </Link>
                           <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
+                      </Link>
                     </div>
             ):null
                   ))
@@ -609,19 +642,28 @@ const JobManagement = () => {
                   jobsAccepted.map((job) => (
             job && job._id && job.company && job.company._id ? (
                       <div key={job._id} className={clsx(styles.content)}>
-                        <div className={clsx(styles.jobcard)}>
                     <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                        <div className={clsx(styles.jobcard)}>
                         <div className={clsx(styles.contentJobcard)}>
                           <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                           <div className={clsx(styles.contentText)}>
                             <p><strong>{job.title}</strong></p>
                             <p>Company: {job.company.name}</p>
                             <p>Address: {job.street},{job.city}</p>
+                            {job.skillNames && job.skillNames.length > 0 ? (
+                              <div className={clsx(styles.skills)}>
+                                {job.skillNames.map((skill, index) => (
+                                  <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                                ))}
+                              </div>
+                            ) : (
+                              <span>No skills</span>
+                            )}
                           </div>
                         </div>                          
-                    </Link>
                           <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
+                    </Link>
                   </div>
             ):null
                   ))
@@ -650,19 +692,28 @@ const JobManagement = () => {
                   jobsRejected.map((job) => (
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
-              <div className={clsx(styles.jobcard)}>
           <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+              <div className={clsx(styles.jobcard)}>
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
                   <p><strong>{job.title}</strong></p>
                   <p>Company: {job.company.name}</p>
                   <p>Address: {job.street},{job.city}</p>
+                  {job.skillNames && job.skillNames.length > 0 ? (
+                    <div className={clsx(styles.skills)}>
+                      {job.skillNames.map((skill, index) => (
+                        <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                      ))}
+                    </div>
+                  ) : (
+                    <span>No skills</span>
+                  )}
                 </div>
               </div>                          
-          </Link>
                 <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
             </div>
+          </Link>
         </div>
             ):null
                   ))
@@ -691,17 +742,25 @@ const JobManagement = () => {
                   jobsPending.map((job) => (
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
-              <div className={clsx(styles.jobcard)}>
           <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+              <div className={clsx(styles.jobcard)}>
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
                   <p><strong>{job.title}</strong></p>
                   <p>Company: {job.company.name}</p>
                   <p>Address: {job.street},{job.city}</p>
+                  {job.skillNames && job.skillNames.length > 0 ? (
+                    <div className={clsx(styles.skills)}>
+                      {job.skillNames.map((skill, index) => (
+                        <p key={index} className={clsx(styles.skill)}>{skill}</p>
+                      ))}
+                    </div>
+                  ) : (
+                    <span>No skills</span>
+                  )}
                 </div>
               </div>                          
-          </Link>
                               <div className={clsx(styles.buttonContainer)}>
                                 <button
                                   className={clsx(styles.btnDongY, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
@@ -720,6 +779,7 @@ const JobManagement = () => {
                                 <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>
+          </Link>
                     </div>
             ):null
                   ))

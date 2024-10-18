@@ -188,7 +188,10 @@ const JobsRecommended = ({ candidateId }) => {
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (
                   <div onClick={() => handleSaveJob(job.jobId)}>
-                    <i className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
+                    <i 
+                      className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}
+                      style={{color: savedJobs[job.jobId]?'red':'gray'}}                      
+                      ></i>
                   </div>
                 )}
                   </div>
