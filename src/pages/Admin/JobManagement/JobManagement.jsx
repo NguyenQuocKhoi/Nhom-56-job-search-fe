@@ -459,6 +459,7 @@ const JobManagement = () => {
         <div className={clsx(styles.joblist)}>
         <div className={clsx(styles.jobContainer)}>
           {/* <p>All Jobs</p> */}
+          <strong>Kết quả phù hợp: {results.length}</strong>
             {results.length > 0 ? (
               results.map((job) => (
               <div key={job._id} className={clsx(styles.content)}>
@@ -620,16 +621,16 @@ const JobManagement = () => {
                   <div>No jobs available</div>
                 )}
               </div>
-            </div>
               <div className={clsx(styles.pagination)}>
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
               </div>
+            </div>
           </div>
         )}
         {activeTab === 'accepted' && (
@@ -671,16 +672,16 @@ const JobManagement = () => {
                   <div>No jobs available</div>
                 )}
               </div>
-            </div>
               <div className={clsx(styles.pagination)}>
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
               </div>
+            </div>
           </div>
         )}
         {activeTab === 'rejected' && (
@@ -721,16 +722,16 @@ const JobManagement = () => {
                   <div>No jobs available</div>
                 )}
               </div>
-            </div>
               <div className={clsx(styles.pagination)}>
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
               </div>
+            </div>
           </div>
         )}
         {activeTab === 'pending' && (
@@ -787,16 +788,16 @@ const JobManagement = () => {
                   <div>No jobs available</div>
                 )}
               </div>
-            </div>
               <div className={clsx(styles.pagination)}>
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
               </div>
+            </div>
           </div>
         )}
       </div>

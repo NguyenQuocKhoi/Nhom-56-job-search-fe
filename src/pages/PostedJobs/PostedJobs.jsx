@@ -21,9 +21,13 @@ const PostedJobs = () => {
 
   const [pendingApplications, setPendingApplications] = useState({});
 
+  //lọc theo ngày
+  const [sortOrder, setSortOrder] = useState('new');
+
   const user = getUserStorage()?.user;
   const companyId = user._id;
 
+  //------1
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -32,18 +36,12 @@ const PostedJobs = () => {
         setJobs(jobs);
         setTotalPages(totalPages);
 
-        // Fetch category names
-        const categoryIds = jobs
-          .map((job) => job.category)
-          .filter((categoryId) => categoryId); // Filter out undefined or null categories
-
+        const categoryIds = jobs.map((job) => job.category).filter(Boolean);
+        // const categoryIds = jobs
+        //   .map((job) => job.category)
+        //   .filter((categoryId) => categoryId); 
         const uniqueCategoryIds = [...new Set(categoryIds)];
-
-        // Fetch all categories in parallel
-        const categoryPromises = uniqueCategoryIds.map((categoryId) =>
-          getAPiNoneToken(`/category/${categoryId}`)
-        );
-
+        const categoryPromises = uniqueCategoryIds.map((categoryId) => getAPiNoneToken(`/category/${categoryId}`));
         const categoryResponses = await Promise.all(categoryPromises);
         const categoryMap = {};
 
@@ -104,7 +102,21 @@ const PostedJobs = () => {
     setJobs(jobs);
     setTotalPages(totalPages);
   }
+  
+  //
+  const sortedJobs = [...jobs].sort((a, b) => {
+    if (sortOrder === 'new') {
+      return new Date(b.createdAt) - new Date(a.createdAt); // Newest first
+    } else {
+      return new Date(a.createdAt) - new Date(b.createdAt); // Oldest first
+    }
+  });
 
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+  };
+
+  // ------2
   // useEffect(() => {
   //   // Lọc công việc dựa trên tab hiện tại
   //   const filtered = jobs.filter((job) => {
@@ -171,9 +183,34 @@ const PostedJobs = () => {
           </div>
         ) : (
           <>
+            <div className={clsx(styles.filterContainer)}>
+                <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
+                  <label>
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="new"
+                      checked={sortOrder === 'new'}
+                      onChange={() => handleSortChange('new')}
+                    />
+                    Mới nhất
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="filter"
+                      value="old"
+                      checked={sortOrder === 'old'}
+                      onChange={() => handleSortChange('old')}
+                    />
+                    Cũ nhất
+                  </label>
+                </div>
+
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
-                {jobs.map((job) => (
+                {/* {jobs.map((job) => ( */}
+                {sortedJobs.map((job) => (
                   <Link key={job._id} to={`/postedDetail/${job._id}`} className={clsx(styles.jobcard)}>
                     <div className={clsx(styles.content)}>
                       <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />

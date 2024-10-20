@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../CategoryManagement/categoryManagement.module.scss';
-import { getApiWithToken, postApiWithToken, putApiWithToken } from '../../../api';
+import { getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
 import clsx from 'clsx';
 // import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import { Button, Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -22,6 +24,10 @@ const CategoryManagement = () => {
   const [results, setResults] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [jobs, setJobs] = useState([]);
+
   const fetchCategories = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -39,6 +45,22 @@ const CategoryManagement = () => {
     }
   }, [pagination.limit]);
 
+  const fetchJobsByCategory = async (categoryName) => {
+    try {
+      const response = await postApiNoneToken('/category/get-job', { categoryName });
+      console.log(response);
+      
+      if (response.data.success) {
+        setJobs(response.data.jobs);
+      } else {
+        setError(response.message || 'Error fetching jobs');
+      }
+    } catch (err) {
+      console.log(err)
+      // setError('Error fetching jobs 123');
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
@@ -53,12 +75,12 @@ const CategoryManagement = () => {
         Swal.fire('Error', 'Category name is required', 'error');
         return;
       }
-      console.log(newCategoryName);
+      // console.log(newCategoryName);
 
       const checkResult = await postApiWithToken('/category/check-category', { name: newCategoryName });
-      console.log("55",checkResult.data.message);
+      // console.log("55",checkResult.data.message);
       
-      console.log("57 success",checkResult.data.success);
+      // console.log("57 success",checkResult.data.success);
       
       if (checkResult.data.success === true) {
         Swal.fire('Error', 'Category already exists', 'error');
@@ -86,7 +108,7 @@ const CategoryManagement = () => {
   
       const checkResult = await postApiWithToken('/category/check-category', { name: categoryInput });
 
-      console.log("77",checkResult);
+      // console.log("77",checkResult);
       
       if (checkResult.data.success === true) {
         Swal.fire('Error', 'Category already exists', 'error');
@@ -106,37 +128,81 @@ const CategoryManagement = () => {
     e.preventDefault();
 
     if (!categorySearchInput) {
-      setErrorMessage('Please provide a Category name');
+      setErrorMessage('Vui lòng nhập tên danh mục');
       setResults(null);
       return;
     }
 
     try {
-      // Make the POST request to the backend API
       const response = await postApiWithToken('/category/get-category-by-name', { name: categorySearchInput });
 
       console.log(response);
       
 
       if (response.data.success) {
-        setResults(response.data.data);  // Set the results to display on the interface
-        setErrorMessage('');        // Clear any previous error message
+        setResults(response.data.data); 
+        setErrorMessage('');        
       } else {
-        setResults(null);           // Clear previous results
-        setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
+        setResults(null);           
+        setErrorMessage('Không tìm thấy kết quả phù hợp'); 
       }
     } catch (error) {
       console.error("Error during category search:", error);
       setResults(null);
-      setErrorMessage('Không tìm thấy kết quả phù hợp'); // Set error message
-      // setErrorMessage('Error occurred while searching. Please try again later.');
+      setErrorMessage('Không tìm thấy kết quả phù hợp');
     }
-  };  
+  }; 
+  
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedCategory(null);
+    setJobs([]);
+  };
+
+  const handleShowModal = (categoryName) => {
+    setSelectedCategory(categoryName);
+    setShowModal(true);
+    fetchJobsByCategory(categoryName);
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
+    <>
+    <Modal show={showModal} onHide={handleCloseModal} className={clsx(styles.modal)} centered>
+      <div>
+      <Modal.Header closeButton className={clsx(styles.modalHeader)}>
+        <Modal.Title className={clsx(styles.modalTitle)}>Danh sách công việc của danh mục {selectedCategory?.name}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className={clsx(styles.modalBody)}>
+        {jobs.length > 0 ? (
+              <div>
+                {jobs.map((job) => (
+                  <div key={job._id} className={clsx(styles.jobcard)}>                      
+                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
+                      <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>                    
+                      <div className={clsx(styles.jobcardText)}>
+                        <p><strong>{job.title}</strong></p>
+                        <p>{job.company?.name}</p>
+                        <p>{job.street}, {job.city}</p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>Không có công việc nào thuộc danh mục này</div>
+            )}
+      </Modal.Body>
+      <Modal.Footer className={clsx(styles.modalFooter)}>
+        <Button variant="danger" onClick={handleCloseModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+      </div>
+    </Modal>
+
     <div>
       <h2>Quản lí danh mục công việc</h2>
 
@@ -163,18 +229,50 @@ const CategoryManagement = () => {
 
       {results ? (
         <div>
-          <p>Kết quả:</p>
-          <ul>
+          <strong>Kết quả phù hợp: {results.length}</strong>
             {results.map((category) => (
-              <li key={category._id}>{category.name}</li>
+              // <div className={clsx(styles.categoryName)}>
+              //   <h3 key={category._id}>{category.name}</h3>
+              // </div>
+              <div key={category._id}>
+                {editingCategoryId === category._id ? (
+                  <div className={clsx(styles.categoryName)}>
+                    <input
+                      type="text"
+                      value={categoryInput}
+                      onChange={(e) => setCategoryInput(e.target.value)}
+                      className={clsx(styles.inputCategory)}
+                    />
+                    <div>
+                      <button onClick={() => handleUpdateCategory(category._id)} className={clsx(styles.btnSua)}>Xác nhận chỉnh sửa</button>
+                      <button onClick={() => setEditingCategoryId(null)} className={clsx(styles.btnHuy)}>Hủy</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={clsx(styles.categoryName)}>
+                    <div className={clsx(styles.categoryNameText)} onClick={() => handleShowModal(category.name)}>                      
+                      <h3>{category.name}</h3>
+                    </div>
+                    <button onClick={() => {
+                      setEditingCategoryId(category._id);
+                      setCategoryInput(category.name); 
+                    }}
+                      className={clsx(styles.btnSua)}
+                    >
+                      Sửa danh mục
+                    </button>
+                  </div>
+                )}
+              </div>
             ))}
-          </ul>
         </div>
       ) : (
-        errorMessage && <p>{errorMessage}</p>
+        errorMessage && 
+        <div className={clsx(styles.kqSearch)}>
+          <p>{errorMessage}</p>
+        </div>
       )}
 
-      <strong>Tổng số lượng danh mục: {categories.length}</strong>
       <div className={clsx(styles.top)}>
         <input
           type="text"
@@ -185,6 +283,8 @@ const CategoryManagement = () => {
         />
         <button onClick={handleCreateCategory} className={clsx(styles.btnSua)}>Thêm danh mục</button>
       </div>
+
+      <strong>Tổng số lượng danh mục: {categories.length}</strong>
 
       <div className={clsx(styles.categorylist)}>
         <div className={clsx(styles.categoryContainer)}>
@@ -206,10 +306,12 @@ const CategoryManagement = () => {
                   </div>
                 ) : (
                   <div className={clsx(styles.categoryName)}>
-                    <h3>{category.name}</h3>
+                    <div className={clsx(styles.categoryNameText)} onClick={() => handleShowModal(category.name)}>                                          
+                      <h3>{category.name}</h3>
+                    </div>
                     <button onClick={() => {
                       setEditingCategoryId(category._id);
-                      setCategoryInput(category.name); // Set the input with current category name
+                      setCategoryInput(category.name); 
                     }}
                       className={clsx(styles.btnSua)}
                     >
@@ -235,6 +337,7 @@ const CategoryManagement = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

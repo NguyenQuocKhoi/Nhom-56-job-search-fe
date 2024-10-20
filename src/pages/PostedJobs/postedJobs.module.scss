@@ -178,3 +178,16 @@
   font-size: 25px;
   color: gray;
 }
+
+.filterContainer {
+  display: flex;
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  gap: 20px; /* Khoảng cách giữa các nút radio */
+  margin: -10px 0 -10px 10px; /* Khoảng cách trên và dưới */
+  // margin: 10px 0;
+  justify-content: center;
+}
+
+.filterContainer p {
+  margin-right: 10px;
+}

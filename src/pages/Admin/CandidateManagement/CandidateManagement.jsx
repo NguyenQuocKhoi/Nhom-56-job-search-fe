@@ -669,7 +669,7 @@ const CandidateManagement = () => {
         /> */}
       </Modal.Body>
       <Modal.Footer className={clsx(styles.modalFooter)}>
-        <Button variant="secondary" onClick={handleCloseModal}>
+        <Button variant="danger" onClick={handleCloseModal}>
           Close
         </Button>
         <Button variant="primary" onClick={handleCreateCandidate}>
@@ -776,10 +776,11 @@ const CandidateManagement = () => {
       {/* <div>
         <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate)}>Thêm ứng viên</button>
       </div> */}
-
+      
       {results && (
         <div className={clsx(styles.candidatelist)}>
           <div className={clsx(styles.candidateContainer)}>
+          <strong>Kết quả phù hợp: {results.length}</strong>
           {results.length > 0 ? (
           results.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>

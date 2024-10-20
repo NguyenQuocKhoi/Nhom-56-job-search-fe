@@ -537,7 +537,7 @@ const CompanyManagement = () => {
         /> */}
       </Modal.Body>
       <Modal.Footer className={styles.modalFooter}>
-        <Button variant="secondary" onClick={handleCloseModal}>
+        <Button variant="danger" onClick={handleCloseModal}>
           Close
         </Button>
         <Button variant="primary" onClick={handleCreateCompany}>
@@ -681,6 +681,7 @@ const CompanyManagement = () => {
         <div className={clsx(styles.companylist)}>
           <div className={clsx(styles.companyContainer)}>
             {/* <h3>All Jobs</h3> */}
+            <strong>Kết quả phù hợp: {results.length}</strong>
             {results.length > 0 ? (
               results.map((company) => (
               <div key={company._id} className={clsx(styles.content)}>
@@ -834,7 +835,7 @@ const CompanyManagement = () => {
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
@@ -883,7 +884,7 @@ const CompanyManagement = () => {
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
@@ -931,7 +932,7 @@ const CompanyManagement = () => {
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}
@@ -997,7 +998,7 @@ const CompanyManagement = () => {
                 {pagination.currentPage > 1 && (
                   <button onClick={() => handlePageChange(pagination.currentPage - 1)}>Previous</button>
                 )}
-                <span>Page {pagination.currentPage} of {pagination.totalPages}</span>
+                <span> {pagination.currentPage} / {pagination.totalPages} trang</span>
                 {pagination.currentPage < pagination.totalPages && (
                   <button onClick={() => handlePageChange(pagination.currentPage + 1)}>Next</button>
                 )}

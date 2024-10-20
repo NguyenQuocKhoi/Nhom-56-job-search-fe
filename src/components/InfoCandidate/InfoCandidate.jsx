@@ -483,12 +483,14 @@ const handleAutoApply = async () => {
           
         </div>
 
-        <div className={clsx(styles.midInfo)}>          
+        <div className={clsx(styles.midInfo)}>       
+          <div className={clsx(styles.midInfoBig)}>
+               
           <div className={clsx(styles.midInfoSkill)}>
             <div className={clsx(styles.midBtnSkill)}>
               <label>Kỹ năng:</label>
               <button 
-                className={clsx(styles.btnChooseSkill)}
+                className={clsx(styles.btnChooseSkill, {[styles.editing]:isEditing})}
                 onClick={handleOpenSkillModal} 
                 disabled={!isEditing}
               >
@@ -496,10 +498,22 @@ const handleAutoApply = async () => {
               </button>
             </div>
 
-            <div className={clsx(styles.modalSkill)}>
+            {/* <div className={clsx(styles.skillSection)}>
+              {skills.length > 0 ? (
+                skills.map((skill, index) => (
+                  // <div key={index} className={clsx(styles.skillContainer)}>
+                  <div key={index} className={clsx(styles.selectedSkill)}>
+                    <span className={clsx(styles.skillTag)}>{skill}</span>
+                  </div>
+                ))
+              ) : (
+                <p>Chưa cập nhật</p>
+              )}
+            </div> */}
+
+            {/* <div className={clsx(styles.modalSkill)}>
               {showSkillModal && (
                 <div className={clsx(styles.modalOverlay)}>
-                  {/* <div className={clsx(styles.modalContent)}> */}
                       {allSkills.map((skill) => (
                         <div key={skill._id} className={clsx(styles.skillcard)}>
                             <input 
@@ -513,25 +527,10 @@ const handleAutoApply = async () => {
                             </div>
                         </div>
                       ))}
-                  {/* </div> */}
                   <button onClick={handleCloseSkillModal} className={styles.closeModalButton}>Close</button>
                 </div>
               )}
-            </div>
-            
-            <div className={clsx(styles.skillSection)}>
-              {skills.length > 0 ? (
-                skills.map((skill, index) => (
-                  <div key={index} className={clsx(styles.skillContainer)}>
-                    <span className={clsx(styles.skillTag)}>{skill}</span>
-                  </div>
-                ))
-              ) : (
-                <p>Chưa cập nhật</p>
-              )}
-            </div>
-            
-            
+            </div>                                     */}
           </div>
 
           <div className={clsx(styles.midInfoDGC)}> 
@@ -573,6 +572,42 @@ const handleAutoApply = async () => {
             </div>
           </div>
         </div>
+
+        <div className={clsx(styles.skillSection)}>
+          {skills.length > 0 ? (
+            skills.map((skill, index) => (
+              // <div key={index} className={clsx(styles.skillContainer)}>
+              <div key={index} className={clsx(styles.selectedSkill)}>
+                <span className={clsx(styles.skillTag)}>{skill}</span>
+              </div>
+            ))
+          ) : (
+            <p>Chưa cập nhật</p>
+          )}
+        </div>
+
+          <div className={clsx(styles.modalSkill)}>
+            {showSkillModal && (
+              <div className={clsx(styles.modalOverlay)}>
+                    {allSkills.map((skill) => (
+                      <div key={skill._id} className={clsx(styles.skillcard)}>
+                          <input 
+                            type="checkbox" 
+                            checked={selectedSkills.includes(skill._id)}//skill có sẵn 
+                            onChange={() => handleSkillToggle(skill._id)}
+                            className={clsx(styles.skillCheckbox)}
+                          />
+                          <div className={clsx(styles.skillname)}>
+                            {skill.skillName}
+                          </div>
+                      </div>
+                    ))}
+                <button onClick={handleCloseSkillModal} className={styles.closeModalButton}>Close</button>
+              </div>
+            )}
+          </div>
+        </div>
+
 
       </div>
 

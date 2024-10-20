@@ -11,7 +11,7 @@ import ReatQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const cities = [
-  'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'Chọn tỉnh/thành phố','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
   'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
   'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
   'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
@@ -91,12 +91,23 @@ const CreatePostJob = () => {
     fetchSkills();
   }, []);
 
+  // const handleChange = (e) => {
+  //   setJobData({
+  //     ...jobData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
   const handleChange = (e) => {
-    setJobData({
-      ...jobData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    
+    if (value !== 'Chọn tỉnh/thành phố') {
+      setJobData(prevState => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
+  
   const handleChangeD = (value) => {
     setJobData({
       ...jobData,
@@ -147,6 +158,9 @@ const CreatePostJob = () => {
       category,
       requirementSkills
     } = jobData;
+
+    console.log(jobData);
+    
   
     if (
       !title ||
@@ -175,6 +189,8 @@ const CreatePostJob = () => {
         ...jobData,
         companyId: userData._id,
       });
+
+      console.log(result);//////////////////      
   
       if (result.data.success) {
         setError('');
