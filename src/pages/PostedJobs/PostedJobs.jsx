@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import clsx from 'clsx';
 import styles from './postedJobs.module.scss';
-import { getAPiNoneToken, getApiWithToken } from '../../api';
+import { getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,8 @@ const PostedJobs = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  // const [activeTab, setActiveTab] = useState('all'); // 'all', 'approved', 'pending'
+
+  const [activeTab, setActiveTab] = useState('All');
 
   // const [filteredJobs, setFilteredJobs] = useState([]);
 
@@ -27,39 +28,42 @@ const PostedJobs = () => {
   const user = getUserStorage()?.user;
   const companyId = user._id;
 
-  //------1
+  //mới
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
+        const response = await postApiWithToken(`/job/get-job/${companyId}`, {
+          page: currentPage,
+          limit: 6,
+          sort: sortOrder === 'new' ? 'desc' : 'asc',
+        });
         const { jobs, totalPages } = response.data;
         setJobs(jobs);
         setTotalPages(totalPages);
-
+  
         const categoryIds = jobs.map((job) => job.category).filter(Boolean);
-        // const categoryIds = jobs
-        //   .map((job) => job.category)
-        //   .filter((categoryId) => categoryId); 
         const uniqueCategoryIds = [...new Set(categoryIds)];
-        const categoryPromises = uniqueCategoryIds.map((categoryId) => getAPiNoneToken(`/category/${categoryId}`));
+        const categoryPromises = uniqueCategoryIds.map((categoryId) =>
+          getAPiNoneToken(`/category/${categoryId}`)
+        );
         const categoryResponses = await Promise.all(categoryPromises);
         const categoryMap = {};
-
+  
         categoryResponses.forEach((response) => {
           const { _id, name } = response.data.category;
           categoryMap[_id] = name;
         });
         setCategories(categoryMap);
-
-        const pendingPromises = jobs.map((job) => 
-          getApiWithToken(`/application/countPending/${job._id}`)
-      );
-      const pendingResponses = await Promise.all(pendingPromises);
-      const pendingMap = {};
-      pendingResponses.forEach((response, index) => {
-        pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
-      });
-      setPendingApplications(pendingMap);
+  
+        const pendingPromises = jobs.map((job) =>
+          postApiWithToken(`/application/countPending/${job._id}`, {})
+        );
+        const pendingResponses = await Promise.all(pendingPromises);
+        const pendingMap = {};
+        pendingResponses.forEach((response, index) => {
+          pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
+        });
+        setPendingApplications(pendingMap);
       } catch (error) {
         setError('Error fetching jobs');
         console.error(error);
@@ -67,41 +71,141 @@ const PostedJobs = () => {
         setLoading(false);
       }
     };
-
+  
     fetchJobs();
-  }, [companyId, currentPage]);
-
+  }, [companyId, currentPage, sortOrder]);
+  
   const All = async () => {
-    const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
+    const response = await postApiWithToken(`/job/get-job/${companyId}`, {
+      page: currentPage,
+      limit: 6,
+      sort: sortOrder === 'new' ? 'desc' : 'asc',
+    });
     const { jobs, totalPages } = response.data;
-    console.log(jobs);
-    
     setJobs(jobs);
     setTotalPages(totalPages);
-  }
-
-  const Accept  = async () => {
-    const responseA = await getApiWithToken(`/job/get-jobs/${companyId}?page=${currentPage}&limit=6`);
+    setActiveTab('All');
+  };
+  
+  const Accept = async () => {
+    const responseA = await postApiWithToken(`/job/get-jobs/${companyId}`, {
+      page: currentPage,
+      limit: 6,
+      sort: sortOrder === 'new' ? 'desc' : 'asc',
+    });
     const { jobs, totalPages } = responseA.data;
     setJobs(jobs);
     setTotalPages(totalPages);
-  }
-
+    setActiveTab('Accept');
+  };
+  
   const Reject = async () => {
-    const responseR = await getApiWithToken(`/job/get-jobs-rejected/${companyId}?page=${currentPage}&limit=6`);
-    const { jobs, totalPages } = responseR.data;    
+    const responseR = await postApiWithToken(`/job/get-jobs-rejected/${companyId}`, {
+      page: currentPage,
+      limit: 6,
+      sort: sortOrder === 'new' ? 'desc' : 'asc',
+    });
+    console.log(responseR);
+    
+    const { jobs, totalPages } = responseR.data;
     setJobs(jobs);
     setTotalPages(totalPages);
-  }
-
+    setActiveTab('Reject');
+  };
+  
   const Pending = async () => {
-    const responseP = await getApiWithToken(`/job/get-jobs-pending/${companyId}?page=${currentPage}&limit=6`);
-    const { jobs, totalPages } = responseP.data;
-    console.log(jobs);
-
+    const responseP = await postApiWithToken(`/job/get-jobs-pending/${companyId}`, {
+      page: currentPage,
+      limit: 6,
+      sort: sortOrder === 'new' ? 'desc' : 'asc',
+    });
+    console.log(responseP);
+    
+    const { jobs, totalPages } = responseP.data.data;
     setJobs(jobs);
     setTotalPages(totalPages);
-  }
+    setActiveTab('Pending');
+  };
+
+  //------1
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     try {
+  //       const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
+  //       const { jobs, totalPages } = response.data;
+  //       setJobs(jobs);
+  //       setTotalPages(totalPages);
+
+  //       const categoryIds = jobs.map((job) => job.category).filter(Boolean);
+  //       // const categoryIds = jobs
+  //       //   .map((job) => job.category)
+  //       //   .filter((categoryId) => categoryId); 
+  //       const uniqueCategoryIds = [...new Set(categoryIds)];
+  //       const categoryPromises = uniqueCategoryIds.map((categoryId) => getAPiNoneToken(`/category/${categoryId}`));
+  //       const categoryResponses = await Promise.all(categoryPromises);
+  //       const categoryMap = {};
+
+  //       categoryResponses.forEach((response) => {
+  //         const { _id, name } = response.data.category;
+  //         categoryMap[_id] = name;
+  //       });
+  //       setCategories(categoryMap);
+
+  //       const pendingPromises = jobs.map((job) => 
+  //         getApiWithToken(`/application/countPending/${job._id}`)
+  //     );
+  //     const pendingResponses = await Promise.all(pendingPromises);
+  //     const pendingMap = {};
+  //     pendingResponses.forEach((response, index) => {
+  //       pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
+  //     });
+  //     setPendingApplications(pendingMap);
+  //     } catch (error) {
+  //       setError('Error fetching jobs');
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchJobs();
+  // }, [companyId, currentPage]);
+
+  // const All = async () => {
+  //   const response = await getApiWithToken(`/job/get-job/${companyId}?page=${currentPage}&limit=6`);
+  //   const { jobs, totalPages } = response.data;
+  //   console.log(jobs);
+    
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('All');
+  // }
+
+  // const Accept  = async () => {
+  //   const responseA = await getApiWithToken(`/job/get-jobs/${companyId}?page=${currentPage}&limit=6`);
+  //   const { jobs, totalPages } = responseA.data;
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Accept');
+  // }
+
+  // const Reject = async () => {
+  //   const responseR = await getApiWithToken(`/job/get-jobs-rejected/${companyId}?page=${currentPage}&limit=6`);
+  //   const { jobs, totalPages } = responseR.data;    
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Reject');
+  // }
+
+  // const Pending = async () => {
+  //   const responseP = await getApiWithToken(`/job/get-jobs-pending/${companyId}?page=${currentPage}&limit=6`);
+  //   const { jobs, totalPages } = responseP.data;
+  //   console.log(jobs);
+
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Pending');
+  // }
   
   //
   const sortedJobs = [...jobs].sort((a, b) => {
@@ -141,25 +245,25 @@ const PostedJobs = () => {
 
         <div className={clsx(styles.tabs)}>
           <button
-            className={clsx(styles.tabButton)}
+            className={clsx(styles.tabButton, activeTab === 'All' && styles.activeTab)}
             onClick={All}
           >
             Tất cả
           </button>
           <button
-            className={clsx(styles.tabButton)}
+            className={clsx(styles.tabButton, activeTab === "Accept" && styles.activeTab)}
             onClick={Accept}
           >
             Đã được đồng ý
           </button>
           <button
-            className={clsx(styles.tabButton)}
+            className={clsx(styles.tabButton, activeTab === "Pending" && styles.activeTab)}
             onClick={Pending}
           >
             Chưa được phê duyệt
           </button>
           <button
-            className={clsx(styles.tabButton)}
+            className={clsx(styles.tabButton, activeTab === "Reject" && styles.activeTab)}
             onClick={Reject}
           >
             Đã bị từ chối
