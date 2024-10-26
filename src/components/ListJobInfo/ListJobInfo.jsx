@@ -6,8 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { getUserStorage } from '../../Utils/valid';
 import Swal from 'sweetalert2';
+import { useTranslation } from 'react-i18next';
 
 const ListJobInfo = () => {
+  const { t, i18n } = useTranslation();
+
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -243,23 +246,24 @@ const ListJobInfo = () => {
     fetchJobs();
   }, [fetchJobs]);
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className={clsx(styles.joblist)}>
-      <p className={clsx(styles.textTitle)}>Việc làm tốt nhất</p>
+      {/* <p className={clsx(styles.textTitle)}>Việc làm tốt nhất</p> */}
+      <p className={clsx(styles.textTitle)}>{t('listJobInfo.bestJob')}</p>
       <div className={clsx(styles.filter)}>
-      <div className={clsx(styles.loc)}>Lọc theo:</div>
+      <div className={clsx(styles.loc)}>{t('listJobInfo.filter')}</div>
         <select className={clsx(styles.locationInput)} value={filterCriteria} onChange={handleFilterChange}>
-          <option value="salary">Lương</option>
-          <option value="type">Loại công việc</option>
-          <option value="expiredAt">Hạn nộp hồ sơ</option>
-          <option value="position">Vị trí</option>
+          <option value="salary">{t('listJobInfo.salary')}</option>
+          <option value="type">{t('listJobInfo.type')}</option>
+          <option value="expiredAt">{t('listJobInfo.expired')}</option>
+          <option value="position">{t('listJobInfo.position')}</option>
         </select>
 
         <div className={clsx(styles.filterOptions)}>
-          <button onClick={() => handleFilterValueChange('All')} className={clsx(filterValue === 'All' && styles.active)}>Tất cả</button>
+          <button onClick={() => handleFilterValueChange('All')} className={clsx(filterValue === 'All' && styles.active)}>{t('listJobInfo.all')}</button>
           {filterCriteria === 'salary' && (
             <>
               {/* <button onClick={() => handleFilterValueChange('1000 - 2000$')} className={clsx(filterValue === '1000 - 2000$' && styles.active)}>1000 - 2000$</button> */}
@@ -285,16 +289,16 @@ const ListJobInfo = () => {
           )}
           {filterCriteria === 'type' && (
             <>
-              <button onClick={() => handleFilterValueChange('fulltime')} className={clsx(filterValue === 'fulltime' && styles.active)}>Full time</button>
-              <button onClick={() => handleFilterValueChange('parttime')} className={clsx(filterValue === 'parttime' && styles.active)}>Part time</button>
-              <button onClick={() => handleFilterValueChange('intern')} className={clsx(filterValue === 'intern' && styles.active)}>Intern</button>
+              <button onClick={() => handleFilterValueChange('fulltime')} className={clsx(filterValue === 'fulltime' && styles.active)}>{t('listJobInfo.fulltime')}</button>
+              <button onClick={() => handleFilterValueChange('parttime')} className={clsx(filterValue === 'parttime' && styles.active)}>{t('listJobInfo.parttime')}</button>
+              <button onClick={() => handleFilterValueChange('intern')} className={clsx(filterValue === 'intern' && styles.active)}>{t('listJobInfo.intern')}</button>
             </>
           )}
           {filterCriteria === 'position' && (
             <>
               <button onClick={() => handleFilterValueChange('Fullstack developer')} className={clsx(filterValue === 'Fullstack developer' && styles.active)}>Fullstack developer</button>
               <button onClick={() => handleFilterValueChange('Senior Developer')} className={clsx(filterValue === 'Senior Developer' && styles.active)}>Senior Developer</button>
-              <button onClick={() => handleFilterValueChange('lập trình viên')} className={clsx(filterValue === 'lập trình viên' && styles.active)}>Lập trình viên</button>
+              <button onClick={() => handleFilterValueChange('lập trình viên')} className={clsx(filterValue === 'lập trình viên' && styles.active)}>{t('listJobInfo.dev')}</button>
             </>
           )}
         </div>
@@ -361,7 +365,7 @@ const ListJobInfo = () => {
             ) : null
           ))
         ) : (
-          <div>Không tìm thấy việc làm phù hợp</div>
+          <div>{t('listJobInfo.noJob')}</div>
         )}
       </div>
 
@@ -372,7 +376,7 @@ const ListJobInfo = () => {
             {/* Previous */}
           </button>
         )}
-        <span>{pagination.currentPage} / {pagination.totalPages} trang </span>
+        <span>{pagination.currentPage} / {pagination.totalPages} {t('listJobInfo.page')} </span>
         {pagination.currentPage < pagination.totalPages && (
           <button onClick={() => handlePageChange(pagination.currentPage + 1)}>
             <i className="fa-solid fa-angle-right"></i>

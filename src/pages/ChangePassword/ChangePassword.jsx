@@ -14,6 +14,9 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
   const user = getUserStorage().user;
   console.log(user);
   
@@ -65,6 +68,12 @@ const ChangePassword = () => {
     }
   };
   
+  const toggleOldPasswordVisibility = () => {
+    setShowOldPassword(!showOldPassword);
+  };
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
   
   return (
     <>
@@ -86,38 +95,66 @@ const ChangePassword = () => {
                 <form onSubmit={handleChangePassword}>
                   <div className="form-group">
                     <label htmlFor="oldpassword">Old password</label>
-                    <input
-                      value={oldPassword}
-                      type="password"
-                      className="form-control"
-                      id="oldpassword"
-                      placeholder="Enter your old password"
-                      onChange={(e) => setOldPassword(e.target.value)}
-                    />
+                    <div className={clsx(styles.passwordContainer)}>
+                      <input
+                        value={oldPassword}
+                        type={showOldPassword ? 'text' : 'password'} 
+                        className="form-control"
+                        id="oldpassword"
+                        placeholder="Enter your old password"
+                        onChange={(e) => setOldPassword(e.target.value)}
+                      />
+
+                      <span 
+                        onClick={toggleOldPasswordVisibility} 
+                        style={{ marginTop: '8px', cursor: 'pointer' }}
+                      >
+                        { showOldPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                      </span>
+                    </div>
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="newpassword">New password</label>
-                    <input
-                      value={newPassword}
-                      type="password"
-                      className="form-control"
-                      id="newpassword"
-                      placeholder="Enter your new password"
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
+                    <div className={clsx(styles.passwordContainer)}>
+                      <input
+                        value={newPassword}
+                        type={showNewPassword ? 'text' : 'password'} 
+                        className="form-control"
+                        id="newpassword"
+                        placeholder="Enter your new password"
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+
+                      <span 
+                        onClick={toggleNewPasswordVisibility} 
+                        style={{ marginTop: '8px', cursor: 'pointer' }}
+                      >
+                        { showNewPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                      </span>
+                    </div>
                   </div>
 
                   <div className="form-group">
                     <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input
-                      value={confirmPassword}
-                      type="password"
-                      className="form-control"
-                      id="confirmPassword"
-                      placeholder="Confirm your password"
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                    <div className={clsx(styles.passwordContainer)}>
+                      <input
+                        value={confirmPassword}
+                        type={showNewPassword ? 'text' : 'password'} 
+                        className="form-control"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      
+                      />
+
+                      <span 
+                        onClick={toggleNewPasswordVisibility} 
+                        style={{ marginTop: '8px', cursor: 'pointer' }}
+                      >
+                        { showNewPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                      </span>
+                    </div>
                   </div>
 
                   <button type="submit" className="btn btn-primary w-100 mt-4">

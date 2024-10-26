@@ -6,8 +6,9 @@
   
   .mainContent {
     flex: 1;
-    padding: 2rem;
-    background: #f5f5f5;
+    // padding: 2rem;
+    // background: #f5f5f5;
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
     margin-top: 4rem; /* Khoảng cách để không bị che khuất bởi header */
   }
   
@@ -15,7 +16,7 @@
 .searchBar {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
+  margin: 4rem 0;
   height: 3.5rem; /* Set the height to match the form's height */
 }
 
@@ -85,7 +86,7 @@
   cursor: pointer;
   transition: background 0.3s ease;
   height: 100%; 
-  width: 150px;
+  width: 160px;
 
   i{
     margin-right: 1rem;

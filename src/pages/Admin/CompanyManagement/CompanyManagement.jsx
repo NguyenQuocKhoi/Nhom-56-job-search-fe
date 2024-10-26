@@ -105,7 +105,7 @@ const CompanyManagement = () => {
     setCompaniesAccepted(companiesWithIsActive.filter(company => company.status === true && company.pendingUpdates === null));
     setCompaniesRejected(companiesWithIsActive.filter(company => company.status === false && company.pendingUpdates === null));
     setCompaniesPending(companiesWithIsActive.filter(company => company.status === undefined || company.pendingUpdates !== null));
-
+    
       // setCompaniesAll(result.data.companies);
       // setCompaniesAccepted(result.data.companies.filter(company => company.status === true && company.pendingUpdates === null));
       // setCompaniesRejected(result.data.companies.filter(company => company.status === false && company.pendingUpdates === null));
@@ -125,6 +125,13 @@ const CompanyManagement = () => {
   useEffect(() => {
     fetchCompanies();
   }, [fetchCompanies]);
+
+  // useEffect(() => {
+  //   if (companiesPending) {
+  //     setNumberCompanyPending(companiesPending.length);  // Cập nhật số lượng công việc pending
+  //   }
+  // }, [companiesPending, setNumberCompanyPending]);  // Gọi lại mỗi khi jobsPending thay đổi
+  
 
   const handlePageChange = (newPage) => {
     fetchCompanies(newPage);
@@ -799,8 +806,8 @@ const CompanyManagement = () => {
                 {companiesAll.length > 0 ? (
                   companiesAll.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
@@ -819,11 +826,11 @@ const CompanyManagement = () => {
                               {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
+                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
-                        </Link>
                     </div>
                       
                   ))
@@ -851,12 +858,14 @@ const CompanyManagement = () => {
                 {companiesAccepted.length > 0 ? (
                   companiesAccepted.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <p><strong>{company.name}</strong></p>
+                              <p>{company.website}</p>
+                              <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
                                 {company.status === true 
@@ -869,11 +878,11 @@ const CompanyManagement = () => {
                               {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
+                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
-                        </Link>
                     </div>
                   ))
                 ) : (
@@ -900,12 +909,14 @@ const CompanyManagement = () => {
                 {companiesRejected.length > 0 ? (
                   companiesRejected.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <p><strong>{company.name}</strong></p>
+                              <p>{company.website}</p>
+                              <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
                                 {company.status === true 
@@ -917,11 +928,11 @@ const CompanyManagement = () => {
                               {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
+                        </Link>
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
                       </div>
-                        </Link>
                     </div>
                   ))
                 ) : (
@@ -948,23 +959,25 @@ const CompanyManagement = () => {
                 {companiesPending.length > 0 ? (
                   companiesPending.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
                               <h3><strong>{company.name}</strong></h3>
+                              <p>{company.website}</p>
+                              <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
-                                {company.status === true 
-                                  ? " Đồng ý" 
-                                  : company.status === false 
-                                  ? " Từ chối" 
-                                  : " Chưa phê duyệt"}
+                                {company.pendingUpdates || company.status === undefined 
+                                  ? "Chưa phê duyệt" 
+                                  : null}
                               </p>
+
                               {/* <p>Status: {""+company.status}</p> */}
                             </div>
                           </div>
+                          </Link>
                         <div className={clsx(styles.buttonGroup)}>
                           <button
                             // className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
@@ -987,7 +1000,6 @@ const CompanyManagement = () => {
                           </button>
                         </div>
                       </div>
-                      </Link>
                     </div>
                   ))
                 ) : (

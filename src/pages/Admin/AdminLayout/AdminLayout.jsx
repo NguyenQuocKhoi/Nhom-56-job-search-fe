@@ -18,9 +18,11 @@ const AdminLayout = () => {
       case 'overview':
         return <Overview />;
       case 'job':
-        return <JobManagement />;
+        return <JobManagement 
+        />;
       case 'company':
-        return <CompanyManagement />;
+        return <CompanyManagement 
+        />;
       case 'candidate':
         return <CandidateManagement />;
       case 'category':
@@ -41,7 +43,10 @@ const AdminLayout = () => {
       <Header />
       </div>
       <div className={styles.mainContent}>
-        <Sidebar setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
+        <Sidebar 
+          setSelectedTab={setSelectedTab} 
+          selectedTab={selectedTab} 
+        />
         <div className={styles.content}>
           {renderContent()}
         </div>

@@ -6,8 +6,11 @@ import styles from './postedJobs.module.scss';
 import { getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const PostedJobs = () => {
+  const { t, i18n } = useTranslation();
+
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -241,32 +244,32 @@ const PostedJobs = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <p className={clsx(styles.titleLon)}>Danh sách tin đã đăng</p>
+        <p className={clsx(styles.titleLon)}>{t('postCreated.postedList')}</p>
 
         <div className={clsx(styles.tabs)}>
           <button
             className={clsx(styles.tabButton, activeTab === 'All' && styles.activeTab)}
             onClick={All}
           >
-            Tất cả
+            {t('postCreated.all')}
           </button>
           <button
             className={clsx(styles.tabButton, activeTab === "Accept" && styles.activeTab)}
             onClick={Accept}
           >
-            Đã được đồng ý
+            {t('postCreated.accepted')}
           </button>
           <button
             className={clsx(styles.tabButton, activeTab === "Pending" && styles.activeTab)}
             onClick={Pending}
           >
-            Chưa được phê duyệt
+            {t('postCreated.pending')}
           </button>
           <button
             className={clsx(styles.tabButton, activeTab === "Reject" && styles.activeTab)}
             onClick={Reject}
           >
-            Đã bị từ chối
+            {t('postCreated.rejected')}
           </button>
         </div>
 
@@ -281,14 +284,14 @@ const PostedJobs = () => {
           <div className={clsx(styles.joblist)}>
             <div className={clsx(styles.jobContainer)}>
               <div className={clsx(styles.khongCoTin)}>
-                <p>Không có công việc nào nào.</p>
+                <p>{t('postCreated.noJob')}.</p>
               </div>
             </div>        
           </div>
         ) : (
           <>
             <div className={clsx(styles.filterContainer)}>
-                <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
+                <p className={clsx(styles.textFilter)}>{t('appliedJob.display')}: </p>
                   <label>
                     <input
                       type="radio"
@@ -297,7 +300,7 @@ const PostedJobs = () => {
                       checked={sortOrder === 'new'}
                       onChange={() => handleSortChange('new')}
                     />
-                    Mới nhất
+                    {t('appliedJob.lastest')}
                   </label>
                   <label>
                     <input
@@ -307,7 +310,7 @@ const PostedJobs = () => {
                       checked={sortOrder === 'old'}
                       onChange={() => handleSortChange('old')}
                     />
-                    Cũ nhất
+                    {t('appliedJob.oldest')}
                   </label>
                 </div>
 

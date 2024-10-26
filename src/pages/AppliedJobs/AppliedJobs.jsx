@@ -7,8 +7,11 @@ import { getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 const AppliedJobs = () => {
+  const { t, i18n } = useTranslation();
+
   const [applications, setApplications] = useState([]);
   const [jobDetails, setJobDetails] = useState({});
   const [loading, setLoading] = useState(true);
@@ -93,7 +96,7 @@ const AppliedJobs = () => {
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <p className={clsx(styles.title)}>Danh sách công việc đã ứng tuyển</p>
+        <p className={clsx(styles.title)}>{t('appliedJob.appliedJob')}</p>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -103,7 +106,7 @@ const AppliedJobs = () => {
 
           {/* lọc */}
                 <div className={clsx(styles.filterContainer)}>
-                <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
+                <p className={clsx(styles.textFilter)}>{t('appliedJob.display')}: </p>
                   <label>
                     <input
                       type="radio"
@@ -112,7 +115,7 @@ const AppliedJobs = () => {
                       checked={sortOrder === 'new'}
                       onChange={() => setSortOrder('new')}
                     />
-                    Mới nhất
+                    {t('appliedJob.lastest')}
                   </label>
                   <label>
                     <input
@@ -122,7 +125,7 @@ const AppliedJobs = () => {
                       checked={sortOrder === 'old'}
                       onChange={() => setSortOrder('old')}
                     />
-                    Cũ nhất
+                    {t('appliedJob.oldest')}
                   </label>
                 </div>
 
@@ -161,7 +164,7 @@ const AppliedJobs = () => {
             })}
           </div>
         ) : (
-          <p>Không có công việc nào đã ứng tuyển.</p>
+          <p>{t('appliedJob.notApplied')}.</p>
         )}
       </div>
       <Footer />

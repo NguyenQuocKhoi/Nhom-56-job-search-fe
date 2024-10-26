@@ -14,6 +14,175 @@
       "postCreated":"Post Created",
       "noNotifications":"No notification",
       "savedCandidates":"Saved Candidates"
+    },
+    "search":{
+      "search": "Search",
+      "allCities": "All cities",
+      "enterJob": "Enter job title, skill, etc",
+      "enterCompany": "Enter company name, etc",
+      "suggestedKeyword": "Suggested keyword",
+      "jobNotFound": "Can't find a suitable job",
+      "company":"Companies",
+      "job":"Jobs",
+      "display": "Display priority by",
+      "default":"Default",
+      "postAt":"Posted date",
+      "expireOn":"expiration date",
+      "salaryDownToUp":"Salary from low to high"
+    },
+    "recommendJob":{
+      "recommendJob":"Suggest suitable jobs"
+    },
+    "listJobInfo":{
+      "bestJob":"Best job",
+      "filter": "Filter by",
+      "salary": "Salary",
+      "all": "All",
+      "milion": "triệu",
+      "agree": "Thỏa thuận",
+      "type": "Type",
+      "parttime": "Part time",
+      "fulltime": "Full time",
+      "intern": "Intern",
+      "expired": "Expire on",
+      "position": "Position",
+      "dev": "Developer",
+      "page": "page",
+      "noJob": "No Job"
+    },
+    "listCompany":{
+      "topCompany": "Top companies"
+    },
+    "savedJob":{
+      "savedJob": "Saved Job List",
+      "notSaved": "You have not saved any work.",
+      "clickHere": "Click here to explore more exciting jobs"
+    },
+    "appliedJob":{
+      "appliedJob": "Applied Job list",
+      "display": "Display priority by",
+      "lastest": "Lastest",
+      "oldest": "Oldest",
+      "notApplied": "You have not applied for any jobs yet."
+    },
+    "footer":{
+      "contactUs": "Contact us",
+      "address": "Address",
+      "hotline": "Hotline",
+      "introWebsite": "Website Introduction",
+      "social": "Social network",
+      "follow": "Follow now"
+    },
+    "profile":{
+      "info": "Personal information",
+      "name": "Full name",
+      "phone": "Phone number",
+      "address": "Address",
+      "city": "City",
+      "skill": "Skill",
+      "chooseSkill": "Choose skill",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "exp": "Experience",
+      "edu": "Education",
+      "moreInfo": "More infomation",
+      "privateAcc": "Private account",
+      "publicAcc": "Public account",
+      "autoApply": "Auto apply",
+      "stopAutoApply": "Stop auto apply",
+      "updateInfo": "Update infomation",
+      "update": "Update",
+      "cancel": "Cancel",
+      "notify": "Notification",
+      "newNotify": "New notification",
+      "viewDetailJob": "View job details",
+      "notifyDetail":"Notification Detail",
+      "close": "Close",
+      "notUpdate": "Not updated yet",
+      "male": "Male",
+      "female": "Female",
+      "selectCity": "Select a city",
+      "deleteCV": "Delete CV"
+    },
+    "createPostJob":{
+      "createJob":"Create Job Posting",
+      "title": "Title",
+      "describe": "Description",
+      "requirement": "Requirement",
+      "interest": "Interest",
+      "address": "Address",
+      "city": "City",
+      "chooseCity": "Choose city",
+      "salary": "Salary",
+      "numberOfCruiment": "Number of cruiment",
+      "exp": "Experience",
+      "expired": "Expire on",
+      "skill": "Skill",
+      "chooseSkill": "Choose skill",
+      "position": "Position",
+      "type": "Type",
+      "category": "Category",
+      "chooseCategory": "Choose category",
+      "createPost": "Create Post",
+      "exit": "Exit",
+      "close": "Close",
+      "notApprove":"Account not approved! You can post job ads only after approval."
+    },
+    "editPost":{
+      "editJob":"Edit Job Posting",
+      "confirmEdit":"Confirm edit",
+      "editPost": "Edit Post",
+      "cancel": "Cancel"
+    },
+    "postCreated":{
+      "postedList": "List of posted jobs",
+      "all": "All",
+      "accepted": "Accepted",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "noJob": "No jobs posted yet"
+    },
+    "savedCandidates":{
+      "savedCandidateList": "List of saved candidates",
+      "notSavedCandidate": "No candidates saved yet"
+    },
+    "profileCompany":{
+      "infoCompany":"Company Information",
+      "name":"Full name",
+      "phone":"Phone number",
+      "address":"Address",
+      "city":"City",
+      "description":"Description",
+      "updateInfo":"Update infomation",
+      "update":"Update",
+      "cancel":"Cancel",
+      "wait":"Pending approval"
+    },
+    "postedDetail":{
+      "numberCandidate":"Number of candidates awaiting approval",
+      "listCandidate":"Candidate List",
+      "noCandidateApplied":"No candidates applied for this job",
+      "btnSua":"Edit post",
+      "btnXoa":"Delete post",
+      "wait":"Pending approval"
+    },
+    "apply":{
+      "applyNow":"Apply now",
+      "applied":"Applied",
+      "save":"Save",
+      "unsave":"Unsave",
+      "close":"Close",
+      "apply":"Apply",
+      "loadCV":"Download CV and fill in information",
+      "name":"Name",
+      "phone":"Phone number",
+      "option":"Do you want to use old CV or new CV?",
+      "oldCV":"Old CV",
+      "newCV":"New CV",
+      "chooseCV":"Choose CV",
+      "fillName":"Enter display name with NTD",
+      "fillEmail":"Enter display email with NTD",
+      "fillPhone":"Enter display phone number with NTD"
     }
   }
   

@@ -85,6 +85,7 @@ const JobManagement = () => {
       setJobsAccepted(jobsWithSkills.filter(job => job.status === true && job.pendingUpdates === null));
       setJobsRejected(jobsWithSkills.filter(job => job.status === false && job.pendingUpdates === null));
       setJobsPending(jobsWithSkills.filter(job => job.pendingUpdates !== null || job.status === undefined));      
+
       // setJobsAll(result.data.jobs);
       // setJobsAccepted(result.data.jobs.filter(job => job.status === true && job.pendingUpdates === null));
       // setJobsRejected(result.data.jobs.filter(job => job.status === false && job.pendingUpdates === null));
@@ -135,6 +136,12 @@ const JobManagement = () => {
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  // useEffect(() => {
+  //   if (jobsPending) {
+  //     setNumberJobPending(jobsPending.length);  // Cập nhật số lượng công việc pending
+  //   }
+  // }, [jobsPending, setNumberJobPending]);  // Gọi lại mỗi khi jobsPending thay đổi  
 
   const handlePageChange = (newPage) => {
     fetchJobs(newPage);
@@ -582,8 +589,9 @@ const JobManagement = () => {
                   jobsAll.map((job) => (
             job && job._id && job.company && job.company._id ? (
                     <div className={clsx(styles.content)}  key={job._id}>
-                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                      {/* <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}> */}
                       <div className={clsx(styles.jobcard)}>
+                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
                       <div className={styles.contentJobcard}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
@@ -611,9 +619,10 @@ const JobManagement = () => {
                           )}
                         </div>
                       </div>
+                        </Link>
                           <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
-                      </Link>
+                      {/* </Link> */}
                     </div>
             ):null
                   ))
@@ -643,8 +652,8 @@ const JobManagement = () => {
                   jobsAccepted.map((job) => (
             job && job._id && job.company && job.company._id ? (
                       <div key={job._id} className={clsx(styles.content)}>
-                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
                         <div className={clsx(styles.jobcard)}>
+                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
                         <div className={clsx(styles.contentJobcard)}>
                           <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                           <div className={clsx(styles.contentText)}>
@@ -662,9 +671,9 @@ const JobManagement = () => {
                             )}
                           </div>
                         </div>                          
+                    </Link>
                           <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                       </div>
-                    </Link>
                   </div>
             ):null
                   ))
@@ -693,8 +702,8 @@ const JobManagement = () => {
                   jobsRejected.map((job) => (
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
-          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.jobcard)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
@@ -712,9 +721,9 @@ const JobManagement = () => {
                   )}
                 </div>
               </div>                          
+          </Link>
                 <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
             </div>
-          </Link>
         </div>
             ):null
                   ))
@@ -743,14 +752,20 @@ const JobManagement = () => {
                   jobsPending.map((job) => (
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
-          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.jobcard)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
                   <p><strong>{job.title}</strong></p>
                   <p>Company: {job.company.name}</p>
                   <p>Address: {job.street},{job.city}</p>
+                  <p>
+                    Trạng thái: 
+                    {job.pendingUpdates || job.status === undefined 
+                      ? "Chưa phê duyệt" 
+                      : null}
+                  </p>
                   {job.skillNames && job.skillNames.length > 0 ? (
                     <div className={clsx(styles.skills)}>
                       {job.skillNames.map((skill, index) => (
@@ -762,6 +777,7 @@ const JobManagement = () => {
                   )}
                 </div>
               </div>                          
+                                </Link>
                               <div className={clsx(styles.buttonContainer)}>
                                 <button
                                   className={clsx(styles.btnDongY, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
@@ -780,7 +796,6 @@ const JobManagement = () => {
                                 <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
                               </div>
                       </div>
-          </Link>
                     </div>
             ):null
                   ))

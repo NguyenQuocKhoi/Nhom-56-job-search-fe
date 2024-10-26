@@ -6,8 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 import { getUserStorage } from '../../Utils/valid';
+import { useTranslation } from 'react-i18next';
 
 const JobsRecommended = ({ candidateId }) => {
+  const { t, i18n } = useTranslation();
+
   const navigate = useNavigate();
 
   const [jobs, setJobs] = useState([]);
@@ -171,7 +174,7 @@ const JobsRecommended = ({ candidateId }) => {
     <div className={clsx(styles.joblist)}>
       {
         displayedJobs.length > 0 &&
-        <p className={clsx(styles.textTitle)}>Gợi ý việc làm phù hợp</p>
+        <p className={clsx(styles.textTitle)}>{t('recommendJob.recommendJob')}</p>
       }
       <div className={clsx(styles.jobContainer)}>
         {displayedJobs.length > 0 ? (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAPiNoneToken } from '../../api';
+import { getAPiNoneToken, postApiWithToken } from '../../api';
 import styles from './detailCompany.module.scss';
 import clsx from 'clsx';
 import Header from '../../components/Header/Header';
@@ -33,7 +33,12 @@ const DetailCompany = () => {
 
     const fetchJobs = async () => {
       try {
-        const response = await getAPiNoneToken(`/job/get-jobs/${id}?page=${currentPage}&limit=6`);
+        // const response = await getAPiNoneToken(`/job/get-jobs/${id}?page=${currentPage}&limit=6`);
+        const response = await postApiWithToken(`/job/get-jobs/${id}`, {
+          // page: currentPage,
+          // limit: 6,
+          // sort: sortOrder === 'new' ? 'desc' : 'asc',
+        });
         if (response.data.jobs.length === 0) {
           setJobs([]);  // No jobs found
           setTotalPages(1); // Ensure pagination is reset

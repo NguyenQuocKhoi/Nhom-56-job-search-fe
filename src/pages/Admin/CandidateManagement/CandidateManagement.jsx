@@ -818,8 +818,9 @@ const CandidateManagement = () => {
         {candidates.length > 0 ? (
           candidates.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>
-                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+                {/* <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}> */}
               <div className={clsx(styles.candidatecard)}>
+                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
                   <div className={clsx(styles.contentCandidatecard)}>
                     <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                     <div className={clsx(styles.contentText)}>
@@ -835,6 +836,7 @@ const CandidateManagement = () => {
                       {/* <p>IsActive: {"" + candidate.isActive}</p> */}
                     </div>
                   </div>
+                  </Link>
                 <button
                   className={clsx(styles.btnVoHieuHoa)}
                   onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
@@ -842,7 +844,7 @@ const CandidateManagement = () => {
                   {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                 </button>
               </div>
-                  </Link>
+                    {/* </Link> */}
             </div>
           ))
         ) : (

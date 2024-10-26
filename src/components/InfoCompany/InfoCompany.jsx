@@ -7,6 +7,7 @@ import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useTranslation } from 'react-i18next';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -25,6 +26,8 @@ const cities = [
 ];
 
 const InfoCompany = () => {
+  const { t, i18n } = useTranslation();
+
   const [company, setCompany] = useState({
     avatar: '',
     name: '',
@@ -163,7 +166,7 @@ const InfoCompany = () => {
 
   return (
     <div className={clsx(styles.companyInfo)}>
-      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>Thông tin công ty</h2>
+      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profileCompany.infoCompany')}</h2>
       
       <div className={clsx(styles.top)}>
         <div className={clsx(styles.avatarSection)}>
@@ -179,7 +182,7 @@ const InfoCompany = () => {
         </div>
 
         <div className={clsx(styles.topInfo)}>
-          <label>Name:</label>
+          <label>{t('profileCompany.name')}:</label>
           <input 
             type="text" 
             name="name"
@@ -199,7 +202,7 @@ const InfoCompany = () => {
             className={clsx(getStyleForField('email'))}
           />
 
-          <label>Phone Number:</label>
+          <label>{t('profileCompany.phone')}:</label>
           <input 
             type="text" 
             name="phoneNumber"
@@ -215,7 +218,7 @@ const InfoCompany = () => {
         <div className={clsx(styles.midAddress)}>
 
         <div className={clsx(styles.midAddressStreet)}>
-            <p className={clsx(styles.textStreet)}>Địa chỉ:</p>
+            <p className={clsx(styles.textStreet)}>{t('profileCompany.address')}:</p>
             <input 
               type="text" 
               name="street"
@@ -250,7 +253,7 @@ const InfoCompany = () => {
           {/* cũ */}
           <div className={clsx(styles.midAddressCity)}>
             <div className={clsx(styles.midCityContainer)}>
-              <p className={clsx(styles.textStreet)}>Tỉnh/Thành phố:</p>
+              <p className={clsx(styles.textStreet)}>{t('profileCompany.city')}:</p>
               <input 
                 type="text" 
                 name="city"
@@ -316,7 +319,7 @@ const InfoCompany = () => {
             className={clsx(getStyleForField('website'))}
           />
 
-        <label>Description:</label>
+        <label>{t('profileCompany.description')}:</label>
         {/* <textarea
           type="text" 
           name="description"
@@ -337,15 +340,15 @@ const InfoCompany = () => {
           {isEditing ? (
             <>
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
-                Cập nhật
+                {t('profileCompany.update')}
               </button>
               <button className={clsx(styles.btnCancel)} onClick={() => setIsEditing(false)}>
-                Hủy
+                {t('profileCompany.cancel')}
               </button>
             </>
           ) : (
             <button className={clsx(styles.btnEdit)} onClick={() => setIsEditing(true)}>
-              Cập nhật thông tin
+              {t('profileCompany.updateInfo')}
             </button>
           )}
         </div>
@@ -353,7 +356,7 @@ const InfoCompany = () => {
 
       {company.pendingUpdates && (
       <div className={clsx(styles.dangchopheduyet)}>
-        <h3>Đang chờ phê duyệt</h3>
+        <h3>{t('profileCompany.wait')}</h3>
       </div>)}
     </div>
   );

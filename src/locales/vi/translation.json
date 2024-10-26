@@ -14,6 +14,175 @@
       "postCreated":"Công việc đã tạo",
       "noNotifications":"Không có thông báo",
       "savedCandidates": "Ứng viên đã lưu"
+    },
+    "search":{
+      "search": "Tìm kiếm",
+      "allCities": "Tất cả",
+      "enterJob": "Nhập tên công việc, kỹ năng,...",
+      "enterCompany": "Nhập tên công ty,...",
+      "suggestedKeyword": "Từ khóa gợi ý",
+      "jobNotFound": "Không tìm thấy việc làm phù hợp",
+      "company":"Công ty",
+      "job":"Việc làm",
+      "display": "Ưu tiên hiển thị theo",
+      "default":"Mặc định",
+      "postAt":"Ngày đăng",
+      "expireOn":"Ngày hết hạn",
+      "salaryDownToUp":"Lương từ thấp đến cao"
+    },
+    "recommendJob":{
+      "recommendJob":"Gợi ý việc làm phù hợp"
+    },
+    "listJobInfo":{
+      "bestJob":"Việc làm tốt nhất",
+      "filter": "Lọc theo",
+      "salary": "Lương",
+      "all": "Tất cả",
+      "milion": "triệu",
+      "agree": "Thỏa thuận",
+      "type": "Loại công việc",
+      "parttime": "Bán thời gian",
+      "fulltime": "Toàn thời gian",
+      "intern": "Thực tập sinh",
+      "expired": "Hạn nộp hồ sơ",
+      "position": "Vị trí",
+      "dev": "Lập trình viên",
+      "page": "trang",
+      "noJob":"Không có công việc để hiển thị"
+    },
+    "listCompany":{
+      "topCompany": "Top công ty hàng đầu"
+    },
+    "savedJob":{
+      "savedJob": "Danh sách công việc đã lưu",
+      "notSaved": "Bạn chưa lưu công việc nào",
+      "clickHere": "Nhấn vào đây để khám phá nhiều công việc hấp dẫn"
+    },
+    "appliedJob":{
+      "appliedJob": "Danh sách công việc đã ứng tuyển",
+      "display": "Ưu tiên hiển thị theo",
+      "lastest": "Mới nhất",
+      "oldest": "Cũ nhất",
+      "notApplied": "Bạn chưa ứng tuyển công việc nào"
+    },
+    "footer":{
+      "contactUs": "Liên hệ với chúng tôi",
+      "address": "Địa chỉ",
+      "hotline": "Đường dây nóng",
+      "introWebsite": "Giới thiệu website",
+      "social": "Mạng xã hội",
+      "follow": "Follow ngay"
+    },
+    "profile":{
+      "info": "Thông tin cá nhân",
+      "name": "Họ và tên",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ",
+      "city": "Tỉnh/thành phố",
+      "skill": "Kỹ năng",
+      "chooseSkill": "Chọn kỹ năng",
+      "dob": "Ngày sinh",
+      "gender": "Giới tính",
+      "exp": "Kinh nghiệm",
+      "edu": "Học vấn",
+      "moreInfo": "Thông tin thêm",
+      "privateAcc": "Tài khoản riêng tư",
+      "publicAcc": "Tài khoản công khai",
+      "autoApply": "Ứng tuyển tự động",
+      "stopAutoApply": "Ngưng ứng tuyển tự động",
+      "updateInfo": "Cập nhật thông tin",
+      "update": "Cập nhật",
+      "cancel": "Hủy",
+      "notify": "Thông báo",
+      "newNotify": "Thông báo mới",
+      "viewDetailJob": "Xem chi tiết công việc",
+      "notifyDetail":"Chi tiết thông báo",
+      "close": "Đóng",
+      "notUpdate": "Chưa cập nhật",
+      "male": "Nam",
+      "female": "Nữ",
+      "selectCity": "Chọn tỉnh/tp",
+      "deleteCV": "Xóa CV"
+    },
+    "createPostJob":{
+      "createJob":"Tạo Tin Tuyển Dụng",
+      "title": "Tiêu đề",
+      "describe": "Mô tả",
+      "requirement": "Yêu cầu",
+      "interest": "Phúc lợi",
+      "address": "Địa chỉ",
+      "city": "Tỉnh/thành phố",
+      "chooseCity": "Chọn tỉnh/tp",
+      "salary": "Mức lương",
+      "numberOfCruiment": "Số lương tuyển",
+      "exp": "Kinh nghiệm",
+      "expired": "Ngày hết hạn",
+      "skill": "Kỹ năng(Yêu cầu)",
+      "chooseSkill": "Chọn kỹ năng",
+      "position": "Vị trí",
+      "type": "Loại công việc",
+      "category": "Danh mục",
+      "chooseCategory": "Chọn danh mục",
+      "createPost": "Tạo bài đăng",
+      "exit": "Thoát",
+      "close": "Đóng",
+      "notApprove":"Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng"
+    },
+    "editPost":{
+      "editJob":"Sửa Tin Tuyển Dụng",
+      "confirmEdit":"Xác nhận chỉnh sửa",
+      "editPost": "Sửa bài đăng",
+      "cancel": "Hủy bỏ"
+    },
+    "postCreated":{
+      "postedList": "Danh sách tin đã đăng",
+      "all": "Tất cả",
+      "accepted": "Đã được đồng ý",
+      "pending": "Chưa được phê duyệt",
+      "rejected": "Đã bị từ chối",
+      "noJob": "Chưa đăng công việc nào"
+    },
+    "savedCandidates":{
+      "savedCandidateList": "Danh sách ứng viên đã lưu",
+      "notSavedCandidate": "Chưa lưu ứng viên nào"
+    },
+    "profileCompany":{
+      "infoCompany":"Thông tin công ty",
+      "name":"Họ và tên",
+      "phone":"Số điện thoại",
+      "address":"Địa chỉ",
+      "city":"Tỉnh/thành phố",
+      "description":"Mô tả",
+      "updateInfo":"Cập nhật thông tin",
+      "update":"Cập nhật",
+      "cancel":"Hủy",
+      "wait":"Đang chờ phê duyệt"
+    },
+    "postedDetail":{
+      "numberCandidate":"Số lượng ứng viên chờ phê duyệt",
+      "listCandidate":"Danh sách ứng viên",
+      "noCandidateApplied":"Không có ứng viên ứng tuyển",
+      "btnSua":"Sửa bài đăng",
+      "btnXoa":"Xóa bài đăng",
+      "wait":"Đang chờ phê duyệt"
+    },
+    "apply":{
+      "applyNow":"Ứng tuyển ngay",
+      "applied":"Đã ứng tuyển",
+      "save":"Lưu tin",
+      "unsave":"Bỏ lưu",
+      "close":"Đóng",
+      "apply":"Ứng tuyển",
+      "loadCV":"Tải CV và điền thông tin",
+      "name":"Họ và tên",
+      "phone":"Số điện thoại",
+      "option":"Bạn muốn dùng CV cũ hay CV mới",
+      "oldCV":"CV cũ",
+      "newCV":"CV mới",
+      "chooseCV":"Chọn CV",
+      "fillName":"Nhập tên hiển thị với NTD",
+      "fillEmail":"Nhập email hiển thị với NTD",
+      "fillPhone":"Nhập số điện thoại hiển thị với NTD"
     }
   }
   

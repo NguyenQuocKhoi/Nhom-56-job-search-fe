@@ -162,10 +162,26 @@
 .textCV{
   align-self: center;
   display: flex;
-  margin-right: 10px;
+  margin-left: 10px;
+  gap: 3px;
+  // margin-right: 10px;
+  // background: yellow;
 }
 .uploadSection{
-  display: flex;
+  margin-top: 40px;
+  // background: green;
+  // display: flex;
+}
+.btnXoa{
+  background: red;
+  border-radius: 5px;
+  margin-left: 10px;
+  height: 40px;
+  border: 1px solid white;
+  color: white;
+}
+.btnXoa:hover{
+  background: lightcoral;
 }
 .modalSkill{
   display: flex;

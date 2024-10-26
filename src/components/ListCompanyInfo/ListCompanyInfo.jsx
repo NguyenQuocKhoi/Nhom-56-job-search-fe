@@ -4,6 +4,7 @@ import styles from './listCompanyInfo.module.scss';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 
 const ListCompanyInfo = () => {
@@ -15,6 +16,8 @@ const ListCompanyInfo = () => {
     totalPages: 1,
     limit: 10,
   });
+
+  const { t, i18n } = useTranslation();
 
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
@@ -41,12 +44,12 @@ const ListCompanyInfo = () => {
     fetchCompanies(newPage);
   };
 
-  if (loading) return <div>Loading...</div>;
+  // if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className={clsx(styles.companylist)}>
-      <p className={clsx(styles.textTitle)}>Top công ty hàng đầu</p>
+      <p className={clsx(styles.textTitle)}>{t('listCompany.topCompany')}</p>
       <div className={clsx(styles.companyContainer)}>
         {companies.length > 0 ? (
           companies.map((company) => (

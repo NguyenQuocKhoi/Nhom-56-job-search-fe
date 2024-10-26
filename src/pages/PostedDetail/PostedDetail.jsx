@@ -7,8 +7,11 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getAPiNoneToken, getApiWithToken, deleteApiWithToken } from '../../api';
 import Swal from 'sweetalert2';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 const PostedDetail = () => {
+  const { t, i18n } = useTranslation();
+
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
@@ -218,11 +221,11 @@ const PostedDetail = () => {
           </div>
 
           <div className={clsx(styles.groupButton)}>
-            <button onClick={handleEditPost} className={clsx(styles.btnSua)}>Sửa bài đăng</button>
-            <button onClick={handleDeletePost} className={clsx(styles.btnXoa)}>Xóa bài đăng</button>
+            <button onClick={handleEditPost} className={clsx(styles.btnSua)}>{t('postedDetail.btnSua')}</button>
+            <button onClick={handleDeletePost} className={clsx(styles.btnXoa)}>{t('postedDetail.btnXoa')}</button>
           </div>
           <div className={clsx(styles.textChoPheDuyet)}>
-            {job.pendingUpdates && <p>Đang chờ phê duyệt</p>}
+            {job.pendingUpdates && <p>{t('postedDetail.wait')}</p>}
           </div>
         </div>
 
@@ -277,8 +280,8 @@ const PostedDetail = () => {
             {apply.length > 0 ? (
               <div className={clsx(styles.joblist)}>
             <div className={clsx(styles.ds)}>
-              <strong>Số lượng ứng viên chờ phê duyệt: {numberApplyPending}</strong>
-              <strong>Danh sách ứng viên:</strong>
+              <strong>{t('postedDetail.numberCandidate')}: {numberApplyPending}</strong>
+              <strong>{t('postedDetail.listCandidate')}:</strong>
             </div>
                   <div className={clsx(styles.jobContainer)}>
                     {apply.map((apply, index) => (
@@ -315,7 +318,7 @@ const PostedDetail = () => {
                 </div>
             ) : (
               <div className={clsx(styles.ds)}>
-                <strong>No candidates applied for this job.</strong>
+                <strong>{t('postedDetail.noCandidateApplied')}.</strong>
               </div>
             )}
           </div>

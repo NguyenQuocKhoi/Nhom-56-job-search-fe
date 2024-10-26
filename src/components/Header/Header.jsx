@@ -227,8 +227,8 @@ const Header = () => {
   </Dropdown.Toggle>
   <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
     <div className={clsx(styles.tb)}>
-      <p>Thông báo</p>
-      <p>{numberNotifyNotRead} Thông báo mới</p>
+      <p>{t('profile.notify')}</p>
+      <p>{numberNotifyNotRead} {t('profile.newNotify')}</p>
     </div>
     {notifications.length > 0 ? (
       notifications.map(notification => (
@@ -261,7 +261,7 @@ const Header = () => {
   {selectedNotification && (
     <Modal show={showModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Notification Detail</Modal.Title>
+        <Modal.Title>{t('profile.notifyDetail')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>{selectedNotification.message}</p>
@@ -269,12 +269,12 @@ const Header = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleCloseModal}>
-          Close
+          {t('profile.close')}
         </Button>
         {role === 'candidate' && selectedNotification.job && (
           <Link to={`/detailJob/${selectedNotification.job}`} className={clsx(styles.jobcard)}>
             <Button variant="secondary">
-              Xem chi tiết công việc
+              {t('profile.viewDetailJob')}
             </Button>
           </Link>
         )}
@@ -314,8 +314,8 @@ const Header = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu className={clsx(styles.scrollableDropdown)}>
                     <div className={clsx(styles.tb)}>
-                      <p>Thông báo</p>
-                      <p>{numberNotifyNotRead} Thông báo mới</p>
+                      <p>{t('profile.notify')}</p>
+                      <p>{numberNotifyNotRead} {t('profile.newNotify')}</p>
                     </div>
                       {notifications.length > 0 ? (
                         notifications.map(notification => (
@@ -346,7 +346,7 @@ const Header = () => {
                   {selectedNotification && (
                     <Modal show={showModal} onHide={handleCloseModal}>
                       <Modal.Header closeButton>
-                        <Modal.Title>Notification Detail</Modal.Title>
+                        <Modal.Title>{t('profile.notifyDetail')}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
                         <p>{selectedNotification.message}</p>
@@ -354,12 +354,12 @@ const Header = () => {
                       </Modal.Body>
                       <Modal.Footer>
                         <Button variant="secondary" onClick={handleCloseModal}>
-                          Close
+                          {t('profile.close')}
                         </Button>
                         {role === 'company' && selectedNotification.job && (
                           <Link to={`/detailJob/${selectedNotification.job}`} className={clsx(styles.jobcard)}>
                             <Button variant="secondary">
-                              Xem chi tiết công việc
+                              {t('profile.viewDetailJob')}
                             </Button>
                           </Link>
                         )}

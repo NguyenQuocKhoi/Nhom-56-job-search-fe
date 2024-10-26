@@ -403,7 +403,9 @@ const SearchResult = () => {
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
                         <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
-                        <h3>{company.name}</h3>
+                        <div className={clsx(styles.nameSearchContainer)}>
+                          <h3>{company.name}</h3>
+                        </div>
                       </div>
                     </Link>
                   ))
@@ -617,7 +619,9 @@ const SearchResult = () => {
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
                       <div className={clsx(styles.companycard)}>
                         <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatarCompany)}/>
-                        <h3>{company.name}</h3>
+                        <div className={clsx(styles.nameSearchContainer)}>
+                          <h3>{company.name}</h3>
+                        </div>
                       </div>
                     </Link>
                   ))

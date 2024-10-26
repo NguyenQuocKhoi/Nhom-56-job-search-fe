@@ -1,8 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../SideBar/sideBar.module.scss';
 import clsx from 'clsx';
+import { getApiWithToken } from '../../../api';
 
 const Sidebar = ({ setSelectedTab, selectedTab }) => {
+  const [hasPendingJobs, setHasPendingJobs] = useState(false);
+  const [hasPendingCompanies, setHasPendingCompanies] = useState(false);
+
+  useEffect(() => {
+    const fetchPendingJobs = async () => {
+      try {
+        const response = await getApiWithToken('/job/get-all-pending');
+        console.log("job",response);
+        
+        if (response.data.success && response.data.totalJobs > 0) {
+          setHasPendingJobs(true);
+        } else {
+          setHasPendingJobs(false);
+        }
+      } catch (error) {
+        console.error('Error fetching pending jobs:', error);
+      }
+    };
+
+    const fetchPendingCompanies = async () => {
+      try {
+        const responseC = await getApiWithToken('/company/get-all-companies-pending');
+        console.log("company",responseC);
+        
+        if (responseC.data.success && responseC.data.totalCompanies > 0) {
+          setHasPendingCompanies(true);
+        } else {
+          setHasPendingCompanies(false);
+        }
+      } catch (error) {
+        console.error('Error fetching pending companies:', error);
+      }
+    };
+
+    fetchPendingJobs();
+    fetchPendingCompanies();
+  }, []);
+
   return (
     <div className={styles.sidebar}>
       <div
@@ -17,14 +56,20 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
         onClick={() => setSelectedTab('job')}
       >
         <i className="fa-solid fa-briefcase"></i>
-        <p className={clsx(styles.text)}>Quản lí việc làm</p>
+        <p className={clsx(styles.text)}>
+          Quản lí việc làm
+          {hasPendingJobs && <span className={clsx(styles.notificationDot)}></span>}
+        </p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'company' ? styles.active : ''}`}
         onClick={() => setSelectedTab('company')}
       >
         <i className="fa-solid fa-building"></i>
-        <p className={clsx(styles.text)}>Quản lí công ty</p>
+        <p className={clsx(styles.text)}>
+          Quản lí công ty
+          {hasPendingCompanies && <span className={clsx(styles.notificationDot)}></span>}
+        </p>
       </div>
       <div
         className={`${styles.tab} ${selectedTab === 'candidate' ? styles.active : ''}`}

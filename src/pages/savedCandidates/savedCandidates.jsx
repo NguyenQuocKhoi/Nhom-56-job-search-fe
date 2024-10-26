@@ -7,8 +7,11 @@ import { getUserStorage } from '../../Utils/valid';
 import { getApiWithToken } from '../../api';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 const SavedCandidates = () => {
+  const { t, i18n } = useTranslation();
+
   const [savedCandidates, setSavedCandidates] = useState([]);
   const [candidateDetails, setCandidateDetails] = useState({});
   const [loading, setLoading] = useState(true);
@@ -63,7 +66,7 @@ const SavedCandidates = () => {
     <div className={clsx(styles.savedJobsPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <p className={clsx(styles.title)}>Danh sách ứng viên đã lưu</p>
+        <p className={clsx(styles.title)}>{t('savedCandidates.savedCandidateList')}</p>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -71,7 +74,7 @@ const SavedCandidates = () => {
         ) : (
           <div className={clsx(styles.jobContainer)}>
             {savedCandidates.length === 0 ? (
-              <p>No saved candidates found.</p>
+              <p>{t('savedCandidates.notSavedCandidate')}.</p>
             ) : (
               savedCandidates.map((candidate) => (
                 <div key={candidate._id} className={clsx(styles.jobcard)}>

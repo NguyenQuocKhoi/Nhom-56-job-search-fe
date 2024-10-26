@@ -7,6 +7,7 @@ import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReatQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useTranslation } from 'react-i18next';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -25,6 +26,8 @@ const cities = [
 ];
 
 const EditPost = () => {
+  const { t, i18n } = useTranslation();
+
   const { jobId } = useParams();
   const navigate = useNavigate();
   
@@ -212,10 +215,10 @@ const EditPost = () => {
     <div className={clsx(styles.createPostJobPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <h2 className={clsx(styles.pageTitle)}>Sửa Tin Tuyển Dụng</h2>
+        <h2 className={clsx(styles.pageTitle)}>{t('editPost.editJob')}</h2>
         <form className={clsx(styles.form)}>          
           <div className={clsx(styles.formGroupTT)}>
-            <label htmlFor="title">Tiêu đề</label>
+            <label htmlFor="title">{t('createPostJob.title')}</label>
             <input
               type="text"
               id="title"
@@ -227,7 +230,7 @@ const EditPost = () => {
           </div>
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="description">Mô tả</label>
+            <label htmlFor="description">{t('createPostJob.describe')}</label>
             {/* <textarea
               id="description"
               name="description"
@@ -245,7 +248,7 @@ const EditPost = () => {
           </div>
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="requirements">Yêu cầu</label>
+            <label htmlFor="requirements">{t('createPostJob.requirement')}</label>
             {/* <textarea
               id="requirements"
               name="requirements"
@@ -263,7 +266,7 @@ const EditPost = () => {
           </div>
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="interest">Phúc lợi</label>
+            <label htmlFor="interest">{t('createPostJob.interest')}</label>
             {/* <textarea
               id="interest"
               name="interest"
@@ -282,7 +285,7 @@ const EditPost = () => {
 
           <div className={clsx(styles.midAddress)}>
               <div className={clsx(styles.midAddressStreet)}>
-                <label htmlFor="street">Đường:</label>
+                <label htmlFor="street">{t('createPostJob.address')}</label>
                 <input
                   type="text"
                   id="street"
@@ -294,7 +297,7 @@ const EditPost = () => {
               </div>
 
               <div className={clsx(styles.midAddressCity)}>
-              <label>Tỉnh/Thành phố:</label>
+              <label>{t('createPostJob.city')}</label>
               {/* <input 
                 type="text" 
                 name="city"
@@ -349,7 +352,7 @@ const EditPost = () => {
 
           <div className={clsx(styles.midLuong)}>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="salary">Mức lương</label>
+              <label htmlFor="salary">{t('createPostJob.salary')}</label>
               <input
                 type="text"
                 id="salary"
@@ -360,7 +363,7 @@ const EditPost = () => {
               />
             </div>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="numberOfCruiment">Số lượng tuyển</label>
+              <label htmlFor="numberOfCruiment">{t('createPostJob.numberOfCruiment')}</label>
               <input
                 type="number"
                 id="numberOfCruiment"
@@ -377,7 +380,7 @@ const EditPost = () => {
               />
             </div>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="experienceLevel">Kinh nghiệm</label>
+              <label htmlFor="experienceLevel">{t('createPostJob.exp')}</label>
               <input
                 type="text"
                 id="experienceLevel"
@@ -388,7 +391,7 @@ const EditPost = () => {
               />
             </div>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="expiredAt">Ngày hết hạn</label>
+              <label htmlFor="expiredAt">{t('createPostJob.expired')}</label>
               <input
                 type="date"
                 id="expiredAt"
@@ -402,14 +405,14 @@ const EditPost = () => {
 
           <div className={clsx(styles.midVitri)}>
             <div className={clsx(styles.formGroupLuong)}>
-              <label>Requirements skills:</label>
+              <label>{t('createPostJob.skill')}</label>
               <button 
                 className={clsx(styles.openModalButton)}
                 onClick={handleOpenSkillModal} 
                 disabled={!isEditing}
                 type='button'
               >
-                Chọn kỹ năng
+                {t('createPostJob.chooseSkill')}
               </button>
               <div className={clsx(styles.selectedSkills)}>
                 {skills.length > 0 ? (
@@ -453,7 +456,7 @@ const EditPost = () => {
               )}
 
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="position">Vị trí</label>
+              <label htmlFor="position">{t('createPostJob.position')}</label>
               <input
                 type="text"
                 id="position"
@@ -465,7 +468,7 @@ const EditPost = () => {
             </div>
             
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="type">Loại công việc</label>
+              <label htmlFor="type">{t('createPostJob.type')}</label>
               <select
                 id="type"
                 name="type"
@@ -473,14 +476,14 @@ const EditPost = () => {
                 onChange={handleChange}
                 disabled={!isEditing}
               >
-                <option value="fulltime">Full-time</option>
-                <option value="parttime">Part-time</option>
-                <option value="intern">Intern</option>
+                <option value="fulltime">{t('listJobInfo.fulltime')}</option>
+                <option value="parttime">{t('listJobInfo.parttime')}</option>
+                <option value="intern">{t('listJobInfo.intern')}</option>
               </select>
             </div>
             {/*  */}
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="category">Danh mục</label>
+              <label htmlFor="category">{t('createPostJob.category')}</label>
               <select
                 id="category"
                 name="category"
@@ -501,10 +504,10 @@ const EditPost = () => {
 
         <div className={clsx(styles.actions)}>
           <button className={clsx(styles.createButton)} onClick={handleEditPostJob}>
-            {isEditing ? 'Xác nhận chỉnh sửa' : 'Sửa bài đăng'}
+            {isEditing ? t('editPost.confirmEdit') : t('editPost.editPost')}
           </button>
           <button className={clsx(styles.cancelButton)} onClick={() => navigate(-1)}>
-            Hủy bỏ
+            {t('editPost.cancel')}
           </button>
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}

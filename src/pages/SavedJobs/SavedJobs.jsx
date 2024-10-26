@@ -8,8 +8,11 @@ import { getAPiNoneToken, getApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 const SavedJobs = () => {
+  const { t, i18n } = useTranslation();
+
   const [savedJobs, setSavedJobs] = useState([]);
   const [jobDetails, setJobDetails] = useState({});
   const [loading, setLoading] = useState(true);
@@ -79,7 +82,7 @@ const SavedJobs = () => {
     <div className={clsx(styles.savedJobsPage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
-        <p className={clsx(styles.title)}>Danh sách công việc đã lưu</p>
+        <p className={clsx(styles.title)}>{t('savedJob.savedJob')}</p>
         {/* {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -89,7 +92,7 @@ const SavedJobs = () => {
             {savedJobs.length === 0 ? (
               <>              
                 <p>
-                  Bạn chưa lưu công việc nào. <Link to="/jobs">Nhấn vào đây để khám phá nhiều công việc hấp dẫn.</Link>
+                  {t('savedJob.notSaved')}. <Link to="/jobs">{t('savedJob.clickHere')}.</Link>
                 </p>
                 
               </>

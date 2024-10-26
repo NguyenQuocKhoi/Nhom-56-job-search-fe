@@ -9,8 +9,13 @@ import Footer from '../../components/Footer/Footer';
 import { getUserStorage } from '../../Utils/valid';
 import { Button, Form, Modal } from 'react-bootstrap';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 const JobDetail = () => {
+  const { t, i18n } = useTranslation();
+
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
@@ -36,11 +41,32 @@ const JobDetail = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    
     if (file) {
-      setCvFile(file);
-      // setFileName(file.name); // Lưu tên tệp vào state
+      // Kiểm tra loại tệp và kích thước
+      if (file.type === 'application/pdf' && file.size <= MAX_FILE_SIZE) {
+        setCvFile(file);
+        // setFileName(file.name); // Lưu tên tệp vào state
+      } else {
+        // Hiển thị thông báo nếu không đạt yêu cầu
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng chọn file PDF và kích thước tối đa là 2MB',
+          confirmButtonText: 'OK'
+        }).then(()=>{
+          e.target.value = '';
+        });
+      }
     }
   };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setCvFile(file);
+  //     // setFileName(file.name); // Lưu tên tệp vào state
+  //   }
+  // };
 
   //Modal
   const [showModalNoneCV, setShowModalNoneCV] = useState(false);
@@ -402,10 +428,10 @@ const JobDetail = () => {
     {/* Modal handleApplyByNewCandidate*/}
     <Modal show={showModalNoneCV} onHide={handleCloseModalNoneCV}>
       <Modal.Header closeButton>
-        <Modal.Title>Tải CV và điền thông tin</Modal.Title>
+        <Modal.Title>{t('apply.loadCV')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Name</p>
+        <p>{t('apply.name')}</p>
         <input 
           type="text"
           value={candidateName}
@@ -418,7 +444,7 @@ const JobDetail = () => {
           disabled
           // onChange={(e) => setCandidateEmail(e.target.value)} 
         />
-        <p>Phone</p>
+        <p>{t('apply.phone')}</p>
         <input 
           type="text" 
           value={candidatePhone}
@@ -431,11 +457,11 @@ const JobDetail = () => {
       />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModalNoneCV}>
-          Close
+        <Button variant="danger" onClick={handleCloseModalNoneCV}>
+          {t('apply.close')}
         </Button>
-        <Button variant="secondary" onClick={handleApplyByNewCandidate}>
-          Apply
+        <Button variant="primary" onClick={handleApplyByNewCandidate}>
+          {t('apply.apply')}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -443,13 +469,13 @@ const JobDetail = () => {
     {/* Modal */}
     <Modal show={showModalCV} onHide={handleCloseModalCV}>
       <Modal.Header closeButton>
-        <Modal.Title>Bạn muốn dùng CV cũ hay CV mới</Modal.Title>
+        <Modal.Title>{t('apply.option')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Check
           type="radio"
           id="option1"
-          label="Old CV"
+          label={t('apply.oldCV')}
           name="options"
           value="option1"
           checked={selectedOption === 'option1'}
@@ -458,7 +484,7 @@ const JobDetail = () => {
         <Form.Check
           type="radio"
           id="option2"
-          label="New CV"
+          label={t('apply.newCV')}
           name="options"
           value="option2"
           checked={selectedOption === 'option2'}
@@ -468,10 +494,10 @@ const JobDetail = () => {
         {showNewCvFields && (
           <div className="new-cv-fields">
             <Form.Group controlId="formCvName">
-              <Form.Label>Họ và tên</Form.Label>
+              <Form.Label>Họ và tên{t('apply.name')}</Form.Label>
               <Form.Control
                 type="text" 
-                placeholder="Nhập tên hiển thị với NTD" 
+                placeholder={t('apply.fillName')} 
                 value={candidateName}
                 onChange={(e) => setCandidateName(e.target.value)} 
               />
@@ -481,24 +507,24 @@ const JobDetail = () => {
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="text" 
-                placeholder="Nhập email hiển thị với NTD" 
+                placeholder={t('apply.fillEmail')} 
                 value={candidateEmail}
                 disabled  
               />
             </Form.Group>
 
             <Form.Group controlId="formCvPhoneNumber">
-              <Form.Label>Số điện thoại</Form.Label>
+              <Form.Label>{t('apply.phone')}</Form.Label>
               <Form.Control 
                 type="text" 
-                placeholder="Nhập số điện thoại hiển thị với NTD" 
+                placeholder={t('apply.fillPhone')} 
                 value={candidatePhone}
                 onChange={(e) => setCandidatePhone(e.target.value)}
               />
             </Form.Group>
 
             <Form.Group controlId="formCv">
-              <Form.Label>Chọn CV</Form.Label>
+              <Form.Label>{t('apply.chooseCV')}</Form.Label>
               <Form.Control 
                 type="file" 
                 accept='.pdf'
@@ -509,11 +535,11 @@ const JobDetail = () => {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModalCV}>
-          Close
+        <Button variant="danger" onClick={handleCloseModalCV}>
+          {t('apply.close')}
         </Button>
         <Button variant="primary" onClick={handleCvOption}>
-          Apply
+          {t('apply.apply')}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -538,11 +564,11 @@ const JobDetail = () => {
                 >
                   {
                     isApplied ? (
-                      <strong>Đã ứng tuyển</strong>
+                      <strong>{t('apply.applied')}</strong>
                     ): (
                       <>
                         <i className="fa-regular fa-paper-plane"></i>
-                        <strong className={clsx(styles.utn)}>Ứng tuyển ngay</strong>
+                        <strong className={clsx(styles.utn)}>{t('apply.applyNow')}</strong>
                       </>
                     )
                   }
@@ -552,12 +578,12 @@ const JobDetail = () => {
                   className={clsx(styles.btnSave)}
                   onClick={handleSaveJob}>
                   <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  <p><strong>{isSaved ? 'Bỏ lưu' : 'Lưu tin'}</strong></p>
+                  <p><strong>{isSaved ? t('apply.save') : t('apply.unsave')}</strong></p>
                 </button>
               </div>
             )}
             <div className={clsx(styles.ngang)}>
-              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
               <p><strong>Lương:</strong> {job.salary}</p>
               <p><strong>Vị trí làm việc:</strong> {job.position}</p>
             </div>
@@ -579,8 +605,8 @@ const JobDetail = () => {
               ></div>
             {/* <p><strong>Yêu cầu:</strong> {job.requirements}</p> */}
 
-            <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString()}</p>
-            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString()}</p>
+            <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString("vi-VN")}</p>
+            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
           </div>
           
           <div className={clsx(styles.vieclamlienquan)}>
@@ -602,7 +628,7 @@ const JobDetail = () => {
                         <p><strong>Job Title: {job.title || 'Loading...'}</strong></p>
                         <p>Company: {job.company?.name || 'Unknown Company'}</p>
                         <p>Address: {job.street}, {job.city}</p>
-                        <p>Posted on: {new Date(job.expiredAt).toLocaleDateString()}</p>
+                        <p>Posted on: {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
                       </div>
                     </Link>
                   </div>

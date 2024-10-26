@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import styles from './infoCandidate.module.scss';
 
-import { getAPiNoneToken, getApiWithToken, postApiWithToken, putApiWithToken } from '../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken, putApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 //
 import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useTranslation } from 'react-i18next';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -25,8 +26,11 @@ const cities = [
   'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
   'Vĩnh Phúc', 'Yên Bái'
 ];
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 const InfoCandidate = () => {
+  const { t, i18n } = useTranslation();
+
   const [candidate, setCandidate] = useState({
     name: '',
     email: '',
@@ -210,6 +214,15 @@ const handleAutoApply = async () => {
 
   const handleUpdateAll = async () => {
     try {
+      Swal.fire({
+        title: 'Processing',
+        text: 'Please wait while we update your information...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       const candidateId = getUserStorage().user._id;
       let success = true;
 
@@ -259,7 +272,13 @@ const handleAutoApply = async () => {
           setSkills(skillNames); // Update skills state
           setCandidate(updatedCandidateData); // Update candidate state
   
-          Swal.fire({ icon: 'success', text: 'All updates were successful!' });
+          await Swal.fire({ 
+            icon: 'success', 
+            title: 'Success!',
+            text: 'All updates were successful!!', 
+            confirmButtonText: 'OK'
+          });
+          // Swal.fire({ icon: 'success', text: 'All updates were successful!' });
         } else {
           Swal.fire({ icon: 'error', text: 'Failed to refresh skills after update.' });
         }
@@ -272,7 +291,10 @@ const handleAutoApply = async () => {
     } catch (err) {
       setError('An error occurred during the update');
       Swal.fire({ icon: 'error', text: 'An error occurred during the update' });
-    }
+    } 
+    // finally {
+    //   Swal.close();
+    // }
   };
 
   //đổi ảnh đại diện thấy ngay
@@ -282,17 +304,44 @@ const handleAutoApply = async () => {
   };
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    setAvatarFile(file);
-  
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result);
-    };
     
     if (file) {
-      reader.readAsDataURL(file);
+      // Kiểm tra loại tệp và kích thước
+      if (file.type.startsWith('image/') && file.size <= MAX_FILE_SIZE) {
+        setAvatarFile(file);
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setAvatarPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Hiển thị thông báo nếu không đạt yêu cầu
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng chọn file ảnh và kích thước tối đa là 2MB',
+          confirmButtonText: 'OK'
+        }).then(()=>{
+          e.target.value = '';
+        });
+      }
     }
-  };  
+  };
+  // const handleAvatarChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setAvatarFile(file);
+  
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     setAvatarPreview(reader.result);
+  //   };
+    
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   }
+  // };  
+  
   const handleCancel = () => {
     setIsEditing(false);
     setShowSkillModal(false);
@@ -319,11 +368,32 @@ const handleAutoApply = async () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    
     if (file) {
-      setCvFile(file);
-      setFileName(file.name); // Store file name in state
+      // Kiểm tra loại tệp và kích thước
+      if (file.type === 'application/pdf' && file.size <= MAX_FILE_SIZE) {
+        setCvFile(file);
+        setFileName(file.name); // Lưu tên tệp vào state
+      } else {
+        // Hiển thị thông báo nếu không đạt yêu cầu
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Vui lòng chọn file PDF và kích thước tối đa là 2MB',
+          confirmButtonText: 'OK'
+        }).then(()=>{
+          e.target.value = '';
+        });
+      }
     }
   };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setCvFile(file);
+  //     setFileName(file.name); // Store file name in state
+  //   }
+  // };
 
   //city
   const handleCitySelect = (city) => {
@@ -348,12 +418,56 @@ const handleAutoApply = async () => {
     setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
+  const handleXoaCV = async (candidateId) => {
+    try {
+      Swal.fire({
+        title: 'Processing',
+        text: 'Please wait while we delete your CV...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      const response = await deleteApiWithToken(`/candidate/delete-cv/${candidateId}`);  
+      console.log("384",response);
+      
+      if (response.data.success) {
+        console.log("CV deleted successfully");
+  
+        setCandidate((prevCandidate) => ({
+          ...prevCandidate,
+          resume: undefined,
+          resumeOriginalName: undefined
+        }));
+
+        await Swal.fire({ 
+          icon: 'success', 
+          title: 'Thành công!',
+          text: 'CV đã được xóa thành công!', 
+          confirmButtonText: 'OK'
+        });
+        // Swal.fire({ icon: 'success', text: 'CV deleted successfully!' });
+      } else {
+        // Swal.fire({ icon: 'error', text: "Failed to delete CV" });
+        Swal.fire({ icon: 'error', text: response.data.message || "Failed to delete CV" });
+        console.log(response.data.message || "Failed to delete CV");
+      }
+    } catch (error) {
+      console.error("Error deleting CV:", error);
+      Swal.fire({ icon: 'error', text: 'An error occurred while deleting the CV' });
+    }
+    //  finally{
+    //   Swal.close();
+    // }
+  };
+
   if (error) return <div className={clsx(styles.error)}>{error}</div>;
   if (!candidate) return <div className={clsx(styles.loading)}>Loading...</div>;
 
   return (
     <div className={clsx(styles.candidateInfo)}>
-      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>Thông tin cá nhân</h2>
+      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profile.info')}</h2>
 
       <div className={clsx(styles.top)}>
         <div className={clsx(styles.avatarSection)}>
@@ -385,7 +499,7 @@ const handleAutoApply = async () => {
         </div>
 
         <div className={clsx(styles.topInfo)}>
-          <label>Họ và tên:</label>
+          <label>{t('profile.name')}:</label>
           <input 
             type="text" 
             name="name"
@@ -403,7 +517,7 @@ const handleAutoApply = async () => {
             disabled
           />
 
-          <label>Số điện thoại:</label>
+          <label>{t('profile.phone')}:</label>
           <input 
             type="text" 
             name="phoneNumber"
@@ -417,7 +531,7 @@ const handleAutoApply = async () => {
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
         <div className={clsx(styles.midAddressStreet)}>            
-            <p className={clsx(styles.textStreet)}>Địa chỉ:</p>
+            <p className={clsx(styles.textStreet)}>{t('profile.address')}:</p>
             <input 
               type="text" 
               name="street"
@@ -428,7 +542,7 @@ const handleAutoApply = async () => {
             />
           </div>
 
-          <p className={clsx(styles.textStreet)}>Tỉnh/Thành phố:</p>
+          <p className={clsx(styles.textStreet)}>{t('profile.city')}:</p>
           
           {/* mới */}
           <div className={clsx(styles.selectContainer)}>
@@ -438,7 +552,7 @@ const handleAutoApply = async () => {
               onChange={(e) => handleCitySelect(e.target.value)}
               disabled={!isEditing}
             >
-              <option value="">Select a city</option>
+              <option value="">{t('profile.selectCity')}</option>
               {cities.map((city) => (
                 <option key={city} value={city}>
                   {city}
@@ -488,13 +602,13 @@ const handleAutoApply = async () => {
                
           <div className={clsx(styles.midInfoSkill)}>
             <div className={clsx(styles.midBtnSkill)}>
-              <label>Kỹ năng:</label>
+              <label>{t('profile.skill')}:</label>
               <button 
                 className={clsx(styles.btnChooseSkill, {[styles.editing]:isEditing})}
                 onClick={handleOpenSkillModal} 
                 disabled={!isEditing}
               >
-                Chọn kỹ năng
+                {t('profile.chooseSkill')}
               </button>
             </div>
 
@@ -535,7 +649,7 @@ const handleAutoApply = async () => {
 
           <div className={clsx(styles.midInfoDGC)}> 
             <div className={clsx(styles.textNSGT)}>            
-              <p>Ngày sinh:</p>
+              <p>{t('profile.dob')}:</p>
               <input 
                 type="date" 
                 name="dateOfBirth"
@@ -546,30 +660,46 @@ const handleAutoApply = async () => {
             </div>           
 
             <div className={clsx(styles.textNSGT)}>
-              <p>Giới tính:</p>
+              <p>{t('profile.gender')}:</p>
               <select 
                 name="gender" 
                 value={candidate.gender || ""}
                 onChange={handleInputChange}
                 disabled={!isEditing}
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">{t('profile.male')}</option>
+                <option value="female">{t('profile.female')}</option>
               </select>
             </div>
 
             <div className={clsx(styles.uploadSection)}>
+              <div>
+                <input 
+                  type="file" 
+                  accept=".pdf" 
+                  onChange={handleFileChange}
+                  disabled={!isEditing}
+                />
+                <button 
+                  className={clsx(styles.btnXoa)} 
+                  onClick={() => handleXoaCV(candidate._id)}
+                >
+                  {t('profile.deleteCV')}
+                </button>
               <div className={clsx(styles.textCV)}>
                 <p>CV:</p>
-                <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a>
+                {/* <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a> */}
+                {candidate.resume ? (
+                  <a href={candidate.resume} target="_blank" rel="noopener noreferrer">
+                    {candidate.resumeOriginalName}
+                  </a>
+                ) : (
+                  <p>{t('profile.notUpdate')}</p>
+                )}
               </div>
-              <input 
-                type="file" 
-                accept=".pdf" 
-                onChange={handleFileChange}
-                disabled={!isEditing}
-              />
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -582,7 +712,7 @@ const handleAutoApply = async () => {
               </div>
             ))
           ) : (
-            <p>Chưa cập nhật</p>
+            <p>{t('profile.notUpdate')}</p>
           )}
         </div>
 
@@ -612,7 +742,7 @@ const handleAutoApply = async () => {
       </div>
 
       <div className={clsx(styles.infoSection)}>                        
-        <label>Kinh nghiệm:</label>
+        <label>{t('profile.exp')}:</label>
         <input 
           type="text" 
           name="experience"
@@ -621,7 +751,7 @@ const handleAutoApply = async () => {
           disabled={!isEditing}
         />
 
-        <label>Học vấn:</label>
+        <label>{t('profile.edu')}:</label>
         <input 
           type="text" 
           name="education"
@@ -631,7 +761,7 @@ const handleAutoApply = async () => {
         />
 
                 
-        <label>Thông tin thêm:</label>
+        <label>{t('profile.moreInfo')}:</label>
         {/* <textarea 
           name="moreInformation"
           value={candidate.moreInformation || ""}
@@ -655,14 +785,16 @@ const handleAutoApply = async () => {
           // }}
           className={clsx(styles.btnPublicAccount, {[styles.active]: buttonState})}
         >
-          {buttonState ? 'Private Account' : 'Public Account'}
+          {/* {buttonState ? 'Private Account' : 'Public Account'} */}
+          {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
         </button>
 
         <button
           onClick={handleAutoApply}
           className={clsx(styles.btnAutoApply, { [styles.active]: autoSearchJobs })}
         >
-          {autoSearchJobs ? 'Stop Auto Apply' : 'Auto Apply'}
+          {/* {autoSearchJobs ? 'Stop Auto Apply' : 'Auto Apply'} */}
+          {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
         </button>
         {/* <button onClick={handleAutoApply}>
           Auto Apply
@@ -670,7 +802,7 @@ const handleAutoApply = async () => {
           {isEditing ? (
             <>
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateAll}>
-                Cập nhật
+              {t('profile.update')}
               </button>
               <button className={clsx(styles.btnCancel)} 
                 onClick={() => 
@@ -679,7 +811,7 @@ const handleAutoApply = async () => {
                   // setIsEditing(false)
                   // setShowSkillModal(false)
                  }}>
-                Hủy
+                {t('profile.cancel')}
               </button>
             </>
           ) : (
@@ -687,7 +819,7 @@ const handleAutoApply = async () => {
               setIsEditing(true) 
               handleEdit()
               }}>
-              Cập nhật thông tin
+              {t('profile.updateInfo')}
             </button>
           )}
         </div>

@@ -9,24 +9,43 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ReatQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useTranslation } from 'react-i18next';
 
-const cities = [
-  'Chọn tỉnh/thành phố','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
-  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
-  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
-  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
-  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
-  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
-  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
-  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
-  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
-  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
-  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
-  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
-  'Vĩnh Phúc', 'Yên Bái'
-];
+// const cities = [
+//   'Chọn tỉnh/thành phố','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+//   'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+//   'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+//   'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+//   'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+//   'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+//   'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+//   'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+//   'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+//   'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+//   'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+//   'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+//   'Vĩnh Phúc', 'Yên Bái'
+// ];
 
 const CreatePostJob = () => {
+  const { t, i18n } = useTranslation();
+
+  const cities = [
+    t('createPostJob.chooseCity'),'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+    'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+    'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+    'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+    'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+    'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+    'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+    'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+    'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+    'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+    'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+    'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+    'Vĩnh Phúc', 'Yên Bái'
+  ];
+  
   const navigate = useNavigate();
 
   const [jobData, setJobData] = useState({
@@ -316,10 +335,10 @@ const CreatePostJob = () => {
       {/* {companyStatus !== true && (
         <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
       )} */}
-        <h2 className={clsx(styles.pageTitle)}>Tạo Tin Tuyển Dụng</h2>
+        <h2 className={clsx(styles.pageTitle)}>{t('createPostJob.createJob')}</h2>
         <form className={clsx(styles.form)}>
           <div className={clsx(styles.formGroupTT)}>
-            <label htmlFor="title">Tiêu đề <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="title">{t('createPostJob.title')} <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="title"
@@ -330,7 +349,7 @@ const CreatePostJob = () => {
           </div>
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="description">Mô tả <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="description">{t('createPostJob.describe')} <span style={{ color: 'red' }}>*</span></label>
             {/* <textarea
               id="description"
               name="description"
@@ -346,7 +365,7 @@ const CreatePostJob = () => {
           </div>
 
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="requirements">Yêu cầu <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="requirements">{t('createPostJob.requirement')} <span style={{ color: 'red' }}>*</span></label>
             {/* <textarea
               id="requirements"
               name="requirements"
@@ -362,7 +381,7 @@ const CreatePostJob = () => {
           </div>
           
           <div className={clsx(styles.formGroup)}>
-            <label htmlFor="interest">Phúc lợi <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="interest">{t('createPostJob.interest')} <span style={{ color: 'red' }}>*</span></label>
             {/* <textarea
               id="interest"
               name="interest"
@@ -379,7 +398,7 @@ const CreatePostJob = () => {
 
           <div className={clsx(styles.midAddress)}>
           <div className={clsx(styles.midAddressStreet)}>
-              <label>Đường <span style={{ color: 'red' }}>*</span></label>
+              <label>{t('createPostJob.address')} <span style={{ color: 'red' }}>*</span></label>
               <input
                 type="text"
                 id="street"
@@ -391,7 +410,7 @@ const CreatePostJob = () => {
             </div>
             
           <div className={clsx(styles.midAddressCity)}>
-            <label>Tỉnh/Thành phố <span style={{ color: 'red' }}>*</span></label>
+            <label>{t('createPostJob.city')} <span style={{ color: 'red' }}>*</span></label>
             {/* <input 
               type="text" 
               name="city"
@@ -453,7 +472,7 @@ const CreatePostJob = () => {
 
           <div className={clsx(styles.midLuong)}>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="salary">Mức lương <span style={{ color: 'red' }}>*</span></label>
+              <label htmlFor="salary">{t('createPostJob.salary')} <span style={{ color: 'red' }}>*</span></label>
               <input
                 type="text"
                 id="salary"
@@ -464,7 +483,7 @@ const CreatePostJob = () => {
             </div>
 
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="numberOfCruiment">Số lượng tuyển <span style={{ color: 'red' }}>*</span></label>
+              <label htmlFor="numberOfCruiment">{t('createPostJob.numberOfCruiment')} <span style={{ color: 'red' }}>*</span></label>
               <input
                 type="number"
                 id="numberOfCruiment"
@@ -480,7 +499,7 @@ const CreatePostJob = () => {
               />
             </div>
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="experienceLevel">Kinh nghiệm <span style={{ color: 'red' }}>*</span></label>
+              <label htmlFor="experienceLevel">{t('createPostJob.exp')} <span style={{ color: 'red' }}>*</span></label>
               <input
                 type="text"
                 id="experienceLevel"
@@ -490,7 +509,7 @@ const CreatePostJob = () => {
               />
             </div>
             <div className={clsx(styles.formGroupLuong)}>
-            <label htmlFor="expiredAt">Ngày hết hạn <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="expiredAt">{t('createPostJob.expired')} <span style={{ color: 'red' }}>*</span></label>
             <input
                 type="date"
                 id="expiredAt"
@@ -504,9 +523,9 @@ const CreatePostJob = () => {
 
           <div className={clsx(styles.midVitri)}>
             <div className={clsx(styles.formGroupLuong)}>
-              <label>Kỹ năng (Yêu cầu) <span style={{ color: 'red' }}>*</span></label>
+              <label>{t('createPostJob.skill')} <span style={{ color: 'red' }}>*</span></label>
               <button type="button" onClick={openModal} className={styles.openModalButton}>
-                Chọn kỹ năng
+                {t('createPostJob.chooseSkill')}
               </button>
               {/* <div className={styles.selectedSkills}>
                 {skillsData
@@ -520,7 +539,7 @@ const CreatePostJob = () => {
             </div>
 
           <div className={clsx(styles.formGroupLuong)}>
-            <label htmlFor="position">Vị trí <span style={{ color: 'red' }}>*</span></label>
+            <label htmlFor="position">{t('createPostJob.position')} <span style={{ color: 'red' }}>*</span></label>
             <input
               type="text"
               id="position"
@@ -531,28 +550,28 @@ const CreatePostJob = () => {
             </div>
           
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="type">Loại công việc <span style={{ color: 'red' }}>*</span></label>
+              <label htmlFor="type">{t('createPostJob.type')} <span style={{ color: 'red' }}>*</span></label>
               <select
                 id="type"
                 name="type"
                 value={jobData.type}
                 onChange={handleChange}
               >
-                <option value="fulltime">Full-time</option>
-                <option value="parttime">Part-time</option>
-                <option value="intern">Intern</option>
+                <option value="fulltime">{t('listJobInfo.fulltime')}</option>
+                <option value="parttime">{t('listJobInfo.parttime')}</option>
+                <option value="intern">{t('listJobInfo.intern')}</option>
               </select>
             </div>
 
             <div className={clsx(styles.formGroupLuong)}>
-              <label htmlFor="category">Danh mục <span style={{ color: 'red' }}>*</span></label>
+              <label htmlFor="category">{t('createPostJob.category')} <span style={{ color: 'red' }}>*</span></label>
               <select
                 id="category"
                 name="category"
                 value={jobData.category}
                 onChange={handleChange}
               >
-                <option value="">Chọn danh mục</option>
+                <option value="">{t('createPostJob.chooseCategory')}</option>
                 {categoryDa.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
@@ -590,7 +609,7 @@ const CreatePostJob = () => {
                     ))}
                   </div>
                   <button onClick={closeModal} className={styles.closeModalButton}>
-                    Đóng
+                    {t('createPostJob.close')}
                   </button>
                 </div>
               </div>
@@ -604,20 +623,20 @@ const CreatePostJob = () => {
             onClick={handleCreatePostJob}
             disabled={companyStatus !== true}
           >
-            Tạo bài đăng
+            {t('createPostJob.createPost')}
           </button>        
                   
           <button
             className={clsx(styles.cancelButton)}
             onClick={() => navigate(-1)}
           >
-            Thoát
+            {t('createPostJob.exit')}
           </button>
         </div>
         {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
         {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{successMessage}</div>} {/* Success message */}
         {companyStatus !== true && (
-          <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
+          <p className={clsx(styles.topThongBaoChuaPheDuyet)}>{t('createdPostJob.notApprove')}.</p>
         )}
       </div>
 
