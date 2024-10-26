@@ -11,7 +11,12 @@ import { useTranslation } from 'react-i18next';
 const PostedJobs = () => {
   const { t, i18n } = useTranslation();
 
-  const [jobs, setJobs] = useState([]);
+  // const [jobs, setJobs] = useState([]);
+  const [allJobs, setAllJobs] = useState([]);
+  const [acceptedJobs, setAcceptedJobs] = useState([]);
+  const [rejectedJobs, setRejectedJobs] = useState([]);
+  const [pendingJobs, setPendingJobs] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,102 +37,173 @@ const PostedJobs = () => {
   const companyId = user._id;
 
   //mới
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await postApiWithToken(`/job/get-job/${companyId}`, {
-          page: currentPage,
-          limit: 6,
-          sort: sortOrder === 'new' ? 'desc' : 'asc',
-        });
-        const { jobs, totalPages } = response.data;
-        setJobs(jobs);
-        setTotalPages(totalPages);
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     try {
+  //       const response = await postApiWithToken(`/job/get-job/${companyId}`, {
+  //         page: currentPage,
+  //         limit: 6,
+  //         sort: sortOrder === 'new' ? 'desc' : 'asc',
+  //       });
+  //       const { jobs, totalPages } = response.data;
+  //       setJobs(jobs);
+  //       setTotalPages(totalPages);
   
-        const categoryIds = jobs.map((job) => job.category).filter(Boolean);
-        const uniqueCategoryIds = [...new Set(categoryIds)];
-        const categoryPromises = uniqueCategoryIds.map((categoryId) =>
-          getAPiNoneToken(`/category/${categoryId}`)
-        );
-        const categoryResponses = await Promise.all(categoryPromises);
-        const categoryMap = {};
+  //       const categoryIds = jobs.map((job) => job.category).filter(Boolean);
+  //       const uniqueCategoryIds = [...new Set(categoryIds)];
+  //       const categoryPromises = uniqueCategoryIds.map((categoryId) =>
+  //         getAPiNoneToken(`/category/${categoryId}`)
+  //       );
+  //       const categoryResponses = await Promise.all(categoryPromises);
+  //       const categoryMap = {};
   
-        categoryResponses.forEach((response) => {
-          const { _id, name } = response.data.category;
-          categoryMap[_id] = name;
-        });
-        setCategories(categoryMap);
+  //       categoryResponses.forEach((response) => {
+  //         const { _id, name } = response.data.category;
+  //         categoryMap[_id] = name;
+  //       });
+  //       setCategories(categoryMap);
   
-        const pendingPromises = jobs.map((job) =>
-          postApiWithToken(`/application/countPending/${job._id}`, {})
-        );
-        const pendingResponses = await Promise.all(pendingPromises);
-        const pendingMap = {};
-        pendingResponses.forEach((response, index) => {
-          pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
-        });
-        setPendingApplications(pendingMap);
-      } catch (error) {
-        setError('Error fetching jobs');
-        console.error(error);
-      } finally {
-        setLoading(false);
+  //       const pendingPromises = jobs.map((job) =>
+  //         postApiWithToken(`/application/countPending/${job._id}`, {})
+  //       );
+  //       const pendingResponses = await Promise.all(pendingPromises);
+  //       const pendingMap = {};
+  //       pendingResponses.forEach((response, index) => {
+  //         pendingMap[jobs[index]._id] = response.data.totalPendingApplications;
+  //       });
+  //       setPendingApplications(pendingMap);
+  //     } catch (error) {
+  //       setError('Error fetching jobs');
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  
+  //   fetchJobs();
+  // }, [companyId, currentPage, sortOrder]);
+  
+  // const All = async () => {
+  //   const response = await postApiWithToken(`/job/get-job/${companyId}`, {
+  //     page: currentPage,
+  //     limit: 6,
+  //     sort: sortOrder === 'new' ? 'desc' : 'asc',
+  //   });
+  //   const { jobs, totalPages } = response.data;
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('All');
+  // };
+  
+  // const Accept = async () => {
+  //   const responseA = await postApiWithToken(`/job/get-jobs/${companyId}`, {
+  //     page: currentPage,
+  //     limit: 6,
+  //     sort: sortOrder === 'new' ? 'desc' : 'asc',
+  //   });
+  //   const { jobs, totalPages } = responseA.data;
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Accept');
+  // };
+  
+  // const Reject = async () => {
+  //   const responseR = await postApiWithToken(`/job/get-jobs-rejected/${companyId}`, {
+  //     page: currentPage,
+  //     limit: 6,
+  //     sort: sortOrder === 'new' ? 'desc' : 'asc',
+  //   });
+  //   console.log(responseR);
+    
+  //   const { jobs, totalPages } = responseR.data;
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Reject');
+  // };
+  
+  // const Pending = async () => {
+  //   const responseP = await postApiWithToken(`/job/get-jobs-pending/${companyId}`, {
+  //     page: currentPage,
+  //     limit: 6,
+  //     sort: sortOrder === 'new' ? 'desc' : 'asc',
+  //   });
+  //   console.log(responseP);
+    
+  //   const { jobs, totalPages } = responseP.data.data;
+  //   setJobs(jobs);
+  //   setTotalPages(totalPages);
+  //   setActiveTab('Pending');
+  // };
+  const fetchJobs = async () => {
+    try {
+      let response;
+      switch (activeTab) {
+        case 'All':
+          response = await postApiWithToken(`/job/get-job/${companyId}`, {
+            page: currentPage,
+            limit: 6,
+            sort: sortOrder === 'new' ? 'desc' : 'asc',
+          });
+          setAllJobs(response.data.jobs);
+          setTotalPages(response.data.totalPages);
+          break;
+        case 'Accept':
+          response = await postApiWithToken(`/job/get-jobs/${companyId}`, {
+            page: currentPage,
+            limit: 6,
+            sort: sortOrder === 'new' ? 'desc' : 'asc',
+          });
+          setAcceptedJobs(response.data.jobs);
+          setTotalPages(response.data.totalPages);
+          break;
+        case 'Reject':
+          response = await postApiWithToken(`/job/get-jobs-rejected/${companyId}`, {
+            page: currentPage,
+            limit: 6,
+            sort: sortOrder === 'new' ? 'desc' : 'asc',
+          });
+          setRejectedJobs(response.data.jobs);
+          setTotalPages(response.data.totalPages);
+          break;
+        case 'Pending':
+          response = await postApiWithToken(`/job/get-jobs-pending/${companyId}`, {
+            page: currentPage,
+            limit: 6,
+            sort: sortOrder === 'new' ? 'desc' : 'asc',
+          });
+          setPendingJobs(response.data.data.jobs);
+          setTotalPages(response.data.data.totalPages);
+          break;
+        default:
+          break;
       }
-    };
-  
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchJobs();
-  }, [companyId, currentPage, sortOrder]);
-  
-  const All = async () => {
-    const response = await postApiWithToken(`/job/get-job/${companyId}`, {
-      page: currentPage,
-      limit: 6,
-      sort: sortOrder === 'new' ? 'desc' : 'asc',
-    });
-    const { jobs, totalPages } = response.data;
-    setJobs(jobs);
-    setTotalPages(totalPages);
-    setActiveTab('All');
+  }, [activeTab, currentPage, sortOrder]); // Chỉ gọi fetchJobs khi activeTab, currentPage hoặc sortOrder thay đổi
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Đặt lại trang về 1 khi thay đổi tab
   };
-  
-  const Accept = async () => {
-    const responseA = await postApiWithToken(`/job/get-jobs/${companyId}`, {
-      page: currentPage,
-      limit: 6,
-      sort: sortOrder === 'new' ? 'desc' : 'asc',
-    });
-    const { jobs, totalPages } = responseA.data;
-    setJobs(jobs);
-    setTotalPages(totalPages);
-    setActiveTab('Accept');
-  };
-  
-  const Reject = async () => {
-    const responseR = await postApiWithToken(`/job/get-jobs-rejected/${companyId}`, {
-      page: currentPage,
-      limit: 6,
-      sort: sortOrder === 'new' ? 'desc' : 'asc',
-    });
-    console.log(responseR);
-    
-    const { jobs, totalPages } = responseR.data;
-    setJobs(jobs);
-    setTotalPages(totalPages);
-    setActiveTab('Reject');
-  };
-  
-  const Pending = async () => {
-    const responseP = await postApiWithToken(`/job/get-jobs-pending/${companyId}`, {
-      page: currentPage,
-      limit: 6,
-      sort: sortOrder === 'new' ? 'desc' : 'asc',
-    });
-    console.log(responseP);
-    
-    const { jobs, totalPages } = responseP.data.data;
-    setJobs(jobs);
-    setTotalPages(totalPages);
-    setActiveTab('Pending');
+
+  const jobsToDisplay = () => {
+    switch (activeTab) {
+      case 'All':
+        return allJobs;
+      case 'Accept':
+        return acceptedJobs;
+      case 'Reject':
+        return rejectedJobs;
+      case 'Pending':
+        return pendingJobs;
+      default:
+        return [];
+    }
   };
 
   //------1
@@ -211,13 +287,13 @@ const PostedJobs = () => {
   // }
   
   //
-  const sortedJobs = [...jobs].sort((a, b) => {
-    if (sortOrder === 'new') {
-      return new Date(b.createdAt) - new Date(a.createdAt); // Newest first
-    } else {
-      return new Date(a.createdAt) - new Date(b.createdAt); // Oldest first
-    }
-  });
+  // const sortedJobs = [...jobs].sort((a, b) => {
+  //   if (sortOrder === 'new') {
+  //     return new Date(b.createdAt) - new Date(a.createdAt); // Newest first
+  //   } else {
+  //     return new Date(a.createdAt) - new Date(b.createdAt); // Oldest first
+  //   }
+  // });
 
   const handleSortChange = (order) => {
     setSortOrder(order);
@@ -247,7 +323,7 @@ const PostedJobs = () => {
         <p className={clsx(styles.titleLon)}>{t('postCreated.postedList')}</p>
 
         <div className={clsx(styles.tabs)}>
-          <button
+          {/* <button
             className={clsx(styles.tabButton, activeTab === 'All' && styles.activeTab)}
             onClick={All}
           >
@@ -270,6 +346,31 @@ const PostedJobs = () => {
             onClick={Reject}
           >
             {t('postCreated.rejected')}
+          </button> */}
+
+<button
+            className={clsx(styles.tabButton, activeTab === 'All' && styles.activeTab)}
+            onClick={() => handleTabChange('All')}
+          >
+            {t('postCreated.all')}
+          </button>
+          <button
+            className={clsx(styles.tabButton, activeTab === "Accept" && styles.activeTab)}
+            onClick={() => handleTabChange('Accept')}
+          >
+            {t('postCreated.accepted')}
+          </button>
+          <button
+            className={clsx(styles.tabButton, activeTab === "Pending" && styles.activeTab)}
+            onClick={() => handleTabChange('Pending')}
+          >
+            {t('postCreated.pending')}
+          </button>
+          <button
+            className={clsx(styles.tabButton, activeTab === "Reject" && styles.activeTab)}
+            onClick={() => handleTabChange('Reject')}
+          >
+            {t('postCreated.rejected')}
           </button>
         </div>
 
@@ -279,7 +380,8 @@ const PostedJobs = () => {
         // ) : error ? (
         //   <p>{error}</p>
         // ) : 
-        jobs === undefined ? (
+        // jobs === undefined ? (
+          jobsToDisplay().length === 0 ? (
         // jobs.length === 0 ? (
           <div className={clsx(styles.joblist)}>
             <div className={clsx(styles.jobContainer)}>
@@ -317,7 +419,8 @@ const PostedJobs = () => {
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {/* {jobs.map((job) => ( */}
-                {sortedJobs.map((job) => (
+                {/* {sortedJobs.map((job) => ( */}
+                {jobsToDisplay().map((job) => (
                   <Link key={job._id} to={`/postedDetail/${job._id}`} className={clsx(styles.jobcard)}>
                     <div className={clsx(styles.content)}>
                       <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
