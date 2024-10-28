@@ -87,7 +87,7 @@
       "edu": "Học vấn",
       "moreInfo": "Thông tin thêm",
       "privateAcc": "Tài khoản riêng tư",
-      "publicAcc": "Tài khoản công khai",
+      "publicAcc": "Công khai tài khoản",
       "autoApply": "Ứng tuyển tự động",
       "stopAutoApply": "Ngưng ứng tuyển tự động",
       "updateInfo": "Cập nhật thông tin",
@@ -182,7 +182,12 @@
       "chooseCV":"Chọn CV",
       "fillName":"Nhập tên hiển thị với NTD",
       "fillEmail":"Nhập email hiển thị với NTD",
-      "fillPhone":"Nhập số điện thoại hiển thị với NTD"
+      "fillPhone":"Nhập số điện thoại hiển thị với NTD",
+      "cv":"Hồ sơ xin việc"
+    },
+    "stateBtn":{
+      "accept": "Đồng ý",
+      "reject": "Từ chối"
     }
   }
   

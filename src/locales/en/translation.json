@@ -182,7 +182,12 @@
       "chooseCV":"Choose CV",
       "fillName":"Enter display name with NTD",
       "fillEmail":"Enter display email with NTD",
-      "fillPhone":"Enter display phone number with NTD"
+      "fillPhone":"Enter display phone number with NTD",
+      "cv":"Resume"
+    },
+    "stateBtn":{
+      "accept": "Accept",
+      "reject": "Reject"
     }
   }
   

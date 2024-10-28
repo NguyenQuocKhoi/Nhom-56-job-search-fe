@@ -38,21 +38,23 @@
   border: none;
   border-radius: 5px;
   color: white;
-  background-color: gray; // Default color
+  background-color: gray;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .button.accepted {
-  background-color: skyblue; // Color when accepted
+  background-color: skyblue;
+  cursor: not-allowed;
 }
 
 .button.rejected {
-  background-color: skyblue; // Color when rejected
+  background-color: skyblue;
+  cursor: not-allowed;
 }
 
 .button.disabled {
-  background-color: lightgray; // Disabled color
+  background-color: lightgray;
 }
 
 .top{

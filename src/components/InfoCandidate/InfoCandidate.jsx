@@ -69,9 +69,12 @@ const InfoCandidate = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   //public account
-  const [buttonState, setButtonState] = useState(null);
+  // const [buttonState, setButtonState] = useState(null);
+  const [buttonState, setButtonState] = useState(candidate.status || false);
   //auto search job
-  const [autoSearchJobs, setAutoSearchJobs] = useState(null);
+  // const [autoSearchJobs, setAutoSearchJobs] = useState(null);
+  const [autoSearchJobs, setAutoSearchJobs] = useState(candidate.autoSearchJobs || false);
+  const candidateHasCV = Boolean(candidate.resume);
 
   useEffect(() => {
     const fetchCandidate = async () => {
@@ -125,17 +128,51 @@ const InfoCandidate = () => {
     fetchCandidate();
   }, []);
   
-  const handlePublicAccount = async () => {
-    const newStatus = !buttonState; // Đảo ngược trạng thái
-    const statusText = newStatus ? 'Public' : 'Private';
+  // const handlePublicAccount = async () => {
+  //   const newStatus = !buttonState; // Đảo ngược trạng thái
+  //   const statusText = newStatus ? 'Public' : 'Private';
 
+  //   try {
+  //     await putApiWithToken('/candidate/update-status', {
+  //       candidateId: candidate._id,
+  //       status: newStatus,
+  //     });
+
+  //     setButtonState(newStatus); // Cập nhật trạng thái nút
+  //     Swal.fire({
+  //       icon: 'success',
+  //       title: statusText,
+  //       text: `You have set your account to ${statusText.toLowerCase()}.`,
+  //     });
+  //   } catch (err) {
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Error',
+  //       text: `Failed to ${statusText.toLowerCase()} the account.`,
+  //     });
+  //   }
+  // };  
+  const handlePublicAccount = async () => {
+    if (!candidateHasCV) {
+      setButtonState(false);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Chưa cập nhật CV',
+        text: 'Vui lòng cập nhật CV để có thể sử dụng chức năng công khai tài khoản.',
+      });
+      return;
+    }
+  
+    const newStatus = !buttonState;
+    const statusText = newStatus ? 'Public' : 'Private';
+  
     try {
       await putApiWithToken('/candidate/update-status', {
         candidateId: candidate._id,
         status: newStatus,
       });
-
-      setButtonState(newStatus); // Cập nhật trạng thái nút
+  
+      setButtonState(newStatus);
       Swal.fire({
         icon: 'success',
         title: statusText,
@@ -148,13 +185,52 @@ const InfoCandidate = () => {
         text: `Failed to ${statusText.toLowerCase()} the account.`,
       });
     }
-  };  
+  };
+
+// const handleAutoApply = async () => {
+//   const newAutoSearchJobs = !autoSearchJobs;
+//   console.log('autoSearchJobs',autoSearchJobs);
+//   console.log('newAutoSearchJobs',newAutoSearchJobs);
+  
+//   try {
+//     const response = await putApiWithToken(`/candidate/auto-apply`, {
+//       candidateId: candidate._id,
+//       autoSearchJobs: newAutoSearchJobs,
+//     });
+
+//     setAutoSearchJobs(newAutoSearchJobs);
+//     // console.log('134',response.data.success);
+
+//     // if (response.data.success) {
+//     if (newAutoSearchJobs) {
+//       if (response.matchingJobs && response.matchingJobs.length > 0) {
+//         console.log("Applications automatically created for matching jobs:", response.matchingJobs);
+//       } else {
+//         console.log("No jobs with matching skills and city found.");
+//       }
+//     } else {
+//       console.error("Error:", response.data.message);
+//     }
+//   } catch (error) {
+//     console.error("An error occurred during auto-apply:", error);
+//   }
+// };
 
 const handleAutoApply = async () => {
+  if (!candidateHasCV) {
+    setAutoSearchJobs(false);
+    Swal.fire({
+      icon: 'warning',
+      title: 'Chưa cập nhật CV',
+      text: 'Vui lòng cập nhật CV để có thể sử dụng chức năng ứng tuyển tự động.',
+    });
+    return;
+  }
+
   const newAutoSearchJobs = !autoSearchJobs;
-  console.log('autoSearchJobs',autoSearchJobs);
-  console.log('newAutoSearchJobs',newAutoSearchJobs);
-  
+  console.log('autoSearchJobs:', autoSearchJobs);
+  console.log('newAutoSearchJobs:', newAutoSearchJobs);
+
   try {
     const response = await putApiWithToken(`/candidate/auto-apply`, {
       candidateId: candidate._id,
@@ -162,9 +238,7 @@ const handleAutoApply = async () => {
     });
 
     setAutoSearchJobs(newAutoSearchJobs);
-    // console.log('134',response.data.success);
 
-    // if (response.data.success) {
     if (newAutoSearchJobs) {
       if (response.matchingJobs && response.matchingJobs.length > 0) {
         console.log("Applications automatically created for matching jobs:", response.matchingJobs);
@@ -680,12 +754,20 @@ const handleAutoApply = async () => {
                   onChange={handleFileChange}
                   disabled={!isEditing}
                 />
+
                 <button 
+                  className={clsx(styles.btnXoa, { [styles.disabled]: !candidate.resume })} 
+                  onClick={() => handleXoaCV(candidate._id)}
+                  disabled={!candidate.resume} // Disable if no CV
+                >
+                  {t('profile.deleteCV')}
+                </button>
+                {/* <button 
                   className={clsx(styles.btnXoa)} 
                   onClick={() => handleXoaCV(candidate._id)}
                 >
                   {t('profile.deleteCV')}
-                </button>
+                </button> */}
               <div className={clsx(styles.textCV)}>
                 <p>CV:</p>
                 {/* <a href={candidate.resume} target="_blank" rel="noopener noreferrer">{candidate.resumeOriginalName}</a> */}
@@ -778,27 +860,42 @@ const handleAutoApply = async () => {
 
         <div className={clsx(styles.btnContainer)}>
 
-        <button onClick={handlePublicAccount} 
-          // style={{
-          //   borderRadius: '5px',
-          //   border: '1px solid white',
-          // }}
-          className={clsx(styles.btnPublicAccount, {[styles.active]: buttonState})}
-        >
-          {/* {buttonState ? 'Private Account' : 'Public Account'} */}
-          {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
-        </button>
+          {/* <button 
+            onClick={handlePublicAccount} 
+            className={clsx(styles.btnPublicAccount, {
+              [styles.active]: buttonState,
+              [styles.disabled]: !candidateHasCV // Add a disabled style if no CV
+            })}
+            disabled={!candidateHasCV} // Disable if no CV
+          >
+            {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
+          </button>
 
-        <button
-          onClick={handleAutoApply}
-          className={clsx(styles.btnAutoApply, { [styles.active]: autoSearchJobs })}
-        >
-          {/* {autoSearchJobs ? 'Stop Auto Apply' : 'Auto Apply'} */}
-          {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
-        </button>
-        {/* <button onClick={handleAutoApply}>
-          Auto Apply
-        </button> */}
+          <button
+            onClick={handleAutoApply}
+            className={clsx(styles.btnAutoApply, {
+              [styles.active]: autoSearchJobs,
+              [styles.disabled]: !candidateHasCV // Add a disabled style if no CV
+            })}
+            disabled={!candidateHasCV} // Disable if no CV
+          >
+            {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
+          </button> */}
+
+
+          <button onClick={handlePublicAccount} 
+            className={clsx(styles.btnPublicAccount, {[styles.active]: buttonState})}
+          >
+            {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
+          </button>
+
+          <button
+            onClick={handleAutoApply}
+            className={clsx(styles.btnAutoApply, { [styles.active]: autoSearchJobs })}
+          >
+            {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
+          </button>
+          
           {isEditing ? (
             <>
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateAll}>

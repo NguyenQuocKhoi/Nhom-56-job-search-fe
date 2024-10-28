@@ -34,6 +34,8 @@ const JobDetail = () => {
   const [candidateName, setCandidateName] = useState('');
   const [candidateEmail, setCandidateEmail] = useState('');
   const [candidatePhone, setCandidatePhone] = useState('');
+  const [candidateResume, setCandidateResume] = useState('');
+  const [candidateResumeOriginalName, setCandidateResumeOriginalName] = useState('');
 
   // const [fileName, setFileName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -111,6 +113,8 @@ const JobDetail = () => {
           setCandidateName(response.data.candidate.name);
           setCandidateEmail(response.data.candidate.email);
           setCandidatePhone(response.data.candidate.phoneNumber);
+          setCandidateResume(response.data.candidate.resume);
+          setCandidateResumeOriginalName(response.data.candidate.resumeOriginalName);
         } else {
           setError('Failed to fetch candidate data');
         }
@@ -450,6 +454,7 @@ const JobDetail = () => {
           value={candidatePhone}
           onChange={(e) => setCandidatePhone(e.target.value)}
         />
+        <p>{t('apply.cv')}</p>
         <input 
         type="file" 
         accept=".pdf" 
@@ -472,15 +477,19 @@ const JobDetail = () => {
         <Modal.Title>{t('apply.option')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Check
-          type="radio"
-          id="option1"
-          label={t('apply.oldCV')}
-          name="options"
-          value="option1"
-          checked={selectedOption === 'option1'}
-          onChange={handleApplyWithExistingCvO1}
-        />
+        <div className={clsx(styles.chooseCV)}>
+          <Form.Check
+            type="radio"
+            id="option1"
+            label={t('apply.oldCV')}
+            name="options"
+            value="option1"
+            checked={selectedOption === 'option1'}
+            onChange={handleApplyWithExistingCvO1}
+          />              
+          <a href={candidateResume} target="_blank" rel="noopener noreferrer">{candidateResumeOriginalName}</a>
+        </div>
+        
         <Form.Check
           type="radio"
           id="option2"
@@ -494,7 +503,7 @@ const JobDetail = () => {
         {showNewCvFields && (
           <div className="new-cv-fields">
             <Form.Group controlId="formCvName">
-              <Form.Label>Họ và tên{t('apply.name')}</Form.Label>
+              <Form.Label>{t('apply.name')}</Form.Label>
               <Form.Control
                 type="text" 
                 placeholder={t('apply.fillName')} 
@@ -654,7 +663,9 @@ const JobDetail = () => {
       <div className={clsx(styles.columnTwo)}>
         <div className={clsx(styles.companyContainer)}>
           <div className={clsx(styles.titleCongty)}>
-            <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
+              <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            </Link>
             <p>
               {/* <strong>Công ty:</strong>  */}
               <strong>{job.company.name}</strong>

@@ -7,8 +7,11 @@ import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../api';
 import logo from '../../images/logo.png';
 import Swal from 'sweetalert2';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const DetailCandidate = () => {
+  const { t, i18n } = useTranslation();
+
   const { candidateId } = useParams();
   const [searchParams] = useSearchParams();
   const applicationId = searchParams.get('applicationId'); // Get the application ID from query params
@@ -137,14 +140,14 @@ const DetailCandidate = () => {
             onClick={() => handleStatusUpdate('accepted')}
             disabled={buttonState === 'accepted'}
           >
-            Accept
+            {t('stateBtn.accept')}
           </button>
           <button
             className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
             onClick={() => handleStatusUpdate('rejected')}
             disabled={buttonState === 'rejected'} // Disable if already rejected
           >
-            Reject
+            {t('stateBtn.reject')}
           </button>
         </div>
       </div>

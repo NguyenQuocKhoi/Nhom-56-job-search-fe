@@ -20,7 +20,6 @@ const DetailJobAdmin = () => {
   //
   const [buttonState, setButtonState] = useState('pending');
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -29,6 +28,9 @@ const DetailJobAdmin = () => {
         const result = await getAPiNoneToken(`/job/${jobId}`);
         if (result.data.job) {
           setJob(result.data.job);
+
+          console.log(result.data.job);
+          setButtonState(result.data.job.status);          
   
           const categoryId = result.data.job.category;
           if (categoryId) {
@@ -297,21 +299,23 @@ const DetailJobAdmin = () => {
       <div className={clsx(styles.buttonContainer)}>
         <button
           className={clsx(styles.button, {
-            // [styles.accepted]: buttonState === 'accepted',
-            // [styles.disabled]: buttonState === 'rejected' || job.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
+            //  [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected'
+             [styles.accepted]: buttonState === true, [styles.disabled]: buttonState === 'rejected'
           })}
           onClick={() => handleStatusUpdate(job._id, true)}
-          // disabled={buttonState === 'accepted' || job.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
+          // disabled={buttonState === 'accepted'} 
+          disabled={buttonState === true} 
         >
           Accept
         </button>
         <button
           className={clsx(styles.button, {
-            // [styles.rejected]: buttonState === 'rejected',
-            // [styles.disabled]: buttonState === 'accepted' || job.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
+            // [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted'
+            [styles.rejected]: buttonState === false, [styles.disabled]: buttonState === 'accepted'
           })}
           onClick={() => handleStatusUpdate(job._id, false)}
-          // disabled={buttonState === 'rejected' || job.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
+          // disabled={buttonState === 'rejected'} 
+          disabled={buttonState === false} 
         >
           Reject
         </button>

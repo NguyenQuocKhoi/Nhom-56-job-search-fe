@@ -39,7 +39,11 @@ const DetailCompany = () => {
           // limit: 6,
           // sort: sortOrder === 'new' ? 'desc' : 'asc',
         });
-        if (response.data.jobs.length === 0) {
+        console.log("response",response);
+        console.log("length",response.data.jobs?.length);
+        
+        if (!response.data) {
+        // if (response.data === '') {
           setJobs([]);  // No jobs found
           setTotalPages(1); // Ensure pagination is reset
         } else {

@@ -97,9 +97,11 @@
   }
   .button.accepted{
     background: green;
+    cursor: not-allowed;
   }
   .button.rejected{
     background: red;
+    cursor: not-allowed;
   }
   .button.disabled{
     background: gray;

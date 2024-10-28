@@ -323,6 +323,16 @@ textarea {
   }
 }
 
+.btnPublicAccount.disabled,
+.btnAutoApply.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btnXoa.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .closeModalButton{
   background: #1E90FF;
   border-radius: 5px;
