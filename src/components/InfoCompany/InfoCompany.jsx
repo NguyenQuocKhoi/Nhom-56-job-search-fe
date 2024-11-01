@@ -40,9 +40,14 @@ const InfoCompany = () => {
     pendingUpdates: null
   });
   const [error, setError] = useState(null);
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  // const [avatarFile, setAvatarFile] = useState(null);
+  // const [avatarPreview, setAvatarPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  //mới
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(company.avatar || logo);
+  const [originalAvatar, setOriginalAvatar] = useState(company.avatar || logo);
 
   //city
   const [showCityModal, setShowCityModal] = useState(false);
@@ -71,15 +76,34 @@ const InfoCompany = () => {
     fetchCompany();
   }, [companyId]);
 
+  // const handleAvatarChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setAvatarFile(file);
+  //   }
+  // };
+
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const previewURL = URL.createObjectURL(file);
       setAvatarFile(file);
+      setAvatarPreview(previewURL);
     }
   };
 
   const handleUpdateInfo = async () => {
     try {
+      //mới thêm
+      Swal.fire({
+        title: t('profile.processing'),
+        text: t('profile.pleaseWait'),
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       const companyId = getUserStorage().user._id;
       const formData = new FormData();
       
@@ -105,7 +129,19 @@ const InfoCompany = () => {
       if (companyResponse.data.success) {
         setCompany(companyResponse.data.company);
         setIsEditing(false);
-        Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
+
+        //
+        setOriginalAvatar(avatarPreview);
+
+        //mới thêm
+        await Swal.fire({ 
+          icon: 'success', 
+          title: t('profile.success'),
+          text: t('profile.updateAllSuccess'), 
+          confirmButtonText: 'OK'
+        });
+
+        // Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
       } else {
         setError('Failed to update company information');
         Swal.fire({ icon: 'error', text: 'Failed to update company information' });
@@ -265,9 +301,9 @@ const InfoCompany = () => {
               />
             </div>
 
-            <div className={clsx(styles.modalChooseCity)}>            
               {showCityModal && !company.pendingUpdates && (
-                // <div className={clsx(styles.modal)}>
+            <div className={clsx(styles.modalChooseCity)}>            
+                <div className={clsx(styles.modalOverlay)}>
                   <div className={clsx(styles.modalContent)}>
                     <div className={clsx(styles.searchCityContainer)}>
                       <input 
@@ -280,18 +316,18 @@ const InfoCompany = () => {
                     </div>
 
                       {filteredCities.map((city) => (
-                        <li 
+                        <p
                           key={city}
                           onClick={() => handleCitySelect(city)}
                         >
                           {city}
-                        </li>
+                        </p>
                       ))}
                     {/* <button onClick={() => setShowCityModal(false)}>Close</button> */}
                   </div>
-                // </div>
-              )}
+                 </div>
             </div>
+              )}
           </div>
 
           {/* <div className={clsx(styles.midAddressStreet)}>
@@ -342,7 +378,13 @@ const InfoCompany = () => {
               <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
                 {t('profileCompany.update')}
               </button>
-              <button className={clsx(styles.btnCancel)} onClick={() => setIsEditing(false)}>
+              <button className={clsx(styles.btnCancel)} onClick={() => {
+                setIsEditing(false)
+                setShowCityModal(false)
+                
+                setAvatarPreview(originalAvatar)
+                setAvatarFile(null)}
+              }>
                 {t('profileCompany.cancel')}
               </button>
             </>

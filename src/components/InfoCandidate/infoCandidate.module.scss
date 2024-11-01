@@ -22,9 +22,19 @@
   // margin: 20px;
   padding: 20px;
   border-radius: 8px;
+  max-width: 350px;
 
   // background: yellow;
   background: white;
+}
+.textP{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  background: lightblue;
+  color: blue;
 }
 .topInfo{
   display: flex;

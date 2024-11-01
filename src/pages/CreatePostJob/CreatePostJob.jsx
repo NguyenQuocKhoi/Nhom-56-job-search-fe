@@ -59,9 +59,9 @@ const CreatePostJob = () => {
     position: '',
     city: '',
     street: '',
-    type: 'fulltime', // default to 'fulltime'
+    type: 'fulltime',
     expiredAt: '',
-    category: '', // add category field
+    category: '',
     requirementSkills: []
   });
 
@@ -128,23 +128,44 @@ const CreatePostJob = () => {
   };
   
   const handleChangeD = (value) => {
-    setJobData({
-      ...jobData,
+    setJobData(prevState => ({
+      ...prevState,
       description: value
-    });
+    }));
   };
+  
   const handleChangeI = (value) => {
-    setJobData({
-      ...jobData,
+    setJobData(prevState => ({
+      ...prevState,
       interest: value
-    });
+    }));
   };
+  
   const handleChangeR = (value) => {
-    setJobData({
-      ...jobData,
+    setJobData(prevState => ({
+      ...prevState,
       requirements: value
-    });
+    }));
   };
+
+  // const handleChangeD = (value) => {
+  //   setJobData({
+  //     ...jobData,
+  //     description: value
+  //   });
+  // };
+  // const handleChangeI = (value) => {
+  //   setJobData({
+  //     ...jobData,
+  //     interest: value
+  //   });
+  // };
+  // const handleChangeR = (value) => {
+  //   setJobData({
+  //     ...jobData,
+  //     requirements: value
+  //   });
+  // };
 
 
   const handleSkillChange = (skillId) => {
@@ -160,7 +181,6 @@ const CreatePostJob = () => {
   const handleCreatePostJob = async () => {
     const userData = getUserStorage()?.user;
   
-    // Check if all required fields are filled
     const {
       title,
       description,
@@ -180,7 +200,6 @@ const CreatePostJob = () => {
 
     console.log(jobData);
     
-  
     if (
       !title ||
       !description ||
@@ -197,9 +216,10 @@ const CreatePostJob = () => {
       !expiredAt ||
       !category ||
       !requirementSkills === 0
+      // !requirementSkills.length === 0//thêm .length
     ) {
-      setError('Vui lòng nhập đủ thông tin');
-      setSuccessMessage(''); // Reset success message
+      setError(t('createPostJob.pleaseFillInfo'));
+      setSuccessMessage('');
       return;
     }
   
@@ -213,14 +233,16 @@ const CreatePostJob = () => {
   
       if (result.data.success) {
         setError('');
-        setSuccessMessage('Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.');
+        // setSuccessMessage('Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.');
+        setSuccessMessage(t('createPostJob.postSuccess'));
         Swal.fire({
           icon: 'success',
-          title: 'Tạo bài đăng thành công',
-          text: `Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.`,
+          title: t('createPostJob.createSuccess'),
+          text: t('createPostJob.postSuccess'),
         });
 
         setJobData({
+          // ...jobData,
           title: '',
           description: '',
           requirements: '',
@@ -231,12 +253,12 @@ const CreatePostJob = () => {
           position: '',
           city: '',
           street: '',
-          type: 'fulltime', // default to 'fulltime'
+          type: 'fulltime',
           expiredAt: '',
           category: '',
           requirementSkills: []
         });
-        setSearchQuery('');
+        // setSearchQuery('');
         setFilteredCities(cities);
       } else {
         setError(result.data.message);
@@ -280,8 +302,8 @@ const CreatePostJob = () => {
             icon: 'warning',
             title: 'Thông báo',
             html: `
-            <p>Vui lòng hoàn thiện thông tin để được phê duyệt tài khoản.</p>
-            <button id="updateProfileBtn" class="swal2-confirm swal2-styled" style="display: inline-block;">Cập nhật ngay</button>
+            <p>${t('createPostJob.pleaseFillToPhe')}</p>
+            <button id="updateProfileBtn" class="swal2-confirm swal2-styled" style="display: inline-block;">${t('createPostJob.updateNow')}</button>
           `,
           showConfirmButton: false, // Hide the default confirm button
           didRender: () => {
@@ -336,7 +358,7 @@ const CreatePostJob = () => {
         <p className={clsx(styles.topThongBaoChuaPheDuyet)}>Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng.</p>
       )} */}
         <h2 className={clsx(styles.pageTitle)}>{t('createPostJob.createJob')}</h2>
-        <form className={clsx(styles.form)}>
+        <div className={clsx(styles.form)}>
           <div className={clsx(styles.formGroupTT)}>
             <label htmlFor="title">{t('createPostJob.title')} <span style={{ color: 'red' }}>*</span></label>
             <input
@@ -615,7 +637,7 @@ const CreatePostJob = () => {
               </div>
             )}                            
           
-        </form>
+        </div>
 
         <div className={clsx(styles.actions)}>
           <button
@@ -633,10 +655,12 @@ const CreatePostJob = () => {
             {t('createPostJob.exit')}
           </button>
         </div>
-        {error && <div className={clsx(styles.errorMessage)}>{error}</div>}
-        {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{successMessage}</div>} {/* Success message */}
+        {/* {error && <div className={clsx(styles.errorMessage)}>{error}</div>} */}
+        {error && <div className={clsx(styles.errorMessage)}>{t('createPostJob.pleaseFillInfo')}</div>}
+        {/* {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{successMessage}</div>} Success message */}
+        {successMessage && <div className={clsx(styles.thongBaoTaoThanhCong)}>{t('createPostJob.postSuccess')}</div>} {/* Success message */}
         {companyStatus !== true && (
-          <p className={clsx(styles.topThongBaoChuaPheDuyet)}>{t('createdPostJob.notApprove')}.</p>
+          <p className={clsx(styles.topThongBaoChuaPheDuyet)}>{t('createPostJob.notApprove')}.</p>
         )}
       </div>
 

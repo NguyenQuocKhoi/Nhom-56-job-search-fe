@@ -86,8 +86,8 @@
       "exp": "Kinh nghiệm",
       "edu": "Học vấn",
       "moreInfo": "Thông tin thêm",
-      "privateAcc": "Tài khoản riêng tư",
-      "publicAcc": "Công khai tài khoản",
+      "privateAcc": "Riêng tư",
+      "publicAcc": "Công khai",
       "autoApply": "Ứng tuyển tự động",
       "stopAutoApply": "Ngưng ứng tuyển tự động",
       "updateInfo": "Cập nhật thông tin",
@@ -102,7 +102,21 @@
       "male": "Nam",
       "female": "Nữ",
       "selectCity": "Chọn tỉnh/tp",
-      "deleteCV": "Xóa CV"
+      "deleteCV": "Xóa CV",
+      "textPublic":"Tài khoản của bạn đang ở chế độ công khai. Mọi người có thể tìm thấy bạn.",
+      "textPrivate":"Tài khoản của bạn đang ở chế độ riêng tư. Mọi người không thể tìm thấy bạn.",
+      "success":"Thành công",
+      "deleteCVsuccess":"CV đã được xóa thành công!",
+      "error":"Lỗi",
+      "errorChooseCV":"Vui lòng chọn file PDF và kích thước tối đa là 2MB",
+      "errorChooseAvatar":"Vui lòng chọn file ảnh và kích thước tối đa là 2MB",
+      "noUpdateCV":"Chưa cập nhật CV",
+      "pleaseUpdateCVtoP":"Vui lòng cập nhật CV để có thể sử dụng chức năng công khai tài khoản.",
+      "pleaseUpdateCVauto":"Vui lòng cập nhật CV để có thể sử dụng chức năng ứng tuyển tự động.",
+      "processing":"Quá trình đang diễn ra",
+      "pleaseWait":"Vui lòng đợi trong khi chúng tôi cập nhật thông tin của bạn...",
+      "updateAllSuccess":"Cập nhật thông tin thành công!!",
+      "pleaseWaitDeleteCV":"Vui lòng đợi trong khi chúng tôi xóa CV của bạn..."
     },
     "createPostJob":{
       "createJob":"Tạo Tin Tuyển Dụng",
@@ -126,7 +140,12 @@
       "createPost": "Tạo bài đăng",
       "exit": "Thoát",
       "close": "Đóng",
-      "notApprove":"Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng"
+      "notApprove":"Tài khoản chưa được phê duyệt! Sau khi được phê duyệt mới có thể đăng tin tuyển dụng",
+      "createSuccess":"Tạo bài đăng thành công",
+      "postSuccess":"Bài đăng đã được tạo thành công và đang chờ admin phê duyệt.",
+      "pleaseFillInfo":"Vui lòng nhập đủ thông tin",
+      "pleaseFillToPhe":"Vui lòng hoàn thiện thông tin để được phê duyệt tài khoản.",
+      "updateNow":"Cập nhật ngay"
     },
     "editPost":{
       "editJob":"Sửa Tin Tuyển Dụng",
@@ -188,6 +207,14 @@
     "stateBtn":{
       "accept": "Đồng ý",
       "reject": "Từ chối"
+    },
+    "detailCompany":{
+      "address":"Địa chỉ",
+      "description":"Mô tả",
+      "phoneNumber":"Số điện thoại",
+      "notPosted":"Chưa đăng công việc",
+      "page":"trang",
+      "post":"Tin tuyển dụng của công ty"
     }
   }
   

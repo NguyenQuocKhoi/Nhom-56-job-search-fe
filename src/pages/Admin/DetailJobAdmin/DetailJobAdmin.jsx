@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { deleteApiWithToken, getAPiNoneToken, putApiWithToken } from '../../../api';
 import styles from './detailJobAdmin.module.scss';
 import clsx from 'clsx';
@@ -7,6 +7,8 @@ import Header from '../HeaderAdmin/HeaderAdmin';
 import Swal from 'sweetalert2';
 
 const DetailJobAdmin = () => {
+  const navigate = useNavigate();
+
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
@@ -152,6 +154,8 @@ const DetailJobAdmin = () => {
         title: status === true ? 'Accepted' : 'Rejected',//true
         text: `You have ${status} this job.`,
       });
+
+      navigate(-1);//tạm thời
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -298,24 +302,28 @@ const DetailJobAdmin = () => {
 
       <div className={clsx(styles.buttonContainer)}>
         <button
-          className={clsx(styles.button, {
-            //  [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected'
-             [styles.accepted]: buttonState === true, [styles.disabled]: buttonState === 'rejected'
-          })}
+          className={clsx(styles.button, 
+            job.pendingUpdates !== null
+              ? null
+              : {
+                  [styles.accepted]: buttonState === true,
+                  // [styles.disabled]: buttonState === 'rejected'
+                }
+          )}
           onClick={() => handleStatusUpdate(job._id, true)}
-          // disabled={buttonState === 'accepted'} 
-          disabled={buttonState === true} 
         >
           Accept
         </button>
         <button
-          className={clsx(styles.button, {
-            // [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted'
-            [styles.rejected]: buttonState === false, [styles.disabled]: buttonState === 'accepted'
-          })}
+          className={clsx(styles.button, 
+            job.pendingUpdates !== null
+              ? null
+              : {
+                  [styles.rejected]: buttonState === false,
+                  // [styles.disabled]: buttonState === 'accepted'
+                }
+          )}
           onClick={() => handleStatusUpdate(job._id, false)}
-          // disabled={buttonState === 'rejected'} 
-          disabled={buttonState === false} 
         >
           Reject
         </button>

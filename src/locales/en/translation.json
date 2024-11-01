@@ -86,8 +86,8 @@
       "exp": "Experience",
       "edu": "Education",
       "moreInfo": "More infomation",
-      "privateAcc": "Private account",
-      "publicAcc": "Public account",
+      "privateAcc": "Private",
+      "publicAcc": "Public",
       "autoApply": "Auto apply",
       "stopAutoApply": "Stop auto apply",
       "updateInfo": "Update infomation",
@@ -102,7 +102,21 @@
       "male": "Male",
       "female": "Female",
       "selectCity": "Select a city",
-      "deleteCV": "Delete CV"
+      "deleteCV": "Delete CV",
+      "textPublic":"Your account is public. People can find you.",
+      "textPrivate":"Your account is private. People can't find you.",
+      "success":"Success",
+      "deleteCVsuccess":"CV was deleted successfully!",
+      "error":"Error",
+      "errorChooseCV":"Please select PDF file and maximum size is 2MB",
+      "errorChooseAvatar":"Please select an image file and maximum size is 2MB",
+      "noUpdateCV":"CV not updated",
+      "pleaseUpdateCVtoP":"Please update your CV to be able to use the public account function.",
+      "pleaseUpdateCVauto":"Please update your CV to be able to use the automatic application function.",
+      "processing":"Processing",
+      "pleaseWait":"Please wait while we update your information...",
+      "updateAllSuccess":"All updates were successful!!",
+      "pleaseWaitDeleteCV":"Please wait while we delete your CV..."
     },
     "createPostJob":{
       "createJob":"Create Job Posting",
@@ -126,7 +140,12 @@
       "createPost": "Create Post",
       "exit": "Exit",
       "close": "Close",
-      "notApprove":"Account not approved! You can post job ads only after approval."
+      "notApprove":"Account not approved! You can post job ads only after approval.",
+      "createSuccess":"Post created successfully",
+      "postSuccess":"Post has been successfully created and is awaiting admin approval.",
+      "pleaseFillInfo":"Please enter complete information",
+      "pleaseFillToPhe":"Please complete the information to get your account approved.",
+      "updateNow":"Update now"
     },
     "editPost":{
       "editJob":"Edit Job Posting",
@@ -188,6 +207,14 @@
     "stateBtn":{
       "accept": "Accept",
       "reject": "Reject"
+    },
+    "detailCompany":{
+      "address":"Address",
+      "description":"Description",
+      "phoneNumber":"Phone Number",
+      "notPosted":"No job posted yet",
+      "page":"page",
+      "post":"Company recruitment news"
     }
   }
   

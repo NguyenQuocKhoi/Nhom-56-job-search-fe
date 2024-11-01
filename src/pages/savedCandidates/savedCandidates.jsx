@@ -78,7 +78,11 @@ const SavedCandidates = () => {
             ) : (
               savedCandidates.map((candidate) => (
                 <div key={candidate._id} className={clsx(styles.jobcard)}>
-                  <Link to={`/detail-candidate/${candidate.candidate._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                  <Link 
+                    to={`/detail-candidate/${candidate.candidate._id}`} 
+                    // target="_blank" rel="noopener noreferrer" 
+                    className={clsx(styles.linkJob)}
+                  >
                     <img src={candidateDetails[candidate.candidate]?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />                        
                     <div className={clsx(styles.describe)}>
                       <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>

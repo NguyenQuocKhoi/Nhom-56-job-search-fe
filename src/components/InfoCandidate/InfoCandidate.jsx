@@ -157,8 +157,8 @@ const InfoCandidate = () => {
       setButtonState(false);
       Swal.fire({
         icon: 'warning',
-        title: 'Chưa cập nhật CV',
-        text: 'Vui lòng cập nhật CV để có thể sử dụng chức năng công khai tài khoản.',
+        title: t('profile.noUpdateCV'),
+        text: t('profile.pleaseUpdateCVtoP'),
       });
       return;
     }
@@ -221,8 +221,8 @@ const handleAutoApply = async () => {
     setAutoSearchJobs(false);
     Swal.fire({
       icon: 'warning',
-      title: 'Chưa cập nhật CV',
-      text: 'Vui lòng cập nhật CV để có thể sử dụng chức năng ứng tuyển tự động.',
+      title: t('profile.noUpdateCV'),
+      text: t('profile.pleaseUpdateCVauto'),
     });
     return;
   }
@@ -289,8 +289,8 @@ const handleAutoApply = async () => {
   const handleUpdateAll = async () => {
     try {
       Swal.fire({
-        title: 'Processing',
-        text: 'Please wait while we update your information...',
+        title: t('profile.processing'),
+        text: t('profile.pleaseWait'),
         allowOutsideClick: false,
         didOpen: () => {
           Swal.showLoading();
@@ -348,8 +348,8 @@ const handleAutoApply = async () => {
   
           await Swal.fire({ 
             icon: 'success', 
-            title: 'Success!',
-            text: 'All updates were successful!!', 
+            title: t('profile.success'),
+            text: t('profile.updateAllSuccess'), 
             confirmButtonText: 'OK'
           });
           // Swal.fire({ icon: 'success', text: 'All updates were successful!' });
@@ -393,8 +393,8 @@ const handleAutoApply = async () => {
         // Hiển thị thông báo nếu không đạt yêu cầu
         Swal.fire({
           icon: 'error',
-          title: 'Lỗi!',
-          text: 'Vui lòng chọn file ảnh và kích thước tối đa là 2MB',
+          title: t('profile.error'),
+          text: t('profile.errorChooseAvatar'),
           confirmButtonText: 'OK'
         }).then(()=>{
           e.target.value = '';
@@ -452,8 +452,8 @@ const handleAutoApply = async () => {
         // Hiển thị thông báo nếu không đạt yêu cầu
         Swal.fire({
           icon: 'error',
-          title: 'Lỗi!',
-          text: 'Vui lòng chọn file PDF và kích thước tối đa là 2MB',
+          title: t('profile.error'),
+          text: t('profile.errorChooseCV'),
           confirmButtonText: 'OK'
         }).then(()=>{
           e.target.value = '';
@@ -495,8 +495,8 @@ const handleAutoApply = async () => {
   const handleXoaCV = async (candidateId) => {
     try {
       Swal.fire({
-        title: 'Processing',
-        text: 'Please wait while we delete your CV...',
+        title: t('profile.processing'),
+        text: t('profile.pleaseWaitDeleteCV'),
         allowOutsideClick: false,
         didOpen: () => {
           Swal.showLoading();
@@ -517,8 +517,10 @@ const handleAutoApply = async () => {
 
         await Swal.fire({ 
           icon: 'success', 
-          title: 'Thành công!',
-          text: 'CV đã được xóa thành công!', 
+          // title: 'Thành công!',
+          title: t('profile.success'),
+          // text: 'CV đã được xóa thành công!', 
+          text: t('profile.deleteCVsuccess'), 
           confirmButtonText: 'OK'
         });
         // Swal.fire({ icon: 'success', text: 'CV deleted successfully!' });
@@ -570,6 +572,14 @@ const handleAutoApply = async () => {
             disabled={!isEditing}
             // style={{width: '240px'}}            
           />
+          {buttonState 
+            ? <div className={clsx(styles.textP)}>
+                <p><strong>{t('profile.textPublic')}</strong></p>
+              </div> 
+            : <div className={clsx(styles.textP)}>
+                <p><strong>{t('profile.textPrivate')}</strong></p>
+              </div> 
+          }
         </div>
 
         <div className={clsx(styles.topInfo)}>

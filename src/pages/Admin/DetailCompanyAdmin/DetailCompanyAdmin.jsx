@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../../api';
 import styles from './detailCompanyAdmin.module.scss';
 import clsx from 'clsx';
@@ -8,6 +8,8 @@ import logo from '../../../images/logo.png';
 import Swal from 'sweetalert2';
 
 const DetailCompanyAdmin = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [company, setCompany] = useState(null);
   const [error, setError] = useState(null);
@@ -29,6 +31,9 @@ const DetailCompanyAdmin = () => {
       try {
         const result = await getAPiNoneToken(`/company/${id}`);
         setCompany(result.data.company);
+
+        //lấy trạng thái mặc định
+        setButtonState(result.data.company.status);
 
         //
         const userResult = await getApiWithToken(`/user/${id}`);
@@ -166,6 +171,7 @@ const DetailCompanyAdmin = () => {
         text: `You have ${status} this company.`,
       });
       //refresh màn hình luôn
+      navigate(-1);//tạm thời là thế
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -268,22 +274,28 @@ const DetailCompanyAdmin = () => {
 
       <div className={clsx(styles.buttonContainer)}>
         <button
-          className={clsx(styles.button, {
-            [styles.accepted]: buttonState === 'accepted',
-            [styles.disabled]: buttonState === 'rejected' || company.pendingUpdates === null, // Disable if rejected or pendingUpdates is null
-          })}
+          className={clsx(styles.button, 
+            company.pendingUpdates !== null
+              ? null
+              : {
+                  [styles.accepted]: buttonState === true,
+                  // [styles.disabled]: buttonState === 'rejected'
+                }
+          )}
           onClick={() => handleStatusUpdate(company._id, true)}
-          disabled={buttonState === 'accepted' || company.pendingUpdates === null} // Disable if accepted or pendingUpdates is null
         >
           Accept
         </button>
         <button
-          className={clsx(styles.button, {
-            [styles.rejected]: buttonState === 'rejected',
-            [styles.disabled]: buttonState === 'accepted' || company.pendingUpdates === null, // Disable if accepted or pendingUpdates is null
-          })}
+          className={clsx(styles.button, 
+            company.pendingUpdates !== null
+              ? null
+              : {
+                  [styles.rejected]: buttonState === false,
+                  // [styles.disabled]: buttonState === 'accepted'
+                }
+          )}
           onClick={() => handleStatusUpdate(company._id, false)}
-          disabled={buttonState === 'rejected' || company.pendingUpdates === null} // Disable if rejected or pendingUpdates is null
         >
           Reject
         </button>

@@ -75,7 +75,9 @@ const JobDetail = () => {
   const [showModalCV, setShowModalCV] = useState(false);
 
   //khi đã có cv hiện modal có 2 option old, new
-  const [selectedOption, setSelectedOption] = useState('option1');
+  // const [selectedOption, setSelectedOption] = useState('option1');
+  const [selectedOption, setSelectedOption] = useState('');
+  const [showOldCvFields, setShowOldCvFields] = useState(false);
   const [showNewCvFields, setShowNewCvFields] = useState(false);
 
   const [similarJobs, setSimilarJobs] = useState([]);
@@ -85,8 +87,14 @@ const JobDetail = () => {
     setShowNewCvFields(false); // Ẩn các trường input khi chọn CV cũ
   };
 
+  const handleUploadNewCvO1 = () => {
+    setSelectedOption('option1');
+    setShowOldCvFields(true); // Hiển thị các trường input khi chọn CV mới
+    setShowNewCvFields(false); // Ẩn các trường input khi chọn CV cũ
+  };
   const handleUploadNewCvO2 = () => {
     setSelectedOption('option2');
+    setShowOldCvFields(false); // Hiển thị các trường input khi chọn CV mới
     setShowNewCvFields(true); // Hiển thị các trường input khi chọn CV mới
   };
 
@@ -104,6 +112,7 @@ const JobDetail = () => {
 
     const fetchCandidate = async () => {
       try {
+
         const candidateId = getUserStorage().user._id;
         // console.log(candidateId);
     
@@ -275,6 +284,23 @@ const JobDetail = () => {
 
   const handleApplyByNewCandidate = async () => {
     const candidateId = getUserStorage().user._id;
+
+    if (!candidateName || !candidateEmail || !candidatePhone) {
+      Swal.fire('Vui lòng nhập đủ thông tin', '', 'warning');
+      return;
+    }
+
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(candidatePhone)) {
+        Swal.fire('Số điện thoại không hợp lệ', '','warning');
+        return;
+    }
+
+    if (!cvFile) {
+      Swal.fire('Vui lòng chọn CV', '', 'warning');
+      return;
+    }
+
      try{
       const data = {
         name: candidateName,
@@ -326,6 +352,23 @@ const JobDetail = () => {
 
   const handleUploadNewCv = async () => {
     const candidateId = getUserStorage().user._id;
+
+    if (!candidateName || !candidateEmail || !candidatePhone) {
+      Swal.fire('Vui lòng nhập đủ thông tin', '', 'warning');
+      return;
+    }
+
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(candidatePhone)) {
+        Swal.fire('Số điện thoại không hợp lệ', '', 'warning');
+        return;
+    }
+
+    if (!cvFile) {
+      Swal.fire('Vui lòng chọn CV', '', 'warning');
+      return;
+    }
+
      try{
       const data = {
         name: candidateName,
@@ -477,7 +520,6 @@ const JobDetail = () => {
         <Modal.Title>{t('apply.option')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className={clsx(styles.chooseCV)}>
           <Form.Check
             type="radio"
             id="option1"
@@ -485,10 +527,14 @@ const JobDetail = () => {
             name="options"
             value="option1"
             checked={selectedOption === 'option1'}
-            onChange={handleApplyWithExistingCvO1}
-          />              
-          <a href={candidateResume} target="_blank" rel="noopener noreferrer">{candidateResumeOriginalName}</a>
-        </div>
+            // onChange={handleApplyWithExistingCvO1} 
+            onChange={handleUploadNewCvO1} 
+          />       
+          {showOldCvFields && (
+            <div className={clsx(styles.chooseCV)}>
+              <p>Click vào để xem CV: </p><a href={candidateResume} target="_blank" rel="noopener noreferrer">{candidateResumeOriginalName}</a>
+            </div>
+          )}       
         
         <Form.Check
           type="radio"
@@ -501,7 +547,8 @@ const JobDetail = () => {
         />
 
         {showNewCvFields && (
-          <div className="new-cv-fields">
+          // <div className="new-cv-fields">
+          <div className={clsx(styles.newCVfields)}>
             <Form.Group controlId="formCvName">
               <Form.Label>{t('apply.name')}</Form.Label>
               <Form.Control

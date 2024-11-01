@@ -84,12 +84,7 @@ const JobManagement = () => {
       setJobsAll(jobsWithSkills);
       setJobsAccepted(jobsWithSkills.filter(job => job.status === true && job.pendingUpdates === null));
       setJobsRejected(jobsWithSkills.filter(job => job.status === false && job.pendingUpdates === null));
-      setJobsPending(jobsWithSkills.filter(job => job.pendingUpdates !== null || job.status === undefined));      
-
-      // setJobsAll(result.data.jobs);
-      // setJobsAccepted(result.data.jobs.filter(job => job.status === true && job.pendingUpdates === null));
-      // setJobsRejected(result.data.jobs.filter(job => job.status === false && job.pendingUpdates === null));
-      // setJobsPending(result.data.jobs.filter(job => job.pendingUpdates !== null || job.status === undefined));//pendingUpdates khác null thì là pending      
+      setJobsPending(jobsWithSkills.filter(job => job.pendingUpdates !== null || job.status === undefined));        
 
       setPagination(prev => ({
         ...prev,
@@ -288,13 +283,7 @@ const JobManagement = () => {
     } else {
         setResults(null);
     }
-      // console.log("82", searchParams);
-      // console.log("82", response.data.jobs);
-      // if (response.data.success) {
-      //   setResults(response.data.jobs);
-      // } else {
-      //   setResults(null);
-      // }
+  
     } catch (error) {
       console.error("Search error:", error);
       setResults(null);
@@ -332,7 +321,7 @@ const JobManagement = () => {
   return (
     <div className={styles.jobManagement}>
       <h2>Quản lí việc làm</h2>
-        {/* searchBar */}
+
         <form className={clsx(styles.searchBar)}>
           <div className={clsx(styles.form)}>
             {/* <Form.Control
@@ -591,7 +580,9 @@ const JobManagement = () => {
                     <div className={clsx(styles.content)}  key={job._id}>
                       {/* <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}> */}
                       <div className={clsx(styles.jobcard)}>
-                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                      <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}
+                          target="_blank" rel="noopener noreferrer"
+                      >
                       <div className={styles.contentJobcard}>
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
@@ -653,7 +644,9 @@ const JobManagement = () => {
             job && job._id && job.company && job.company._id ? (
                       <div key={job._id} className={clsx(styles.content)}>
                         <div className={clsx(styles.jobcard)}>
-                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+                    <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}
+                      target="_blank" rel="noopener noreferrer"
+                    >
                         <div className={clsx(styles.contentJobcard)}>
                           <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                           <div className={clsx(styles.contentText)}>
@@ -703,7 +696,9 @@ const JobManagement = () => {
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
               <div className={clsx(styles.jobcard)}>
-          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}
+            target="_blank" rel="noopener noreferrer"
+          >
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
@@ -753,7 +748,9 @@ const JobManagement = () => {
             job && job._id && job.company && job.company._id ? (
               <div key={job._id} className={clsx(styles.content)}>
               <div className={clsx(styles.jobcard)}>
-          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}>
+          <Link to={`/detailJobAdmin/${job._id}`} className={clsx(styles.linkJob)}
+            target="_blank" rel="noopener noreferrer"
+          >
               <div className={clsx(styles.contentJobcard)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>

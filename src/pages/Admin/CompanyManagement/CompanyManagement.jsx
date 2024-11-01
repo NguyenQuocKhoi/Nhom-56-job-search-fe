@@ -78,11 +78,10 @@ const CompanyManagement = () => {
       const companies = result.data.companies;
       console.log(companies);
 
-    // Fetch the isActive status for each company (based on the company._id assuming it corresponds to the userId)
     const companiesWithIsActive = await Promise.all(
       companies.map(async (company) => {
         try {
-          const userIsActiveResponse = await getApiWithToken(`/user/${company._id}`);  // Assuming company._id is the userId
+          const userIsActiveResponse = await getApiWithToken(`/user/${company._id}`);
           // console.log("userIsActiveResponse",userIsActiveResponse.data.user.isActive);
           // console.log(company._id);
           
@@ -91,10 +90,10 @@ const CompanyManagement = () => {
           // console.log("isActive", isActive);
           // console.log(company._id);
           
-          return { ...company, isActive };  // Attach isActive status to each company object
+          return { ...company, isActive };  
         } catch (error) {
           console.error(`Failed to fetch isActive status for company ${company._id}`, error);
-          return { ...company, isActive: false }; // Default to false if there's an error
+          return { ...company, isActive: false }; 
         }
       })
     );
@@ -106,10 +105,6 @@ const CompanyManagement = () => {
     setCompaniesRejected(companiesWithIsActive.filter(company => company.status === false && company.pendingUpdates === null));
     setCompaniesPending(companiesWithIsActive.filter(company => company.status === undefined || company.pendingUpdates !== null));
     
-      // setCompaniesAll(result.data.companies);
-      // setCompaniesAccepted(result.data.companies.filter(company => company.status === true && company.pendingUpdates === null));
-      // setCompaniesRejected(result.data.companies.filter(company => company.status === false && company.pendingUpdates === null));
-      // setCompaniesPending(result.data.companies.filter(company => company.status === undefined || company.pendingUpdates !== null));
       setPagination(prev => ({
         ...prev,
         currentPage: result.data.currentPage,
@@ -807,7 +802,9 @@ const CompanyManagement = () => {
                   companiesAll.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
                       <div className={clsx(styles.companycard)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}
+                          // target="_blank" rel="noopener noreferrer"
+                        >
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
@@ -816,9 +813,9 @@ const CompanyManagement = () => {
                               <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
-                                {company.status === true 
+                                {company.status === true && company.pendingUpdates === null
                                   ? " Đồng ý" 
-                                  : company.status === false 
+                                  : company.status === false && company.pendingUpdates === null
                                   ? " Từ chối" 
                                   : " Chưa phê duyệt"}
                               </p>
@@ -859,7 +856,9 @@ const CompanyManagement = () => {
                   companiesAccepted.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
                       <div className={clsx(styles.companycard)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}
+                          target="_blank" rel="noopener noreferrer"
+                        >
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
@@ -868,9 +867,9 @@ const CompanyManagement = () => {
                               <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
-                                {company.status === true 
+                                {company.status === true && company.pendingUpdates === null
                                   ? " Đồng ý" 
-                                  : company.status === false 
+                                  : company.status === false && company.pendingUpdates === null
                                   ? " Từ chối" 
                                   : " Chưa phê duyệt"}
                               </p>
@@ -910,7 +909,9 @@ const CompanyManagement = () => {
                   companiesRejected.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
                       <div className={clsx(styles.companycard)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}
+                          target="_blank" rel="noopener noreferrer"
+                        >
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>
@@ -919,9 +920,9 @@ const CompanyManagement = () => {
                               <p>{company.street}, {company.city}</p>
                               <p>
                                 Trạng thái: 
-                                {company.status === true 
+                                {company.status === true && company.pendingUpdates === null
                                   ? " Đồng ý" 
-                                  : company.status === false 
+                                  : company.status === false && company.pendingUpdates === null
                                   ? " Từ chối" 
                                   : " Chưa phê duyệt"}
                               </p>
@@ -960,7 +961,9 @@ const CompanyManagement = () => {
                   companiesPending.map((company) => (
                     <div key={company._id} className={clsx(styles.content)}>
                       <div className={clsx(styles.companycard)}>
-                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}>
+                        <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}
+                          target="_blank" rel="noopener noreferrer"
+                        >
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                             <div className={clsx(styles.contentText)}>

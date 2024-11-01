@@ -6,8 +6,11 @@ import clsx from 'clsx';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
 
 const DetailCompany = () => {
+  const { t, i18n } = useTranslation();
+
   const { id } = useParams();
   const [company, setCompany] = useState(null);
   const [error, setError] = useState(null);
@@ -107,14 +110,14 @@ const DetailCompany = () => {
             <p className={clsx(styles.topTitleText)}><strong>{company.name}</strong></p>
             <div className={clsx(styles.address)}>
               <i className="fa-solid fa-location-dot"></i>
-              <p><strong>Address:</strong> {company.street}, {company.city}</p>
+              <p><strong>{t('detailCompany.address')}:</strong> {company.street}, {company.city}</p>
             </div>
           </div>
           
         </div>
         <div className={clsx(styles.mid)}>
           <div className={clsx(styles.intro)}>
-            <p><strong>Description:</strong></p>
+            <p><strong>{t('detailCompany.description')}:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: company.description }}
             ></div>
@@ -122,7 +125,7 @@ const DetailCompany = () => {
 
           <div className={clsx(styles.midRight)}>
             <div className={clsx(styles.contact)}>
-              <p><strong>Phone Number:</strong> {company.phoneNumber}</p>
+              <p><strong>{t('detailCompany.phoneNumber')}:</strong> {company.phoneNumber}</p>
               <p><strong>Website: </strong><a href={company.website} target="_blank" rel="noopener noreferrer">{company.website}</a></p>
               <p><strong>Email:</strong> {company.email}</p>
             </div>
@@ -134,13 +137,13 @@ const DetailCompany = () => {
           <p>Loading...</p>
         ) : jobs.length === 0 ? (
           <div className={clsx(styles.ds)}>
-            <p><strong>Chưa đăng công việc.</strong></p>
+            <p><strong>{t('detailCompany.notPosted')}.</strong></p>
           </div>
         ) : (
           <>
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.ds)}>
-                <strong>Tin tuyển dụng của công ty:</strong>
+                <strong>{t('detailCompany.post')}:</strong>
               </div>
               <div className={clsx(styles.jobContainer)}>
                 {jobs.map((job) => (
@@ -171,7 +174,7 @@ const DetailCompany = () => {
               >
                 <i className="fa-solid fa-angle-left"></i>
               </button>
-              <span>{currentPage} / {totalPages} trang</span>
+              <span>{currentPage} / {totalPages} {t('detailCompany.page')}</span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
