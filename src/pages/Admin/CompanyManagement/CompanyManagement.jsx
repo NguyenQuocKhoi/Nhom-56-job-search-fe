@@ -803,7 +803,7 @@ const CompanyManagement = () => {
                     <div key={company._id} className={clsx(styles.content)}>
                       <div className={clsx(styles.companycard)}>
                         <Link to={`/detailCompanyAdmin/${company._id}`} className={clsx(styles.linkCompany)}
-                          // target="_blank" rel="noopener noreferrer"
+                          target="_blank" rel="noopener noreferrer"
                         >
                           <div className={clsx(styles.contentCompanycard)}>
                             <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>

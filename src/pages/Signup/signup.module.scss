@@ -31,3 +31,19 @@
     text-decoration: underline;
   }
 }
+
+.passwordContainer{
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.passwordContainer input {
+  padding-right: 30px;
+}
+.passwordToggleIcon{
+  position: absolute;
+  right: 9.5px;
+  top: 6.5px;
+  cursor: pointer;
+}
+

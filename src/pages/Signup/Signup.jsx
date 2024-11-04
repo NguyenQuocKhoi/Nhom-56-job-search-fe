@@ -20,6 +20,9 @@ const Signup = () => {
   const [passwordErr, setPasswordErr] = useState("");
   const [verify, setVerify] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   //
   const [showModal, setShowModal] = useState(false);
 
@@ -73,7 +76,7 @@ const Signup = () => {
   
           Swal.fire({
             icon: "success",
-            text: "Xác minh và đăng nhập thành công!",
+            text: "Xác minh và tạo tài khoản thành công!",
           });
   
           navigate("/login");
@@ -196,6 +199,13 @@ const Signup = () => {
   const handleCloseModal = () => {
     setShowModal(false);
   }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
   
   return (
     <>
@@ -220,12 +230,12 @@ const Signup = () => {
           }}
           aria-invalid={!!emailErr}
           />
-          <Button variant="secondary" onClick={handleResentVerify}>
+          <Button variant="primary" onClick={handleResentVerify}>
             Gửi lại mã
         </Button>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal}>
+        <Button variant="danger" onClick={handleCloseModal}>
           Close
         </Button>
         <Button variant="primary" onClick={()=>handleSignup()}>
@@ -288,13 +298,23 @@ const Signup = () => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        isInvalid={!!passwordErr}
-                      />
+                      <div className={clsx(styles.passwordContainer)}>
+                        <Form.Control
+                          type={showPassword ? 'text' : 'password'} 
+                          placeholder="Enter your password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          isInvalid={!!passwordErr}
+                        />
+
+                        <span 
+                          onClick={togglePasswordVisibility} 
+                          className={clsx(styles.passwordToggleIcon)}
+                          // style={{ marginTop: '8px', cursor: 'pointer' }}
+                        >
+                          { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                        </span>
+                      </div>
                       <Form.Control.Feedback type="invalid">
                         {/* {passwordErr} */}
                       </Form.Control.Feedback>
@@ -302,13 +322,23 @@ const Signup = () => {
                     {/* Confirm */}
                     <Form.Group className="mb-3">
                       <Form.Label>Confirm Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Confirm your password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        isInvalid={!!passwordErr}
-                      />
+                      <div className={clsx(styles.passwordContainer)}>
+                        <Form.Control
+                          type={showConfirmPassword ? 'text' : 'password'} 
+                          placeholder="Confirm your password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          isInvalid={!!passwordErr}
+                        />
+
+                        <span 
+                          onClick={toggleConfirmPasswordVisibility} 
+                          className={clsx(styles.passwordToggleIcon)}
+                          // style={{ marginTop: '8px', cursor: 'pointer' }}
+                        >
+                          { showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                        </span>
+                      </div>
                       <Form.Control.Feedback type="invalid">
                         {passwordErr}
                       </Form.Control.Feedback>
@@ -359,13 +389,22 @@ const Signup = () => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => handleCheckPassword(e.target.value)}
-                        isInvalid={!!passwordErr}
-                      />
+                      <div className={clsx(styles.passwordContainer)}>
+                        <Form.Control
+                          type={showPassword ? 'text' : 'password'} 
+                          placeholder="Enter your password"
+                          value={password}
+                          onChange={(e) => handleCheckPassword(e.target.value)}
+                          isInvalid={!!passwordErr}
+                        />
+                        <span 
+                        onClick={togglePasswordVisibility} 
+                        className={clsx(styles.passwordToggleIcon)}
+                        // style={{ marginTop: '8px', cursor: 'pointer' }}
+                      >
+                        { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                      </span>
+                      </div>
                       <Form.Control.Feedback type="invalid">
                         {passwordErr}
                       </Form.Control.Feedback>
@@ -373,13 +412,22 @@ const Signup = () => {
                     {/* confirm */}
                     <Form.Group className="mb-3">
                       <Form.Label>Confirm Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        placeholder="Confirm your password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        isInvalid={!!passwordErr}
-                      />
+                      <div className={clsx(styles.passwordContainer)}>
+                        <Form.Control
+                          type={showConfirmPassword ? 'text' : 'password'} 
+                          placeholder="Confirm your password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          isInvalid={!!passwordErr}
+                        />
+                        <span 
+                          onClick={toggleConfirmPasswordVisibility} 
+                          className={clsx(styles.passwordToggleIcon)}
+                          // style={{ marginTop: '8px', cursor: 'pointer' }}
+                        >
+                          { showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                        </span>
+                      </div>
                       <Form.Control.Feedback type="invalid">
                         {passwordErr}
                       </Form.Control.Feedback>

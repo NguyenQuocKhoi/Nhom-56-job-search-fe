@@ -515,6 +515,8 @@ const handleAutoApply = async () => {
           resumeOriginalName: undefined
         }));
 
+        setButtonState(false);//xóa xong set state lại ngay
+
         await Swal.fire({ 
           icon: 'success', 
           // title: 'Thành công!',
@@ -870,6 +872,7 @@ const handleAutoApply = async () => {
 
         <div className={clsx(styles.btnContainer)}>
 
+{/* nếu không có cv thì disable luôn */}
           {/* <button 
             onClick={handlePublicAccount} 
             className={clsx(styles.btnPublicAccount, {
@@ -892,19 +895,35 @@ const handleAutoApply = async () => {
             {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
           </button> */}
 
+        <div className={clsx(styles.groupBtnPublicAuto)}>
+          <div className={clsx(styles.toggleSwitch, { [styles.active]: buttonState })} onClick={handlePublicAccount}>
+            <div className={styles.toggleCircle}></div>
+          </div>  
+          <span className={styles.toggleLabel}>
+            {buttonState ? 'Tài khoản đang ở chế độ công khai' : 'Tài khoản đang ở chế độ riêng tư'}
+          </span>
 
-          <button onClick={handlePublicAccount} 
+            {/* nếu không có cv thì thông báo */}
+          {/* <button onClick={handlePublicAccount} 
             className={clsx(styles.btnPublicAccount, {[styles.active]: buttonState})}
           >
             {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
-          </button>
+          </button> */}
 
-          <button
+          <div className={clsx(styles.toggleSwitch, { [styles.active]: autoSearchJobs })} onClick={handleAutoApply}>
+            <div className={styles.toggleCircle}></div>
+          </div>  
+          <span className={styles.toggleLabel}>
+            {autoSearchJobs ? 'Đang bật tìm việc tự động' : 'Đang tắt tìm việc tự động'}
+          </span>
+
+          {/* <button
             onClick={handleAutoApply}
             className={clsx(styles.btnAutoApply, { [styles.active]: autoSearchJobs })}
           >
             {autoSearchJobs ? t('profile.stopAutoApply') : t('profile.autoApply')}
-          </button>
+          </button> */}
+        </div>      
           
           {isEditing ? (
             <>

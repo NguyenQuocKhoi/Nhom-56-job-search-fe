@@ -247,7 +247,7 @@ const ListJobInfo = () => {
   }, [fetchJobs]);
 
   // if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <div className={clsx(styles.joblist)}>
@@ -318,7 +318,9 @@ const ListJobInfo = () => {
                   {/* className={clsx(styles.linkJob)}> */}
                   <div className={clsx(styles.text)}>
                     <div className={clsx(styles.title)}>
-                    <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
+                    <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} 
+                      target="_blank" rel="noopener noreferrer"
+                    >
                       <p><strong>{job.title}</strong></p>
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (
@@ -331,7 +333,7 @@ const ListJobInfo = () => {
                 )}
                     </div>
                     <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} 
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank" rel="noopener noreferrer"//
                     >
                     <div className={clsx(styles.describe)}>
                       <p>Company: {job.company.name}</p>

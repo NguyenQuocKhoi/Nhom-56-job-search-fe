@@ -183,6 +183,10 @@ textarea {
   &:hover{
     background: #1e9999;
   }
+  &:disabled{
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+  }
 }
 
 .btnConfirm {
@@ -195,6 +199,10 @@ textarea {
   &:hover {
     background: green;
   }
+  &:disabled{
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+  }
 }
 
 .btnEdit {
@@ -205,6 +213,10 @@ textarea {
   color: white;
   &:hover{
     background: blue;
+  }
+  &:disabled{
+    background-color: #c0c0c0;
+    cursor: not-allowed;
   }
 }
 

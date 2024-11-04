@@ -136,8 +136,9 @@ const DetailJobAdmin = () => {
   const handleStatusUpdate = async ( jobId, status ) => {
     // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
     Swal.fire({
-      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
-      text: `Please wait while ${status} the company.`,
+      // title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      title: 'Đang xử lí',
+      text: `Please wait while ${status} the job.`,
       allowOutsideClick: false,
       showConfirmButton: false,
       willOpen: () => {

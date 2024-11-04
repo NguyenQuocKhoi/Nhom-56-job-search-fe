@@ -201,8 +201,10 @@ const Overview = () => {
 
   const fetchJobs = useCallback(async () => {
     try {
-      const result = await getAPiNoneToken('/job/get-all');
+      const result = await getAPiNoneToken('/job/get-all-not-page');
       const jobs = result.data.jobs;
+      
+      // console.log("jobs",result.data.jobs);
 
       const jobsAccepted = jobs.filter(job => job.status === true && job.pendingUpdates === null).length;
       const jobsRejected = jobs.filter(job => job.status === false && job.pendingUpdates === null).length;
@@ -212,7 +214,8 @@ const Overview = () => {
         accepted: jobsAccepted,
         rejected: jobsRejected,
         pending: jobsPending,
-        total: jobs.length
+        // total: jobs.length
+        total: result.data.jobs.length
       });
     } catch (error) {
       console.error('Error fetching jobs:', error);

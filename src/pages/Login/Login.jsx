@@ -19,6 +19,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [emailForgotPassword, setEmailForgotPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+
   //captcha mới
   const [captcha, setCaptcha] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
@@ -266,6 +268,10 @@ const handleSubmitCaptcha = async () => {
     setShowModal(false);
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
     <Modal 
@@ -357,14 +363,24 @@ const handleSubmitCaptcha = async () => {
 
                   <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input
-                      value={password}
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      placeholder="Enter your password"
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <div className={clsx(styles.passwordContainer)}>
+                      <input
+                        value={password}
+                        type={showPassword ? 'text' : 'password'} 
+                        className="form-control"
+                        id="password"
+                        placeholder="Enter your password"
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      
+                      <span 
+                        onClick={togglePasswordVisibility} 
+                        className={clsx(styles.passwordToggleIcon)}
+                        // style={{ marginTop: '8px', cursor: 'pointer' }}
+                      >
+                        { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
+                      </span>
+                    </div>
                   </div>
 
                   <button type="submit" className="btn btn-primary w-100 mt-4">

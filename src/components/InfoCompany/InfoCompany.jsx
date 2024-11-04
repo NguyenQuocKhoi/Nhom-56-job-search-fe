@@ -53,6 +53,8 @@ const InfoCompany = () => {
   const [showCityModal, setShowCityModal] = useState(false);
   const [filteredCities, setFilteredCities] = useState(cities);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [isFirstUpdate, setIsFirstUpdate] = useState(true);
   
   const companyId = getUserStorage().user._id;
 
@@ -92,66 +94,139 @@ const InfoCompany = () => {
     }
   };
 
-  const handleUpdateInfo = async () => {
-    try {
-      //mới thêm
-      Swal.fire({
-        title: t('profile.processing'),
-        text: t('profile.pleaseWait'),
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-
-      const companyId = getUserStorage().user._id;
-      const formData = new FormData();
+//hàm mới hiện tại tất cả công ty đều bị lần đầu bắt cập nhật đầy đủ
+const handleUpdateInfo = async () => {
+  try {    
+    // Check if it's the first update by verifying the company's status
+    if (!company.status) {
+      const requiredFields = ['name', 'phoneNumber', 'city', 'street', 'website', 'description'];
+      const missingFields = requiredFields.filter(field => !company[field]);
       
-      // Append form data for the company fields
-      formData.append('name', company.name);
-      formData.append('phoneNumber', company.phoneNumber);
-      formData.append('city', company.city);
-      formData.append('street', company.street);
-      formData.append('website', company.website);
-      formData.append('description', company.description);
-      
-      // Append avatar file if it exists
-      if (avatarFile) {
-        formData.append('avatar', avatarFile);
+      // Ensure avatar is also required on the first update
+      if (!avatarFile) {
+        missingFields.push('avatar');
       }
 
-      const companyResponse = await putApiWithToken(`/company/update/${companyId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      if (companyResponse.data.success) {
-        setCompany(companyResponse.data.company);
-        setIsEditing(false);
-
-        //
-        setOriginalAvatar(avatarPreview);
-
-        //mới thêm
-        await Swal.fire({ 
-          icon: 'success', 
-          title: t('profile.success'),
-          text: t('profile.updateAllSuccess'), 
-          confirmButtonText: 'OK'
+      if (missingFields.length > 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Thông tin không đầy đủ',
+          text: 'Vui lòng điền đầy đủ tất cả thông tin, bao gồm cả ảnh đại diện trước khi cập nhật.',
         });
-
-        // Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
-      } else {
-        setError('Failed to update company information');
-        Swal.fire({ icon: 'error', text: 'Failed to update company information' });
+        return;
       }
-    } catch (err) {
-      setError('An error occurred during information update');
-      Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
     }
-  };
-  
+
+    Swal.fire({
+      title: t('profile.processing'),
+      text: t('profile.pleaseWait'),
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    const companyId = getUserStorage().user._id;
+    const formData = new FormData();
+    formData.append('name', company.name);
+    formData.append('phoneNumber', company.phoneNumber);
+    formData.append('city', company.city);
+    formData.append('street', company.street);
+    formData.append('website', company.website);
+    formData.append('description', company.description);
+
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    }
+
+    const companyResponse = await putApiWithToken(`/company/update/${companyId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    if (companyResponse.data.success) {
+      setCompany(companyResponse.data.company);
+      setIsEditing(false);
+      setOriginalAvatar(avatarPreview);
+
+      await Swal.fire({ 
+        icon: 'success', 
+        title: t('profile.success'),
+        text: t('profile.updateAllSuccess'), 
+        confirmButtonText: 'OK'
+      });
+      
+      // Update status if this was the first update
+      if (!company.status) {
+        setIsFirstUpdate(false);
+      }
+
+    } else {
+      setError('Failed to update company information');
+      Swal.fire({ icon: 'error', text: 'Failed to update company information' });
+    }
+  } catch (err) {
+    setError('An error occurred during information update');
+    Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
+  }
+};
+
+//hàm cũ, không yêu cầu đầy đủ tất cả các trường
+  // const handleUpdateInfo = async () => {
+  //   try {      
+  //     Swal.fire({
+  //       title: t('profile.processing'),
+  //       text: t('profile.pleaseWait'),
+  //       allowOutsideClick: false,
+  //       didOpen: () => {
+  //         Swal.showLoading();
+  //       },
+  //     });
+
+  //     const companyId = getUserStorage().user._id;
+  //     const formData = new FormData();
+      
+  //     formData.append('name', company.name);
+  //     formData.append('phoneNumber', company.phoneNumber);
+  //     formData.append('city', company.city);
+  //     formData.append('street', company.street);
+  //     formData.append('website', company.website);
+  //     formData.append('description', company.description);
+            
+  //     if (avatarFile) {
+  //       formData.append('avatar', avatarFile);
+  //     }
+
+  //     const companyResponse = await putApiWithToken(`/company/update/${companyId}`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     });
+
+  //     if (companyResponse.data.success) {
+  //       setCompany(companyResponse.data.company);
+  //       setIsEditing(false);
+        
+  //       setOriginalAvatar(avatarPreview);
+        
+  //       await Swal.fire({ 
+  //         icon: 'success', 
+  //         title: t('profile.success'),
+  //         text: t('profile.updateAllSuccess'), 
+  //         confirmButtonText: 'OK'
+  //       });
+
+  //       // Swal.fire({ icon: 'success', text: 'Company information updated successfully!' });
+  //     } else {
+  //       setError('Failed to update company information');
+  //       Swal.fire({ icon: 'error', text: 'Failed to update company information' });
+  //     }
+  //   } catch (err) {
+  //     setError('An error occurred during information update');
+  //     Swal.fire({ icon: 'error', text: 'An error occurred during information update' });
+  //   }
+  // };
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -375,7 +450,11 @@ const InfoCompany = () => {
         <div className={clsx(styles.btnContainer)}>
           {isEditing ? (
             <>
-              <button className={clsx(styles.btnConfirm)} onClick={handleUpdateInfo}>
+              <button 
+                className={clsx(styles.btnConfirm)} 
+                onClick={handleUpdateInfo}
+                disabled={company.pendingUpdates}                
+                >
                 {t('profileCompany.update')}
               </button>
               <button className={clsx(styles.btnCancel)} onClick={() => {
@@ -389,7 +468,11 @@ const InfoCompany = () => {
               </button>
             </>
           ) : (
-            <button className={clsx(styles.btnEdit)} onClick={() => setIsEditing(true)}>
+            <button 
+              className={clsx(styles.btnEdit)} 
+              onClick={() => setIsEditing(true)}
+              disabled={company.pendingUpdates}
+              >
               {t('profileCompany.updateInfo')}
             </button>
           )}

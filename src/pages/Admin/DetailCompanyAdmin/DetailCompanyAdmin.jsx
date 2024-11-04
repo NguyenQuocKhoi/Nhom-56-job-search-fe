@@ -100,19 +100,17 @@ const DetailCompanyAdmin = () => {
     setCurrentPage(page);
   };
 
+  //ver 1
   const renderField = (label, originalValue, updatedValue) => {
-    if (!originalValue) {
-      return null;
-    }
+    // if (!originalValue) {
+    //   return null;
+    // }
 
-    // Check if the label is 'Description'
     if (label === 'Description') {
       return (
         <div>
           <p><strong>{label}:</strong></p>
-          {/* Render original description as HTML */}
           <div dangerouslySetInnerHTML={{ __html: originalValue }} />
-          {/* If there is an updated value and it's different from the original, render the updated description */}
           {updatedValue !== undefined && updatedValue !== originalValue && (
             <div style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
               <strong>(Cập nhật thành:)</strong>
@@ -123,7 +121,6 @@ const DetailCompanyAdmin = () => {
       );
     }
   
-    // For non-description fields, render normally
     return (
       <p>
         <strong>{label}:</strong> {originalValue}
@@ -136,6 +133,7 @@ const DetailCompanyAdmin = () => {
     );
   };
   
+  //ver 2
   // const renderField = (label, originalValue, updatedValue) => {
   //   return (
   //     <p>
@@ -152,7 +150,8 @@ const DetailCompanyAdmin = () => {
   const handleStatusUpdate = async ( companyId, status ) => {
     // Hiển thị thông báo ngay lập tức khi người dùng nhấn nút
     Swal.fire({
-      title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      // title: `${status === 'accepted' ? 'Accepting' : 'Rejecting'}...`,
+      title: 'Đang xử lí',
       text: `Please wait while ${status} the company.`,
       allowOutsideClick: false,
       showConfirmButton: false,
@@ -273,7 +272,76 @@ const DetailCompanyAdmin = () => {
       </div>
 
       <div className={clsx(styles.buttonContainer)}>
-        <button
+        {(buttonState === null || company.pendingUpdates !== null) && (
+          <>
+              <button
+              className={clsx(styles.button, 
+                company.pendingUpdates !== null
+                  ? null
+                  : {
+                      [styles.accepted]: buttonState === true,
+                      // [styles.disabled]: buttonState === 'rejected'
+                    }
+              )}
+              onClick={() => handleStatusUpdate(company._id, true)}
+            >
+              Accept
+            </button>
+            <button
+              className={clsx(styles.button, 
+                company.pendingUpdates !== null
+                  ? null
+                  : {
+                      [styles.rejected]: buttonState === false,
+                      // [styles.disabled]: buttonState === 'accepted'
+                    }
+              )}
+              onClick={() => handleStatusUpdate(company._id, false)}
+            >
+              Reject
+            </button>
+            {/* <button
+              className={clsx(styles.button, 
+                {
+                  [styles.accepted]: buttonState === true,
+                }
+              )}
+              onClick={() => handleStatusUpdate(company._id, true)}
+            >
+              Accept
+            </button>
+            <button
+              className={clsx(styles.button, 
+                {
+                  [styles.rejected]: buttonState === false,
+                }
+              )}
+              onClick={() => handleStatusUpdate(company._id, false)}
+            >
+              Reject
+            </button> */}
+          </>
+        )}
+
+        {buttonState === true && company.pendingUpdates === null && (
+          <button
+            className={clsx(styles.button, styles.accepted)}
+            onClick={() => handleStatusUpdate(company._id, true)}
+          >
+            Accept
+          </button>
+        )}
+
+        {buttonState === false && company.pendingUpdates === null && (
+          <button
+            className={clsx(styles.button, styles.rejected)}
+            onClick={() => handleStatusUpdate(company._id, false)}
+          >
+            Reject
+          </button>
+        )}
+
+        {/* <button
           className={clsx(styles.button, 
             company.pendingUpdates !== null
               ? null
@@ -298,7 +366,7 @@ const DetailCompanyAdmin = () => {
           onClick={() => handleStatusUpdate(company._id, false)}
         >
           Reject
-        </button>
+        </button> */}
 
           <button
           onClick={() => handleDisableCompany(user._id, user.isActive)}

@@ -434,7 +434,8 @@ const PostedJobs = () => {
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
                           <p>Category: {categories[job.category] || 'No Category'}</p>
-                          <p className={clsx(styles.numberApplyPending)}>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</p>
+                          {/* <p className={clsx(styles.numberApplyPending)}>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</p> */}
+                          <strong>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</strong>
                         </div>
                       </div>
                     </div>

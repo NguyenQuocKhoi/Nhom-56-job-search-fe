@@ -169,7 +169,7 @@ const JobDetail = () => {
     
     const fetchJob = async () => {
       try {
-        // console.log(1);
+        console.log(1);
         // console.log(2);
         
         const result = await getAPiNoneToken(`/job/${jobId}`);
@@ -220,6 +220,7 @@ const JobDetail = () => {
               })
             );
             setSimilarJobs(jobsWithCompanyDetails);
+            console.log(jobsWithCompanyDetails);            
             setTotalPages(similarJobData.data.totalPages);
             console.log(similarJobData.data.totalPages);            
           } else {
@@ -230,7 +231,8 @@ const JobDetail = () => {
           setError('Job not found');
         }
       } catch (err) {
-        setError('Failed to fetch job details');
+        console.log("Failed to fetch job details");
+        // setError('Failed to fetch job details');///////////////////
       }
     };
     
@@ -467,7 +469,7 @@ const JobDetail = () => {
     navigate('/search-job-result', { state: { searchParams } });
   }
   
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
   if (!job) return <div>Job not found</div>;
 
   return (
