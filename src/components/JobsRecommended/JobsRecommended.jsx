@@ -190,13 +190,13 @@ const JobsRecommended = ({ candidateId }) => {
                     <p><strong>{job.title}</strong></p>
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (
-                  <div onClick={() => handleSaveJob(job.jobId)}>
-                    <i 
-                      className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}
-                      style={{color: savedJobs[job.jobId]?'red':'gray'}}                      
-                      ></i>
-                  </div>
-                )}
+                      <div onClick={() => handleSaveJob(job.jobId)}>
+                        <i 
+                          className={clsx(savedJobs[job.jobId] ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}
+                          style={{color: savedJobs[job.jobId]?'red':'gray'}}                      
+                          ></i>
+                      </div>
+                    )}
                   </div>
                   <Link to={`/detailJob/${job.jobId}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                   <div className={clsx(styles.describe)}>

@@ -1,5 +1,10 @@
 .searchComponent {
     margin-top: -0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
     // padding: 2rem;
     // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   }
@@ -84,6 +89,16 @@
     padding: 10px;
     margin-right: -15px;
   }
+
+  .placeContainer{
+    display: flex;
+  }  
+
+  .searchBtnContainer{
+    display: flex;
+    // background: red;
+    width: 100%;
+  }
   
   .searchButton {
     border-radius: 10px;
@@ -160,17 +175,19 @@
   }
   
   .results {
+    // background: green;
     margin-top: 2rem;
-    max-width: 1292px;
-    padding-left: 6rem; /* Indentation for the results */
+    width: 60%;
+    // max-width: 1292px;
+    // padding-left: 6rem; /* Indentation for the results */
   }
   
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-    margin-left: 180px;
-  }
+  // .tabs {
+  //   display: flex;
+  //   justify-content: center;
+  //   margin-bottom: 1rem;
+  //   margin-left: 180px;
+  // }
   
   .tabButton {
     padding: 0.75rem 1.5rem;
@@ -188,10 +205,12 @@
   }
   
   .tabContent {
-    // background: #f5f5f5;
+    // background: red;
+    width: 100%;
+
     padding: 0 4rem;
     border-radius: 10px;
-    min-width: 1330px;
+    // min-width: 1330px;
     // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
@@ -358,12 +377,15 @@
     // flex-direction: column;
     gap: 0.5rem;
     text-decoration: none;
-    width: 100%; 
+    // width: 100%; 
     box-sizing: border-box; 
     // min-height: 200px;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+
+    // width: 200%;
+    // align-self: center;
 
     &:hover {
       // background: linear-gradient(to right, #87CEEB, #1E90FF);
@@ -476,4 +498,85 @@
 
 .nameCandidate{
   font-weight: bold;
+}
+
+//
+@media (max-width: 768px) {
+  .results {
+    margin-top: 2rem;
+    max-width: 1292px;
+    // padding-left: 6rem; /* Indentation for the results */
+    // background: lightcoral;
+    width: 100%;
+  }
+
+  .tabContent{
+    margin-left: -15px;
+    // background: blue;
+    width: 100%;
+    padding: 0;
+    // margin-left: 100px;
+  }
+  .companycard{
+    flex-direction: column;
+    width: 100%;
+  }
+  
+}
+
+@media (max-width: 1024px) { /* Tablet styles */
+  .jobInput {
+    margin-right: 0;
+    width: 100%;
+
+  }
+
+  .selectContainer {
+    width: 100%; /* Full width for select */
+    justify-content: space-between; /* Space out elements */
+  }
+
+  .select {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .searchButton {
+    width: 20%; 
+  }
+}
+
+@media (max-width: 768px) {
+  .searchContainer {
+    // display: flex;
+    // flex-direction: column;
+    // background: red;
+    // height: 250px;
+    // width: 100%;
+    // justify-content: center;
+    // align-items: center;
+  }
+  .form{
+    flex-direction: column;
+  }
+  .searchContainer{
+    height: 400px;
+  }
+
+  .searchBtnContainer{
+    border-radius: 8px;
+    height: 55px;
+    background-color: white;
+  }
+
+  .searchButton span {
+    display: none;
+  }
+
+  .searchButton{
+    width: 20%;
+  }
+  .select{
+    width: 94%;
+  }
 }

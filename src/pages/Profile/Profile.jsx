@@ -6,9 +6,10 @@ import styles from './profile.module.scss';
 import InfoCandidate from '../../components/InfoCandidate/InfoCandidate';
 import InfoCompany from '../../components/InfoCompany/InfoCompany';
 import { getUserStorage } from '../../Utils/valid';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const Profile = () => {
-
+  usePageTitle('Thông tin tài khoản');
   
   const user = getUserStorage()?.user;
   const role = user ? user.role : null;

@@ -54,13 +54,10 @@ const ListCompanyInfo = () => {
         {companies.length > 0 ? (
           companies.map((company) => (
             <Link key={company._id} to={`/detailCompany/${company._id}`} className={clsx(styles.companycard)} 
-              // target="_blank" rel="noopener noreferrer"
+              target="_blank" rel="noopener noreferrer"
             >
               <img src={company.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
               <h3 className={clsx(styles.centeredText)}>{company.name}</h3>
-              {/* <h3><strong>Company name:</strong> {company.name}</h3> */}
-              {/* <p><strong>Address:</strong> {company.address}</p> */}
-              {/* <p><strong>Website:</strong> {company.website}</p> */}
             </Link>
           ))
         ) : (
@@ -71,14 +68,12 @@ const ListCompanyInfo = () => {
         {pagination.currentPage > 1 && (
           <button onClick={() => handlePageChange(pagination.currentPage - 1)}>
             <i className="fa-solid fa-angle-left"></i>
-            {/* Previous */}
           </button>
         )}
         <span>{pagination.currentPage} / {pagination.totalPages} trang </span>
         {pagination.currentPage < pagination.totalPages && (
           <button onClick={() => handlePageChange(pagination.currentPage + 1)}>
-            <i className="fa-solid fa-angle-right"></i>
-            {/* Next */}
+            <i className="fa-solid fa-angle-right"></i>            
           </button>
         )}
       </div>

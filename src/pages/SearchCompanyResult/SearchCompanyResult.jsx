@@ -7,6 +7,8 @@ import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
+import Loading from '../../components/Loading/Loading';
 
 // const cities = [
 //   'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -25,6 +27,8 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 const SearchCompanyResult = () => {
+  usePageTitle('Tìm công ty');
+
   const { t, i18n } = useTranslation();
 
   const cities = [
@@ -52,6 +56,9 @@ const SearchCompanyResult = () => {
 
   const [error, setError] = useState(null);
 
+  //loading spinner
+  const [loading, setLoading] = useState(false);
+
   const handleSearch = async (event) => {
     if(event){
         event.preventDefault();//tránh tải lại trang làm mất dữ liệu đang hiển thị
@@ -63,7 +70,9 @@ const SearchCompanyResult = () => {
     };
     
     try {
+      setLoading(true);
       const response = await postApiNoneToken('/user/search', searchParams);
+      setLoading(false);
 
       if (response.data.success) {
         console.log(response.data.data);
@@ -86,6 +95,8 @@ const SearchCompanyResult = () => {
   if (error) return <div>{error}</div>;
 
   return (
+    <>
+      {loading ? <Loading /> : null}
       <div className={clsx(styles.searchComponent)}>
         <Header />
       <div className={clsx(styles.searchContainer)}>
@@ -94,6 +105,7 @@ const SearchCompanyResult = () => {
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
 
+    <div className={clsx(styles.placeContainer)}>
       <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
       </div>
@@ -114,8 +126,10 @@ const SearchCompanyResult = () => {
                 </option>
               ))}
             </select>
+            </div>
       </div>
       
+      <div className={clsx(styles.searchBtnContainer)}>
           <input
             className={clsx(styles.jobInput)}
             type="text"
@@ -127,8 +141,10 @@ const SearchCompanyResult = () => {
           />
           <button className={clsx(styles.searchButton)} onClick={handleSearch}>
             <i className="fa-solid fa-magnifying-glass"></i>
-            {t('search.search')}
+            <span>{t('search.search')}</span>
           </button>
+          </div>
+
         </div>
       </form>
     </div>
@@ -137,7 +153,7 @@ const SearchCompanyResult = () => {
         <div className={clsx(styles.results)}>
           <div className={clsx(styles.tabContent)}>
               <div>
-                <p className={clsx(styles.textTitle)}>{t('search.company')}</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.company')}</p>
                 {results.companies.length > 0 ? (
                   results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
@@ -156,6 +172,7 @@ const SearchCompanyResult = () => {
       )}
       <Footer/>
     </div>
+    </>
   );
 };
 

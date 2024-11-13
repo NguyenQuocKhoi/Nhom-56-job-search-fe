@@ -1,23 +1,102 @@
-.adminLayout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
+// .adminLayout {
+//     display: flex;
+//     flex-direction: column;
+//     height: 100vh;
+//   }
   
-  .mainContent {
-    display: flex;
-    flex: 1;
-  }
+//   .mainContent {
+//     display: flex;
+//     flex: 1;
+//   }
   
-  .content {
-    flex: 1;
-    padding: 20px;
-    background-color: #f8f9fa;
-    //giữ cho sidebar đứng yên
-    margin-left: 12.5rem;
-  }
+//   .content {
+//     flex: 1;
+//     padding: 20px;
+//     background-color: #f8f9fa;
+//     //giữ cho sidebar đứng yên
+//     margin-left: 12.5rem;
+//   }
 
 //giữ cho header nằm yên trên top khi cuộn trang
 .margin{
   margin-bottom: 5rem;
+}
+
+.adminLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+  margin-left: 12.5rem; /* Leave space for sidebar on larger screens */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.logo {
+  height: 50px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logoIcon {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+.iconList {
+  display: none;
+  cursor: pointer;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0; /* Remove sidebar margin on mobile */
+    padding-top: 70px; /* Adjust for fixed header */
+  }
+
+  .iconList {
+    display: flex; /* Show menu icon on mobile */
+  }
+
+  .mainContent {
+    flex-direction: column;
+  }
 }

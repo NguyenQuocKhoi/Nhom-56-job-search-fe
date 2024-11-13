@@ -7,7 +7,8 @@ import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 
 const cities = [
-  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  // 'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'Tất cả TP', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
   'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
   'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
   'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
@@ -376,10 +377,10 @@ const JobManagement = () => {
           </div>
         )} */}
 
-<div className={clsx(styles.iconPlace)}>
+    <div className={clsx(styles.addressSearch)}>
+      <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
       </div>
-      
       <div className={clsx(styles.selectContainer)}>
         <select
               className={clsx(styles.select)}
@@ -387,7 +388,7 @@ const JobManagement = () => {
               // onChange={(e) => setAddressInput(e.target.value)}
               onChange={(e) => {
                 const selectedCity = e.target.value;
-                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+                setAddressInput(selectedCity === "Tất cả TP" ? "" : selectedCity);
               }}
             >
               {cities.map((city) => (
@@ -396,10 +397,13 @@ const JobManagement = () => {
                 </option>
               ))}
             </select>
+        </div>
       </div>
+
+          <div className={clsx(styles.inputSearch)}>
             <input
               type="text"
-              placeholder="Enter job title"
+              placeholder="Nhập thông tin công việc"
               className={clsx(styles.jobInput)}
               id="search"
               value={jobInput}
@@ -411,8 +415,10 @@ const JobManagement = () => {
               onClick={handleSearch}
             >
               <i className="fa-solid fa-magnifying-glass"></i>
-              <strong className={clsx(styles.s)}>Search</strong>          
+              <strong className={clsx(styles.s)}><span>Tìm kiếm</span></strong>          
             </button>
+          </div>
+
           </div>
         </form>
       
@@ -455,7 +461,7 @@ const JobManagement = () => {
         <div className={clsx(styles.joblist)}>
         <div className={clsx(styles.jobContainer)}>
           {/* <p>All Jobs</p> */}
-          <strong>Kết quả phù hợp: {results.length}</strong>
+          {/* <strong>Kết quả phù hợp: {results.length}</strong> */}
             {results.length > 0 ? (
               results.map((job) => (
               <div key={job._id} className={clsx(styles.content)}>
@@ -464,7 +470,7 @@ const JobManagement = () => {
                     <div className={clsx(styles.contentJobcard)}>
                         <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
-                          <p>{job.title}</p>
+                          <p><strong>{job.title}</strong></p>
                           <p>Company: {job.companyName}</p>
                           <p>Address: {job.street}, {job.city}</p>
                           <p 
@@ -478,6 +484,31 @@ const JobManagement = () => {
                             Trạng thái: {getJobStatus(job)}
                           </p>
                         </div>
+                    </div>
+
+                    <div>                      
+                        <>                          
+                          {job.pendingUpdates !== null || job.status === undefined 
+                          ? <div className={clsx(styles.buttonContainer)}>
+                            <button
+                              className={clsx(styles.btnDongY, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+                              onClick={() => handleStatusUpdate(job._id, true)}
+                              disabled={buttonState === 'accepted'}
+                            >
+                              Accept
+                            </button>
+                            <button
+                              className={clsx(styles.btnTuChoi, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+                              onClick={() => handleStatusUpdate(job._id, false)}
+                              disabled={buttonState === 'rejected'}
+                            >
+                              Reject
+                            </button>
+                            <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                          </div>
+                          : <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteJob(job._id)}>Xóa</button>
+                          }
+                        </>                      
                     </div>
                   </div>
                       </Link>

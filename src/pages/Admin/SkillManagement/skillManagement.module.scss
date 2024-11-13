@@ -3,16 +3,16 @@
     display: flex;
     justify-content: center;
     margin: 2rem 0;
-    height: 3.5rem; /* Set the height to match the form's height */
+    height: 3.5rem; 
   }
   
   .form {
     display: flex;
     width: 75%;
-    max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+    max-width: 1200px; 
     border-radius: 50px;
-    height: 3.5rem; /* Set the same height as .searchBar */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
+    height: 3.5rem; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
   
   .jobInput,
@@ -35,21 +35,21 @@
     margin-right: 0.5rem; /* Add space between input fields */
   }
   
-  .searchButton {
-    border-radius: 50px;
-    font-size: 1rem;
-    padding: 0.75rem 2rem;
-    background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    height: 100%; /* Make the button take full height of the parent */
-  }
+  // .searchButton {
+  //   border-radius: 50px;
+  //   font-size: 1rem;
+  //   padding: 0.75rem 2rem;
+  //   background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+  //   border: none;
+  //   color: #fff;
+  //   cursor: pointer;
+  //   transition: background 0.3s ease;
+  //   height: 100%; /* Make the button take full height of the parent */
+  // }
   
-  .searchButton:hover {
-    background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-  }
+  // .searchButton:hover {
+  //   background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
+  // }
 
   .skillName{
     display: flex;
@@ -152,12 +152,13 @@
     cursor: pointer;
     transition: background 0.3s ease;
     height: 100%; /* Make the button take full height of the parent */
-    width: 150px;
+    width: 180px;
   }
   
   .searchButton:hover {
+    background: blue;
     // background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
 
   }
 
@@ -233,4 +234,20 @@
   .textCandidate{
     margin-left: 10px;
     margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .searchBar{
+      // background: green;
+      margin-left: 15px;
+    }
+    .form{
+      // background: red;
+    }
+    .s span{
+      display: none;
+    }
+    .btnSua span {
+      display: none;
+    }
   }

@@ -9,8 +9,11 @@ import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const SavedJobs = () => {
+  usePageTitle('Danh sách công việc đã lưu');
+
   const { t, i18n } = useTranslation();
 
   const [savedJobs, setSavedJobs] = useState([]);
@@ -103,10 +106,11 @@ const SavedJobs = () => {
                       <img src={jobDetails[job.job._id]?.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
                     </Link>
                     <Link to={`/detailJob/${job.job._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
-                    <div className={clsx(styles.describe)}>
-                      <p><strong>Job Title: {jobDetails[job.job._id]?.title || 'Loading...'}</strong></p>
-                      <p>Company: {jobDetails[job.job._id]?.company.name}</p>
-                      <p>Address: {jobDetails[job.job._id]?.street}, {jobDetails[job.job._id]?.city}</p>
+                    {/* <div className={clsx(styles.describe)}> */}
+                    <div className={clsx(styles.textInfoJob)}>
+                      <p><strong>{jobDetails[job.job._id]?.title || 'Loading...'}</strong></p>
+                      <p>{jobDetails[job.job._id]?.company.name}</p>
+                      <p>{jobDetails[job.job._id]?.street}, {jobDetails[job.job._id]?.city}</p>
                       <p>Saved at: {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
                     </div>
                 </Link>

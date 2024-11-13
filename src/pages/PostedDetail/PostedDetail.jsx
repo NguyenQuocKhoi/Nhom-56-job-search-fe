@@ -8,8 +8,10 @@ import { getAPiNoneToken, getApiWithToken, deleteApiWithToken } from '../../api'
 import Swal from 'sweetalert2';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const PostedDetail = () => {
+
   const { t, i18n } = useTranslation();
 
   const { jobId } = useParams();
@@ -110,6 +112,12 @@ const PostedDetail = () => {
     };
     fetchJobAndCandidates();
   }, [jobId]);
+
+  useEffect(() => {
+    if (job && job.company) {
+      document.title = `${job.title} | ${job.company.name}`;
+    }
+  }, [job]);
 
   const isFieldDifferent = (field) => job && job.pendingUpdates && job[field] !== job.pendingUpdates[field];
 

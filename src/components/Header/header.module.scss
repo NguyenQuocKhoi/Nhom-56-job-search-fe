@@ -28,6 +28,13 @@
   width: 50px;
 }
 
+.iconListMobile{
+  display: none;
+}
+.infoMobile{
+  display: none;
+}
+
 .avatar{
   width: 30px;
   height: 30px;
@@ -93,7 +100,7 @@
   // top: -5px;
   // right: -5px;
   top: 2px;
-  right: 6px;
+  right: 20px;
 }
 
 .unreadNotification {
@@ -178,5 +185,184 @@
   display: inline-block;
   margin-left: 10px;
   margin-top: 3px;  // Adjust to vertically align with the message's first line
+}
+
+.groupBtnDNDK{
+  // background: red;
+  margin-left: 10px;
+}
+
+//responsive
+// Phong cách mặc định cho header
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  font-weight: bold;
+  background: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+
+  .logoContainer {
+    flex: 1;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .navLink, .navLinkLS {
+    margin-left: 1rem;
+    text-decoration: none;
+  }
+
+  .btn {
+    margin: 2px;
+  }
+}
+
+// Sử dụng media query để điều chỉnh giao diện trên màn hình nhỏ
+@media (max-width: 768px) {
+  .header {
+    // flex-direction: column; // Chuyển header từ hàng sang cột khi màn hình nhỏ
+    padding: 1rem;
+
+    .logoContainer {
+      // margin-bottom: 1rem;
+    }
+    .iconListMobile{
+      // display: flex;
+    }
+
+    // .nav {
+    //   display: none; // Ẩn menu khi ở kích thước màn hình nhỏ
+    // }
+
+    // Hiển thị biểu tượng menu hamburger
+    .menuIcon {
+      display: block;
+      cursor: pointer;
+    }
+  }
+
+  // Khi người dùng nhấp vào menu hamburger, hiện nav
+  .nav.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+
+    .navLink, .navLinkLS {
+      margin: 0.5rem 0;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+// Đối với các màn hình rất nhỏ (dưới 480px), điều chỉnh thêm các kích thước
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+
+    .nav {
+      display: none; // Ẩn menu khi ở kích thước màn hình nhỏ
+    }
+    .navLink{
+      color: black;
+      // background: green;
+    }
+    .iconList{
+      font-size: 20px;
+    }
+    .logoContainer{
+      // background: green;
+      display: flex;
+      flex: 1;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .scrollableDropdown{
+      width: 340px;
+    }
+
+    .tb {
+      flex-direction: column;
+      // display: flex;
+      // justify-content: center;
+      // align-items: center;
+      border-bottom: 1px solid #f5f5f5;
+      // background: green;
+      background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+      color: white;
+      // gap: 0px;
+    }
+
+    .logoContainer .logo {
+      width: 50px; // Giảm kích thước logo
+      // margin-left: 20px;
+    }
+
+    .dropdownMenu {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .dropdownMobile{
+      display: flex;
+      // background: red;
+      // justify-content: center;
+      align-items: center;
+    }
+    .groupBtnDNDK{
+      margin-left: 50px;
+      .btn{
+        width: 30px;
+      }
+    }
+    .dropdownProfileMobile{
+      display: flex;
+      margin-left: 14px;
+      align-items: center;
+      .avatar{
+        // width: 40px;
+      }
+    }
+    .avatar {
+      width: 24px;
+      height: 24px;
+    }
+
+    .navLinkLS, .navLink {
+      font-size: 0.85rem;
+    }
+
+    .btn {
+      padding: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .iconListMobile{
+      display: flex;
+      // background: red;
+      font-size: 20px;
+    }
+    .infoMobile{
+      display: flex;
+      // background: red;
+      // width: 80px;
+      // justify-content: flex-end;
+    }
+  }
 }
 

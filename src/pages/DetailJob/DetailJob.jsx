@@ -10,6 +10,8 @@ import { getUserStorage } from '../../Utils/valid';
 import { Button, Form, Modal } from 'react-bootstrap';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
+import Loading from "../../components/Loading/Loading";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -40,6 +42,9 @@ const JobDetail = () => {
   // const [fileName, setFileName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  //loading spinner
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -81,6 +86,8 @@ const JobDetail = () => {
   const [showNewCvFields, setShowNewCvFields] = useState(false);
 
   const [similarJobs, setSimilarJobs] = useState([]);
+
+  const [applicationStatus, setApplicationStatus] = useState(null);
 
   const handleApplyWithExistingCvO1 = () => {
     setSelectedOption('option1');
@@ -133,17 +140,26 @@ const JobDetail = () => {
           const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
           const applications = applicationResponse?.data?.applications || [];
 
-          // console.log(applications);
+          console.log(applications);//
     
-          const isApplied = applications.some(application => 
+          //mới
+          const jobApplication = applications.find(application =>
             application.candidate === candidateId && application.job === jobId
-          );
-          if (isApplied) {
-            setIsApplied(true); // Set the state if already applied
+          );    
+          if (jobApplication) {
+            setIsApplied(true);
+            setApplicationStatus(jobApplication.status);
           }
+
+          //cũ
+          // const isApplied = applications.some(application => 
+          //   application.candidate === candidateId && application.job === jobId
+          // );
+          // if (isApplied) {
+          //   setIsApplied(true);
+          // }
         } catch (applicationError) {
-          console.warn('No applications found for candidate', applicationError);
-          // Optionally handle cases where there are no applications
+          console.warn('No applications found for candidate', applicationError);        
         }
     
         // Fetch saved jobs data
@@ -169,7 +185,7 @@ const JobDetail = () => {
     
     const fetchJob = async () => {
       try {
-        console.log(1);
+        // console.log(1);
         // console.log(2);
         
         const result = await getAPiNoneToken(`/job/${jobId}`);
@@ -207,7 +223,7 @@ const JobDetail = () => {
           }
 
           const similarJobData = await postApiNoneToken('/job/get-similar', { jobId }, { params: { page: currentPage } });
-          console.log(similarJobData);
+          // console.log(similarJobData);
 
           if (similarJobData.data.success && similarJobData.data.matchingJobs) {
             const jobsWithCompanyDetails = await Promise.all(
@@ -220,9 +236,9 @@ const JobDetail = () => {
               })
             );
             setSimilarJobs(jobsWithCompanyDetails);
-            console.log(jobsWithCompanyDetails);            
+            // console.log(jobsWithCompanyDetails);            
             setTotalPages(similarJobData.data.totalPages);
-            console.log(similarJobData.data.totalPages);            
+            // console.log(similarJobData.data.totalPages);            
           } else {
             setSimilarJobs([]);
           }
@@ -249,6 +265,12 @@ const JobDetail = () => {
     setUserRole(userRole);
     setUserId(userData?._id);
   }, [jobId, currentPage]);
+
+  useEffect(() => {
+    if (job && job.company) {
+      document.title = `${job.title} | ${job.company.name}`;
+    }
+  }, [job]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -303,6 +325,15 @@ const JobDetail = () => {
       return;
     }
 
+    Swal.fire({
+      title: 'Đang xử lý...',
+      text: 'Vui lòng đợi trong giây lát',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
      try{
       const data = {
         name: candidateName,
@@ -339,13 +370,22 @@ const JobDetail = () => {
   };
 
   const handleApplyWithExistingCv = async () => {
+    Swal.fire({
+      title: 'Đang xử lý...',
+      text: 'Vui lòng đợi trong giây lát',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // Hiển thị biểu tượng tải
+      },
+    });
+
     try {
       await postApiWithToken(`/application/create`, { 
         jobId: job._id,
         candidateId: userId,
       });
       Swal.fire('Ứng tuyển thành công!', '', 'success');
-      setIsApplied(true);
+      setIsApplied(true);//////////////////////////////////////////////////
       setShowModalCV(false);
     } catch (error) {
       Swal.fire('Lỗi', 'Không thể gửi đơn ứng tuyển', 'error');
@@ -370,6 +410,15 @@ const JobDetail = () => {
       Swal.fire('Vui lòng chọn CV', '', 'warning');
       return;
     }
+
+    Swal.fire({
+      title: 'Đang xử lý...',
+      text: 'Vui lòng đợi trong giây lát',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
      try{
       const data = {
@@ -470,7 +519,7 @@ const JobDetail = () => {
   }
   
   // if (error) return <div>{error}</div>;
-  if (!job) return <div>Job not found</div>;
+  // if (!job) return <div>Job not found</div>;
 
   return (
     <>
@@ -604,12 +653,29 @@ const JobDetail = () => {
 
       <Header />
       <div className={clsx(styles.jobDetail)}>
+        <div className={styles.columnTop}>
         <div className={clsx(styles.columnOne)}>
           <div className={clsx(styles.titleContainer)}>
             <div className={clsx(styles.title)}>
               {/* <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} /> */}
             <div className={clsx(styles.tenCV)}>
-              <h1>{job.title}</h1>
+              <h1>{job?.title}</h1>
+              {applicationStatus !== null &&
+              <p 
+                style={{ 
+                  backgroundColor: 
+                    applicationStatus === 'accepted' ? 'lightgreen' : 
+                    applicationStatus === 'rejected' ? 'lightcoral' : 
+                    'lightgray'
+                }}
+              >
+                Trạng thái: {applicationStatus}
+                
+                {applicationStatus === 'accepted' && <i className="fa-solid fa-check"></i>}
+                {applicationStatus === 'rejected' && <i className="fa-solid fa-x"></i>}
+                {applicationStatus === 'pending' && <i className="fa-regular fa-clock"></i>}
+              </p>
+              }
             </div>
             </div>
             {(userRole === 'candidate' || !userRole) && (
@@ -636,14 +702,15 @@ const JobDetail = () => {
                   className={clsx(styles.btnSave)}
                   onClick={handleSaveJob}>
                   <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  <p><strong>{isSaved ? t('apply.save') : t('apply.unsave')}</strong></p>
+                  {/* <p><strong>{isSaved ? t('apply.save') : t('apply.unsave')}</strong></p> */}
+                  <p><strong>{isSaved ? t('apply.unsave') : t('apply.save')}</strong></p>
                 </button>
               </div>
             )}
             <div className={clsx(styles.ngang)}>
-              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
-              <p><strong>Lương:</strong> {job.salary}</p>
-              <p><strong>Vị trí làm việc:</strong> {job.position}</p>
+              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
+              <p><strong>Lương:</strong> {job?.salary}</p>
+              <p><strong>Vị trí làm việc:</strong> {job?.position}</p>
             </div>
           </div>
         
@@ -651,60 +718,20 @@ const JobDetail = () => {
             {/* <p><strong>Phúc lợi:</strong> {job.interest}</p> */}
             <p><strong>Mô tả:</strong></p>
             <div
-              dangerouslySetInnerHTML={{ __html: job.description }}
+              dangerouslySetInnerHTML={{ __html: job?.description }}
               ></div>
             <p><strong>Phúc lợi:</strong></p>
             <div
-              dangerouslySetInnerHTML={{ __html: job.interest }}
+              dangerouslySetInnerHTML={{ __html: job?.interest }}
               ></div>
             <p><strong>Yêu cầu:</strong></p>
             <div
-              dangerouslySetInnerHTML={{ __html: job.requirements }}
+              dangerouslySetInnerHTML={{ __html: job?.requirements }}
               ></div>
             {/* <p><strong>Yêu cầu:</strong> {job.requirements}</p> */}
 
-            <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString("vi-VN")}</p>
-            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
-          </div>
-          
-          <div className={clsx(styles.vieclamlienquan)}>
-            <p><strong>Việc làm liên quan</strong></p>
-            
-            <div className={clsx(styles.jobContainer)}>
-              {similarJobs.length === 0 ? (
-                <p>No jobs similar.</p>
-              ) : (
-                similarJobs
-                  .filter((job) => job.jobId !== jobId)
-                  .map((job) => (
-                  <div key={job.jobId} className={clsx(styles.jobcard)}>
-                    <Link to={`/detailCompany/${job.companyId}`} target="_blank" rel="noopener noreferrer">
-                      <img src={job.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
-                    </Link>
-                    <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
-                      <div className={clsx(styles.describe)}>
-                        <p><strong>Job Title: {job.title || 'Loading...'}</strong></p>
-                        <p>Company: {job.company?.name || 'Unknown Company'}</p>
-                        <p>Address: {job.street}, {job.city}</p>
-                        <p>Posted on: {new Date(job.expiredAt).toLocaleDateString("vi-VN")}</p>
-                      </div>
-                    </Link>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className={clsx(styles.pagination)}>
-              <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
-                <i className="fa-solid fa-angle-left"></i>              
-                {/* Previous */}
-              </button>
-              <span> {currentPage} / {totalPages} trang </span>
-              <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
-                <i className="fa-solid fa-angle-right"></i>              
-                {/* Next */}
-              </button>
-            </div>
+            <p><strong>Ngày đăng:</strong> {new Date(job?.createdAt).toLocaleDateString("vi-VN")}</p>
+            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
           </div>
 
       </div>
@@ -712,21 +739,21 @@ const JobDetail = () => {
       <div className={clsx(styles.columnTwo)}>
         <div className={clsx(styles.companyContainer)}>
           <div className={clsx(styles.titleCongty)}>
-            <Link to={`/detailCompany/${job.company._id}`} target="_blank" rel="noopener noreferrer">
-              <img src={job.company.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+            <Link to={`/detailCompany/${job?.company._id}`} target="_blank" rel="noopener noreferrer">
+              <img src={job?.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
             </Link>
             <p>
               {/* <strong>Công ty:</strong>  */}
-              <strong>{job.company.name}</strong>
+              <strong>{job?.company?.name}</strong>
             </p>
           </div>
-            <p><strong>Địa chỉ:</strong> {job.street}, {job.city} </p>
+            <p><strong>Địa chỉ:</strong> {job?.street}, {job?.city} </p>
         </div>
 
         <div className={clsx(styles.thongtinchung)}>
-          <p><strong>Hình thức làm việc:</strong> {job.type}</p>
-          <p><strong>Số lượng tuyển:</strong> {job.numberOfCruiment}</p>
-          <p><strong>Kinh nghiệm:</strong> {job.experienceLevel}</p>
+          <p><strong>Hình thức làm việc:</strong> {job?.type}</p>
+          <p><strong>Số lượng tuyển:</strong> {job?.numberOfCruiment}</p>
+          <p><strong>Kinh nghiệm:</strong> {job?.experienceLevel}</p>
         </div>
 
         <div className={clsx(styles.them)}>
@@ -749,9 +776,53 @@ const JobDetail = () => {
             )}
           </div>
         </div>
-      </div>
 
       </div>
+
+        </div>
+        <div className={styles.columnBot}>
+          <div className={clsx(styles.vieclamlienquan)}>
+              <p><strong>{t('listJobInfo.relatedJobs')}</strong></p>
+            <div className={clsx(styles.jobContainer)}>
+              {similarJobs.length === 0 ? (
+                <p>No jobs similar.</p>
+              ) : (
+                similarJobs
+                  .filter((job) => job.jobId !== jobId)
+                  .map((job) => (
+                  <div key={job.jobId} className={clsx(styles.jobcard)}>
+                    <Link to={`/detailCompany/${job.companyId}`} target="_blank" rel="noopener noreferrer">
+                      <img src={job?.company?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />
+                    </Link>
+                    <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
+                      <div className={clsx(styles.describe)}>
+                        <p><strong>Job Title: {job?.title || 'Loading...'}</strong></p>
+                        <p>Company: {job?.company?.name || 'Unknown Company'}</p>
+                        <p>Address: {job?.street}, {job?.city}</p>
+                        <p>Posted on: {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
+                      </div>
+                    </Link>
+                  </div>
+                ))
+              )}
+
+
+            </div>
+              <div className={clsx(styles.pagination)}>
+                <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+                  <i className="fa-solid fa-angle-left"></i>                              
+                </button>
+                <span> {currentPage} / {totalPages} trang </span>
+                <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+                  <i className="fa-solid fa-angle-right"></i>                              
+                </button>
+              </div>
+            </div>
+          </div>
+              
+      </div>
+
+      
       <Footer />
     </>
   );

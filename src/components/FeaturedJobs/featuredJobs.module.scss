@@ -1,116 +1,87 @@
 .searchComponent {
-  // padding: 2rem;
-  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  width: 100%; /* Full width */
 }
+
 .searchContainer {
   display: flex;
   flex-direction: column;
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-  height: 250px;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+  padding: 1rem; /* Add some padding for mobile */
 }
 
 .searchBar {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
+  margin: 1rem 0; /* Adjust margins for responsiveness */
+  width: 100%; /* Full width for mobile */
   height: 3.5rem;
-  width: 80%;
-  max-width: 1200px;
 }
+
 .form {
-  margin-top: 40px;
+  margin-top: 30px;
   display: flex;
-  width: 100%;
-  max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+  flex-direction: row; /* Align items in a row */
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Maximum width for larger screens */
   border-radius: 10px;
-  height: 100%; /* Ensure full height */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow for emphasis */
-  background-color: #ffffff; /* White background for the form */
+  height: 100%; /* Automatic height */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
 }
 
 .selectContainer {
   display: flex;
   align-items: center;
-  margin: 0 10px; // Khoảng cách giữa các phần tử trong form
+  margin: 0 5px;
 }
 
 .select {
-  padding: 10px; // Khoảng cách bên trong
-  border: 1px solid #ffffff; // Đường viền
-  border-radius: 4px; // Bo góc
-  font-size: 16px; // Kích thước chữ
-  width: 200px; // Chiều rộng
-  background-color: #fff; // Màu nền
-  margin: 0 5px; // Khoảng cách giữa select và input
-  // outline: #ffffff; // Bỏ viền khi chọn
-  transition: border 0.3s; // Hiệu ứng chuyển tiếp
-
-  &:focus {
-    // border: 1px solid #007bff; // Màu viền khi chọn
-  }
-}
-
-.jobInput,
-.locationInput {
-  border: none;
-  border-radius: 50px;
-  padding: 0.75rem 1.25rem; /* Slightly larger padding for better touch target */
-  font-size: 1rem;
-  outline: none;
-  height: 100%;
+  padding: 10px;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 200px; 
+  margin: 0 5px; 
 }
 
 .jobInput {
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  outline: none;
+  height: 100%;
   flex: 2;
   margin-right: 0.5rem;
 }
 
-.locationInput {
-  flex: 1;
-  margin-right: 0.5rem;
-}
-
-.iconPlace{
+.iconPlace {
   font-size: 25px;
   padding: 10px;
   margin-right: -15px;
+}
+
+i{
+  margin-right: 1rem;
 }
 
 .searchButton {
   border-radius: 10px;
   font-size: 1.2rem;
   padding: 0.5rem 1rem;
-  // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient */
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   border: 6px solid white;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease;
-  height: 100%;
-  width: 160px;
-
-  i{
-    margin-right: 1rem;
-  }
-  
-  &:hover {
-    // background: linear-gradient(to right, #0077cc, #005999); /* Hover effect */
-  background: linear-gradient(90deg, rgb(31, 5, 114) 0%, rgb(7, 65, 113) 100%);
-    // transform: translateY(-2px); /* Slight lift effect */
-  }
+  width: auto;
 }
 
 .suggestBar {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
-  align-items: center;
-}
-.suggestTitle{
-  color: white;
+  margin: 1rem 0; /* Adjust margins */
+  flex-wrap: wrap; /* Allow suggestions to wrap on smaller screens */
 }
 
 .suggest {
@@ -119,100 +90,90 @@
   border: 1px solid rgb(236, 231, 231);
   margin: 10px 5px;
   background: #e7e1e1;
+  padding: 0 10px; /* Add some padding */
 }
 
-.results {
-  margin-top: 2rem;
-  max-width: 1292px;
-  padding-left: 6rem; /* Indentation for the results */
+.suggestTitle{
+  margin-top: 10px;
+  color: white;
 }
 
-.tabs {
+.placeContainer{
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
 }
 
-.tabButton {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-bottom: 2px solid transparent;
-  background: none;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: border-bottom 0.3s ease;
+.searchBtnContainer{
+  display: flex;
+  // background: red;
+  width: 100%;
 }
 
-.tabButton:hover,
-.active {
-  border-bottom: 2px solid #0077cc;
-}
+@media (max-width: 1024px) { /* Tablet styles */
+  .form {
+    // flex-direction: column; /* Stack elements vertically */
+  }
 
-.tabContent {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+  .jobInput {
+    margin-right: 0;
+    width: 100%;
 
-@media (max-width: 768px) {
-  .results {
-    padding-left: 2rem; /* Adjust padding for smaller screens */
+  }
+
+  .selectContainer {
+    width: 100%; /* Full width for select */
+    justify-content: space-between; /* Space out elements */
+  }
+
+  .select {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .searchButton {
+    width: 20%; 
   }
 }
 
-//modal
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); // Semi-transparent background
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+@media (max-width: 768px) {
+  .form {
+    flex-direction: column; /* Stack elements vertically */
+  }
 
-.modalContent {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px; // Maximum width of modal
-  max-height: 80vh; // Maximum height of modal
-  overflow-y: auto; // Vertical scrollbar if content overflows
-  position: relative; // For positioning the close button
-}
+  .jobInput{
+    // margin-top: 10px;
+  }
+  .searchContainer {
+    height: auto; 
+    // background: green;
+  }
 
-.modalContent input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
+  .searchBtnContainer{
+    border-radius: 8px;
+    height: 55px;
+    background-color: white;
+  }
 
-.modalContent ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+  .searchButton span {
+    display: none;
+  }
 
-.modalContent li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
-}
+  .searchButton {
+    // padding: 0.5rem; 
+    width: 20%; 
+    // height: 75%;
+    // margin-top: 6px;
+    // height: 40px;
+    // font-size: 1rem;
+  }
 
-.modalContent li:hover {
-  background-color: #f0f0f0;
-}
+  .select{
+    width: 94%;
+    // margin: 0.5rem 0;
+  }
 
-.modalContent .selected {
-  background-color: #d0f0c0; // Highlight selected items
-}
-
-.modalContent button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  .suggestBar {
+    margin-top: 5rem;
+    flex-direction: column; 
+    // background: red;
+  }
 }

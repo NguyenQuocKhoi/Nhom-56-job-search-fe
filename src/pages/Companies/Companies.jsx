@@ -8,6 +8,7 @@ import { Button, Form } from 'react-bootstrap';
 import { postApiNoneToken } from '../../api';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 // const cities = [
 //   'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -26,6 +27,8 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 const Companies = () => {
+  usePageTitle('Danh sách công ty');
+
   const { t, i18n } = useTranslation();
 
   const cities = [
@@ -121,24 +124,27 @@ const Companies = () => {
         <div className={clsx(styles.searchBar)}>
           <div className={clsx(styles.form)}>
 
-          <div className={clsx(styles.iconPlace)}>
-            <i className="fa-solid fa-location-dot"></i>
-          </div>
-          
-          <div className={clsx(styles.selectContainer)}>
-            <select
-                  className={clsx(styles.select)}
-                  value={addressInput}
-                  onChange={(e) => setAddressInput(e.target.value)}
-                >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+          <div className={clsx(styles.placeContainer)}>
+            <div className={clsx(styles.iconPlace)}>
+              <i className="fa-solid fa-location-dot"></i>
+            </div>
+            
+            <div className={clsx(styles.selectContainer)}>
+              <select
+                    className={clsx(styles.select)}
+                    value={addressInput}
+                    onChange={(e) => setAddressInput(e.target.value)}
+                  >
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+            </div>
           </div>
 
+          <div className={clsx(styles.searchBtnContainer)}>
             <input
               type="text"
               // placeholder="Enter company name, etc."
@@ -154,8 +160,10 @@ const Companies = () => {
               onClick={handleSearch}
             >
           <i className="fa-solid fa-magnifying-glass"></i>
-              {t('search.search')}
+              <span>{t('search.search')}</span>
             </button>
+          </div>
+
           </div>
         </div>
         

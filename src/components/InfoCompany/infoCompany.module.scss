@@ -7,6 +7,11 @@
   max-width: 1200px;
   margin: 6rem auto;
 }
+.titleInfoCompany{
+  display: flex;
+  justify-content: center;
+  margin: -20px 0 20px 0;
+}
 .top{
   // background: green;
   background: #f5f5f5;
@@ -343,4 +348,47 @@ textarea {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+//responsive
+@media (max-width: 1024px) {
+  .candidateInfo{
+    // margin-top: 6rem;
+  }
+  .top {
+    // flex-direction: column;
+  }
+}
+
+@media (max-width: 768px){
+  .companyInfo{
+    // background: red;
+    padding: 1rem;
+    max-width: 100%;
+    // margin: 1rem;
+    margin-top: 6rem;
+  }
+  .titleInfoCompany{
+    margin: 0 0 10px 0;
+    // margin: 0;
+  }
+
+  .top{
+    // background: red;
+  }
+  .topInfo{
+    padding: 1rem;
+    // width: 100%;
+    margin-left: 0px;
+    margin-top: 15px;
+  }
+
+  .top,
+  .midAddress {
+    flex-direction: column;
+  }
+
+  .avatarSection {
+    max-width: 100%;
+  }
 }

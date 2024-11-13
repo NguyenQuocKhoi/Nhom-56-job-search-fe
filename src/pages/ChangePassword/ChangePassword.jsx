@@ -7,8 +7,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { putApiWithToken } from '../../api';
 import { getUserStorage, validatePassword } from '../../Utils/valid';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const ChangePassword = () => {
+  usePageTitle('Đổi mật khẩu');
+
   const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

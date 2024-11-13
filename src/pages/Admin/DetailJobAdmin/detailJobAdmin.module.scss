@@ -179,5 +179,73 @@
     justify-content: space-between;
   }
   
+/* Đối với tablet (màn hình từ 768px đến 1024px) */
+@media (max-width: 1024px) {
+  .columnTop {
+      flex-direction: column;
+  }
+  .columnOne, .columnTwo {
+      width: 100%;
+      margin: 0;
+      min-width: auto;
+      max-width: 100%;
+  }
+  .jobContainer {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+/* Đối với điện thoại di động (màn hình dưới 768px) */
+@media (max-width: 768px) {
+  .jobDetail {
+      padding: 1rem;
+      margin-top: 2rem;
+      flex-direction: column;
+  }
+  .columnTop {
+      flex-direction: column;
+  }
+  .titleContainer {
+      padding: 10px;
+      margin: 5px;
+  }
+  .thongtinchinh, .thongtinchung, .companyContainer, .them, .vieclamlienquan {
+      padding: 10px;
+      margin: 5px;
+  }
+  .columnOne, .columnTwo {
+      width: 100%;
+      margin: 0;
+  }
+  .ngang {
+      flex-direction: column;
+  }
+  .jobContainer {
+      grid-template-columns: 1fr;
+  }
+  .jobcard {
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+  .btnSave i{
+    margin-left: 10px;
+  }
+  .btnSave p{
+    display: none;
+  }
+}
+
+/* Các điều chỉnh thêm cho các nút và font chữ */
+@media (max-width: 480px) {
+  .btn, .btnSave {
+      width: 100%;
+      font-size: 0.9rem;
+  }
+  h1 {
+      font-size: 1.5rem;
+  }
+  p {
+      font-size: 0.9rem;
+  }
+}
   

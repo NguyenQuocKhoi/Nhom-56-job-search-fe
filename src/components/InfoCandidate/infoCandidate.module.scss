@@ -3,6 +3,7 @@
   flex-direction: column;
   padding: 2rem;
   background: #f5f5f5;
+  // background: red;
   border-radius: 8px;
   max-width: 1200px;
   margin: 6rem auto;
@@ -13,6 +14,11 @@
   background: #f5f5f5;
   display: flex;
   border-radius: 8px;
+}
+.titleInfoCandidate{
+  display: flex;
+  justify-content: center;
+  margin: -20px 0 20px 0;
 }
 .avatarSection {
   display: flex;
@@ -81,6 +87,10 @@
 .textStreet{
   // background: red;
   align-self: center;
+}
+.cityContainer{
+  display: flex;
+  gap: 10px;
 }
 .midInfo{
   // background: blue;
@@ -494,4 +504,234 @@ textarea {
 //
 .changed {
   background-color: #ffeb3b;
+}
+
+.groupToggle{
+  display: flex;
+}
+
+//responsive
+@media (max-width: 1024px) {
+  .candidateInfo{
+    // margin-top: 6rem;
+  }
+  .top {
+    // flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .candidateInfo {
+    padding: 1rem;
+    max-width: 100%;
+    // margin: 1rem;
+    margin-top: 6rem;
+  }
+
+  .mid{
+    // background: red;
+  }
+  .top,
+  .midAddress {
+    flex-direction: column;
+  }
+  .titleInfoCandidate{
+    margin: 0 0 10px 0;
+  }
+  .avatarSection {
+    max-width: 100%;
+  }
+
+  .btnContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  .groupBtnPublicAuto{
+    flex-direction: column;
+  }
+  .midInfoDGC{
+    flex-direction: column;
+    // background: red;
+  }
+
+  .midInfoDGC{
+    // background: red;
+    // height: 60px;
+    display: flex;
+    // border-radius: 8px;
+    // margin: 10px 0 10px 10px;
+    // justify-content: start;
+    align-items: flex-start;
+  }
+  .textNSGT{
+    // display: flex;
+    // align-items: center;
+    // gap: 10px;
+    // background: green;
+  }
+  .btnChooseSkill {
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid white;
+    background: #b0e0e6;
+    cursor: not-allowed; 
+    pointer-events: none;
+  }
+  
+  .btnChooseSkill.editing {
+    background: blue; 
+    cursor: pointer; 
+    pointer-events: auto;
+    color: white;
+  }
+  
+  .btnChooseSkill.editing:hover {
+    background: #1e90ff;
+  }
+  
+  .textCV{
+    align-self: center;
+    display: flex;
+    margin-left: 10px;
+    gap: 3px;
+    // margin-right: 10px;
+    // background: yellow;
+  }
+  .uploadSection{
+    // margin-top: 40px;
+    // background: green;
+    // display: flex;
+  }
+  .btnXoa{
+    background: red;
+    border-radius: 5px;
+    margin-left: 10px;
+    height: 40px;
+    border: 1px solid white;
+    color: white;
+  }
+  .btnXoa:hover{
+    background: lightcoral;
+  }
+  .midInfo{
+    // background: blue;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    // margin: 20px;
+    border-radius: 8px;
+  }
+  .midInfoBig{
+    flex-direction: column;
+    display: flex;
+    // background: red;
+  }
+  .midInfoSkill{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: flex-start;
+    // background: red;
+  }
+  .skillContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    width: 94%;
+    background: lightgray;
+    padding: 5px;
+    border-radius: 5px;
+  }  
+  .modalSkill{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    background: white;
+    width: 100%;
+  }
+  .modalOverlay{
+    width: 100%;
+    // background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+  }
+  .skillcard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: lightgray;
+    // margin: 5px;
+    border-radius: 5px;
+    width: 100%;
+    height: 30px;
+    gap: 10px;
+    .skillCheckbox{
+      margin-top: 16px;
+    }
+    .skillname{
+      // flex: 1;
+      width: 60%;
+      // color: red;
+    }
+  }  
+  .skillSection{
+    // background: red;
+    display: flex;
+    // margin: 20px 10px 10px 10px;
+    margin-top: 200px;
+    // margin-left: 10px;
+    gap: 5px;
+  }
+  .selectedSkill{
+    background: lightgray;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    // color: white;
+  }
+  .midBtnSkill{
+    margin: 0 5px 5px 5px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    // background: green;
+  }  
+  .groupBtnPublicAuto{
+    display: flex;
+    align-items: start;
+  }
+  .selectContainer{
+    .select{
+      width: 100%;
+    }
+    // background: red;
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .candidateInfo {
+    // margin-top: 6rem;
+    padding: 0.5rem;
+  }
+
+  .topInfo,
+  .mid,
+  .midAddress,
+  .midInfo,
+  .skillSection {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .toggleLabel {
+    font-size: 0.9rem;
+  }
 }

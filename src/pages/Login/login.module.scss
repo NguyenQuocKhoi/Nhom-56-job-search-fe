@@ -1,19 +1,21 @@
 .loginContainer {
-  position: relative; /* Để logo được định vị đúng */
-  padding-top: 60px; /* Tạo khoảng trống phía trên để không bị che bởi logo */
+  position: relative;
+  padding-top: 60px; /* Space for the logo on larger screens */
 }
 
+/* Logo container positioning */
 .logoContainer {
   position: absolute;
-  top: 16px; /* Khoảng cách từ trên cùng */
-  left: -76px; /* Khoảng cách từ bên trái */
+  top: 16px;
+  left: 16px; /* Adjusted for smaller screens */
 }
 
 .logo {
-  width: 50px; /* Kích thước logo */
-  height: auto; /* Đảm bảo tỷ lệ hình ảnh không bị biến dạng */
+  width: 50px;
+  height: auto;
 }
 
+/* Card styling */
 .loginCard {
   padding: 20px;
   border-radius: 8px;
@@ -23,27 +25,81 @@
   margin-bottom: 20px;
 }
 
+/* Link styling */
 .forgotPassword, .signUpLink {
   color: #007bff;
   text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
-.passwordContainer{
+.forgotPassword:hover, .signUpLink:hover {
+  text-decoration: underline;
+}
+
+/* Password container styling */
+.passwordContainer {
   position: relative;
   display: flex;
   align-items: center;
 }
+
 .passwordContainer input {
   padding-right: 30px;
 }
-.passwordToggleIcon{
+
+.passwordToggleIcon {
   position: absolute;
   right: 10px;
   top: 8px;
   cursor: pointer;
 }
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Center the logo on smaller screens */
+  .logoContainer {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .loginContainer {
+    padding-top: 80px; /* Increased space for logo positioning */
+  }
+
+  .loginCard {
+    padding: 16px;
+  }
+
+  .loginTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack elements nicely on very small screens */
+  .loginContainer {
+    padding-top: 100px;
+  }
+
+  .logoContainer {
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .loginCard {
+    padding: 12px;
+  }
+
+  .loginTitle {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+  }
+
+  .passwordContainer input {
+    padding-right: 25px;
+  }
+
+  .forgotPassword, .signUpLink {
+    font-size: 0.9rem;
+  }
+}

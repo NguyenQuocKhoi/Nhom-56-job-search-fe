@@ -277,7 +277,8 @@ const handleUpdateInfo = async () => {
 
   return (
     <div className={clsx(styles.companyInfo)}>
-      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profileCompany.infoCompany')}</h2>
+      {/* <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profileCompany.infoCompany')}</h2> */}
+      <h2 className={clsx(styles.titleInfoCompany)}>{t('profileCompany.infoCompany')}</h2>
       
       <div className={clsx(styles.top)}>
         <div className={clsx(styles.avatarSection)}>
@@ -444,7 +445,8 @@ const handleUpdateInfo = async () => {
           name="description"
           value={company.pendingUpdates?.description || company.description || ""}
           onChange={handleInputChangeD}
-          disabled={!isEditing}
+          // disabled={!isEditing}
+          readOnly={!isEditing}
         />
 
         <div className={clsx(styles.btnContainer)}>

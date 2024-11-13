@@ -7,8 +7,12 @@ import { validateEmail, validatePassword } from '../../Utils/valid';
 import { getAPiNoneToken, postApiNoneToken } from '../../api';
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
+import Loading from '../../components/Loading/Loading';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const Signup = () => {
+  usePageTitle('TopJob - Đăng kí tài khoản');
+
   const navigate = useNavigate();
   const [key, setKey] = useState('candidate');
   const [name, setName] = useState("Pham Xuan");
@@ -26,7 +30,8 @@ const Signup = () => {
   //
   const [showModal, setShowModal] = useState(false);
 
-  // const [loading, setLoading] = useState(false);
+  //loading spinner
+  const [loading, setLoading] = useState(false);
 
   const handleCheckEmailExit = async (email) => {
     if(validateEmail(email)){
@@ -146,10 +151,10 @@ const Signup = () => {
           role: key,  // Vai trò: candidate hoặc company
         };
 
-        // setLoading(true);//
+        setLoading(true);//
         // Gửi yêu cầu đăng ký và gửi mã xác minh qua email
         const result = await postApiNoneToken("/user/register", data);
-        // setLoading(false);//
+        setLoading(false);//
         if (result.data.success) {
           Swal.fire({
             icon: "info",
@@ -244,6 +249,7 @@ const Signup = () => {
       </Modal.Footer>
     </Modal>
 
+    {loading ? <Loading /> : null}
     <div className={clsx('container', styles.signupContainer)}>
       {/* logo */}
       <div className={styles.logoContainer}>
@@ -355,9 +361,9 @@ const Signup = () => {
                 </Form>
                     
                   <div className="text-center mt-3">
-                <Button variant="outline-danger" className="w-100">
+                {/* <Button variant="outline-danger" className="w-100">
                   <i className="fab fa-google"></i> Sign Up with Google
-                </Button>
+                </Button> */}
               </div>
             </Tab>
 

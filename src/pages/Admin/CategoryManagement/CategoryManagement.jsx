@@ -203,6 +203,7 @@ const CategoryManagement = () => {
       </div>
     </Modal>
 
+    {/* <div className={clsx(styles.content)}> */}
     <div>
       <h2>Quản lí danh mục công việc</h2>
 
@@ -222,7 +223,7 @@ const CategoryManagement = () => {
             onClick={handleSearch}
           >
             <i className="fa-solid fa-magnifying-glass"></i>
-            <strong className={clsx(styles.s)}>Search</strong>  
+            <strong className={clsx(styles.s)}><span>Tìm kiếm</span></strong>  
           </button>
         </div>
       </form>
@@ -281,7 +282,10 @@ const CategoryManagement = () => {
           placeholder="Nhập tên danh mục mới"
           className={clsx(styles.inputCategory)}
         />
-        <button onClick={handleCreateCategory} className={clsx(styles.btnSua)}>Thêm danh mục</button>
+        <button onClick={handleCreateCategory} className={clsx(styles.btnSua)}>
+          <i class="fa-solid fa-plus"></i>
+          <span>Thêm danh mục</span>
+        </button>
       </div>
 
       <strong>Tổng số lượng danh mục: {categories.length}</strong>

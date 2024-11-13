@@ -8,8 +8,11 @@ import logo from '../../images/logo.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserStorage } from '../../Utils/valid';
 import Swal from 'sweetalert2';
+import { useTranslation } from 'react-i18next';
 
 const DetailCandidateSearch = () => {
+  const { t, i18n } = useTranslation();
+
   const { candidateId } = useParams();
   const [candidate, setCandidate] = useState(null);
   const navigate = useNavigate();
@@ -63,6 +66,12 @@ const DetailCandidateSearch = () => {
 
     fetchCandidate();
   }, [candidateId]);
+
+  useEffect(() => {
+    if (candidate) {
+      document.title = `Thông tin ứng viên - ${candidate.name}`;
+    }
+  }, [candidate]);
 
   const handleLoginRedirect = () => {
     navigate('/login', { state: { from: `/detail-candidate/${candidateId}` } });
@@ -126,24 +135,25 @@ const DetailCandidateSearch = () => {
   if (!candidate) return <div>Candidate not found</div>;
 
   return (
-    <div className={clsx(styles.homePage)}>
+    // <div className={clsx(styles.homePage)}>
+    <div>
       <Header />
       <div className={clsx(styles.mainContent)}>
         <div className={clsx(styles.top)}>
           <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
           <div className={clsx(styles.topText)}>            
-            <p><strong>Name:</strong> {candidate.name}</p>
+            <p><strong>{t('detailCandidate.name')}:</strong> {candidate.name}</p>
             <p><strong>Email:</strong> {candidate.email}</p>
-            <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
-            <p><strong>Address:</strong> {candidate.address}</p>
-            <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p>
+            <p><strong>{t('detailCandidate.phoneNumber')}:</strong> {candidate.phoneNumber}</p>
+            <p><strong>{t('detailCandidate.address')}:</strong> {candidate.address}</p>
+            <p><strong>{t('detailCandidate.dob')}:</strong> {candidate.dateOfBirth}</p>
           
             {(userRole === 'company' ) && (
               <button 
               className={clsx(styles.button)}
               onClick={handleSaveCandidate}>
                   <i className={clsx(isSaved ? 'fa-solid fa-heart' : 'fa-regular fa-heart')}></i>
-                  <strong>{isSaved ? 'Bỏ lưu' : 'Lưu ứng viên'}</strong>
+                  <strong>{isSaved ? t('detailCandidate.unsave') : t('detailCandidate.saveCandidate')}</strong>
                 </button>
               )
             }
@@ -152,18 +162,18 @@ const DetailCandidateSearch = () => {
 
         <div className={clsx(styles.bot)}>
           <div className={clsx(styles.botLeft)}>
-            <p><strong>Experience:</strong> {candidate.experience}</p>
-            <p><strong>Education:</strong> {candidate.education}</p>
+            <p><strong>{t('detailCandidate.ex')}:</strong> {candidate.experience}</p>
+            <p><strong>{t('detailCandidate.edu')}:</strong> {candidate.education}</p>
             {/* <p><strong>More Information:</strong> {candidate.moreInformation}</p> */}
-            <p><strong>More Infomation:</strong></p>
+            <p><strong>{t('detailCandidate.moreInfo')}:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: candidate.moreInformation }}
             ></div>
-            <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
+            <p><strong>{t('detailCandidate.resume')}:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
           </div>
 
           <div className={clsx(styles.botRight)}>
-            <strong>Skill:</strong>
+            <strong>{t('detailCandidate.skill')}:</strong>
               {skills.length > 0 ? (
                 skills.map((skill, index) => (
                   <ul key={index}>
@@ -173,7 +183,7 @@ const DetailCandidateSearch = () => {
                   </ul>
                 ))
               ) : (
-                <p>No skills added</p>
+                <p>{t('detailCandidate.noSkillAdded')}</p>
               )}
           </div>
         </div>

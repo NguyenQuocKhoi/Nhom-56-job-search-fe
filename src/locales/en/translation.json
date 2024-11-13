@@ -48,7 +48,8 @@
       "position": "Position",
       "dev": "Developer",
       "page": "page",
-      "noJob": "No Job"
+      "noJob": "No Job",
+      "relatedJobs":"Related jobs"
     },
     "listCompany":{
       "topCompany": "Top companies"
@@ -71,7 +72,8 @@
       "hotline": "Hotline",
       "introWebsite": "Website Introduction",
       "social": "Social network",
-      "follow": "Follow now"
+      "follow": "Follow now",
+      "intro":"TopJob is a platform connecting employers and job seekers, where you can find quality job postings with extremely attractive salaries and benefits as long as you are qualified to meet the job requirements. Employers connected to TopJob are all reputable companies, where you can work in a professional, dynamic, and youthful environment. Quickly join TopJob to find your ideal job and workplace."
     },
     "profile":{
       "info": "Personal information",
@@ -215,6 +217,20 @@
       "notPosted":"No job posted yet",
       "page":"page",
       "post":"Company recruitment news"
+    },
+    "detailCandidate":{
+      "name":"Name",
+      "phoneNumber":"Phone Number",
+      "address":"Address",
+      "dob":"Date of birth",
+      "ex":"Experience",
+      "edu":"Education",
+      "moreInfo":"More infomation",
+      "resume":"Resume",
+      "skill":"Skill",
+      "saveCandidate":"Save Candidate",
+      "unsave":"Unsave",
+      "noSkillAdded":"No skills added"
     }
   }
   

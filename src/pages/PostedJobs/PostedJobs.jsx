@@ -7,8 +7,11 @@ import { getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
 import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const PostedJobs = () => {
+  usePageTitle('Danh sách công việc đã tạo');
+
   const { t, i18n } = useTranslation();
 
   // const [jobs, setJobs] = useState([]);
@@ -28,7 +31,7 @@ const PostedJobs = () => {
 
   const [categories, setCategories] = useState({});
 
-  const [pendingApplications, setPendingApplications] = useState({});
+  const [pendingApplicationsCount, setPendingApplicationsCount] = useState({});
 
   //lọc theo ngày
   const [sortOrder, setSortOrder] = useState('new');
@@ -145,7 +148,8 @@ const PostedJobs = () => {
             sort: sortOrder === 'new' ? 'desc' : 'asc',
           });
           setAllJobs(response.data.jobs);
-          setTotalPages(response.data.totalPages);
+          setTotalPages(response.data.totalPages);                    
+
           break;
         case 'Accept':
           response = await postApiWithToken(`/job/get-jobs/${companyId}`, {
@@ -177,6 +181,15 @@ const PostedJobs = () => {
         default:
           break;
       }
+
+      const pendingCounts = {};
+      const jobs = response.data.jobs || [];
+      for (const job of jobs) {
+        const pendingResponse = await getApiWithToken(`/application/countPending/${job._id}`);
+        pendingCounts[job._id] = pendingResponse.data.totalPendingApplications;
+      }
+      setPendingApplicationsCount(pendingCounts);
+      
     } catch (error) {
       console.error('Error fetching jobs:', error);
     }
@@ -348,7 +361,7 @@ const PostedJobs = () => {
             {t('postCreated.rejected')}
           </button> */}
 
-<button
+          <button
             className={clsx(styles.tabButton, activeTab === 'All' && styles.activeTab)}
             onClick={() => handleTabChange('All')}
           >
@@ -429,13 +442,13 @@ const PostedJobs = () => {
                           <p><strong>{job.title}</strong></p>
                         </div>
                         <div className={clsx(styles.describe)}>
-                          <p>Company: {job.company.name}</p>
-                          <p>Address: {job.street}, {job.city}</p>
+                          <p><strong>{job.company.name}</strong></p>
+                          <p>{job.street}, {job.city}</p>
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
                           <p>Category: {categories[job.category] || 'No Category'}</p>
                           {/* <p className={clsx(styles.numberApplyPending)}>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</p> */}
-                          <strong>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</strong>
+                          <strong>Số lượng chưa phê duyệt: {pendingApplicationsCount[job._id] || 0}</strong>
                         </div>
                       </div>
                     </div>

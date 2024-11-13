@@ -159,36 +159,41 @@ const FeaturedJobs = () => {
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
 
-          <div className={clsx(styles.iconPlace)}>
-            <i className="fa-solid fa-location-dot"></i>
-          </div>
-          
-          <div className={clsx(styles.selectContainer)}>
-            <select
-                  className={clsx(styles.select)}
-                  value={addressInput}
-                  onChange={(e) => setAddressInput(e.target.value)}
-                >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+          <div className={clsx(styles.placeContainer)}>
+            <div className={clsx(styles.iconPlace)}>
+              <i className="fa-solid fa-location-dot"></i>
+            </div>
+            
+            <div className={clsx(styles.selectContainer)}>
+              <select
+                    className={clsx(styles.select)}
+                    value={addressInput}
+                    onChange={(e) => setAddressInput(e.target.value)}
+                  >
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+            </div>
           </div>
       
-          <input
-            className={clsx(styles.jobInput)}
-            type="text"
-            id="search"
-            value={jobInput}
-            onChange={(e) => setJobInput(e.target.value)}
-            placeholder={t('search.enterJob')}
-          />
-          <button className={clsx(styles.searchButton)} onClick={handleSearch}>
-            <i className="fa-solid fa-magnifying-glass"></i>
-            {t('search.search')}
-          </button>
+          <div className={clsx(styles.searchBtnContainer)}>
+            <input
+              className={clsx(styles.jobInput)}
+              type="text"
+              id="search"
+              value={jobInput}
+              onChange={(e) => setJobInput(e.target.value)}
+              placeholder={t('search.enterJob')}
+            />
+            <button className={clsx(styles.searchButton)} onClick={handleSearch}>
+              <i className="fa-solid fa-magnifying-glass"></i>
+              <span>{t('search.search')}</span>
+            </button>
+          </div>
+
         </div>
       </form>
 

@@ -8,8 +8,11 @@ import { getApiWithToken } from '../../api';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const SavedCandidates = () => {
+  usePageTitle('Danh sách ứng viên đã lưu');
+
   const { t, i18n } = useTranslation();
 
   const [savedCandidates, setSavedCandidates] = useState([]);
@@ -67,11 +70,11 @@ const SavedCandidates = () => {
       <Header />
       <div className={clsx(styles.mainContent)}>
         <p className={clsx(styles.title)}>{t('savedCandidates.savedCandidateList')}</p>
-        {loading ? (
+        {/* {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : (
+        ) : ( */}
           <div className={clsx(styles.jobContainer)}>
             {savedCandidates.length === 0 ? (
               <p>{t('savedCandidates.notSavedCandidate')}.</p>
@@ -80,13 +83,13 @@ const SavedCandidates = () => {
                 <div key={candidate._id} className={clsx(styles.jobcard)}>
                   <Link 
                     to={`/detail-candidate/${candidate.candidate._id}`} 
-                    // target="_blank" rel="noopener noreferrer" 
+                    target="_blank" rel="noopener noreferrer" 
                     className={clsx(styles.linkJob)}
                   >
                     <img src={candidateDetails[candidate.candidate]?.avatar || logo} alt="Logo" className={clsx(styles.avatar)} />                        
                     <div className={clsx(styles.describe)}>
-                      <p>Name: {candidateDetails[candidate.candidate]?.name || 'Loading...'}</p>
-                      <p>Email: {candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
+                      <p><strong>{candidateDetails[candidate.candidate]?.name || 'Loading...'}</strong></p>
+                      <p>{candidateDetails[candidate.candidate]?.email || 'Loading...'}</p>
                       <p>Phone: {candidateDetails[candidate.candidate]?.phone || 'Người dùng chưa cập nhật'}</p>
                       <p>Saved at: {new Date(candidate.createdAt).toLocaleDateString('vi-VN')}</p>
                     </div>
@@ -95,7 +98,7 @@ const SavedCandidates = () => {
               ))
             )}
           </div>
-        )}
+        {/* )} */}
       </div>
       <Footer />
     </div>

@@ -1,0 +1,28 @@
+.bieuDoCot{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.bieuDo{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+}
+
+.bieuDoTron{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .bieuDo{
+        flex-direction: column;
+    }
+    .bieuDoTron{
+        width: 100%;
+    }
+}

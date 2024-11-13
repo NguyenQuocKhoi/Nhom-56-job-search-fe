@@ -47,3 +47,54 @@
   cursor: pointer;
 }
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Center the logo on smaller screens */
+  .logoContainer {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .loginContainer {
+    padding-top: 80px; /* Increased space for logo positioning */
+  }
+
+  .loginCard {
+    padding: 16px;
+  }
+
+  .loginTitle {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack elements nicely on very small screens */
+  .loginContainer {
+    padding-top: 100px;
+  }
+
+  .logoContainer {
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .loginCard {
+    padding: 12px;
+  }
+
+  .loginTitle {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+  }
+
+  .passwordContainer input {
+    padding-right: 25px;
+  }
+
+  .forgotPassword, .signUpLink {
+    font-size: 0.9rem;
+  }
+}
+

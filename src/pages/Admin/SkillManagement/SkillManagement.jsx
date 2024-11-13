@@ -253,7 +253,7 @@ const SkillManagement = () => {
     </Modal>
 
     <div>
-      <h2>Quản lí danh mục kỹ năng</h2>
+      <h2>Quản lí kỹ năng</h2>
 
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
@@ -271,7 +271,7 @@ const SkillManagement = () => {
             onClick={handleSearch}
           >
             <i className="fa-solid fa-magnifying-glass"></i>
-            <strong className={clsx(styles.s)}>Search</strong>  
+            <strong className={clsx(styles.s)}><span>Tìm kiếm</span></strong>  
           </button>
         </div>
       </form>
@@ -331,7 +331,10 @@ const SkillManagement = () => {
           placeholder="Nhập kỹ năng mới"
           className={clsx(styles.inputSkill)}
         />
-        <button onClick={handleCreateSkill} className={clsx(styles.btnSua)}>Thêm kỹ năng</button>
+        <button onClick={handleCreateSkill} className={clsx(styles.btnSua)}>
+          <i class="fa-solid fa-plus"></i>
+          <span>Thêm kỹ năng</span>
+        </button>
       </div>
 
       <strong>Tổng số lượng kỹ năng: {skills.length}</strong>

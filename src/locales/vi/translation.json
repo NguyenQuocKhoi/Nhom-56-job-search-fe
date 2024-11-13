@@ -48,7 +48,8 @@
       "position": "Vị trí",
       "dev": "Lập trình viên",
       "page": "trang",
-      "noJob":"Không có công việc để hiển thị"
+      "noJob":"Không có công việc để hiển thị",
+      "relatedJobs":"Việc làm liên quan"
     },
     "listCompany":{
       "topCompany": "Top công ty hàng đầu"
@@ -71,7 +72,8 @@
       "hotline": "Đường dây nóng",
       "introWebsite": "Giới thiệu website",
       "social": "Mạng xã hội",
-      "follow": "Follow ngay"
+      "follow": "Follow ngay",
+      "intro":"TopJob là nền tảng kết nối nhà tuyển dụng và người tìm việc, tại đây bạn có thể tìm thấy những tin tuyển dụng chất lượng với mức lương và đãi ngộ vô cùng hấp dẫn miễn là bạn đủ năng lực đáp ứng yêu cầu công việc. Những nhà tuyển dụng kết nối với TopJob đều là những công ty có uy tín, nơi bạn có thể làm việc trong một môi trường chuyên nghiệp, năng động, trẻ trung. Nhanh tay gia nhập TopJob để tìm được công việc và nơi làm việc lý tưởng."
     },
     "profile":{
       "info": "Thông tin cá nhân",
@@ -167,7 +169,7 @@
     },
     "profileCompany":{
       "infoCompany":"Thông tin công ty",
-      "name":"Họ và tên",
+      "name":"Tên công ty",
       "phone":"Số điện thoại",
       "address":"Địa chỉ",
       "city":"Tỉnh/thành phố",
@@ -215,6 +217,20 @@
       "notPosted":"Chưa đăng công việc",
       "page":"trang",
       "post":"Tin tuyển dụng của công ty"
+    },
+    "detailCandidate":{
+      "name":"Họ và tên",
+      "phoneNumber":"Số điện thoại",
+      "address":"Địa chỉ",
+      "dob":"Ngày sinh",
+      "ex":"Kinh nghiệm",
+      "edu":"Học vấn",
+      "moreInfo":"Thông tin thêm",
+      "resume":"Hồ sơ xin việc",
+      "skill":"Kỹ năng",
+      "saveCandidate":"Lưu ứng viên",
+      "unsave":"Bỏ lưu",
+      "noSkillAdded":"Chưa cập nhật kỹ năng"
     }
   }
   

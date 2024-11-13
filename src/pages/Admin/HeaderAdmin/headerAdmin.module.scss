@@ -30,3 +30,20 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.logoIcon{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+.iconList{
+  display: none;
+}
+@media (max-width: 768px) {
+  .iconList{
+    display: flex;
+  }
+}

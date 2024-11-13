@@ -145,8 +145,29 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
     .contentCandidatecard{
       display: flex;
     }
-    .contentText{
+    // .contentText{
+    //   margin-left: 10px;
+    // }
+    .contentText {
       margin-left: 10px;
+      
+      overflow: hidden;
+      line-height: 1.2;
+      color: black;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+    }
+    
+    .contentText p strong {
+      font-size: 1.2 rem;
+      font-weight: bold;
+      background: black;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: normal; /* Cho phép xuống hàng */
+      overflow-wrap: break-word; /* Tự động xuống hàng khi gặp từ dài */
+      word-wrap: break-word; /* Tự động ngắt dòng cho các từ quá dài */
     }
   }
 
@@ -302,7 +323,7 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   cursor: pointer;
   transition: background 0.3s ease;
   height: 100%; /* Make the button take full height of the parent */
-  width: 150px;
+  width: 180px;
   &:hover{
     background: blue;
   }
@@ -339,7 +360,7 @@ background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
 .btnAddCandidate2 {
   border-radius: 5px;
   height: 40px;
-  width: 130px;
+  width: 160px;
   // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   border: 1px solid white;
@@ -578,4 +599,66 @@ justify-content: flex-start;
   border: 1px solid white;
   color: white;
   width: 100%;
+}
+
+.addressSearch{
+  display: flex;
+  // background: red;
+}
+.inputSearch{
+  display: flex;
+  background: white;
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .candidateManagement{
+    padding: 0;
+  }
+  .searchBar{
+    // background: red;
+    margin-left: 40px;
+    // flex-direction: column;
+  }
+  .form{
+    // background: green;
+    width: 320px;
+    flex-direction: column;
+    align-self: center;
+  }
+  .createCandidate{
+    margin-top: 4rem;
+  }
+  .s{
+    margin-left: 0; 
+  }
+  .btnAddCandidate2 span{
+    display: none;
+  }
+  .s span{
+    display: none;
+  }
+  .btnSua span {
+    display: none;
+  }
+  .content{
+    // background: red;
+  }
+  .linkCandidate{
+    // background: yellow;
+  }
+  .avatar{
+    align-self: center;
+  }
+  .contentCandidatecard{
+    // background: green;
+    flex-direction: column;
+    max-width: 250px;
+  }
+  .candidatecard{
+    // background: red;
+    flex-direction: column;
+  }
+  .contentText{
+    // background: lightblue;
+  }
 }

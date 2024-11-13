@@ -18,7 +18,8 @@ const Footer = () => {
         </div>
         <div className={clsx(styles.info)}>
           <h3>{t('footer.introWebsite')}</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid eum quia illum quo inventore, nisi placeat, numquam nulla corporis rerum laudantium vero necessitatibus molestiae eligendi unde nemo ipsa? Ullam, eaque.</p>
+          <p>{t('footer.intro')}</p>
+          {/* <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid eum quia illum quo inventore, nisi placeat, numquam nulla corporis rerum laudantium vero necessitatibus molestiae eligendi unde nemo ipsa? Ullam, eaque.</p> */}
         </div>
         <div className={clsx(styles.socialMedia)}>
           <h3>{t('footer.social')}</h3>

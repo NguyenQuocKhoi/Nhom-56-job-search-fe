@@ -69,48 +69,48 @@ const ChangePasswordAdmin = () => {
             <div className={clsx('card', styles.loginCard)}>
               <div className="card-body">
                 <h2 className={clsx('card-title', 'text-center', styles.loginTitle)}>
-                  Change Password
+                  Đổi mật khẩu
                 </h2>
 
                 <form onSubmit={handleChangePassword}>
                   <div className="form-group">
-                    <label htmlFor="oldpassword">Old password</label>
+                    <label htmlFor="oldpassword">Mật khẩu cũ</label>
                     <input
                       value={oldPassword}
                       type="password"
                       className="form-control"
                       id="oldpassword"
-                      placeholder="Enter your old password"
+                      placeholder="Nhập mật khẩu cũ"
                       onChange={(e) => setOldPassword(e.target.value)}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="newpassword">New password</label>
+                    <label htmlFor="newpassword">Mật khẩu mới</label>
                     <input
                       value={newPassword}
                       type="password"
                       className="form-control"
                       id="newpassword"
-                      placeholder="Enter your new password"
+                      placeholder="Nhập mật khẩu mới"
                       onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
                     <input
                       value={confirmPassword}
                       type="password"
                       className="form-control"
                       id="confirmPassword"
-                      placeholder="Confirm your password"
+                      placeholder="Nhập lại mật khẩu"
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
 
                   <button type="submit" className="btn btn-primary w-100 mt-4">
-                    Change password
+                    Đổi mật khẩu
                   </button>
                 </form>
               </div>

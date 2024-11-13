@@ -250,4 +250,59 @@
   margin-bottom: 10px;
 }
 
+@media (max-width: 768px) {
+  .companyDetail {
+    padding: 1rem;
+  }
+
+  .top {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .top .avatar {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-self: center;
+  }
+
+  .topTitleText {
+    font-size: 24px;
+  }
+
+  .address {
+    // flex-direction: column;
+    gap: 2px;
+  }
+
+  .mid {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .midRight{
+    width: 100%;
+  }
+  .intro, .contact {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .jobContent{
+    flex-direction: column;
+  }
+
+  .content{
+    flex-direction: column;
+  }
+  // .joblist .jobContainer {
+  //   grid-template-columns: 1fr;
+  // }
+
+  // .pagination button {
+  //   padding: 0.4rem 0.8rem;
+  // }
+}
   

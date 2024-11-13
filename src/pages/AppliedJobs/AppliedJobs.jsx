@@ -8,8 +8,10 @@ import { getUserStorage } from '../../Utils/valid';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const AppliedJobs = () => {
+  usePageTitle('Danh sách công việc đã ứng tuyển');
   const { t, i18n } = useTranslation();
 
   const [applications, setApplications] = useState([]);
@@ -19,14 +21,19 @@ const AppliedJobs = () => {
 
   const [sortOrder, setSortOrder] = useState('new');
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   const user = getUserStorage()?.user;
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const result = await getApiWithToken(`/application/get-applications/${user._id}`);
+        const result = await getApiWithToken(`/application/get-applications/${user._id}?page=${currentPage}&limit=10`);
         if (result.data.success) {
           const applications = result.data.applications;
+          console.log(applications);
+          
           // setApplications(applications);
 
           // const jobIds = applications.map(app => app.job);
@@ -49,10 +56,16 @@ const AppliedJobs = () => {
           });
   
           setApplications(sortedApplications);
+          setTotalPages(result.data.totalPages);
+          setCurrentPage(result.data.currentPage);
   
-          const jobIds = applications.map(app => app.job);
-          const jobDetailsPromises = jobIds.map(id => getApiWithToken(`/job/${id}`));
+          // const jobIds = applications.map(app => app.job);
+          const jobIds = sortedApplications.map(app => app.job);
+          const jobDetailsPromises = jobIds.map(id => getApiWithToken(`/job/${id}`));/////////////////////////////////////////
           const jobDetailsResults = await Promise.all(jobDetailsPromises);
+
+          console.log(jobDetailsResults);
+          
   
           const jobs = {};
           jobDetailsResults.forEach((result, index) => {
@@ -62,6 +75,8 @@ const AppliedJobs = () => {
           });
 
           setJobDetails(jobs);
+          console.log("jobs",jobs);
+          
         } else {
           setError(result.data.message);
         }
@@ -90,45 +105,63 @@ const AppliedJobs = () => {
     };
 
     fetchApplications();
-  }, [user._id, sortOrder]);
+  }, [user._id, sortOrder, currentPage]);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+  
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };  
 
   return (
     <div className={clsx(styles.homePage)}>
       <Header />
       <div className={clsx(styles.mainContent)}>
         <p className={clsx(styles.title)}>{t('appliedJob.appliedJob')}</p>
-        {loading ? (
+        
+        {/* lọc */}
+         <div className={clsx(styles.filterContainer)}>
+          <p className={clsx(styles.textFilter)}>{t('appliedJob.display')}: </p>
+            <div className={clsx(styles.optionFilter)}>
+              <label>
+                <input
+                  type="radio"
+                  name="filter"
+                  value="new"
+                  checked={sortOrder === 'new'}
+                  onChange={() => setSortOrder('new')}
+                />
+                {t('appliedJob.lastest')}
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="filter"
+                  value="old"
+                  checked={sortOrder === 'old'}
+                  onChange={() => setSortOrder('old')}
+                />
+                {t('appliedJob.oldest')}
+              </label>
+            </div>
+          </div>
+
+        {
+        loading ? (
           <p>Loading...</p>
         ) : error ? (
-          <p>{error}</p>
+          // <p>{error}</p>
+          <div style={{marginLeft: '140px'}}>
+            <p>{t('appliedJob.notApplied')}.<Link to="/jobs">{t('savedJob.clickHere')}.</Link></p>
+          </div>
         ) : applications.length > 0 ? (
           <div className={clsx(styles.jobContainer)}>
-
-          {/* lọc */}
-                <div className={clsx(styles.filterContainer)}>
-                <p className={clsx(styles.textFilter)}>{t('appliedJob.display')}: </p>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="new"
-                      checked={sortOrder === 'new'}
-                      onChange={() => setSortOrder('new')}
-                    />
-                    {t('appliedJob.lastest')}
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="old"
-                      checked={sortOrder === 'old'}
-                      onChange={() => setSortOrder('old')}
-                    />
-                    {t('appliedJob.oldest')}
-                  </label>
-                </div>
-
             {applications.map((application) => {
               const job = jobDetails[application.job];
               return (
@@ -138,9 +171,9 @@ const AppliedJobs = () => {
                   </Link>
                   <Link key={application._id} to={`/detailJob/${application.job}`} className={clsx(styles.linkJob)} target="_blank" rel="noopener noreferrer">
                   <div className={clsx(styles.textInfoJob)}>
-                    <p>Công việc: {job ? job.title : "Loading..."}</p>
-                    <p>Công ty: {job ? job.company.name : "Loading..."}</p>
-                    <p>Địa chỉ: {job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
+                    <p><strong>{job ? job.title : "Loading..."}</strong></p>
+                    <p>{job ? job.company.name : "Loading..."}</p>
+                    <p>{job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
                     <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString('vi-VN')}</p>                    
                     <p 
                       style={{ 
@@ -166,6 +199,23 @@ const AppliedJobs = () => {
         ) : (
           <p>{t('appliedJob.notApplied')}.</p>
         )}
+
+        <div className={clsx(styles.pagination)}>
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <i className="fa-solid fa-angle-left"></i>
+          </button>
+          <span> {currentPage} / {totalPages} trang</span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            <i className="fa-solid fa-angle-right"></i> 
+          </button>
+        </div>
+
       </div>
       <Footer />
     </div>

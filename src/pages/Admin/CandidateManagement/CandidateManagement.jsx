@@ -10,7 +10,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const cities = [
-  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'Tất cả TP', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
   'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
   'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
   'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
@@ -137,12 +137,27 @@ const CandidateManagement = () => {
   
       const response = await postApiNoneToken('/candidate/search', searchParams);
 
-      console.log("64", searchParams);
-      
+      console.log("64", searchParams);      
       console.log("66", response.data.candidates);
+
+      const candidates = response.data.candidates;
+
+      const updatedCandidates = await Promise.all(
+        candidates.map(async (candidate) => {
+          try {
+            const userIsActiveResponse = await getApiWithToken(`/user/${candidate._id}`);  // Assuming candidate._id là userId
+            const isActive = userIsActiveResponse.data.user.isActive;
+            return { ...candidate, isActive };  // Gán isActive vào đối tượng candidate
+          } catch (error) {
+            console.error('Failed to fetch isActive status for candidate', error);
+            return { ...candidate, isActive: null };  // Trả về null nếu không thể lấy isActive
+          }
+        })
+      );
   
       if (response.data.success) {
-        setResults(response.data.candidates);
+        // setResults(response.data.candidates);
+        setResults(updatedCandidates);
       } else {
         setResults(null);
       }
@@ -734,10 +749,10 @@ const CandidateManagement = () => {
             </div>
           </div>
         )} */}
-        <div className={clsx(styles.iconPlace)}>
+    <div className={clsx(styles.selectContainer)}>
+      <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
       </div>
-      
       <div className={clsx(styles.selectContainer)}>
         <select
               className={clsx(styles.select)}
@@ -745,7 +760,7 @@ const CandidateManagement = () => {
               // onChange={(e) => setAddressInput(e.target.value)}
               onChange={(e) => {
                 const selectedCity = e.target.value;
-                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+                setAddressInput(selectedCity === "Tất cả TP" ? "" : selectedCity);
               }}
             >
               {cities.map((city) => (
@@ -755,9 +770,11 @@ const CandidateManagement = () => {
               ))}
             </select>
       </div>
+    </div>
+      <div className={clsx(styles.inputSearch)}>
         <input
           type="text"
-          placeholder="Enter candidate"
+          placeholder="Nhập thông tin ứng viên..."
           className={clsx(styles.jobInput)}
           value={candidateInput}
           onChange={(e) => setCandidateInput(e.target.value)}
@@ -768,8 +785,10 @@ const CandidateManagement = () => {
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
-          <strong className={clsx(styles.s)}>Search</strong>          
+          <strong className={clsx(styles.s)}><span>Tìm kiếm</span></strong>          
         </button>
+      </div>
+
       </div>
     </form>
             {/* searchBar */}
@@ -780,7 +799,7 @@ const CandidateManagement = () => {
       {results && (
         <div className={clsx(styles.candidatelist)}>
           <div className={clsx(styles.candidateContainer)}>
-          <strong>Kết quả phù hợp: {results.length}</strong>
+          {/* <strong>Kết quả phù hợp: {results.length}</strong> */}
           {results.length > 0 ? (
           results.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>
@@ -793,6 +812,17 @@ const CandidateManagement = () => {
                       <p>{candidate.email}</p>
                       <p>{candidate.phoneNumber}</p>
                     </div>
+                  </div>
+
+                  <div>
+                    <>
+                    <button
+                      className={clsx(styles.btnVoHieuHoa)}
+                      onClick={() => handleDisableCandidate(candidate._id, candidate.isActive)}
+                      >
+                      {candidate.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                    </button>
+                    </>
                   </div>
               </div>
                 </Link>
@@ -810,7 +840,10 @@ const CandidateManagement = () => {
       {/* content */}
     <div className={clsx(styles.createCandidate)}>
       <strong>Tổng số lượng ứng viên: {candidates.length}</strong>
-      <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate2)}>Thêm ứng viên</button>
+      <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate2)}>
+        <i class="fa-solid fa-plus"></i>
+        <span>Thêm ứng viên</span>
+      </button>
     </div>
 
       <div className={clsx(styles.candidatelist)}>
@@ -830,7 +863,7 @@ const CandidateManagement = () => {
                       <p>
                         Trạng thái: 
                         {candidate.isActive === true 
-                          ? " Đang hoạt động" 
+                          ? " Đang được kích hoạt" 
                           : " Đã bị vô hiệu hóa"}
                       </p>
                       {/* <p>IsActive: {"" + candidate.isActive}</p> */}

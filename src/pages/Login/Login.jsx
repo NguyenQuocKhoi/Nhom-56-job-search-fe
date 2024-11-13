@@ -9,8 +9,11 @@ import { setUserStorage, validateEmail } from '../../Utils/valid';
 import { postApiNoneToken } from '../../api';
 import Loading from "../../components/Loading/Loading";
 import { Button, Modal } from 'react-bootstrap';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const Login = () => {
+  usePageTitle('TopJob - Đăng nhập');
+
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("phamchixuan1605@gmail.com");
@@ -400,12 +403,12 @@ const handleSubmitCaptcha = async () => {
                   onFailure={handleLoginWithGoogle} // Cũng có thể xử lý lỗi ở đây
                   cookiePolicy={'single_host_origin'}
                 /> */}
-                  <button 
+                  {/* <button 
                     className="btn btn-outline-danger w-100" 
                     // onClick={handleLoginWithGoogle}
                   >
                     <i className="fab fa-google"></i> Log In with Google for candidate
-                  </button>
+                  </button> */}
                 </div>
                 <div className={clsx('text-center', 'mt-4', styles.signUpText)}>
                   <span>Don't have an account?</span>

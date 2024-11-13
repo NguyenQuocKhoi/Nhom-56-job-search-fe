@@ -1,9 +1,9 @@
 .jobDetail {
-  display: flex;
+  // display: flex;
 
     // padding: 2rem;
     background: #f9f9f9;
-    // background: white;
+    // background: red;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 1200px;
@@ -78,6 +78,13 @@
   margin-left: 10px;
 }
 
+.columnTop{
+  display: flex;
+}
+.columnBot{
+
+}
+
 .columnOne{
   // background: #000;
   margin-right: 10px;
@@ -142,8 +149,9 @@
 }
 //similar job
 .jobContainer {
-  max-width: 1200px; /* Đặt chiều rộng tối đa để nội dung không quá rộng */
-  margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
+  // background: red;
+  max-width: 860px; /* Đặt chiều rộng tối đa để nội dung không quá rộng */
+  // margin: 0 auto; /* Căn giữa nội dung theo chiều ngang */
   display: grid;
   // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
@@ -273,5 +281,75 @@
   span {
     align-self: center;
     font-size: 1rem;
+  }
+}
+
+//
+/* Đối với tablet (màn hình từ 768px đến 1024px) */
+@media (max-width: 1024px) {
+  .columnTop {
+      flex-direction: column;
+  }
+  .columnOne, .columnTwo {
+      width: 100%;
+      margin: 0;
+      min-width: auto;
+      max-width: 100%;
+  }
+  .jobContainer {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Đối với điện thoại di động (màn hình dưới 768px) */
+@media (max-width: 768px) {
+  .jobDetail {
+      padding: 1rem;
+      margin-top: 2rem;
+  }
+  .columnTop {
+      flex-direction: column;
+  }
+  .titleContainer {
+      padding: 10px;
+      margin: 5px;
+  }
+  .thongtinchinh, .thongtinchung, .companyContainer, .them, .vieclamlienquan {
+      padding: 10px;
+      margin: 5px;
+  }
+  .columnOne, .columnTwo {
+      width: 100%;
+      margin: 0;
+  }
+  .ngang {
+      flex-direction: column;
+  }
+  .jobContainer {
+      grid-template-columns: 1fr;
+  }
+  .jobcard {
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+  .btnSave i{
+    margin-left: 10px;
+  }
+  .btnSave p{
+    display: none;
+  }
+}
+
+/* Các điều chỉnh thêm cho các nút và font chữ */
+@media (max-width: 480px) {
+  .btn, .btnSave {
+      width: 100%;
+      font-size: 0.9rem;
+  }
+  h1 {
+      font-size: 1.5rem;
+  }
+  p {
+      font-size: 0.9rem;
   }
 }

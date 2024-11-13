@@ -224,6 +224,42 @@ const handleAutoApply = async () => {
       title: t('profile.noUpdateCV'),
       text: t('profile.pleaseUpdateCVauto'),
     });
+    await putApiWithToken(`/candidate/auto-apply`, {
+      candidateId: candidate._id,
+      autoSearchJobs: false,
+    });
+    return;
+  }
+
+  if (!candidate.city) {
+    setAutoSearchJobs(false);
+    Swal.fire({
+      icon: 'warning',
+      // title: t('profile.incompleteProfile'),
+      // text: t('profile.pleaseAddCityAndSkills'),
+      title: 'Chưa cập nhật địa chỉ',
+      text: 'Vui lòng cập nhật địa chỉ để có thể bật tính năng tự động ứng tuyển.'
+    });
+    await putApiWithToken(`/candidate/auto-apply`, {
+      candidateId: candidate._id,
+      autoSearchJobs: false,
+    });
+    return;
+  }
+
+  if (candidate.skill.length < 3) {
+    setAutoSearchJobs(false);
+    Swal.fire({
+      icon: 'warning',
+      // title: t('profile.incompleteProfile'),
+      // text: t('profile.pleaseAddCityAndSkills'),
+      title: 'Chưa cập nhật kỹ năng',
+      text: 'Vui lòng cập nhật ít nhất 3 kỹ năng để có thể bật tính năng tự động ứng tuyển.'
+    });
+    await putApiWithToken(`/candidate/auto-apply`, {
+      candidateId: candidate._id,
+      autoSearchJobs: false,
+    });
     return;
   }
 
@@ -545,7 +581,8 @@ const handleAutoApply = async () => {
 
   return (
     <div className={clsx(styles.candidateInfo)}>
-      <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profile.info')}</h2>
+      {/* <h2 style={{display: 'flex', justifyContent: 'center', margin: '-20px 0 20px 0'}}>{t('profile.info')}</h2> */}
+      <h2 className={clsx(styles.titleInfoCandidate)}>{t('profile.info')}</h2>
 
       <div className={clsx(styles.top)}>
         <div className={clsx(styles.avatarSection)}>
@@ -616,6 +653,7 @@ const handleAutoApply = async () => {
 
       <div className={clsx(styles.mid)}>
         <div className={clsx(styles.midAddress)}>
+
         <div className={clsx(styles.midAddressStreet)}>            
             <p className={clsx(styles.textStreet)}>{t('profile.address')}:</p>
             <input 
@@ -628,8 +666,8 @@ const handleAutoApply = async () => {
             />
           </div>
 
+        <div className={clsx(styles.cityContainer)}>
           <p className={clsx(styles.textStreet)}>{t('profile.city')}:</p>
-          
           {/* mới */}
           <div className={clsx(styles.selectContainer)}>
             <select
@@ -646,6 +684,7 @@ const handleAutoApply = async () => {
               ))}
             </select>
           </div>
+        </div>
 
           {/* cũ */}
           {/* <input 
@@ -679,8 +718,7 @@ const handleAutoApply = async () => {
               </div>
             </div>
           )} */}
-
-          
+    
         </div>
 
         <div className={clsx(styles.midInfo)}>       
@@ -832,7 +870,6 @@ const handleAutoApply = async () => {
           </div>
         </div>
 
-
       </div>
 
       <div className={clsx(styles.infoSection)}>                        
@@ -867,7 +904,8 @@ const handleAutoApply = async () => {
           name="moreInformation"
           value={candidate.moreInformation || ""}
           onChange={handleInputChangeD}
-          disabled={!isEditing}
+          // disabled={!isEditing}
+          readOnly={!isEditing}
         />        
 
         <div className={clsx(styles.btnContainer)}>
@@ -896,12 +934,14 @@ const handleAutoApply = async () => {
           </button> */}
 
         <div className={clsx(styles.groupBtnPublicAuto)}>
-          <div className={clsx(styles.toggleSwitch, { [styles.active]: buttonState })} onClick={handlePublicAccount}>
-            <div className={styles.toggleCircle}></div>
-          </div>  
-          <span className={styles.toggleLabel}>
-            {buttonState ? 'Tài khoản đang ở chế độ công khai' : 'Tài khoản đang ở chế độ riêng tư'}
-          </span>
+          <div className={clsx(styles.groupToggle)}>
+            <div className={clsx(styles.toggleSwitch, { [styles.active]: buttonState })} onClick={handlePublicAccount}>
+              <div className={styles.toggleCircle}></div>
+            </div>  
+            <span className={styles.toggleLabel}>
+              {buttonState ? 'Tài khoản đang ở chế độ công khai' : 'Tài khoản đang ở chế độ riêng tư'}
+            </span>
+          </div>
 
             {/* nếu không có cv thì thông báo */}
           {/* <button onClick={handlePublicAccount} 
@@ -910,12 +950,14 @@ const handleAutoApply = async () => {
             {buttonState ? t('profile.privateAcc') : t('profile.publicAcc')}
           </button> */}
 
-          <div className={clsx(styles.toggleSwitch, { [styles.active]: autoSearchJobs })} onClick={handleAutoApply}>
-            <div className={styles.toggleCircle}></div>
-          </div>  
-          <span className={styles.toggleLabel}>
-            {autoSearchJobs ? 'Đang bật tìm việc tự động' : 'Đang tắt tìm việc tự động'}
-          </span>
+          <div className={clsx(styles.groupToggle)}>
+            <div className={clsx(styles.toggleSwitch, { [styles.active]: autoSearchJobs })} onClick={handleAutoApply}>
+              <div className={styles.toggleCircle}></div>
+            </div>  
+            <span className={styles.toggleLabel}>
+              {autoSearchJobs ? 'Đang bật ứng tuyển tự động' : 'Đang tắt ứng tuyển tự động'}
+            </span>
+          </div>
 
           {/* <button
             onClick={handleAutoApply}

@@ -16,34 +16,77 @@
   justify-content: center;
   margin-bottom: 1rem;
   gap: 1rem;
-  
+}
+
+.tabButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+
+  &.activeTab {
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    color: white;
+    font-weight: bold;
+  }
+
+  &:hover:not(.activeTab) {
+    background-color: #d3d3d3;
+  }
+}
+
+/* Tablet View */
+@media (max-width: 1024px) {
+  .tabs {
+    gap: 0.75rem; /* Reduce gap between buttons */
+  }
+
   .tabButton {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s, color 0.3s;
+    padding: 0.65rem 1.25rem; /* Slightly smaller padding */
+    font-size: 0.95rem; /* Slightly smaller font size */
+  }
+}
 
-    &.activeTab {
-      background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
-      color: white;
-      font-weight: bold;
-    }
+/* Mobile View */
+@media (max-width: 768px) {
+  .content{
+    flex-direction: column;
+  }
+  .mainContent{
+    // background: red;
+    padding-left: 20px;
+  }
+  .tabs {
+    flex-direction: column; /* Stack buttons vertically on small screens */
+    align-items: center; /* Center align buttons */
+    gap: 0.5rem;
+    padding-left: 10px;
+  }
 
-    &:hover:not(.activeTab) {
-      background-color: #d3d3d3;
-    }
+  .tabButton {
+    width: 100%; /* Full width button */
+    padding: 0.6rem 1rem; /* Adjust padding for smaller screens */
+    font-size: 0.9rem; /* Reduce font size for readability */
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 480px) {
+  .tabButton {
+    font-size: 0.85rem; /* Further reduce font size */
+    padding: 0.5rem 0.8rem;
   }
 }
 
 .joblist {
   padding: 1rem;
-  // background: white;
+  // background: green;
 
   .jobContainer {
-    // background: white;
+    // background: red;
 
     max-width: 1200px;
     margin: 0 auto;
@@ -96,6 +139,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 270px;
       width: 270px;
     }
 
@@ -159,15 +203,31 @@
   background: orange;
 }
 
-.titleLon{
+.titleLon {
   font-size: 25px;
   font-weight: bold;
-  background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+  background: linear-gradient(90deg, rgba(35, 9, 121, 1) 0%, rgba(0, 142, 255, 1) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  
   padding-left: 145px;
+
+  @media (max-width: 1200px) {
+    font-size: 22px;
+    padding-left: 100px;
+  }
+
+  @media (max-width: 900px) {
+    font-size: 20px;
+    padding-left: 60px;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+    padding-left: 20px;
+    text-align: center;
+  }
 }
+
 
 .khongCoTin{
   // background: red;
@@ -181,13 +241,25 @@
 
 .filterContainer {
   display: flex;
-  align-items: center; /* Căn giữa nội dung theo chiều dọc */
-  gap: 20px; /* Khoảng cách giữa các nút radio */
-  margin: -10px 0 -10px 10px; /* Khoảng cách trên và dưới */
-  // margin: 10px 0;
+  align-items: center;
+  gap: 20px;
+  margin: -10px 0 -10px 10px;
   justify-content: center;
-}
+  
+  p {
+    margin-right: 10px;
+  }
 
-.filterContainer p {
-  margin-right: 10px;
+  @media (max-width: 600px) { 
+    flex-direction: column;
+    gap: 10px;
+    
+    .optionFilter{
+      display: flex;
+      gap: 10px;
+      margin-top: -20px;
+      margin-bottom: 20px;
+    }
+  }
+
 }

@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import ReatQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 // const cities = [
 //   'Chọn tỉnh/thành phố','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -28,6 +29,8 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 const CreatePostJob = () => {
+  usePageTitle('Tạo tin tuyển dụng');
+
   const { t, i18n } = useTranslation();
 
   const cities = [

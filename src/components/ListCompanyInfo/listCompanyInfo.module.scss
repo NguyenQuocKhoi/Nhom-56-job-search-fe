@@ -1,16 +1,28 @@
 .companylist {
   padding: 1rem;
   background: white;
-  
+
   .companyContainer {
     max-width: 1200px; /* Set the maximum width for the container */
     margin: 0 auto; /* Center the content horizontally */
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Create exactly 4 equal columns */
     gap: 1rem; /* Set the gap between the cards */
-}
 
-.companycard {
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr; /* 1 column for mobile screens */
+    }
+  }
+
+  .companycard {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 1rem;
@@ -23,15 +35,13 @@
     flex-direction: column;
     gap: 0.5rem;
     text-decoration: none;
-    width: 100%; 
-    box-sizing: border-box; 
+    width: 100%;
+    box-sizing: border-box;
     min-height: 200px;
     align-items: center;
     justify-content: center;
 
     &:hover {
-      // background: linear-gradient(to right, #87CEEB, #1E90FF);
-  // background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
       color: white;
       background: #f3f3f3;
     }
@@ -47,7 +57,7 @@
       font-size: 1rem;
       color: #555;
     }
-}
+  }
 
   .pagination {
     display: flex;
@@ -82,13 +92,18 @@
   }
 }
 
-.avatar{
-  width: 170px;
-  height: 170px;
+.avatar {
+  width: 170px; /* Keep the size consistent */
+  height: 170px; /* Keep the size consistent */
   border-radius: 5px;
+
+  @media (max-width: 600px) {
+    width: 120px; /* Adjust size for mobile screens */
+    height: 120px; /* Adjust size for mobile screens */
+  }
 }
 
-//search bar
+// Search bar styles
 .searchBar {
   display: flex;
   justify-content: center;
@@ -140,21 +155,37 @@
 .searchButton:hover {
   background: linear-gradient(to right, #0077cc, #005999); /* Color transition effect on hover */
 }
-.textTitle{
-  font-size: 25px;
+
+.textTitle {
+  font-size: 25px; /* Default size for larger screens */
   font-weight: bold;
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding-left: 145px; /* Padding for larger screens */
   
-  padding-left: 145px;
+  @media (max-width: 1200px) {
+    font-size: 22px; /* Slightly smaller font size for medium screens */
+    padding-left: 100px; /* Adjust padding for medium screens */
+  }
+
+  @media (max-width: 900px) {
+    font-size: 20px; /* Smaller font size for tablets */
+    padding-left: 60px; /* Adjust padding for tablets */
+  }
+
+  @media (max-width: 600px) {
+    font-size: 18px; /* Even smaller font size for mobile screens */
+    padding-left: 20px; /* Minimal padding for mobile */
+    text-align: center; /* Center align text for mobile */
+  }
 }
 
 .centeredText {
   justify-content: center;
-  align-items: center;    
-  text-align: center;     
-  width: 100%;            
-  word-wrap: break-word;  
-  padding: 10px;        
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  word-wrap: break-word;
+  padding: 10px;
 }

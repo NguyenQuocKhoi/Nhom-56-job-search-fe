@@ -10,6 +10,8 @@ import Header from '../../components/Header/Header';
 import JobsRecommended from '../../components/JobsRecommended/JobsRecommended';
 import logo from '../../images/logo.png';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
+import Loading from '../../components/Loading/Loading';
 
 // const cities = [
 //   'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -28,6 +30,8 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 const SearchJobResult = () => {
+  usePageTitle('Tìm việc làm');
+
   const { t, i18n } = useTranslation();
 
   const cities = [
@@ -65,6 +69,9 @@ const SearchJobResult = () => {
 
   //
   const [filter, setFilter] = useState('all');
+
+  //loading spinner
+  const [loading, setLoading] = useState(false);
 
   //role
   const user = getUserStorage()?.user;
@@ -125,7 +132,9 @@ const SearchJobResult = () => {
     // };
     
     try {
+      setLoading(true);
       const response = await postApiNoneToken('/user/search', searchParams);
+      setLoading(false);
 
       if (response.data.success) {
         // setResults(response.data.data);
@@ -241,6 +250,8 @@ const SearchJobResult = () => {
   if (error) return <div>{error}</div>;
 
   return (
+    <>
+      {loading ? <Loading /> : null}
       <div className={clsx(styles.searchComponent)}>
         <Header />
       <div className={clsx(styles.searchContainer)}>
@@ -249,6 +260,7 @@ const SearchJobResult = () => {
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
 
+    <div className={clsx(styles.placeContainer)}>
       <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
       </div>
@@ -269,8 +281,10 @@ const SearchJobResult = () => {
                 </option>
               ))}
             </select>
+          </div>
       </div>
       
+      <div className={clsx(styles.searchBtnContainer)}>
           <input
             className={clsx(styles.jobInput)}
             type="text"
@@ -282,8 +296,10 @@ const SearchJobResult = () => {
           />
           <button className={clsx(styles.searchButton)} onClick={handleSearch}>
             <i className="fa-solid fa-magnifying-glass"></i>
-            {t('search.search')}
+            <span>{t('search.search')}</span>
           </button>
+        </div>
+
         </div>
       </form>
     </div>
@@ -292,10 +308,11 @@ const SearchJobResult = () => {
         <div className={clsx(styles.results)}>
           <div className={clsx(styles.tabContent)}>
               <div>
-                <p className={clsx(styles.textTitle)}>{t('search.job')}</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.job')}</p>
                 {results.jobs.length > 0 && (
                 <div className={clsx(styles.filterContainer)}>
                   <p className={clsx(styles.textFilter)}>{t('search.display')}: </p>
+                  <div className={clsx(styles.optionFilter)}>                
                   <label>
                     <input
                       type="radio"
@@ -336,6 +353,7 @@ const SearchJobResult = () => {
                     />
                     {t('search.salaryDownToUp')}
                   </label>
+                  </div>
                 </div>
               )}
 
@@ -357,6 +375,12 @@ const SearchJobResult = () => {
             })
             .map((job) => (
               <div key={job._id} className={clsx(styles.jobcard)}>
+                <Link
+                    to={`/detailJob/${job._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={clsx(styles.linkJob)}
+                  >
                 <div className={clsx(styles.content)}>
                   <Link
                     to={`/detailCompany/${job.company}`}
@@ -369,12 +393,7 @@ const SearchJobResult = () => {
                       className={clsx(styles.avatar)}
                     />
                   </Link>
-                  <Link
-                    to={`/detailJob/${job._id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={clsx(styles.linkJob)}
-                  >
+                  
                     <div className={clsx(styles.text)}>
                       <div className={clsx(styles.title)}>
                         <p>
@@ -396,7 +415,7 @@ const SearchJobResult = () => {
                         )}
                       </div>
                     </div>
-                  </Link>
+                  {/* </Link> */}
                   {(role === 'candidate' || !role) && (
                     <div onClick={() => handleSaveJob(job._id)}>
                       <i
@@ -409,6 +428,7 @@ const SearchJobResult = () => {
                     </div>
                   )}
                 </div>
+                </Link>
               </div>
             ))
         ) : (
@@ -428,6 +448,7 @@ const SearchJobResult = () => {
       )}
       <Footer/>
     </div>
+    </>
   );
 };
 

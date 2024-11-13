@@ -8,6 +8,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ReatQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const cities = [
   'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -26,6 +27,8 @@ const cities = [
 ];
 
 const EditPost = () => {
+  usePageTitle('Cập nhật tin tuyển dụng');
+
   const { t, i18n } = useTranslation();
 
   const { jobId } = useParams();

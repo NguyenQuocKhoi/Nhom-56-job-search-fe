@@ -155,5 +155,59 @@
       background: rgb(119, 9, 9);
     }
   }
+
+  @media (max-width: 1024px) { /* Tablet */
+    .mainContent {
+      padding: 1.5rem;
+    }
+  
+    .top {
+      flex-direction: column;
+      // text-align: center;
+    }
+  
+    .topText {
+      margin-left: 0;
+    }
+  
+    .bot {
+      flex-direction: column;
+    }
+  
+    .botLeft,
+    .botRight {
+      width: 100%;
+      margin: 0 0 15px 0;
+    }
+  }
+  
+  @media (max-width: 768px) { /* Mobile */
+    .mainContent {
+      padding: 1rem;
+    }
+  
+    .avatar {
+      width: 100px;
+      height: 100px;
+    }
+  
+    // .button {
+    //   width: 50%;
+    //   height: 35px;
+    //   font-size: 14px;
+    //   align-self: center;
+    // }
+  
+    .topText p,
+    .botLeft p,
+    .botRight p {
+      font-size: 0.9rem;
+    }
+    
+    .botLeft,
+    .botRight {
+      padding: 15px;
+    }
+  }
   
   

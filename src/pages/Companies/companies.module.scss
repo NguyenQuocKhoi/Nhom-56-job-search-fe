@@ -20,50 +20,82 @@
   height: 3.5rem; /* Set the height to match the form's height */
 }
 
+// .form {
+//   display: flex;
+//   width: 100%;
+//   max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+//   border-radius: 10px;
+//   height: 3.5rem; /* Set the same height as .searchBar */
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
+//   background: #ffffff;
+// }
 .form {
+  // margin-top: 30px;
   display: flex;
-  width: 100%;
-  max-width: 1200px; /* Maximum width to avoid being too wide on large screens */
+  flex-direction: row; /* Align items in a row */
+  width: 100%; /* Full width */
+  max-width: 1200px; /* Maximum width for larger screens */
   border-radius: 10px;
-  height: 3.5rem; /* Set the same height as .searchBar */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a light shadow effect to highlight */
-  background: #ffffff;
+  height: 100%; /* Automatic height */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
 }
+
 .selectContainer {
   display: flex;
   align-items: center;
   margin: 0 10px; // Khoảng cách giữa các phần tử trong form
 }
 
-.select {
-  padding: 10px; // Khoảng cách bên trong
-  border: 1px solid #ffffff; // Đường viền
-  border-radius: 4px; // Bo góc
-  font-size: 16px; // Kích thước chữ
-  width: 200px; // Chiều rộng
-  background-color: #fff; // Màu nền
-  margin: 0 5px; // Khoảng cách giữa select và input
-  // outline: none; // Bỏ viền khi chọn
-  transition: border 0.3s; // Hiệu ứng chuyển tiếp
+// .select {
+//   padding: 10px; // Khoảng cách bên trong
+//   border: 1px solid #ffffff; // Đường viền
+//   border-radius: 4px; // Bo góc
+//   font-size: 16px; // Kích thước chữ
+//   width: 200px; // Chiều rộng
+//   background-color: #fff; // Màu nền
+//   margin: 0 5px; // Khoảng cách giữa select và input
+//   // outline: none; // Bỏ viền khi chọn
+//   transition: border 0.3s; // Hiệu ứng chuyển tiếp
 
-  &:focus {
-    // border: 1px solid #007bff; // Màu viền khi chọn
-  }
+//   &:focus {
+//     // border: 1px solid #007bff; // Màu viền khi chọn
+//   }
+// }
+
+.select {
+  padding: 10px;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 200px; 
+  margin: 0 5px; 
 }
 
-.jobInput,
-.locationInput {
+// .jobInput,
+// .locationInput {
+//   border: none;
+//   border-radius: 50px;
+//   padding: 0.75rem 1.25rem;
+//   font-size: 1rem;
+//   outline: none; /* Remove outline when the field is focused */
+//   height: 100%; /* Ensure input fields take full height of the parent */
+// }
+
+// .jobInput {
+//   flex: 2;
+//   margin-right: 0.5rem; /* Add space between input fields */
+// }
+
+.jobInput {
   border: none;
   border-radius: 50px;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
-  outline: none; /* Remove outline when the field is focused */
-  height: 100%; /* Ensure input fields take full height of the parent */
-}
-
-.jobInput {
+  outline: none;
+  height: 100%;
   flex: 2;
-  margin-right: 0.5rem; /* Add space between input fields */
+  margin-right: 0.5rem;
 }
 
 .locationInput {
@@ -95,6 +127,16 @@
   &:hover{
     background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
   }
+}
+
+.placeContainer{
+  display: flex;
+}
+
+.searchBtnContainer{
+  display: flex;
+  // background: red;
+  width: 100%;
 }
 
 // .searchButton:hover {
@@ -156,3 +198,79 @@
   top: 10px;
   right: 10px;
 }
+
+@media (max-width: 1024px) { /* Tablet styles */
+  .form {
+    // flex-direction: column; /* Stack elements vertically */
+  }
+
+  .jobInput {
+    margin-right: 0;
+    width: 100%;
+
+  }
+
+  .selectContainer {
+    width: 100%; /* Full width for select */
+    justify-content: space-between; /* Space out elements */
+  }
+
+  .select {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .searchButton {
+    width: 20%; 
+  }
+}
+
+@media (max-width: 768px) {
+  .searchBar{
+    padding: 10px;
+  }
+  .form {
+    // background: red;
+    margin-top: -30px;
+    height: 55px;
+    flex-direction: column; /* Stack elements vertically */
+  }
+
+  .jobInput{
+    // margin-top: 10px;
+  }
+  .searchContainer {
+    height: auto; 
+    // background: green;
+  }
+
+  .searchBtnContainer{
+    border-radius: 8px;
+    height: 55px;
+    background-color: white;
+  }
+
+  .searchButton span {
+    display: none;
+  }
+
+  .searchButton {
+    // padding: 0.5rem; 
+    width: 20%; 
+    // height: 75%;
+    // margin-top: 6px;
+    // height: 40px;
+    // font-size: 1rem;
+  }
+
+  .select{
+    width: 94%;
+    // margin: 0.5rem 0;
+  }
+
+  .suggestBar {
+    margin-top: 5rem;
+    flex-direction: column; 
+  }
+}
+

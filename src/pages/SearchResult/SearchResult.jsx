@@ -9,6 +9,10 @@ import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import JobsRecommended from '../../components/JobsRecommended/JobsRecommended';
 import logo from '../../images/logo.png';
+import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
+
+import Loading from "../../components/Loading/Loading";
 
 const cities = [
   'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -32,6 +36,10 @@ const suggestions = [
 ];
 
 const SearchResult = () => {
+  usePageTitle('Việc làm | Công ty | Ứng viên');
+  
+  const { t, i18n } = useTranslation();
+
   const location = useLocation();
   const initialSearchParams = location.state?.searchParams || {};
   
@@ -55,6 +63,9 @@ const SearchResult = () => {
   //suggest
   const [currentSuggestions, setCurrentSuggestions] = useState(suggestions.slice(0, 5)); // Initial 5 suggestions
   const [startIndex, setStartIndex] = useState(0);
+
+  //loading spinner
+  const [loading, setLoading] = useState(false);
 
   //role
   const user = getUserStorage()?.user;
@@ -111,7 +122,9 @@ const SearchResult = () => {
     };
     
     try {
+      setLoading(true);
       const response = await postApiNoneToken('/user/search', searchParams);
+      setLoading(false);
 
       if (response.data.success) {
         // setResults(response.data.data);
@@ -249,6 +262,8 @@ const SearchResult = () => {
   if (error) return <div>{error}</div>;
 
   return (
+    <>
+      {loading ? <Loading /> : null}
       <div className={clsx(styles.searchComponent)}>
         <Header />
       <div className={clsx(styles.searchContainer)}>
@@ -257,6 +272,7 @@ const SearchResult = () => {
       <form className={clsx(styles.searchBar)}>
         <div className={clsx(styles.form)}>
 
+<div className={clsx(styles.placeContainer)}>
       <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
       </div>
@@ -278,24 +294,28 @@ const SearchResult = () => {
               ))}
             </select>
       </div>
+</div>
       
-          <input
-            className={clsx(styles.jobInput)}
-            type="text"
-            id="search"
-            value={jobInput}
-            onChange={(e) => setJobInput(e.target.value)}
-            placeholder="Enter job title, skill, etc."
-          />
-          <button className={clsx(styles.searchButton)} onClick={handleSearch}>
-            <i className="fa-solid fa-magnifying-glass"></i>
-            Search
-          </button>
+          <div className={clsx(styles.searchBtnContainer)}>
+              <input
+                className={clsx(styles.jobInput)}
+                type="text"
+                id="search"
+                value={jobInput}
+                onChange={(e) => setJobInput(e.target.value)}
+                placeholder={t('search.enterJob')}
+              />
+              <button className={clsx(styles.searchButton)} onClick={handleSearch}>
+                <i className="fa-solid fa-magnifying-glass"></i>
+                <span>{t('search.search')}</span>
+              </button>
+          </div>
+
         </div>
       </form>
 
       <div className={clsx(styles.suggestBar)}>
-        <span className={clsx(styles.suggestTitle)}>Suggested keyword: </span>
+        <span className={clsx(styles.suggestTitle)}>{t('search.suggestedKeyword')}: </span>
           {currentSuggestions.map((suggestion, index) => (
             <button
               key={index}
@@ -344,7 +364,7 @@ const SearchResult = () => {
           <div className={clsx(styles.tabContent)}>
             {activeTab === 'all' && (
               <div className={clsx(styles.jobContainer)}>
-                <p className={clsx(styles.textTitle)}>Việc làm</p>
+                <p className={clsx(styles.textTitleTab)}>Việc làm</p>
                 {results.jobs.length > 0 ? (
                   results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
@@ -397,7 +417,7 @@ const SearchResult = () => {
                   <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
                   )}
 
-                <p className={clsx(styles.textTitle)}>Công ty</p>
+                <p className={clsx(styles.textTitleTab)}>Công ty</p>
                 {results.companies.length > 0 ? (
                   results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
@@ -413,7 +433,7 @@ const SearchResult = () => {
                     <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
                 )}
 
-                <p className={clsx(styles.textTitle)}>Ứng viên</p>
+                <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
                 {results.candidates.length > 0 ? (
                   results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
@@ -432,51 +452,53 @@ const SearchResult = () => {
             )}
             {activeTab === 'jobs' && (
               <div>
-                <p className={clsx(styles.textTitle)}>Việc làm</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.job')}</p>
                 {/* Lọc */}
                 {results.jobs.length > 0 && (
                 <div className={clsx(styles.filterContainer)}>
-                  <p className={clsx(styles.textFilter)}>Ưu tiên hiển thị theo: </p>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="all"
-                      checked={filter === 'all'}
-                      onChange={() => setFilter('all')}
-                    />
-                    Mặc định
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="expirationDate"
-                      checked={filter === 'expirationDate'}
-                      onChange={() => setFilter('expirationDate')}
-                    />
-                    Ngày hết hạn
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="postingDate"
-                      checked={filter === 'postingDate'}
-                      onChange={() => setFilter('postingDate')}
-                    />
-                    Ngày đăng
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="filter"
-                      value="salaryAsc"
-                      checked={filter === 'salaryAsc'}
-                      onChange={() => setFilter('salaryAsc')}
-                    />
-                    Lương thấp đến cao
-                  </label>
+                  <p className={clsx(styles.textFilter)}>{t('appliedJob.display')}: </p>
+                  <div className={clsx(styles.optionFilter)}>
+                    <label>
+                      <input
+                        type="radio"
+                        name="filter"
+                        value="all"
+                        checked={filter === 'all'}
+                        onChange={() => setFilter('all')}
+                      />
+                      Mặc định
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="filter"
+                        value="expirationDate"
+                        checked={filter === 'expirationDate'}
+                        onChange={() => setFilter('expirationDate')}
+                      />
+                      Ngày hết hạn
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="filter"
+                        value="postingDate"
+                        checked={filter === 'postingDate'}
+                        onChange={() => setFilter('postingDate')}
+                      />
+                      Ngày đăng
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="filter"
+                        value="salaryAsc"
+                        checked={filter === 'salaryAsc'}
+                        onChange={() => setFilter('salaryAsc')}
+                      />
+                      Lương thấp đến cao
+                    </label>
+                  </div>
                 </div>
               )}
 
@@ -613,7 +635,7 @@ const SearchResult = () => {
 
             {activeTab === 'companies' && (
               <div>
-                <p className={clsx(styles.textTitle)}>Công ty</p>
+                <p className={clsx(styles.textTitleTab)}>Công ty</p>
                 {results.companies.length > 0 ? (
                   results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
@@ -633,7 +655,7 @@ const SearchResult = () => {
 
             {activeTab === 'candidates' && (
               <div>
-                <p className={clsx(styles.textTitle)}>Ứng viên</p>
+                <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
                   {results.candidates.length > 0 ? (
                   results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
@@ -661,6 +683,7 @@ const SearchResult = () => {
       )}
       <Footer/>
     </div>
+    </>
   );
 };
 

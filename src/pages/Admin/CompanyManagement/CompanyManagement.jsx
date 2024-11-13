@@ -10,7 +10,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const cities = [
-  'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+  'Tất cả TP', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
   'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
   'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
   'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
@@ -220,12 +220,34 @@ const CompanyManagement = () => {
       // const response = await postApiNoneToken('/company/search', searchParams);
       const response = await postApiWithToken('/company/search-by-admin', searchParams);
 
-      console.log("70", searchParams);
-      
+      console.log("70", searchParams);      
       console.log("72", response.data.companies);
+
+      const companies = response.data.companies;
+
+      const companiesWithIsActive = await Promise.all(
+        companies.map(async (company) => {
+          try {
+            const userIsActiveResponse = await getApiWithToken(`/user/${company._id}`);
+            // console.log("userIsActiveResponse",userIsActiveResponse.data.user.isActive);
+            // console.log(company._id);
+            
+            const isActive = userIsActiveResponse.data.user.isActive;
+            setIsActive(isActive);
+            // console.log("isActive", isActive);
+            // console.log(company._id);
+            
+            return { ...company, isActive };  
+          } catch (error) {
+            console.error(`Failed to fetch isActive status for company ${company._id}`, error);
+            return { ...company, isActive: false }; 
+          }
+        })
+      );
   
       if (response.data.success) {
-        setResults(response.data.companies);
+        // setResults(response.data.companies);
+        setResults(companiesWithIsActive);
       } else {
         setResults(null);
       }
@@ -604,10 +626,10 @@ const CompanyManagement = () => {
           </div>
         )} */}
 
+    <div className={clsx(styles.addressSearch)}>
       <div className={clsx(styles.iconPlace)}>
         <i className="fa-solid fa-location-dot"></i>
-      </div>
-      
+      </div>      
       <div className={clsx(styles.selectContainer)}>
         <select
               className={clsx(styles.select)}
@@ -615,7 +637,7 @@ const CompanyManagement = () => {
               // onChange={(e) => setAddressInput(e.target.value)}
               onChange={(e) => {
                 const selectedCity = e.target.value;
-                setAddressInput(selectedCity === "All cities" ? "" : selectedCity);
+                setAddressInput(selectedCity === "Tất cả TP" ? "" : selectedCity);
               }}
             >
               {cities.map((city) => (
@@ -624,10 +646,12 @@ const CompanyManagement = () => {
                 </option>
               ))}
             </select>
+        </div>
       </div>
+      <div className={clsx(styles.inputSearch)}>
         <input
           type="text"
-          placeholder="Enter company"
+          placeholder="Nhập thông tin công ty"
           className={clsx(styles.jobInput)}
           value={companyInput}
           onChange={(e) => setCompanyInput(e.target.value)}
@@ -638,8 +662,10 @@ const CompanyManagement = () => {
           onClick={handleSearch}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
-          <strong className={clsx(styles.s)}>Search</strong>          
+          <strong className={clsx(styles.s)}><span>Tìm kiếm</span></strong>          
         </button>
+      </div>
+
       </div>
     </div>
             {/* searchBar */}
@@ -683,7 +709,7 @@ const CompanyManagement = () => {
         <div className={clsx(styles.companylist)}>
           <div className={clsx(styles.companyContainer)}>
             {/* <h3>All Jobs</h3> */}
-            <strong>Kết quả phù hợp: {results.length}</strong>
+            {/* <strong>Kết quả phù hợp: {results.length}</strong> */}
             {results.length > 0 ? (
               results.map((company) => (
               <div key={company._id} className={clsx(styles.content)}>
@@ -698,6 +724,37 @@ const CompanyManagement = () => {
                         <p>Status: {""+company.status}</p>
                       </div>
                     </div>
+
+                      <div>
+                        <>
+                          {company.status === undefined || company.pendingUpdates !== null
+                            ?<div className={clsx(styles.buttonGroup)}>
+                            <button
+                              // className={clsx(styles.button, { [styles.accepted]: buttonState === 'accepted', [styles.disabled]: buttonState === 'rejected' })}
+                              className={clsx(styles.btnDongY)}
+                              onClick={() => handleStatusUpdate(company._id, true)}
+                              disabled={buttonState === 'accepted'}
+                            >
+                              Accept
+                            </button>
+                            <button
+                              // className={clsx(styles.button, { [styles.rejected]: buttonState === 'rejected', [styles.disabled]: buttonState === 'accepted' })}
+                              className={clsx(styles.btnTuChoi)}                        
+                              onClick={() => handleStatusUpdate(company._id, false)}
+                              disabled={buttonState === 'rejected'}
+                            >
+                              Reject
+                            </button>
+                            <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
+                              {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                            </button>
+                          </div>
+                            :<button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
+                              {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
+                             </button>
+                          }
+                        </>
+                      </div>
                 </div>
                   </Link>
               </div>
@@ -793,7 +850,10 @@ const CompanyManagement = () => {
 
         <div className={clsx(styles.createCompany)}>
           <strong>Danh sách tất cả công ty: {companiesAll.length}</strong>
-          <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany2)}>Thêm công ty</button>
+          <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany2)}>
+            <i class="fa-solid fa-plus"></i>
+            <span>Thêm công ty</span>
+          </button>
         </div>
 
             <div className={clsx(styles.companylist)}>

@@ -254,13 +254,15 @@ const ListJobInfo = () => {
       {/* <p className={clsx(styles.textTitle)}>Việc làm tốt nhất</p> */}
       <p className={clsx(styles.textTitle)}>{t('listJobInfo.bestJob')}</p>
       <div className={clsx(styles.filter)}>
-      <div className={clsx(styles.loc)}>{t('listJobInfo.filter')}</div>
+        <div className={clsx(styles.textLocContainer)}>
+        <div className={clsx(styles.loc)}>{t('listJobInfo.filter')}</div>
         <select className={clsx(styles.locationInput)} value={filterCriteria} onChange={handleFilterChange}>
           <option value="salary">{t('listJobInfo.salary')}</option>
           <option value="type">{t('listJobInfo.type')}</option>
           <option value="expiredAt">{t('listJobInfo.expired')}</option>
           <option value="position">{t('listJobInfo.position')}</option>
         </select>
+        </div>
 
         <div className={clsx(styles.filterOptions)}>
           <button onClick={() => handleFilterValueChange('All')} className={clsx(filterValue === 'All' && styles.active)}>{t('listJobInfo.all')}</button>

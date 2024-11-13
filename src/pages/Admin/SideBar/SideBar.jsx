@@ -146,7 +146,7 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
         onClick={() => setSelectedTab('changePasswordAdmin')}
       >
         <i className="fa-solid fa-unlock"></i>
-        <p className={clsx(styles.text)}>Đổi mật khẩu admin</p>
+        <p className={clsx(styles.text)}>Đổi mật khẩu</p>
       </div>
     </div>
   );

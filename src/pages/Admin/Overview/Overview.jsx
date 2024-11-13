@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Bar, Pie, Line, Doughnut } from 'react-chartjs-2';
+import styles from './overview.module.scss';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,6 +16,7 @@ import {
 import { getAPiNoneToken, getApiWithToken } from '../../../api';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import clsx from 'clsx';
 Chart.register(ChartDataLabels);
 
 // Đăng ký các thành phần cần thiết cho biểu đồ
@@ -313,22 +315,25 @@ const Overview = () => {
       </div> */}
 
       <h3>Thống kê tổng quan</h3>
-      <div style={{maxWidth: '1000px', margin: '0 auto'}}>
+      {/* <div style={{maxWidth: '1000px', margin: '0 auto'}}> */}
+      <div className={clsx(styles.bieuDoCot)}>
         <Bar data={barData} options={options}/>
       </div>
       
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '40px' }}>
-        <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
+      {/* <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '40px' }}> */}
+      <div className={clsx(styles.bieuDo)}>
+        {/* <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}> */}
+        <div className={clsx(styles.bieuDoTron)}>
           <Pie data={companyPieData} options={options} />
           <p>Công ty</p>
         </div>
 
-        <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
+        <div className={clsx(styles.bieuDoTron)}>
           <Pie data={jobPieData} options={options} />
           <p>Công việc</p>
         </div>
 
-        <div style={{ width: '30%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
+        <div className={clsx(styles.bieuDoTron)}>
           <Pie data={candidatePieData} options={options} />
           <p>Ứng viên</p>
         </div>

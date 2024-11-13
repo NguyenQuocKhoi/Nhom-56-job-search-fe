@@ -8,6 +8,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { postApiNoneToken } from '../../api';
 import { useTranslation } from 'react-i18next';
+import usePageTitle from '../../hooks/usePageTitle';
 
 // const cities = [
 //   t('search.allCites'), 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -26,6 +27,8 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 const Jobs = () => {
+  usePageTitle('Danh sách việc làm');
+
   const { t, i18n } = useTranslation();
 
   const cities = [
@@ -118,27 +121,30 @@ const Jobs = () => {
       <main className={clsx(styles.mainContent)}>
           {/* <span>List Jobs</span> */}
           {/* search bar */}
-          <div className={clsx(styles.searchBar)}>
+        <div className={clsx(styles.searchBar)}>
           <div className={clsx(styles.form)}>
 
-          <div className={clsx(styles.iconPlace)}>
-            <i className="fa-solid fa-location-dot"></i>
-          </div>
-          
-          <div className={clsx(styles.selectContainer)}>
-            <select
-                  className={clsx(styles.select)}
-                  value={addressInput}
-                  onChange={(e) => setAddressInput(e.target.value)}
-                >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
+          <div className={clsx(styles.placeContainer)}>
+            <div className={clsx(styles.iconPlace)}>
+              <i className="fa-solid fa-location-dot"></i>
+            </div>
+            
+            <div className={clsx(styles.selectContainer)}>
+              <select
+                    className={clsx(styles.select)}
+                    value={addressInput}
+                    onChange={(e) => setAddressInput(e.target.value)}
+                  >
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+            </div>
           </div>
 
+          <div className={clsx(styles.searchBtnContainer)}>
             <input
               type="text"
               // placeholder="Enter job title"
@@ -153,9 +159,11 @@ const Jobs = () => {
               className={clsx(styles.searchButton)} 
               onClick={handleSearch}
             >
-          <i className="fa-solid fa-magnifying-glass"></i>
-              {t('search.search')}
+              <i className="fa-solid fa-magnifying-glass"></i>
+              <span>{t('search.search')}</span>
             </button>
+          </div>
+
           </div>
         </div>
 

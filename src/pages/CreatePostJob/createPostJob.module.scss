@@ -295,5 +295,37 @@
   right: 10px;
 }
 
+@media (max-width: 768px) {
+  .createPostJobPage{
+    // background: red;
+  }
+  .mainContent{
+    // background: green;
+    width: 100%;
+  }
+  .midAddress{
+    flex-direction: column;
+    margin-top: 0px;
+  }
+  .midLuong{
+    flex-direction: column;
+    // background: red;
+  }
+  .formGroupLuong{
+    width: 100%;
+    margin-bottom: -10px;
+  }
+  .midVitri{
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  .openModalButton{
+    margin-bottom: 15px;
+  }
+  .selectedSkills{
+    margin-top: 10px;
+  }
+}
+
 
   
