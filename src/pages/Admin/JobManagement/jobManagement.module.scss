@@ -161,6 +161,7 @@
           background: rgb(252, 84, 84);
         }
       }
+
       .contentJobcard{
         display: flex;
       }
@@ -364,6 +365,28 @@
   background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
 
   }
+
+  .refreshJob{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin-left: 18px;
+  }
+  .btnRefreshJob {
+    border-radius: 5px;
+    height: 40px;
+    width: 150px;
+    // background: linear-gradient(to right, #00aaff, #0077cc); /* Blue gradient color */
+    background: linear-gradient(90deg, rgba(35,9,121,1) 0%, rgba(0,142,255,1) 100%);
+    border: 1px solid white;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 20px;
+    &:hover{
+      background: blue;
+    }
+  }      
   
   //modal
 .modal {
@@ -451,6 +474,12 @@
     display: none;
   }
   .btnSua span {
+    display: none;
+  }
+  .btnRefreshJob{
+    width: 20%;
+  }
+  .btnRefreshJob span {
     display: none;
   }
   .content{

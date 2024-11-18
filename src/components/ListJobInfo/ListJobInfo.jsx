@@ -323,6 +323,7 @@ const ListJobInfo = () => {
                     <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} 
                       target="_blank" rel="noopener noreferrer"
                     >
+                      {job.pendingUpdates !== null && (<p style={{color: 'white', backgroundColor: 'lightcoral', width: '90%', display: 'flex',justifyContent: 'center', alignItems:'center', borderRadius: '3px'}}><strong>Tạm ngưng</strong></p>)}
                       <p><strong>{job.title}</strong></p>
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (

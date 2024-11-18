@@ -56,6 +56,9 @@ const JobManagement = () => {
 
   const [buttonState, setButtonState] = useState('pending');
 
+  //button refresh jobs
+  const [refresh, setRefresh] = useState(false);
+
   const fetchSkills = async (skillIds) => {
     try {
       const skillRequests = skillIds.map(skillId => getAPiNoneToken(`/skill/${skillId}`));
@@ -132,6 +135,14 @@ const JobManagement = () => {
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  const handleRefreshJob = () => {
+    setRefresh((prev) => !prev);
+  };
+  
+  useEffect(() => {
+    fetchJobs(pagination.currentPage);
+  }, [fetchJobs, pagination.currentPage, refresh]);
 
   // useEffect(() => {
   //   if (jobsPending) {
@@ -602,7 +613,15 @@ const JobManagement = () => {
       <div className={styles.tabContent}>
         {activeTab === 'all' && (
           <div>
+
+        <div className={clsx(styles.refreshJob)}>
             <strong>Danh sách tất cả việc làm: {countAll}</strong>
+            <button onClick={handleRefreshJob} className={clsx(styles.btnRefreshJob)}>
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Làm mới</span>
+            </button>
+        </div>
+
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsAll.length > 0 ? (

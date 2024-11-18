@@ -191,7 +191,7 @@ const JobDetail = () => {
         const result = await getAPiNoneToken(`/job/${jobId}`);
         if (result.data.job) {
           setJob(result.data.job);
-          // console.log("job",result.data.job);
+          // console.log("job pending",result.data.job.pendingUpdates);//
   
           const categoryId = result.data.job.category;
           if (categoryId) {
@@ -225,9 +225,12 @@ const JobDetail = () => {
           const similarJobData = await postApiNoneToken('/job/get-similar', { jobId }, { params: { page: currentPage } });
           // console.log(similarJobData);
 
-          if (similarJobData.data.success && similarJobData.data.matchingJobs) {
+          if (similarJobData.data.success && similarJobData.data.matchingJobs) {          
+            const filteredJobs = similarJobData.data.matchingJobs.filter(job => job.pendingUpdates === null);
+            
             const jobsWithCompanyDetails = await Promise.all(
-              similarJobData.data.matchingJobs.map(async (job) => {
+              // similarJobData.data.matchingJobs.map(async (job) => {
+                filteredJobs.map(async (job) => {
                 const companyResult = await getAPiNoneToken(`/company/${job.companyId}`);
                 return {
                   ...job,
@@ -681,6 +684,29 @@ const JobDetail = () => {
             {(userRole === 'candidate' || !userRole) && (
               <div className={clsx(styles.title)}>
                 <button 
+                  className={clsx(styles.btn, { 
+                    [styles.disabled]: isApplied || job?.pendingUpdates !== null 
+                  })} 
+                  onClick={job?.pendingUpdates === null ? handleApply : undefined} 
+                  disabled={isApplied || job?.pendingUpdates !== null}
+                  style={{ 
+                    backgroundColor: isApplied ? 'gray' : job?.pendingUpdates !== null ? 'lightcoral' : '',
+                    cursor: job?.pendingUpdates !== null ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {isApplied ? (
+                    <strong>{t('apply.applied')}</strong>
+                  ) : job?.pendingUpdates !== null ? (
+                    <strong>Tạm ngưng</strong>
+                  ) : (
+                    <>
+                      <i className="fa-regular fa-paper-plane"></i>
+                      <strong className={clsx(styles.utn)}>{t('apply.applyNow')}</strong>
+                    </>
+                  )}
+                </button>
+
+                {/* <button 
                   className={clsx(styles.btn, { [styles.disabled]: isApplied })} 
                   onClick={handleApply} 
                   disabled={isApplied}
@@ -696,8 +722,7 @@ const JobDetail = () => {
                       </>
                     )
                   }
-                  {/* <strong>{isApplied ? 'Đã ứng tuyển' : 'Ứng tuyển ngay'}</strong> */}
-                </button>
+                </button> */}
                 <button 
                   className={clsx(styles.btnSave)}
                   onClick={handleSaveJob}>

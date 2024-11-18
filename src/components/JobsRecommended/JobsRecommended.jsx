@@ -34,9 +34,12 @@ const JobsRecommended = ({ candidateId }) => {
       setJobs(fetchedJobs);
       // console.log(fetchedJobs);
 
+      const filteredJobs = fetchedJobs.filter((job) => job.pendingUpdates === null);
+
       //lấy chi tiết company theo job
       const jobsWithCompany = await Promise.all(
-        fetchedJobs.map(async (job) => {
+        // fetchedJobs.map(async (job) => {
+          filteredJobs.map(async (job) => {
           if (job.companyId) {
             const companyResult = await getAPiNoneToken(`/company/${job.companyId}`);
             // console.log(companyResult);
