@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Loading/Loading';
 
 const cities = [
   // 'All cities', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -137,7 +138,9 @@ const JobManagement = () => {
   }, [fetchJobs]);
 
   const handleRefreshJob = () => {
+    setLoading(true);
     setRefresh((prev) => !prev);
+    setLoading(false);
   };
   
   useEffect(() => {
@@ -327,10 +330,12 @@ const JobManagement = () => {
     setFilteredCities(cities.filter(city => city.toLowerCase().includes(query)));
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
+    <>
+    {loading ? <Loading /> : null}
     <div className={styles.jobManagement}>
       <h2>Quản lí việc làm</h2>
 
@@ -656,7 +661,7 @@ const JobManagement = () => {
                               ))}
                             </div>
                           ) : (
-                            <span>No skills</span>
+                            <span>Không có kỹ năng</span>
                           )}
                         </div>
                       </div>
@@ -668,7 +673,7 @@ const JobManagement = () => {
             ):null
                   ))
                 ) : (
-                  <div>No jobs available</div>
+                  <div>Không có công việc</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -710,7 +715,7 @@ const JobManagement = () => {
                                 ))}
                               </div>
                             ) : (
-                              <span>No skills</span>
+                              <span>Không có kỹ năng</span>
                             )}
                           </div>
                         </div>                          
@@ -721,7 +726,7 @@ const JobManagement = () => {
             ):null
                   ))
                 ) : (
-                  <div>No jobs available</div>
+                  <div>Không có công việc</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -762,7 +767,7 @@ const JobManagement = () => {
                       ))}
                     </div>
                   ) : (
-                    <span>No skills</span>
+                    <span>Không có kỹ năng</span>
                   )}
                 </div>
               </div>                          
@@ -773,7 +778,7 @@ const JobManagement = () => {
             ):null
                   ))
                 ) : (
-                  <div>No jobs available</div>
+                  <div>Không có công việc</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -820,7 +825,7 @@ const JobManagement = () => {
                       ))}
                     </div>
                   ) : (
-                    <span>No skills</span>
+                    <span>Không có kỹ năng</span>
                   )}
                 </div>
               </div>                          
@@ -847,7 +852,7 @@ const JobManagement = () => {
             ):null
                   ))
                 ) : (
-                  <div>No jobs available</div>
+                  <div>Không có công việc</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -864,6 +869,7 @@ const JobManagement = () => {
         )}
       </div>
     </div>
+  </>
   );
 };
 

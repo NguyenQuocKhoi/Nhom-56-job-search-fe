@@ -111,7 +111,7 @@ const SavedJobs = () => {
                       <p><strong>{jobDetails[job.job._id]?.title || 'Loading...'}</strong></p>
                       <p>{jobDetails[job.job._id]?.company.name}</p>
                       <p>{jobDetails[job.job._id]?.street}, {jobDetails[job.job._id]?.city}</p>
-                      <p>Saved at: {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
+                      <p>{t('savedJob.saveAt')}: {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
                     </div>
                 </Link>
                   </div>

@@ -49,7 +49,8 @@
       "dev": "Lập trình viên",
       "page": "trang",
       "noJob":"Không có công việc để hiển thị",
-      "relatedJobs":"Việc làm liên quan"
+      "relatedJobs":"Việc làm liên quan",
+      "category": "Lĩnh vực"
     },
     "listCompany":{
       "topCompany": "Top công ty hàng đầu"
@@ -57,14 +58,20 @@
     "savedJob":{
       "savedJob": "Danh sách công việc đã lưu",
       "notSaved": "Bạn chưa lưu công việc nào",
-      "clickHere": "Nhấn vào đây để khám phá nhiều công việc hấp dẫn"
+      "clickHere": "Nhấn vào đây để khám phá nhiều công việc hấp dẫn",
+      "saveAt": "Ngày lưu"
     },
     "appliedJob":{
       "appliedJob": "Danh sách công việc đã ứng tuyển",
       "display": "Ưu tiên hiển thị theo",
       "lastest": "Mới nhất",
       "oldest": "Cũ nhất",
-      "notApplied": "Bạn chưa ứng tuyển công việc nào"
+      "notApplied": "Bạn chưa ứng tuyển công việc nào",
+      "status": "Trạng thái",
+      "statusAccept": "Đã được đồng ý",
+      "statusReject": "Đã bị từ chối",
+      "statusPending": "Đang chờ phê duyệt",
+      "dateOfApply": "Ngày nộp"
     },
     "footer":{
       "contactUs": "Liên hệ với chúng tôi",
@@ -231,6 +238,22 @@
       "saveCandidate":"Lưu ứng viên",
       "unsave":"Bỏ lưu",
       "noSkillAdded":"Chưa cập nhật kỹ năng"
+    },
+    "detailJob":{
+      "expired":"Hạn nộp hồ sơ",
+      "salary":"Lương",
+      "position":"Vị trí làm việc",
+      "describe":"Mô tả",
+      "interest":"Phúc lợi",
+      "requirement":"Yêu cầu",
+      "postAt":"Ngày đăng",
+      "address":"Địa chỉ",
+      "type":"Hình thức làm việc",
+      "numberOfCruiment":"Số lượng tuyển",
+      "ex":"Kinh nghiệm",
+      "category":"Lĩnh vực",
+      "skill":"Yêu cầu kỹ năng",
+      "suspend": "Tạm ngưng"
     }
   }
   

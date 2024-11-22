@@ -672,11 +672,21 @@ const JobDetail = () => {
                     'lightgray'
                 }}
               >
-                Trạng thái: {applicationStatus}
+                {t('appliedJob.status')}: 
+                {/* {applicationStatus} */}
                 
-                {applicationStatus === 'accepted' && <i className="fa-solid fa-check"></i>}
-                {applicationStatus === 'rejected' && <i className="fa-solid fa-x"></i>}
-                {applicationStatus === 'pending' && <i className="fa-regular fa-clock"></i>}
+                {applicationStatus === 'accepted' 
+                  // && <i className="fa-solid fa-check"></i>
+                  && <span> {t('appliedJob.statusAccept')}</span>
+                }
+                {applicationStatus === 'rejected' 
+                  // && <i className="fa-solid fa-x"></i>
+                  && <span> {t('appliedJob.statusReject')}</span>
+                }
+                {applicationStatus === 'pending'
+                  // && <i className="fa-regular fa-clock"></i>
+                  && <span> {t('appliedJob.statusPending')}</span>
+                }
               </p>
               }
             </div>
@@ -697,7 +707,7 @@ const JobDetail = () => {
                   {isApplied ? (
                     <strong>{t('apply.applied')}</strong>
                   ) : job?.pendingUpdates !== null ? (
-                    <strong>Tạm ngưng</strong>
+                    <strong>{t('detailJob.suspend')}</strong>
                   ) : (
                     <>
                       <i className="fa-regular fa-paper-plane"></i>
@@ -733,30 +743,30 @@ const JobDetail = () => {
               </div>
             )}
             <div className={clsx(styles.ngang)}>
-              <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
-              <p><strong>Lương:</strong> {job?.salary}</p>
-              <p><strong>Vị trí làm việc:</strong> {job?.position}</p>
+              <p><strong>{t('detailJob.expired')}:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
+              <p><strong>{t('detailJob.salary')}:</strong> {job?.salary}</p>
+              <p><strong>{t('detailJob.position')}:</strong> {job?.position}</p>
             </div>
           </div>
         
           <div className={clsx(styles.thongtinchinh)}>
             {/* <p><strong>Phúc lợi:</strong> {job.interest}</p> */}
-            <p><strong>Mô tả:</strong></p>
+            <p><strong>{t('detailJob.describe')}:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: job?.description }}
               ></div>
-            <p><strong>Phúc lợi:</strong></p>
+            <p><strong>{t('detailJob.interest')}:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: job?.interest }}
               ></div>
-            <p><strong>Yêu cầu:</strong></p>
+            <p><strong>{t('detailJob.requirement')}:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: job?.requirements }}
               ></div>
             {/* <p><strong>Yêu cầu:</strong> {job.requirements}</p> */}
 
-            <p><strong>Ngày đăng:</strong> {new Date(job?.createdAt).toLocaleDateString("vi-VN")}</p>
-            <p><strong>Hạn nộp hồ sơ:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
+            <p><strong>{t('detailJob.postAt')}:</strong> {new Date(job?.createdAt).toLocaleDateString("vi-VN")}</p>
+            <p><strong>{t('detailJob.expired')}:</strong> {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
           </div>
 
       </div>
@@ -772,24 +782,24 @@ const JobDetail = () => {
               <strong>{job?.company?.name}</strong>
             </p>
           </div>
-            <p><strong>Địa chỉ:</strong> {job?.street}, {job?.city} </p>
+            <p><strong>{t('detailJob.address')}:</strong> {job?.street}, {job?.city} </p>
         </div>
 
         <div className={clsx(styles.thongtinchung)}>
-          <p><strong>Hình thức làm việc:</strong> {job?.type}</p>
-          <p><strong>Số lượng tuyển:</strong> {job?.numberOfCruiment}</p>
-          <p><strong>Kinh nghiệm:</strong> {job?.experienceLevel}</p>
+          <p><strong>{t('detailJob.type')}:</strong> {job?.type}</p>
+          <p><strong>{t('detailJob.numberOfCruiment')}:</strong> {job?.numberOfCruiment}</p>
+          <p><strong>{t('detailJob.ex')}:</strong> {job?.experienceLevel}</p>
         </div>
 
         <div className={clsx(styles.them)}>
-          <p><strong>Lĩnh vực: </strong>
+          <p><strong>{t('detailJob.category')}: </strong>
           <Link onClick={handleNavigateToJobByCategory} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
             {categoryName}
           </Link>
           </p>
 
           <div>
-            <strong>Yêu cầu kỹ năng: </strong>
+            <strong>{t('detailJob.skill')}: </strong>
             {skills.length > 0 ? (
               <ul>
                 {skills.map((skill, index) => (
@@ -797,7 +807,7 @@ const JobDetail = () => {
                 ))}
               </ul>
             ) : (
-              <span>No skill</span>
+              <span>{t('detailCandidate.noSkillAdded')}</span>
             )}
           </div>
         </div>
@@ -822,9 +832,9 @@ const JobDetail = () => {
                     <Link to={`/detailJob/${job.jobId}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkJob)}>
                       <div className={clsx(styles.describe)}>
                         <p><strong>Job Title: {job?.title || 'Loading...'}</strong></p>
-                        <p>Company: {job?.company?.name || 'Unknown Company'}</p>
-                        <p>Address: {job?.street}, {job?.city}</p>
-                        <p>Posted on: {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
+                        <p>{job?.company?.name || 'Unknown Company'}</p>
+                        <p>{job?.street}, {job?.city}</p>
+                        <p>{t('detailJob.postAt')}: {new Date(job?.expiredAt).toLocaleDateString("vi-VN")}</p>
                       </div>
                     </Link>
                   </div>
@@ -837,7 +847,7 @@ const JobDetail = () => {
                 <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
                   <i className="fa-solid fa-angle-left"></i>                              
                 </button>
-                <span> {currentPage} / {totalPages} trang </span>
+                <span> {currentPage} / {totalPages} {t('detailCompany.page')} </span>
                 <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
                   <i className="fa-solid fa-angle-right"></i>                              
                 </button>

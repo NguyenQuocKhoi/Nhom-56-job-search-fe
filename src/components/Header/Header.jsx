@@ -303,7 +303,7 @@ const Header = () => {
                                 ? `${notification.message.substring(0, 60)}...` 
                                 : notification.message}
                             </p>
-                            <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+                            <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
                           </div>
                           {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
                         </div>
@@ -324,7 +324,7 @@ const Header = () => {
                   </Modal.Header>
                   <Modal.Body>
                     <p>{selectedNotification.message}</p>
-                    <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+                    <p>{new Date(selectedNotification.createdAt).toLocaleString('vi-VN')}</p>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="danger" onClick={handleCloseModal}>
@@ -383,7 +383,7 @@ const Header = () => {
                                     ? `${notification.message.substring(0, 60)}...` 
                                     : notification.message}
                                 </p>
-                                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+                                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
                               </div>
                               {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
                             </div>
@@ -402,7 +402,7 @@ const Header = () => {
                       </Modal.Header>
                       <Modal.Body>
                         <p>{selectedNotification.message}</p>
-                        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+                        <p>{new Date(selectedNotification.createdAt).toLocaleString('vi-VN')}</p>
                       </Modal.Body>
                       <Modal.Footer>
                         <Button variant="danger" onClick={handleCloseModal}>
@@ -469,7 +469,7 @@ const Header = () => {
                     ? `${notification.message.substring(0, 60)}...` 
                     : notification.message}
                 </p>
-                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
               </div>
               {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
             </div>
@@ -490,7 +490,7 @@ const Header = () => {
       </Modal.Header>
       <Modal.Body>
         <p>{selectedNotification.message}</p>
-        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+        <p>{new Date(selectedNotification.createdAt).toLocaleString('vi-VN')}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="danger" onClick={handleCloseModal}>
@@ -556,7 +556,7 @@ const Header = () => {
                                     ? `${notification.message.substring(0, 60)}...` 
                                     : notification.message}
                                 </p>
-                                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString()}</span>
+                                <span className={clsx(styles.notificationTime)}>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
                               </div>
                               {!notification.status && <span className={clsx(styles.unreadDot)}></span>}
                             </div>
@@ -575,7 +575,7 @@ const Header = () => {
                       </Modal.Header>
                       <Modal.Body>
                         <p>{selectedNotification.message}</p>
-                        <p>{new Date(selectedNotification.createdAt).toLocaleString()}</p>
+                        <p>{new Date(selectedNotification.createdAt).toLocaleString('vi-VN')}</p>
                       </Modal.Body>
                       <Modal.Footer>
                         <Button variant="danger" onClick={handleCloseModal}>

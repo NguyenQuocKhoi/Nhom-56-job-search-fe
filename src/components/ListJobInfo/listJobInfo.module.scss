@@ -122,6 +122,31 @@
     }
   }
 
+  .categoryFilter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .categoryFilter button {
+    padding: 8px 16px;
+    // border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .categoryFilter button:hover {
+    background-color: #eaeaea;
+  }
+  
+  .categoryFilter button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }  
+
   .pagination {
     display: flex;
     justify-content: center;

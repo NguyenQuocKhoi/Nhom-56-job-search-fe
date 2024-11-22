@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../CompanyManagement/companyManagement.module.scss';
-import { getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { Button, Form, Modal } from 'react-bootstrap';
@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import logo from '../../../images/logo.png';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Loading from '../../../components/Loading/Loading';
 
 const cities = [
   'Tất cả TP', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -69,6 +70,9 @@ const CompanyManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  //button refresh companies
+  const [refresh, setRefresh] = useState(false);
+
   const fetchCompanies = useCallback(async (page = 1) => {
     try {
       setLoading(true);
@@ -120,6 +124,16 @@ const CompanyManagement = () => {
   useEffect(() => {
     fetchCompanies();
   }, [fetchCompanies]);
+
+  const handleRefreshCompany = () => {
+    setLoading(true);
+    setRefresh((prev) => !prev);
+    setLoading(false);
+  };
+  
+  useEffect(() => {
+    fetchCompanies(pagination.currentPage);
+  }, [fetchCompanies, pagination.currentPage, refresh]);
 
   // useEffect(() => {
   //   if (companiesPending) {
@@ -205,6 +219,53 @@ const CompanyManagement = () => {
         title: 'Error',
         text: 'An error occurred while updating the user status.',
       });
+    }
+  };
+
+  const handleDeleteCompany = async (companyId) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa công ty này?',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      });
+  
+      if (result.isConfirmed) {
+        const response = await deleteApiWithToken(`/company/delete/${companyId}`);
+        
+        if (response.data.success) {
+          setCompaniesAll(prev => prev.filter(company => company._id !== companyId));
+          setCompaniesAccepted(prev => prev.filter(company => company._id !== companyId));
+          setCompaniesRejected(prev => prev.filter(company => company._id !== companyId));
+          setCompaniesPending(prev => prev.filter(company => company._id !== companyId));
+
+          Swal.fire(
+            'Đã xóa!',
+            'Bài đăng đã được xóa thành công.',
+            'success'
+          );
+          // Re-fetch the jobs or update the state to remove the deleted job
+          fetchCompanies(pagination.currentPage);
+        } else {
+          Swal.fire(
+            'Lỗi!',
+            response.data.message,
+            'error'
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Failed to delete job:', error);
+      Swal.fire(
+        'Lỗi!',
+        'Đã xảy ra lỗi khi xóa bài đăng.',
+        'error'
+      );
     }
   };
 
@@ -396,8 +457,8 @@ const CompanyManagement = () => {
     // });
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
   
   // name: '',
   //     password: '',
@@ -571,6 +632,7 @@ const CompanyManagement = () => {
       </div>
     </Modal>
 
+    {loading ? <Loading /> : null}
     <div className={styles.companyManagement}>
       <h2>Quản lí công ty</h2> 
       
@@ -850,10 +912,16 @@ const CompanyManagement = () => {
 
         <div className={clsx(styles.createCompany)}>
           <strong>Danh sách tất cả công ty: {companiesAll.length}</strong>
-          <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany2)}>
-            <i class="fa-solid fa-plus"></i>
-            <span>Thêm công ty</span>
-          </button>
+          <div>
+            <button onClick={handleRefreshCompany} className={clsx(styles.btnRefreshJob)}>
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Làm mới</span>
+            </button>
+            <button onClick={handleOpenModal} className={clsx(styles.btnAddCompany2)}>
+              <i class="fa-solid fa-plus"></i>
+              <span>Thêm công ty</span>
+            </button>
+          </div>
         </div>
 
             <div className={clsx(styles.companylist)}>
@@ -887,12 +955,13 @@ const CompanyManagement = () => {
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
+                          <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteCompany(company._id)}>Xóa</button>
                       </div>
                     </div>
                       
                   ))
                 ) : (
-                  <div>No companies available</div>
+                  <div>Không có công ty nào để hiển thị.</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -941,11 +1010,12 @@ const CompanyManagement = () => {
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
+                          <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteCompany(company._id)}>Xóa</button>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div>No companies available</div>
+                  <div>Không có công ty nào để hiển thị.</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -993,11 +1063,12 @@ const CompanyManagement = () => {
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
+                          <button className={clsx(styles.btnXoa)} onClick={() => handleDeleteCompany(company._id)}>Xóa</button>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div>No companies available</div>
+                  <div>Không có công ty nào để hiển thị.</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>
@@ -1061,12 +1132,13 @@ const CompanyManagement = () => {
                           <button onClick={() => handleDisableCompany(company._id, company.isActive)} className={clsx(styles.btnVoHieuHoa)}>
                             {company.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'}
                           </button>
+                          <button className={clsx(styles.btnXoaCompanyPending)} onClick={() => handleDeleteCompany(company._id)}>Xóa</button>
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div>No companies available</div>
+                  <div>Không có công ty nào để hiển thị.</div>
                 )}
               </div>
               <div className={clsx(styles.pagination)}>

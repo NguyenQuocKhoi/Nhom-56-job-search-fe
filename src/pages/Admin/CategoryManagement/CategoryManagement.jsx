@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from '../CategoryManagement/categoryManagement.module.scss';
-import { getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
+import { getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken, putApiWithToken } from '../../../api';
 import clsx from 'clsx';
 // import { Button, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Loading from '../../../components/Loading/Loading';
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -31,7 +32,7 @@ const CategoryManagement = () => {
   const fetchCategories = useCallback(async (page = 1) => {
     try {
       setLoading(true);
-      const result = await getApiWithToken(`/category/get-all?page=${page}&limit=${pagination.limit}`);
+      const result = await getAPiNoneToken(`/category/get-all?page=${page}&limit=${pagination.limit}`);
       setCategories(result.data.categories);
       setPagination((prev) => ({
         ...prev,
@@ -165,8 +166,8 @@ const CategoryManagement = () => {
     fetchJobsByCategory(categoryName);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -204,6 +205,7 @@ const CategoryManagement = () => {
     </Modal>
 
     {/* <div className={clsx(styles.content)}> */}
+    {loading ? <Loading /> : null}
     <div>
       <h2>Quản lí danh mục công việc</h2>
 

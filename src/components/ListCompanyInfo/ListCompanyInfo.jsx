@@ -45,7 +45,7 @@ const ListCompanyInfo = () => {
   };
 
   // if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <div className={clsx(styles.companylist)}>
@@ -61,7 +61,7 @@ const ListCompanyInfo = () => {
             </Link>
           ))
         ) : (
-          <div>No companies available</div>
+          <div>Không có công ty để hiển thị</div>
         )}
       </div>
       <div className={clsx(styles.pagination)}>

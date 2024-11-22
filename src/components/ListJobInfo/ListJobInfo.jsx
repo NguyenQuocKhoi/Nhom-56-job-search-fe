@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiWithToken } from '../../api';
+import { deleteApiWithToken, getAPiNoneToken, getApiWithToken, postApiNoneToken, postApiWithToken } from '../../api';
 import styles from './listJobInfo.module.scss';
 import clsx from 'clsx';
 import { Link, useNavigate } from 'react-router-dom';
@@ -33,6 +33,20 @@ const ListJobInfo = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState('salary');
   const [filterValue, setFilterValue] = useState('All');
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAPiNoneToken('/category/get-all');
+        setCategories(response.data.categories); // Lưu danh sách category vào state
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
 
   const fetchJobs = useCallback(async (page = 1) => {
     window.scrollTo(0, 0);
@@ -144,7 +158,7 @@ const ListJobInfo = () => {
   //   applyFilters(); // Gọi applyFilters để làm mới danh sách công việc đã lọc
   // };  
 
-  const applyFilters = useCallback(() => {
+  const applyFilters = useCallback(async () => {
     let filtered = [...jobs];
 
     const parseSalary = (salary) => {
@@ -157,7 +171,36 @@ const ListJobInfo = () => {
       return salaryValue || 0; // Return 0 if parsing fails
     };
 
-    if (filterValue !== 'All') {
+    if (filterCriteria === 'category') {
+      try {
+        if (filterValue.toLowerCase() === 'all') {          
+          filtered = jobs.filter(job => job.status === true);
+        } else {
+          const response = await postApiNoneToken('/category/get-job', { categoryName: filterValue });
+          const fetchedJobs = response.data.jobs.filter(job => job.status === true);
+          // console.log("filtered category",filtered.map(job => job.requirementSkills));//////////
+          const jobsWithSkills = await Promise.all(
+            fetchedJobs.map(async (job) => {
+              const skillPromises = job.requirementSkills.map(async (skillId) => {
+                const skillResult = await getAPiNoneToken(`/skill/${skillId}`);
+                return skillResult.data.skill.skillName;
+              });
+  
+              const skills = await Promise.all(skillPromises);
+              return { ...job, skills }; // Thêm skills vào từng công việc
+            })
+          );
+  
+          filtered = jobsWithSkills;
+          // if (!filtered.length) {
+          //   filtered = [];
+          // }
+        }
+      } catch (error) {
+        filtered = [];
+        console.error('Error fetching jobs by category:', error);
+      }
+    } else if (filterValue !== 'All') {
       filtered = filtered.filter(job => {
         const jobSalaryValue = parseSalary(job.salary);
 
@@ -189,17 +232,19 @@ const ListJobInfo = () => {
         }
         if (filterCriteria === 'type') return job.type === filterValue;
         
-        if (filterCriteria === 'position') {
-          const normalizedJobPosition = job.position.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
-          const normalizedFilterValue = filterValue.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
-          return normalizedJobPosition === normalizedFilterValue; // So sánh
-        }  
+        // if (filterCriteria === 'position') {
+        //   const normalizedJobPosition = job.position.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
+        //   const normalizedFilterValue = filterValue.toLowerCase().replace(/\s+/g, ''); // Xóa khoảng trắng
+        //   return normalizedJobPosition === normalizedFilterValue; // So sánh
+        // }  
         
         return true;
       });
     }
 
     setFilteredJobs(filtered);
+    // console.log("all",filtered);
+    
   }, [jobs, filterCriteria, filterValue]);
 
   useEffect(() => {
@@ -260,7 +305,8 @@ const ListJobInfo = () => {
           <option value="salary">{t('listJobInfo.salary')}</option>
           <option value="type">{t('listJobInfo.type')}</option>
           <option value="expiredAt">{t('listJobInfo.expired')}</option>
-          <option value="position">{t('listJobInfo.position')}</option>
+          {/* <option value="position">{t('listJobInfo.position')}</option> */}
+          <option value="category">{t('listJobInfo.category')}</option>
         </select>
         </div>
 
@@ -270,8 +316,11 @@ const ListJobInfo = () => {
             <>
               {/* <button onClick={() => handleFilterValueChange('1000 - 2000$')} className={clsx(filterValue === '1000 - 2000$' && styles.active)}>1000 - 2000$</button> */}
               {/* <button onClick={() => handleFilterValueChange('2000 - 3000$')} className={clsx(filterValue === '2000 - 3000$' && styles.active)}>2000 - 3000$</button> */}
+              <button onClick={() => handleFilterValueChange('1-9 triệu')} className={clsx(filterValue === '1-9 triệu' && styles.active)}>1-9 triệu</button>
               <button onClick={() => handleFilterValueChange('10-15 triệu')} className={clsx(filterValue === '10-15 triệu' && styles.active)}>10-15 triệu</button>
-              <button onClick={() => handleFilterValueChange('15-25 triệu')} className={clsx(filterValue === '15-25 triệu' && styles.active)}>15-25 triệu</button>
+              <button onClick={() => handleFilterValueChange('16-25 triệu')} className={clsx(filterValue === '16-25 triệu' && styles.active)}>16-25 triệu</button>
+              <button onClick={() => handleFilterValueChange('26-35 triệu')} className={clsx(filterValue === '26-35 triệu' && styles.active)}>26-35 triệu</button>
+              <button onClick={() => handleFilterValueChange('36-45 triệu')} className={clsx(filterValue === '36-45 triệu' && styles.active)}>36-45 triệu</button>
               {/* <button onClick={() => handleFilterValueChange('trên 50 triệu')} className={clsx(filterValue === 'trên 50 triệu' && styles.active)}>trên 50 triệu</button> */}
               <button 
                 onClick={() => handleFilterValueChange('Thỏa thuận')} 
@@ -296,13 +345,27 @@ const ListJobInfo = () => {
               <button onClick={() => handleFilterValueChange('intern')} className={clsx(filterValue === 'intern' && styles.active)}>{t('listJobInfo.intern')}</button>
             </>
           )}
-          {filterCriteria === 'position' && (
+          {/* {filterCriteria === 'position' && (
             <>
               <button onClick={() => handleFilterValueChange('Fullstack developer')} className={clsx(filterValue === 'Fullstack developer' && styles.active)}>Fullstack developer</button>
               <button onClick={() => handleFilterValueChange('Senior Developer')} className={clsx(filterValue === 'Senior Developer' && styles.active)}>Senior Developer</button>
               <button onClick={() => handleFilterValueChange('lập trình viên')} className={clsx(filterValue === 'lập trình viên' && styles.active)}>{t('listJobInfo.dev')}</button>
             </>
+          )} */}
+          {filterCriteria === 'category' && (
+            <div className={styles.categoryFilter}>
+              {categories.map((category) => (
+                <button
+                  key={category._id}
+                  onClick={() => handleFilterValueChange(category.name)}
+                  className={clsx(filterValue === category.name && styles.active)}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
           )}
+
         </div>
       </div>
 
@@ -323,7 +386,7 @@ const ListJobInfo = () => {
                     <Link to={`/detailJob/${job._id}`} className={clsx(styles.linkJob)} 
                       target="_blank" rel="noopener noreferrer"
                     >
-                      {job.pendingUpdates !== null && (<p style={{color: 'white', backgroundColor: 'lightcoral', width: '90%', display: 'flex',justifyContent: 'center', alignItems:'center', borderRadius: '3px'}}><strong>Tạm ngưng</strong></p>)}
+                      {job.pendingUpdates !== null && (<p style={{color: 'white', backgroundColor: 'lightcoral', width: '90%', display: 'flex',justifyContent: 'center', alignItems:'center', borderRadius: '3px'}}><strong>{t('detailJob.suspend')}</strong></p>)}
                       <p><strong>{job.title}</strong></p>
                     </Link>
                     {(userRole === 'candidate' || !userRole) && (

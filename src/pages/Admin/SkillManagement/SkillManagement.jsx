@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Swal from 'sweetalert2';
 import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Loading from '../../../components/Loading/Loading';
 
 const SkillManagement = () => {
   const [skills, setSkills] = useState([]);
@@ -189,8 +190,8 @@ const SkillManagement = () => {
     fetchCandidatesAndJobsBySkill(skillName);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -253,6 +254,7 @@ const SkillManagement = () => {
     </Modal>
 
     <div>
+    {loading ? <Loading /> : null}
       <h2>Quản lí kỹ năng</h2>
 
       <form className={clsx(styles.searchBar)}>

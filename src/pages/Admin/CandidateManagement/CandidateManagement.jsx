@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import logo from '../../../images/logo.png';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Loading from '../../../components/Loading/Loading';
 
 const cities = [
   'Tất cả TP', 'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
@@ -69,6 +70,8 @@ const CandidateManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [skillsData, setSkillsData] = useState([]);
 
+  //button refresh candidates
+  const [refresh, setRefresh] = useState(false);
 
   const fetchCandidates = useCallback(async (page = 1) => {
     try {
@@ -121,6 +124,17 @@ const CandidateManagement = () => {
   useEffect(() => {
     fetchCandidates();
   }, [fetchCandidates]);
+
+  const handleRefreshCandidate = () => {
+    setLoading(true);
+    setRefresh((prev) => !prev);
+    setLoading(false);
+  };
+  
+  useEffect(() => {
+    fetchCandidates(pagination.currentPage);
+  }, [fetchCandidates, pagination.currentPage, refresh]);
+
 
   const handlePageChange = (newPage) => {
     fetchCandidates(newPage);
@@ -355,8 +369,8 @@ const CandidateManagement = () => {
     setIsModalOpen(false);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -694,6 +708,7 @@ const CandidateManagement = () => {
       </div>
     </Modal>
 
+    {loading ? <Loading /> : null}
     <div className={clsx(styles.candidateManagement)}>
       <h2>Quản lí ứng viên</h2>
       
@@ -840,10 +855,16 @@ const CandidateManagement = () => {
       {/* content */}
     <div className={clsx(styles.createCandidate)}>
       <strong>Tổng số lượng ứng viên: {candidates.length}</strong>
+      <div>
+      <button onClick={handleRefreshCandidate} className={clsx(styles.btnRefreshJob)}>
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span>Làm mới</span>
+      </button>
       <button onClick={handleOpenModal} className={clsx(styles.btnAddCandidate2)}>
         <i class="fa-solid fa-plus"></i>
         <span>Thêm ứng viên</span>
       </button>
+      </div>
     </div>
 
       <div className={clsx(styles.candidatelist)}>

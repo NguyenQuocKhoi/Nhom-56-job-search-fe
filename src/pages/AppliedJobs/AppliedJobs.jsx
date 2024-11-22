@@ -174,7 +174,7 @@ const AppliedJobs = () => {
                     <p><strong>{job ? job.title : "Loading..."}</strong></p>
                     <p>{job ? job.company.name : "Loading..."}</p>
                     <p>{job ? job.street : "Loading..."}, {job ? job.city : "Loading..."}</p>
-                    <p>Ngày nộp: {new Date(application.submittedAt).toLocaleDateString('vi-VN')}</p>                    
+                    <p>{t('appliedJob.dateOfApply')}: {new Date(application.submittedAt).toLocaleDateString('vi-VN')}</p>                    
                     <p 
                       style={{ 
                         backgroundColor: 
@@ -183,11 +183,21 @@ const AppliedJobs = () => {
                           'lightgray'
                       }}
                     >
-                      Trạng thái: {application.status}
+                      {t('appliedJob.status')}: 
+                      {/* {application.status} */}
                       
-                      {application.status === 'accepted' && <i className="fa-solid fa-check"></i>}
-                      {application.status === 'rejected' && <i className="fa-solid fa-x"></i>}
-                      {application.status === 'pending' && <i className="fa-regular fa-clock"></i>}
+                      {application.status === 'accepted' 
+                        // && <i className="fa-solid fa-check"></i>
+                        && <span> {t('appliedJob.statusAccept')}</span>
+                      }
+                      {application.status === 'rejected' 
+                        // && <i className="fa-solid fa-x"></i>
+                        && <span> {t('appliedJob.statusReject')}</span>
+                      }
+                      {application.status === 'pending' 
+                        // && <i className="fa-regular fa-clock"></i>
+                        && <span> {t('appliedJob.statusPending')}</span>
+                      }
                     </p>
                   </div>
 

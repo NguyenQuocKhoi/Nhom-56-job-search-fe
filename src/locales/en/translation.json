@@ -49,7 +49,8 @@
       "dev": "Developer",
       "page": "page",
       "noJob": "No Job",
-      "relatedJobs":"Related jobs"
+      "relatedJobs":"Related jobs",
+      "category": "Category"
     },
     "listCompany":{
       "topCompany": "Top companies"
@@ -57,14 +58,20 @@
     "savedJob":{
       "savedJob": "Saved Job List",
       "notSaved": "You have not saved any work.",
-      "clickHere": "Click here to explore more exciting jobs"
+      "clickHere": "Click here to explore more exciting jobs",
+      "saveAt": "Save at"
     },
     "appliedJob":{
       "appliedJob": "Applied Job list",
       "display": "Display priority by",
       "lastest": "Lastest",
       "oldest": "Oldest",
-      "notApplied": "You have not applied for any jobs yet."
+      "notApplied": "You have not applied for any jobs yet.",
+      "status": "Status",
+      "statusAccept": "Accepted",
+      "statusReject": "Rejected",
+      "statusPending": "Pending",
+      "dateOfApply": "Date of application"
     },
     "footer":{
       "contactUs": "Contact us",
@@ -231,6 +238,22 @@
       "saveCandidate":"Save Candidate",
       "unsave":"Unsave",
       "noSkillAdded":"No skills added"
+    },
+    "detailJob":{
+      "expired":"Expire on",
+      "salary":"Salary",
+      "position":"Position",
+      "describe":"Description",
+      "interest":"Interest",
+      "requirement":"Requirement",
+      "postAt":"Posted date",
+      "address":"Address",
+      "type":"Type",
+      "numberOfCruiment":"Number of cruiment",
+      "ex":"Experience",
+      "category":"Category",
+      "skill":"Skill",
+      "suspend": "Suspend"
     }
   }
   
