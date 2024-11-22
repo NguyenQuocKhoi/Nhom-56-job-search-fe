@@ -402,9 +402,9 @@ const ListJobInfo = () => {
                       target="_blank" rel="noopener noreferrer"//
                     >
                     <div className={clsx(styles.describe)}>
-                      <p>Company: {job.company.name}</p>
-                      <p>Address: {job.street}, {job.city}</p>
-                      <p>Salary: {job.salary}</p>
+                      <p>{job.company.name}</p>
+                      <p>{t('detailJob.address')}: {job.street}, {job.city}</p>
+                      <p>{t('listJobInfo.salary')}: {job.salary}</p>
                       {/* <p>Interest: {job.interest}</p> */}
                       {/* <p>Requirements: {job.requirements}</p> */}
                       {/* <p>Category: {categories[job.category] || 'No Category'}</p> */}

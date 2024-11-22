@@ -132,7 +132,7 @@ const DetailCandidateSearch = () => {
   } 
 
   if (error) return <div>{error}</div>;
-  if (!candidate) return <div>Candidate not found</div>;
+  if (!candidate) return <div>Loading...</div>;
 
   return (
     // <div className={clsx(styles.homePage)}>
