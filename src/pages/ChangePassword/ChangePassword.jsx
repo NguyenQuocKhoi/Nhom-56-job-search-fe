@@ -29,8 +29,8 @@ const ChangePassword = () => {
     if (newPassword !== confirmPassword) {
       Swal.fire({
         icon: 'error',
-        title: 'Password Mismatch',
-        text: 'New password and confirm password do not match',
+        title: 'Mật khẩu không khớp',
+        text: 'Mật khẩu không khớp',
       });
       return;
     }
@@ -39,7 +39,7 @@ const ChangePassword = () => {
     if (!passwordValidation.success) {
       Swal.fire({
         icon: 'error',
-        title: 'Invalid Old Password',
+        title: 'Mật khẩu cũ không đúng',
         // text: passwordValidation.message,
       });
       return;
@@ -55,14 +55,14 @@ const ChangePassword = () => {
   
       Swal.fire({
         icon: 'success',
-        title: 'Password Changed',
-        text: 'Your password has been successfully changed',
+        title: 'Đã đổi mật khẩu',
+        text: 'Đổi mật khẩu thành công',
       }).then(() => {
         navigate('/login');
       });
   
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Failed to change password. Please try again later.';
+      const errorMessage = error.response?.data?.message || 'Đổi mật khẩu thất bại. Vui lòng thử lại sau.';
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -92,19 +92,19 @@ const ChangePassword = () => {
             <div className={clsx('card', styles.loginCard)}>
               <div className="card-body">
                 <h2 className={clsx('card-title', 'text-center', styles.loginTitle)}>
-                  Change Password
+                  Đổi mật khẩu
                 </h2>
 
                 <form onSubmit={handleChangePassword}>
                   <div className="form-group">
-                    <label htmlFor="oldpassword">Old password</label>
+                    <label htmlFor="oldpassword">Mật khẩu cũ</label>
                     <div className={clsx(styles.passwordContainer)}>
                       <input
                         value={oldPassword}
                         type={showOldPassword ? 'text' : 'password'} 
                         className="form-control"
                         id="oldpassword"
-                        placeholder="Enter your old password"
+                        placeholder="Nhập mật khẩu cũ"
                         onChange={(e) => setOldPassword(e.target.value)}
                       />
 
@@ -118,14 +118,14 @@ const ChangePassword = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="newpassword">New password</label>
+                    <label htmlFor="newpassword">Mật khẩu mới</label>
                     <div className={clsx(styles.passwordContainer)}>
                       <input
                         value={newPassword}
                         type={showNewPassword ? 'text' : 'password'} 
                         className="form-control"
                         id="newpassword"
-                        placeholder="Enter your new password"
+                        placeholder="Nhập mật khẩu mới"
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
 
@@ -139,14 +139,14 @@ const ChangePassword = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
                     <div className={clsx(styles.passwordContainer)}>
                       <input
                         value={confirmPassword}
                         type={showNewPassword ? 'text' : 'password'} 
                         className="form-control"
                         id="confirmPassword"
-                        placeholder="Confirm your password"
+                        placeholder="Nhập lại mật khẩu"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       
                       />
@@ -161,7 +161,7 @@ const ChangePassword = () => {
                   </div>
 
                   <button type="submit" className="btn btn-primary w-100 mt-4">
-                    Change password
+                    Đổi mật khẩu
                   </button>
                 </form>
               </div>

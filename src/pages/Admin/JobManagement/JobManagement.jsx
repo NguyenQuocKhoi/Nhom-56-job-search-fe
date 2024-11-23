@@ -489,8 +489,8 @@ const JobManagement = () => {
                         <img src={job.companyAvatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
                           <p><strong>{job.title}</strong></p>
-                          <p>Company: {job.companyName}</p>
-                          <p>Address: {job.street}, {job.city}</p>
+                          <p>{job.companyName}</p>
+                          <p>Địa chỉ: {job.street}, {job.city}</p>
                           <p 
                             style={{
                               backgroundColor: 
@@ -644,8 +644,8 @@ const JobManagement = () => {
                         <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                         <div className={styles.contentText}>
                           <p><strong>{job.title}</strong></p>
-                          <p>Company: {job.company.name}</p>
-                          <p>Address: {job.street}, {job.city}</p>
+                          <p>{job.company.name}</p>
+                          <p>Địa chỉ: {job.street}, {job.city}</p>
                           <p 
                             style={{
                               backgroundColor: 
@@ -693,7 +693,14 @@ const JobManagement = () => {
         {activeTab === 'accepted' && (
           <div>
             {/* hiện tại số lượng chỉ lấy của 1 trang */}
+        <div className={clsx(styles.refreshJob)}>
             <strong>Danh sách công việc đã chấp nhận: {jobsAccepted.length}</strong>
+            <button onClick={handleRefreshJob} className={clsx(styles.btnRefreshJob)}>
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Làm mới</span>
+            </button>
+            </div>
+
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsAccepted.length > 0 ? (
@@ -708,8 +715,8 @@ const JobManagement = () => {
                           <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                           <div className={clsx(styles.contentText)}>
                             <p><strong>{job.title}</strong></p>
-                            <p>Company: {job.company.name}</p>
-                            <p>Address: {job.street},{job.city}</p>
+                            <p>{job.company.name}</p>
+                            <p>Địa chỉ: {job.street},{job.city}</p>
                             {job.skillNames && job.skillNames.length > 0 ? (
                               <div className={clsx(styles.skills)}>
                                 {job.skillNames.map((skill, index) => (
@@ -745,7 +752,14 @@ const JobManagement = () => {
         )}
         {activeTab === 'rejected' && (
           <div>
+        <div className={clsx(styles.refreshJob)}>
             <strong>Danh sách công việc đã từ chối: {jobsRejected.length}</strong>
+            <button onClick={handleRefreshJob} className={clsx(styles.btnRefreshJob)}>
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Làm mới</span>
+            </button>
+            </div>
+
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsRejected.length > 0 ? (
@@ -760,8 +774,8 @@ const JobManagement = () => {
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
                   <p><strong>{job.title}</strong></p>
-                  <p>Company: {job.company.name}</p>
-                  <p>Address: {job.street},{job.city}</p>
+                  <p>{job.company.name}</p>
+                  <p>Địa chỉ: {job.street},{job.city}</p>
                   {job.skillNames && job.skillNames.length > 0 ? (
                     <div className={clsx(styles.skills)}>
                       {job.skillNames.map((skill, index) => (
@@ -797,7 +811,14 @@ const JobManagement = () => {
         )}
         {activeTab === 'pending' && (
           <div>
+        <div className={clsx(styles.refreshJob)}>
             <strong>Danh sách công việc chưa được phê duyệt: {jobsPending.length}</strong>
+            <button onClick={handleRefreshJob} className={clsx(styles.btnRefreshJob)}>
+              <i class="fa-solid fa-arrows-rotate"></i>
+              <span>Làm mới</span>
+            </button>
+          </div>
+
             <div className={clsx(styles.joblist)}>
               <div className={clsx(styles.jobContainer)}>
                 {jobsPending.length > 0 ? (
@@ -812,8 +833,8 @@ const JobManagement = () => {
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)}/>
                 <div className={clsx(styles.contentText)}>
                   <p><strong>{job.title}</strong></p>
-                  <p>Company: {job.company.name}</p>
-                  <p>Address: {job.street},{job.city}</p>
+                  <p>{job.company.name}</p>
+                  <p>Địa chỉ: {job.street},{job.city}</p>
                   <p>
                     Trạng thái: 
                     {job.pendingUpdates || job.status === undefined 

@@ -980,7 +980,14 @@ const CompanyManagement = () => {
         )}
         {activeTab === 'accepted' && (
           <div>
+        <div className={clsx(styles.createCompany)}>
             <strong>Danh sách công ty đã chấp nhận: {companiesAccepted.length}</strong>
+            <button onClick={handleRefreshCompany} className={clsx(styles.btnRefreshJob)}>
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Làm mới</span>
+            </button>
+            </div>
+
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesAccepted.length > 0 ? (
@@ -1034,7 +1041,14 @@ const CompanyManagement = () => {
         )}
         {activeTab === 'rejected' && (
           <div>
+        <div className={clsx(styles.createCompany)}>
             <strong>Danh sách công ty đã từ chối: {companiesRejected.length}</strong>
+            <button onClick={handleRefreshCompany} className={clsx(styles.btnRefreshJob)}>
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Làm mới</span>
+            </button>
+            </div>
+
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesRejected.length > 0 ? (
@@ -1087,7 +1101,14 @@ const CompanyManagement = () => {
         )}
         {activeTab === 'pending' && (
           <div>
+        <div className={clsx(styles.createCompany)}>
             <strong>Danh sách công ty chưa được phê duyệt: {companiesPending.length}</strong>
+            <button onClick={handleRefreshCompany} className={clsx(styles.btnRefreshJob)}>
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Làm mới</span>
+            </button>
+            </div>
+
             <div className={clsx(styles.companylist)}>
               <div className={clsx(styles.companyContainer)}>
                 {companiesPending.length > 0 ? (

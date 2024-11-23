@@ -16,9 +16,9 @@ const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState("phamchixuan1605@gmail.com");
+  const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
-  const [password, setPassword] = useState("123456Aa");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailForgotPassword, setEmailForgotPassword] = useState("");
 
@@ -51,7 +51,7 @@ const Login = () => {
           const { isActive, role } = result.data.user;
   
           if (!isActive) {
-            Swal.fire({ icon: "error", text: "Your account has been disabled." });
+            Swal.fire({ icon: "error", text: "Tài khoản của bạn đã bị vô hiệu hóa." });
           } else {
             setUserStorage(result.data);
   
@@ -66,7 +66,7 @@ const Login = () => {
         }
       } catch (error) {
         console.log("123", error);
-        Swal.fire({ icon: "error", text: "Email or password is wrong" });
+        Swal.fire({ icon: "error", text: "Email hoặc mật khẩu không đúng" });
       } finally {
         setLoading(false);
       }
@@ -325,8 +325,8 @@ const handleSubmitCaptcha = async () => {
         <Button variant="primary" onClick={handleSubmitCaptcha}>
           Xác nhận
         </Button>
-        <Button variant="secondary" onClick={handleCloseModal}>
-          Close
+        <Button variant="danger" onClick={handleCloseModal}>
+          Đóng
         </Button>
       </Modal.Footer>
     </Modal>
@@ -344,7 +344,7 @@ const handleSubmitCaptcha = async () => {
             <div className={clsx('card', styles.loginCard)}>
               <div className="card-body">
                 <h2 className={clsx('card-title', 'text-center', styles.loginTitle)}>
-                  Log In to KXWork
+                  Đăng nhập vào TopJob
                 </h2>
 
                 <form onSubmit={handleLogin}>
@@ -355,7 +355,7 @@ const handleSubmitCaptcha = async () => {
                       type="email"
                       className="form-control"
                       id="email"
-                      placeholder="Enter your email"
+                      placeholder="Nhập email"
                       onChange={(e) => {
                         setEmail(e.target.value);
                         setEmailErr('');
@@ -365,14 +365,14 @@ const handleSubmitCaptcha = async () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Mật khẩu</label>
                     <div className={clsx(styles.passwordContainer)}>
                       <input
                         value={password}
                         type={showPassword ? 'text' : 'password'} 
                         className="form-control"
                         id="password"
-                        placeholder="Enter your password"
+                        placeholder="Nhập mật khẩu"
                         onChange={(e) => setPassword(e.target.value)}
                       />
                       
@@ -387,12 +387,12 @@ const handleSubmitCaptcha = async () => {
                   </div>
 
                   <button type="submit" className="btn btn-primary w-100 mt-4">
-                    Log In
+                    Đăng nhập
                   </button>
                 </form>
 
                 <div className="text-center mt-3">
-                  <p className={styles.forgotPassword} onClick={handleShowModal}>Forgot password?</p>
+                  <p className={styles.forgotPassword} onClick={handleShowModal}>Quên mật khẩu?</p>
                 </div>
 
                 <div className="text-center mt-4">
@@ -411,8 +411,8 @@ const handleSubmitCaptcha = async () => {
                   </button> */}
                 </div>
                 <div className={clsx('text-center', 'mt-4', styles.signUpText)}>
-                  <span>Don't have an account?</span>
-                  <a href="/signup" className={styles.signUpLink}>Sign Up</a>
+                  <span>Không có tài khoản?</span>
+                  <a href="/signup" className={styles.signUpLink}> Đăng ký</a>
                 </div>
               </div>
             </div>

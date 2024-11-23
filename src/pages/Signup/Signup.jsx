@@ -15,12 +15,12 @@ const Signup = () => {
 
   const navigate = useNavigate();
   const [key, setKey] = useState('candidate');
-  const [name, setName] = useState("Pham Xuan");
+  const [name, setName] = useState("");
   const [nameErr, setNameErr] = useState("");
-  const [email, setEmail] = useState("phamchixuan1605@gmail.com");
+  const [email, setEmail] = useState("");
   const [emailErr, setEmailErr] = useState("");
-  const [password, setPassword] = useState("123456Aa");
-  const [confirmPassword, setConfirmPassword] = useState("123456Aa");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordErr, setPasswordErr] = useState("");
   const [verify, setVerify] = useState("");
 
@@ -241,7 +241,7 @@ const Signup = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="danger" onClick={handleCloseModal}>
-          Close
+          Đóng
         </Button>
         <Button variant="primary" onClick={()=>handleSignup()}>
           Xác thực
@@ -263,7 +263,7 @@ const Signup = () => {
           <div className={clsx('card', styles.signupCard)}>
             <div className="card-body">
               <h2 className={clsx('card-title', 'text-center', styles.signupTitle)}>
-                Sign Up
+                Đăng nhập
               </h2>
 
               <Tabs
@@ -272,13 +272,13 @@ const Signup = () => {
                 onSelect={(k) => setKey(k)}
                 className="mb-3"
               >
-                <Tab eventKey="candidate" title="Candidate">
+                <Tab eventKey="candidate" title="Ứng viên">
                   <Form>
                     <Form.Group className="mb-3">
-                      <Form.Label>Name</Form.Label>
+                      <Form.Label>Họ và tên</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter your name"
+                        placeholder="Nhập họ và tên"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
@@ -290,7 +290,7 @@ const Signup = () => {
                       <Form.Label>Email</Form.Label>
                       <Form.Control
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Nhập email"
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
@@ -303,11 +303,11 @@ const Signup = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label>Password</Form.Label>
+                      <Form.Label>Mật khẩu</Form.Label>
                       <div className={clsx(styles.passwordContainer)}>
                         <Form.Control
                           type={showPassword ? 'text' : 'password'} 
-                          placeholder="Enter your password"
+                          placeholder="Nhập mật khẩu"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           isInvalid={!!passwordErr}
@@ -327,11 +327,11 @@ const Signup = () => {
                     </Form.Group>
                     {/* Confirm */}
                     <Form.Group className="mb-3">
-                      <Form.Label>Confirm Password</Form.Label>
+                      <Form.Label>Nhập lại mật khẩu</Form.Label>
                       <div className={clsx(styles.passwordContainer)}>
                         <Form.Control
                           type={showConfirmPassword ? 'text' : 'password'} 
-                          placeholder="Confirm your password"
+                          placeholder="Nhập lại mật khẩu"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           isInvalid={!!passwordErr}
@@ -351,7 +351,7 @@ const Signup = () => {
                     </Form.Group>
                     
                   <Button variant="primary" className="w-100" onClick={handleShowModal}>
-                      Sign Up
+                      Đăng ký
                     </Button>
                     {/* <Button variant="primary" className="w-100" onClick={handleShowModal} disabled={loading}>
                       {loading ? 'Đang xử lý...' : 'Sign Up'}
@@ -367,13 +367,13 @@ const Signup = () => {
               </div>
             </Tab>
 
-                <Tab eventKey="company" title="Company">
+                <Tab eventKey="company" title="Công ty">
                   <Form>
                     <Form.Group className="mb-3">
-                      <Form.Label>Company Name</Form.Label>
+                      <Form.Label>Tên công ty</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Enter your company name"
+                        placeholder="Nhập tên công ty"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
@@ -382,7 +382,7 @@ const Signup = () => {
                       <Form.Label>Email</Form.Label>
                       <Form.Control
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="Nhập email"
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
@@ -394,11 +394,11 @@ const Signup = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label>Password</Form.Label>
+                      <Form.Label>Mật khẩu</Form.Label>
                       <div className={clsx(styles.passwordContainer)}>
                         <Form.Control
                           type={showPassword ? 'text' : 'password'} 
-                          placeholder="Enter your password"
+                          placeholder="Nhập mật khẩu"
                           value={password}
                           onChange={(e) => handleCheckPassword(e.target.value)}
                           isInvalid={!!passwordErr}
@@ -417,11 +417,11 @@ const Signup = () => {
                     </Form.Group>
                     {/* confirm */}
                     <Form.Group className="mb-3">
-                      <Form.Label>Confirm Password</Form.Label>
+                      <Form.Label>Nhập lại mật khẩu</Form.Label>
                       <div className={clsx(styles.passwordContainer)}>
                         <Form.Control
                           type={showConfirmPassword ? 'text' : 'password'} 
-                          placeholder="Confirm your password"
+                          placeholder="Nhập lại mật khẩu"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           isInvalid={!!passwordErr}
@@ -440,7 +440,7 @@ const Signup = () => {
                     </Form.Group>
                     
                     <Button variant="primary" className="w-100" onClick={handleShowModal}>
-                      Sign Up
+                      Đăng ký
                     </Button>
                   </Form>
                 </Tab>
@@ -452,8 +452,8 @@ const Signup = () => {
                 </Button>
               </div> */}
               <div className="text-center mt-4">
-                <span>Already have an account?</span>
-                <a href="/login" className={styles.loginLink}> Log In</a>
+                <span>Đã có tài khoản?</span>
+                <a href="/login" className={styles.loginLink}> Đăng nhập</a>
               </div>
             </div>
           </div>
