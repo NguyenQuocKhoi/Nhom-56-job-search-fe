@@ -146,7 +146,7 @@ const DetailCandidateSearch = () => {
             <p><strong>Email:</strong> {candidate.email}</p>
             <p><strong>{t('detailCandidate.phoneNumber')}:</strong> {candidate.phoneNumber}</p>
             <p><strong>{t('detailCandidate.address')}:</strong> {candidate.address}</p>
-            <p><strong>{t('detailCandidate.dob')}:</strong> {candidate.dateOfBirth}</p>
+            <p><strong>{t('detailCandidate.dob')}:</strong> {new Date(candidate.dateOfBirth).toLocaleDateString('vi-VN')}</p>
           
             {(userRole === 'company' ) && (
               <button 
