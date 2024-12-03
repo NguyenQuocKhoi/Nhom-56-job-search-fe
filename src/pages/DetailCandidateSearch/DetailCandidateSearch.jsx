@@ -100,15 +100,15 @@ const DetailCandidateSearch = () => {
     }
   
     try {
-      console.log(candidate._id);
-      console.log(userData._id);
+      // console.log(candidate._id);
+      // console.log(userData._id);
       
       // Kiểm tra xem công việc hiện tại đã được lưu chưa
       const savedCandidate = savedCandidates.find(savedCandidate => 
         savedCandidate.candidate._id === candidate._id && savedCandidate.company === userData._id
       );
-      console.log("Saved candidates:", savedCandidates);
-      console.log("Saved candidate:", savedCandidate);//chưa lưu thì undifined
+      // console.log("Saved candidates:", savedCandidates);
+      // console.log("Saved candidate:", savedCandidate);//chưa lưu thì undifined
   
       if (savedCandidate) {
         // Nếu công việc đã được lưu, thực hiện bỏ lưu
@@ -116,7 +116,7 @@ const DetailCandidateSearch = () => {
         setIsSaved(false);
         Swal.fire('Đã bỏ lưu ứng viên!', '', 'success');
       } else {
-        console.log(96);
+        // console.log(96);
         
         // Nếu công việc chưa được lưu, thực hiện lưu công việc
         await postApiWithToken(`/save-candidate/create`, { 

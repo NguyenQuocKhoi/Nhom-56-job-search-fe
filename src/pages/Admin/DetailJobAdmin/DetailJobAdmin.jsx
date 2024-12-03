@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { deleteApiWithToken, getAPiNoneToken, putApiWithToken } from '../../../api';
 import styles from './detailJobAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Loading/Loading';
 
 const DetailJobAdmin = () => {
   const navigate = useNavigate();
@@ -22,16 +23,20 @@ const DetailJobAdmin = () => {
   //
   const [buttonState, setButtonState] = useState('pending');
 
+  //
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
     const fetchJob = async () => {
       try {
+        setLoading(true)
         const result = await getAPiNoneToken(`/job/${jobId}`);
         if (result.data.job) {
           setJob(result.data.job);
 
-          console.log(result.data.job);
+          // console.log(result.data.job);
           setButtonState(result.data.job.status);          
   
           const categoryId = result.data.job.category;
@@ -84,6 +89,8 @@ const DetailJobAdmin = () => {
         }
       } catch (err) {
         setError('Failed to fetch job details');
+      } finally{
+        setLoading(false);
       }
     };
     
@@ -207,7 +214,8 @@ const DetailJobAdmin = () => {
   };
 
   if (error) return <div>{error}</div>;
-  if (!job) return <div>Job not found</div>;
+  // if (!job) return <div>Không tìm thấy công việc</div>;
+  if (!job) return <div>{loading ? <Loading /> : null}</div>;
 
   return (
     <>
@@ -220,7 +228,9 @@ const DetailJobAdmin = () => {
                 <h1>{job.title}</h1>
                 {
                   job.pendingUpdates?.title && job.pendingUpdates.title !== job.title && (
-                    <h1 style={{backgroundColor: 'yellow'}}>Title mới: {job.pendingUpdates.title}</h1>
+                    <h1 
+                      // style={{backgroundColor: 'yellow'}}
+                    >Tên mới: {job.pendingUpdates.title}</h1>
                   )
                 }
               </div>
@@ -228,22 +238,22 @@ const DetailJobAdmin = () => {
             <div className={clsx(styles.ngang)}>
               {/* {renderField('Expires', new Date(job.expiredAt).toLocaleDateString('vi-VN'), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString('vi-VN'))} */}
               {renderField(
-                'Expires', 
+                'Hạn nộp hồ sơ', 
                 job.expiredAt ? new Date(job.expiredAt).toLocaleDateString('vi-VN') : 'Chưa có ngày hết hạn', 
                 job.pendingUpdates?.expiredAt ? new Date(job.pendingUpdates.expiredAt).toLocaleDateString('vi-VN') : null
               )}
-              {renderField('Salary', job.salary, job.pendingUpdates?.salary)}
-              {renderField('Position', job.position, job.pendingUpdates?.position)}
+              {renderField('Lương', job.salary, job.pendingUpdates?.salary)}
+              {renderField('Vị trí', job.position, job.pendingUpdates?.position)}
             </div>
           </div>
           <div className={clsx(styles.thongtinchinh)}>
-            {renderField('Interest', job.interest, job.pendingUpdates?.interest, true)}
-            {renderField('Description', job.description, job.pendingUpdates?.description, true)}
-            {renderField('Requirements', job.requirements, job.pendingUpdates?.requirements, true)}
-            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
+            {renderField('Phúc lợi', job.interest, job.pendingUpdates?.interest, true)}
+            {renderField('Mô tả', job.description, job.pendingUpdates?.description, true)}
+            {renderField('Yêu cầu', job.requirements, job.pendingUpdates?.requirements, true)}
+            <p><strong>Ngày đăng:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
             {/* {renderField('Expires', new Date(job.expiredAt).toLocaleDateString('vi-VN'), new Date(job.pendingUpdates?.expiredAt).toLocaleDateString('vi-VN'))}             */}
             {renderField(
-              'Expires', 
+              'Hạn nộp hồ sơ', 
               job.expiredAt ? new Date(job.expiredAt).toLocaleDateString('vi-VN') : 'Chưa có ngày hết hạn', 
               job.pendingUpdates?.expiredAt ? new Date(job.pendingUpdates.expiredAt).toLocaleDateString('vi-VN') : null
             )}
@@ -253,27 +263,29 @@ const DetailJobAdmin = () => {
         <div className={clsx(styles.columnTwo)}>
           <div className={clsx(styles.companyContainer)}>
             <div className={clsx(styles.titleCongty)}>
-              <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
-              <p><strong>Company:</strong> {job.company.name}</p>
+              <Link to={`/detailCompanyAdmin/${job?.company._id}`} target="_blank" rel="noopener noreferrer">
+                <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
+              </Link>
+              <p><strong></strong> {job.company.name}</p>
             </div>
             {/* {renderField('Address', `${job.street}, ${job.city}`, `${job.pendingUpdates?.street}, ${job.pendingUpdates?.city}`)} */}
             {renderField(
-              'Address', 
+              'Địa chỉ', 
               `${job.street || 'Chưa có địa chỉ'}, ${job.city || ''}`, 
               job.pendingUpdates ? `${job.pendingUpdates.street || 'Chưa cập nhật địa chỉ'}, ${job.pendingUpdates.city || ''}` : null
             )}
           </div>
 
           <div className={clsx(styles.thongtinchung)}>
-            {renderField('Type', job.type, job.pendingUpdates?.type)}
-            {renderField('Number of Recruitments', job.numberOfCruiment, job.pendingUpdates?.numberOfCruiment)}
-            {renderField('Experience Level', job.experienceLevel, job.pendingUpdates?.experienceLevel)}
+            {renderField('Hình thức làm việc', job.type, job.pendingUpdates?.type)}
+            {renderField('Số lượng tuyển', job.numberOfCruiment, job.pendingUpdates?.numberOfCruiment)}
+            {renderField('Kinh nghiệm', job.experienceLevel, job.pendingUpdates?.experienceLevel)}
           </div>
 
           <div className={clsx(styles.them)}>
-            {renderField('Category', categoryName, categoryNameEdited)}
+            {renderField('Lĩnh vực', categoryName, categoryNameEdited)}
             <div>
-              <strong>Requirements skills: </strong>
+              <strong>Yêu cầu kỹ năng: </strong>
               {skills.length > 0 ? (
                 <ul>
                   {skills.map((skill, index) => (
@@ -281,19 +293,21 @@ const DetailJobAdmin = () => {
                   ))}
                 </ul>
               ) : (
-                <span>No requirements skills</span>
+                <span>Không có yêu cầu kỹ năng</span>
               )}
             </div>
             <div>
-              <strong>Updated Requirements skills: </strong>
+              <strong>Yêu cầu kỹ năng cập nhật: </strong>
               {skillsEdited.length > 0 ? (
                 <ul>
                   {skillsEdited.map((skill, index) => (
-                    <li key={index} style={{ backgroundColor: 'yellow' }}>{skill}</li>
+                    <li key={index} 
+                      // style={{ backgroundColor: 'yellow' }}
+                    >{skill}</li>
                   ))}
                 </ul>
               ) : (
-                <span>No updated requirements skills</span>
+                <span>Không có cập nhật</span>
               )}
             </div>
           </div>
@@ -313,7 +327,7 @@ const DetailJobAdmin = () => {
           )}
           onClick={() => handleStatusUpdate(job._id, true)}
         >
-          Accept
+          Đồng ý
         </button>
         <button
           className={clsx(styles.button, 
@@ -326,7 +340,7 @@ const DetailJobAdmin = () => {
           )}
           onClick={() => handleStatusUpdate(job._id, false)}
         >
-          Reject
+          Từ chối
         </button>
 
         <button onClick={() => handleDeleteJob(job._id)} className={clsx(styles.buttonXoa)}>Xóa</button>

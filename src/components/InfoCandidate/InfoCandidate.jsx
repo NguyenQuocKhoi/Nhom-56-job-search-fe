@@ -87,7 +87,7 @@ const InfoCandidate = () => {
           setCandidate(response.data.candidate);
           // setAvatarPreview(response.data.candidate.avatarUrl); // Hiện avatar
           setAvatarPreview(response.data.candidate.avatar); 
-          console.log(response.data.candidate.avatar);
+          // console.log(response.data.candidate.avatar);
           
 
           setButtonState(response.data.candidate.status);// Lấy status của candidate
@@ -264,8 +264,8 @@ const handleAutoApply = async () => {
   }
 
   const newAutoSearchJobs = !autoSearchJobs;
-  console.log('autoSearchJobs:', autoSearchJobs);
-  console.log('newAutoSearchJobs:', newAutoSearchJobs);
+  // console.log('autoSearchJobs:', autoSearchJobs);
+  // console.log('newAutoSearchJobs:', newAutoSearchJobs);
 
   try {
     const response = await putApiWithToken(`/candidate/auto-apply`, {
@@ -277,9 +277,9 @@ const handleAutoApply = async () => {
 
     if (newAutoSearchJobs) {
       if (response.matchingJobs && response.matchingJobs.length > 0) {
-        console.log("Applications automatically created for matching jobs:", response.matchingJobs);
+        // console.log("Applications automatically created for matching jobs:", response.matchingJobs);
       } else {
-        console.log("No jobs with matching skills and city found.");
+        // console.log("No jobs with matching skills and city found.");
       }
     } else {
       console.error("Error:", response.data.message);
@@ -313,11 +313,9 @@ const handleAutoApply = async () => {
   };
 
   const handleSkillToggle = (skillId) => {
-    if (selectedSkills.includes(skillId)) {
-      // If skill is already selected, remove it from the list
+    if (selectedSkills.includes(skillId)) {      
       setSelectedSkills(selectedSkills.filter((id) => id !== skillId));
-    } else {
-      // If skill is not selected, add it to the list
+    } else {     
       setSelectedSkills([...selectedSkills, skillId]);
     }
   };
@@ -540,10 +538,10 @@ const handleAutoApply = async () => {
       });
 
       const response = await deleteApiWithToken(`/candidate/delete-cv/${candidateId}`);  
-      console.log("384",response);
+      // console.log("384",response);
       
       if (response.data.success) {
-        console.log("CV deleted successfully");
+        // console.log("CV deleted successfully");
   
         setCandidate((prevCandidate) => ({
           ...prevCandidate,
@@ -565,7 +563,7 @@ const handleAutoApply = async () => {
       } else {
         // Swal.fire({ icon: 'error', text: "Failed to delete CV" });
         Swal.fire({ icon: 'error', text: response.data.message || "Failed to delete CV" });
-        console.log(response.data.message || "Failed to delete CV");
+        // console.log(response.data.message || "Failed to delete CV");
       }
     } catch (error) {
       console.error("Error deleting CV:", error);
@@ -848,7 +846,32 @@ const handleAutoApply = async () => {
           )}
         </div>
 
-          <div className={clsx(styles.modalSkill)}>
+            {showSkillModal && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modalContent}>
+                  <div className={styles.skillsContainer}>
+                    {allSkills.map((skill) => (
+                      <div key={skill._id} className={clsx(styles.skillCheckbox)}>
+                        <input
+                          type="checkbox"
+                          id={`skill-${skill._id}`}
+                          checked={selectedSkills.includes(skill._id)}
+                          onChange={() => handleSkillToggle(skill._id)}
+                          className={clsx(styles.checkBox)}
+                        />
+                            <div className={clsx(styles.skillname)}>
+                              {skill.skillName}
+                            </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={handleCloseSkillModal} className={styles.closeModalButton}>
+                    {t('createPostJob.close')}
+                  </button>
+                </div>
+              </div>
+            )}
+          {/* <div className={clsx(styles.modalSkill)}>
             {showSkillModal && (
               <div className={clsx(styles.modalOverlay)}>
                     {allSkills.map((skill) => (
@@ -867,7 +890,7 @@ const handleAutoApply = async () => {
                 <button onClick={handleCloseSkillModal} className={styles.closeModalButton}>Close</button>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
 
       </div>

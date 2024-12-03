@@ -201,7 +201,7 @@ const CreatePostJob = () => {
       requirementSkills
     } = jobData;
 
-    console.log(jobData);
+    // console.log(jobData);
     
     if (
       !title ||
@@ -232,7 +232,7 @@ const CreatePostJob = () => {
         companyId: userData._id,
       });
 
-      console.log(result);//////////////////      
+      // console.log(result);//////////////////      
   
       if (result.data.success) {
         setError('');
@@ -319,7 +319,7 @@ const CreatePostJob = () => {
           });
         } else {
           // All information is complete
-          console.log('Company information is complete.');
+          // console.log('Company information is complete.');
         }
       } else {
         console.error('Unable to fetch company information.');
@@ -604,7 +604,6 @@ const CreatePostJob = () => {
                 ))}
               </select>
             </div>
-
           </div>
 
           <div className={styles.selectedSkills}>

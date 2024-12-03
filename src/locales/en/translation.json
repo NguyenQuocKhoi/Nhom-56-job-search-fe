@@ -28,7 +28,13 @@
       "default":"Default",
       "postAt":"Posted date",
       "expireOn":"expiration date",
-      "salaryDownToUp":"Salary from low to high"
+      "salaryDownToUp":"Salary from low to high",
+      "all":"All",      
+      "candidate":"Candidates",
+      "address":"Address",
+      "salary":"Salary",
+      "gender":"Gender",
+      "noMatch":"No matching results were found"
     },
     "recommendJob":{
       "recommendJob":"Suggest suitable jobs"
@@ -253,7 +259,8 @@
       "ex":"Experience",
       "category":"Category",
       "skill":"Skill",
-      "suspend": "Suspend"
+      "suspend": "Suspend",
+      "lastModified": "Last Modified"
     }
   }
   

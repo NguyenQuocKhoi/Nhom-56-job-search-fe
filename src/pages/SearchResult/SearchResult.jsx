@@ -14,22 +14,6 @@ import usePageTitle from '../../hooks/usePageTitle';
 
 import Loading from "../../components/Loading/Loading";
 
-const cities = [
-  'All cities','TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
-  'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
-  'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
-  'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
-  'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
-  'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
-  'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
-  'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
-  'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
-  'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
-  'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
-  'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
-  'Vĩnh Phúc', 'Yên Bái'
-];
-
 const suggestions = [
   'ReactJS', 'NodeJS', 'React Native', 'Spring Boot', 'Angular',
   'Laravel', 'Express JS', 'Vue JS', 'Flutter'
@@ -39,6 +23,22 @@ const SearchResult = () => {
   usePageTitle('Việc làm | Công ty | Ứng viên');
   
   const { t, i18n } = useTranslation();
+
+  const cities = [
+    t('search.allCities'),'TP.HCM', 'Hà Nội', 'Đà Nẵng', // Priority cities
+    'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+    'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+    'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+    'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+    'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hải Phòng', 'Hòa Bình',
+    'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+    'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định', 'Nghệ An',
+    'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên', 'Quảng Bình',
+    'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị', 'Sóc Trăng',
+    'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên', 'Thanh Hóa',
+    'Thừa Thiên - Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang', 'Vĩnh Long',
+    'Vĩnh Phúc', 'Yên Bái'
+  ];  
 
   const location = useLocation();
   const initialSearchParams = location.state?.searchParams || {};
@@ -85,7 +85,7 @@ const SearchResult = () => {
       try{
       const savedJobsResponse = await getApiWithToken(`/save-job/gets/${user._id}`);
       const savedJobs = savedJobsResponse?.data?.savedJobs || [];
-      console.log('savedJobs',savedJobs);
+      // console.log('savedJobs',savedJobs);
       
       if(savedJobs.length > 0){
         const savedJobMap = savedJobs.reduce((acc, savedJob) => {
@@ -95,14 +95,14 @@ const SearchResult = () => {
           };
           return acc;
         }, {});
-        console.log('savedJobmap',savedJobMap);
+        // console.log('savedJobmap',savedJobMap);
         
         setSavedJobs(savedJobMap);
       }else{
         setSavedJobs({});
       }
     }catch(error){
-      console.log(error);    
+      // console.log(error);    
     }
     }
     } catch (err) {
@@ -128,7 +128,7 @@ const SearchResult = () => {
 
       if (response.data.success) {
         // setResults(response.data.data);
-        console.log(response.data.data.jobs);
+        // console.log(response.data.data.jobs);
         if (response.data.success){
           const jobs = response.data.data.jobs;
 
@@ -205,19 +205,19 @@ const SearchResult = () => {
     }
 
     try {
-      console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
+      // console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
       
       if (savedJobs[jobId]) {
-        console.log(1); 
+        // console.log(1); 
         const savedJobEntry = savedJobs[jobId];
         const savedJobId = savedJobEntry.savedJobId;
         // const savedJodId = Object.keys(savedJobs).find(savedId => savedId === jobId);
 
-        console.log('savedJobs',savedJobs);
-        console.log('savedJobId là id job',savedJobId);
+        // console.log('savedJobs',savedJobs);
+        // console.log('savedJobId là id job',savedJobId);
         
         if(savedJobId) {
-          console.log(3);
+          // console.log(3);
           
           await deleteApiWithToken(`/save-job/delete/${savedJobId}`);//savedJobId chứ không phải jobId
           setSavedJobs(prev => ({ ...prev, [jobId]: false }));
@@ -339,32 +339,32 @@ const SearchResult = () => {
               className={clsx(styles.tabButton, activeTab === 'all' && styles.active)}
               onClick={() => setActiveTab('all')}
             >
-              <p className={clsx(styles.textTitleTab)}>Tất cả</p>
+              <p className={clsx(styles.textTitleTab)}>{t('search.all')}</p>
             </button>
             <button
               className={clsx(styles.tabButton, activeTab === 'jobs' && styles.active)}
               onClick={() => setActiveTab('jobs')}
             >
-              <p className={clsx(styles.textTitleTab)}>Việc làm</p>
+              <p className={clsx(styles.textTitleTab)}>{t('search.job')}</p>
             </button>
             <button
               className={clsx(styles.tabButton, activeTab === 'companies' && styles.active)}
               onClick={() => setActiveTab('companies')}
             >
-              <p className={clsx(styles.textTitleTab)}>Công ty</p>
+              <p className={clsx(styles.textTitleTab)}>{t('search.company')}</p>
             </button>
             <button
               className={clsx(styles.tabButton, activeTab === 'candidates' && styles.active)}
               onClick={() => setActiveTab('candidates')}
             >
-              <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
+              <p className={clsx(styles.textTitleTab)}>{t('search.candidate')}</p>
             </button>
           </div>
 
           <div className={clsx(styles.tabContent)}>
             {activeTab === 'all' && (
               <div className={clsx(styles.jobContainer)}>
-                <p className={clsx(styles.textTitleTab)}>Việc làm</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.job')}</p>
                 {results.jobs.length > 0 ? (
                   results.jobs.map((job) => (
                       <div key={job._id} className={clsx(styles.jobcard)}>
@@ -386,9 +386,9 @@ const SearchResult = () => {
                       <p><strong>{job.title}</strong></p>
                     </div>
                     <div className={clsx(styles.describe)}>
-                      <p>Company: {job.companyName}</p>
-                      <p>Address: {job.street}, {job.city}</p>
-                      <p>Salary: {job.salary}</p>
+                      <p>{job.companyName}</p>
+                      <p>{t('search.address')}: {job.street}, {job.city}</p>
+                      <p>{t('search.salary')}: {job.salary}</p>
                       {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
                         <div className={clsx(styles.skills)}>
                           {job.requirementSkillsNames.map((skill, index) => (
@@ -414,10 +414,10 @@ const SearchResult = () => {
             </div>
                   ))
                 ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                   )}
 
-                <p className={clsx(styles.textTitleTab)}>Công ty</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.company')}</p>
                 {results.companies.length > 0 ? (
                   results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
@@ -430,10 +430,10 @@ const SearchResult = () => {
                     </Link>
                   ))
                   ):(
-                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                 )}
 
-                <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.candidate')}</p>
                 {results.candidates.length > 0 ? (
                   results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
@@ -441,12 +441,12 @@ const SearchResult = () => {
                         <div className={clsx(styles.textCandidate)}>
                         <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
                           <p>Email: {candidate.email}</p>
-                          <p>Gender: {candidate.gender}</p>
+                          <p>{t('search.gender')}: {candidate.gender}</p>
                         </div>
                     </div>
                   ))
                 ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                 )}
               </div>
             )}
@@ -466,7 +466,7 @@ const SearchResult = () => {
                         checked={filter === 'all'}
                         onChange={() => setFilter('all')}
                       />
-                      Mặc định
+                      {t('search.default')}
                     </label>
                     <label>
                       <input
@@ -476,7 +476,7 @@ const SearchResult = () => {
                         checked={filter === 'expirationDate'}
                         onChange={() => setFilter('expirationDate')}
                       />
-                      Ngày hết hạn
+                      {t('search.expireOn')}
                     </label>
                     <label>
                       <input
@@ -486,7 +486,7 @@ const SearchResult = () => {
                         checked={filter === 'postingDate'}
                         onChange={() => setFilter('postingDate')}
                       />
-                      Ngày đăng
+                      {t('search.postAt')}
                     </label>
                     <label>
                       <input
@@ -496,7 +496,7 @@ const SearchResult = () => {
                         checked={filter === 'salaryAsc'}
                         onChange={() => setFilter('salaryAsc')}
                       />
-                      Lương thấp đến cao
+                      {t('search.salaryDownToUp')}
                     </label>
                   </div>
                 </div>
@@ -551,9 +551,9 @@ const SearchResult = () => {
                         </p>
                       </div>
                       <div className={clsx(styles.describe)}>
-                        <p>Company: {job.companyName}</p>
-                        <p>Address: {job.street}, {job.city}</p>
-                        <p>Salary: {job.salary}</p>
+                        <p>{job.companyName}</p>
+                        <p>{t('search.address')}: {job.street}, {job.city}</p>
+                        <p>{t('search.salary')}: {job.salary}</p>
                         {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
                           <div className={clsx(styles.skills)}>
                             {job.requirementSkillsNames.map((skill, index) => (
@@ -584,7 +584,7 @@ const SearchResult = () => {
             ))
         ) : (
           <div className={clsx(styles.cardNoResult)}>
-            <p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p>
+            <p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p>
           </div>
         )}
                 {/* {results.jobs.length > 0 ? (
@@ -635,7 +635,7 @@ const SearchResult = () => {
 
             {activeTab === 'companies' && (
               <div>
-                <p className={clsx(styles.textTitleTab)}>Công ty</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.company')}</p>
                 {results.companies.length > 0 ? (
                   results.companies.map((company) => (
                     <Link key={company._id} to={`/detailCompany/${company._id}`} target="_blank" rel="noopener noreferrer" className={clsx(styles.linkCompany)}>
@@ -648,14 +648,14 @@ const SearchResult = () => {
                     </Link>
                   ))
                   ):(
-                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                 )}
               </div>
             )}
 
             {activeTab === 'candidates' && (
               <div>
-                <p className={clsx(styles.textTitleTab)}>Ứng viên</p>
+                <p className={clsx(styles.textTitleTab)}>{t('search.candidate')}</p>
                   {results.candidates.length > 0 ? (
                   results.candidates.map((candidate) => (
                     <div key={candidate._id} onClick={() => handleViewCandidate(candidate._id)} className={clsx(styles.cardCandidate)}>
@@ -663,12 +663,12 @@ const SearchResult = () => {
                         <div className={clsx(styles.textCandidate)}>
                         <p className={clsx(styles.nameCandidate)}>{candidate.name}</p>
                           <p>Email: {candidate.email}</p>
-                          <p>Gender: {candidate.gender}</p>
+                          <p>{t('search.gender')}: {candidate.gender}</p>
                         </div>
                     </div>
                   ))
                 ):(
-                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                  <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                 )}
               </div>
             )}

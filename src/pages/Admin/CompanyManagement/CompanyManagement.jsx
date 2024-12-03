@@ -39,7 +39,7 @@ const CompanyManagement = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 10,
+    limit: 20,
   });
 
   const [addressInput, setAddressInput] = useState('');
@@ -78,9 +78,9 @@ const CompanyManagement = () => {
       setLoading(true);
       const result = await getAPiNoneToken(`/company/get-all?page=${page}&limit=${pagination.limit}`);
 
-      console.log(result.data.companies);
+      // console.log(result.data.companies);
       const companies = result.data.companies;
-      console.log(companies);
+      // console.log(companies);
 
     const companiesWithIsActive = await Promise.all(
       companies.map(async (company) => {
@@ -191,7 +191,7 @@ const CompanyManagement = () => {
       const newIsActiveState = !currentIsActive;
       const response = await putApiWithToken(`/company/disable-company/${companyId}`, { isActive: newIsActiveState });
   
-      console.log(response);
+      // console.log(response);
       
       if (response.data.success) {
         Swal.fire({
@@ -283,8 +283,8 @@ const CompanyManagement = () => {
       // const response = await postApiNoneToken('/company/search', searchParams);
       const response = await postApiWithToken('/company/search-by-admin', searchParams);
 
-      console.log("70", searchParams);      
-      console.log("72", response.data.companies);
+      // console.log("70", searchParams);      
+      // console.log("72", response.data.companies);
 
       const companies = response.data.companies;
 
@@ -372,12 +372,12 @@ const CompanyManagement = () => {
     e.preventDefault();
 
     try {
-      console.log(1);
-      console.log(companyData.role);
-      console.log(companyData);
+      // console.log(1);
+      // console.log("role",companyData.role);
+      // console.log("company data",companyData);
       
       const response = await postApiWithToken('/user/create-company', companyData);
-      console.log(response);
+      // console.log(response);
       
       if (response.status === 200) {
         Swal.fire({
@@ -392,7 +392,7 @@ const CompanyManagement = () => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: errorMessage,
+        text: errorMessage +"1",
       });
     }
   };
@@ -411,6 +411,7 @@ const CompanyManagement = () => {
       street: '',
       website: '',
       description: '',
+      role: 'company',
     })
   };
 

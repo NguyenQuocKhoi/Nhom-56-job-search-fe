@@ -14,7 +14,7 @@ const ListCompanyInfo = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 10,
+    limit: 8,
   });
 
   const { t, i18n } = useTranslation();

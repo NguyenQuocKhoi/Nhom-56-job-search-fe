@@ -21,7 +21,7 @@ const ChangePassword = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
 
   const user = getUserStorage().user;
-  console.log(user);
+  // console.log(user);
   
   const handleChangePassword = async (e) => {
     e.preventDefault();

@@ -32,7 +32,7 @@ const AppliedJobs = () => {
         const result = await getApiWithToken(`/application/get-applications/${user._id}?page=${currentPage}&limit=10`);
         if (result.data.success) {
           const applications = result.data.applications;
-          console.log(applications);
+          // console.log(applications);
           
           // setApplications(applications);
 
@@ -64,7 +64,7 @@ const AppliedJobs = () => {
           const jobDetailsPromises = jobIds.map(id => getApiWithToken(`/job/${id}`));/////////////////////////////////////////
           const jobDetailsResults = await Promise.all(jobDetailsPromises);
 
-          console.log(jobDetailsResults);
+          // console.log(jobDetailsResults);
           
   
           const jobs = {};
@@ -75,7 +75,7 @@ const AppliedJobs = () => {
           });
 
           setJobDetails(jobs);
-          console.log("jobs",jobs);
+          // console.log("jobs",jobs);
           
         } else {
           setError(result.data.message);
@@ -90,7 +90,7 @@ const AppliedJobs = () => {
             const autoApplyResponse = await postApiWithToken(`/candidate/check-and-auto-apply-jobs`, { candidateId: user._id });
   
             if (autoApplyResponse.data.success) {
-              console.log(autoApplyResponse.data.message);
+              // console.log(autoApplyResponse.data.message);
             } else {
               console.error(autoApplyResponse.data.message);
             }
@@ -98,7 +98,7 @@ const AppliedJobs = () => {
         }
       } catch (error) {
         setError("Error fetching applications");
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }

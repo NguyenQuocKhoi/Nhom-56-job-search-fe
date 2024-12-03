@@ -37,7 +37,7 @@ const JobManagement = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    limit: 15,
+    limit: 20,
   });
 
   // const [jobs, setJobs] = useState([]);

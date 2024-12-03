@@ -76,7 +76,7 @@ const SkillManagement = () => {
         })
       );
   
-      console.log(jobsWithCompanyInfo);
+      // console.log(jobsWithCompanyInfo);
       if (response.data.success) {
         setCandidates(response.data.candidates);
         setJobs(jobsWithCompanyInfo); // Set jobs with attached company info
@@ -102,12 +102,12 @@ const SkillManagement = () => {
         Swal.fire('Error', 'Skil name is required', 'error');
         return;
       }
-      console.log("52", newSkillName);
+      // console.log("52", newSkillName);
 
       const checkResult = await postApiWithToken('/skill/check-skill', { skillName: newSkillName });
-      console.log("55", checkResult.data.message);
+      // console.log("55", checkResult.data.message);
       
-      console.log("57 success", checkResult.data.success);
+      // console.log("57 success", checkResult.data.success);
       
       if (checkResult.data.success === true) {
         Swal.fire('Error', 'Category already exists', 'error');
@@ -130,12 +130,12 @@ const SkillManagement = () => {
         Swal.fire('Error', 'Skill name cannot be empty', 'error');
         return;
       }
-      console.log(skillInput);
+      // console.log(skillInput);
       
   
       const checkResult = await postApiWithToken('/skill/check-skill', { skillName: skillInput });
 
-      console.log("77",checkResult);
+      // console.log("77",checkResult);
       
       if (checkResult.data.success === true) {
         Swal.fire('Error', 'Skill already exists', 'error');

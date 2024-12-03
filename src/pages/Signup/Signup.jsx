@@ -3,7 +3,7 @@ import { Button, Tab, Tabs, Form, Modal } from 'react-bootstrap';
 import clsx from 'clsx';
 import styles from './signup.module.scss';
 import logo from '../../images/logo.png';
-import { validateEmail, validatePassword } from '../../Utils/valid';
+import { validateEmail, validateName, validatePassword } from '../../Utils/valid';
 import { getAPiNoneToken, postApiNoneToken } from '../../api';
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
@@ -48,23 +48,13 @@ const Signup = () => {
     }
   };
 
-  const handleCheckPassword = (password) => {
-    const result = validatePassword(password);
-    if (result.success) {
-      setPassword(password);
-      setPasswordErr('');
-    } else {
-      setPasswordErr(result.message);
-    }
-  };
-
   const handleSignup = async () => {
     try {
       const data = {
         email: email,
         verificationCode: verify,
       };
-  
+    
       const result = await postApiNoneToken("/user/verify", data);
       if (result.data.success) {
         // Đăng ký thành công, tự động đăng nhập
@@ -81,7 +71,7 @@ const Signup = () => {
   
           Swal.fire({
             icon: "success",
-            text: "Xác minh và tạo tài khoản thành công!",
+            text: "Đã xác minh và tạo tài khoản thành công!",
           });
   
           navigate("/login");
@@ -97,11 +87,23 @@ const Signup = () => {
           text: result.data.message,
         });
       }
+    
     } catch (error) {
       Swal.fire({
         icon: "error",
-        text: "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
+        text: "Đã xảy ra lỗi. Vui lòng thử lại sau!",
       });
+    }
+  };
+
+  const handeleCheckEmail = (e) => {
+    if (validateEmail(e.target.value)) {
+      setEmail(e.target.value);
+      setEmailErr('')
+    } else {
+      setEmailErr(
+        "Incorrect email format"
+      );
     }
   };
 
@@ -113,7 +115,7 @@ const Signup = () => {
       if (result.data.success) {
         Swal.fire({
           icon: "info",
-          text: "Mã xác minh đã được gửi lại đến email của bạn.",
+          text: "Mã xác minh đã được gửi lại vào email của bạn.",
         });
       } else {
         Swal.fire({
@@ -124,22 +126,24 @@ const Signup = () => {
     } catch (error) {
       Swal.fire({
         icon: "error",
-        text: "Đã có lỗi xảy ra khi gửi lại mã. Vui lòng thử lại sau!",
+        text: "Đã xảy ra lỗi khi gửi lại mã. Vui lòng thử lại sau!",
       });
     }
   };
   
 
+
   const handleSentVerify = async () => {
     const emailValidation = validateEmail(email);
     const passwordValidation = validatePassword(password);
+    const nameValidation = validateName(name)
   
-    if (emailValidation.success && passwordValidation.success) {
+    if (emailValidation.success && passwordValidation.success && nameValidation.success) {
       try {
         if (password !== confirmPassword) {
           Swal.fire({
             icon: "warning",
-            text: "Mật khẩu không khớp, vui lòng nhập lại",
+            text: "Mật khẩu không khớp, vui lòng nhập lại!",
           });
           return false;
         }
@@ -151,8 +155,8 @@ const Signup = () => {
           role: key,  // Vai trò: candidate hoặc company
         };
 
-        setLoading(true);//
-        // Gửi yêu cầu đăng ký và gửi mã xác minh qua email
+        setLoading(true);
+
         const result = await postApiNoneToken("/user/register", data);
         setLoading(false);//
         if (result.data.success) {
@@ -169,18 +173,33 @@ const Signup = () => {
           return false;
         }
       } catch (error) {
+        setLoading(false);
         Swal.fire({
           icon: "error",
-          text: "Đã có lỗi xảy ra. Vui lòng thử lại sau!",
+          text: "Đã xảy ra lỗi hoặc email đã tồn tại. Vui lòng thử lại sau!",
         });
         return false;
       }
     } else {
+      if(!nameValidation.success){
+        // console.log(1);
+        Swal.fire({
+          icon: "error",
+          text: nameValidation.message,
+        });
+        return false;
+      }
       if (!emailValidation.success) {
         setEmailErr(emailValidation.message);
+        return false;
       }
       if (!passwordValidation.success) {
-        setPasswordErr(passwordValidation.message);
+        // console.log(passwordValidation.message);
+        Swal.fire({
+          icon: "error",
+          text: passwordValidation.message,
+        });
+        return false;
       }
       if (password !== confirmPassword) {
         setPasswordErr("Mật khẩu không khớp");
@@ -227,7 +246,7 @@ const Signup = () => {
         <input 
           type="text"
           id="verify"
-          placeholder='Nhập mã xác thực'
+          placeholder='Enter the authentication code'
           className="form-control"
           value={verify}
           onChange={(e) => {
@@ -236,7 +255,7 @@ const Signup = () => {
           aria-invalid={!!emailErr}
           />
           <Button variant="primary" onClick={handleResentVerify}>
-            Gửi lại mã
+          Gửi lại mã
         </Button>
       </Modal.Body>
       <Modal.Footer>
@@ -244,7 +263,7 @@ const Signup = () => {
           Đóng
         </Button>
         <Button variant="primary" onClick={()=>handleSignup()}>
-          Xác thực
+        Xác thực
         </Button>
       </Modal.Footer>
     </Modal>
@@ -263,7 +282,7 @@ const Signup = () => {
           <div className={clsx('card', styles.signupCard)}>
             <div className="card-body">
               <h2 className={clsx('card-title', 'text-center', styles.signupTitle)}>
-                Đăng nhập
+                Đăng ký
               </h2>
 
               <Tabs
@@ -272,7 +291,7 @@ const Signup = () => {
                 onSelect={(k) => setKey(k)}
                 className="mb-3"
               >
-                <Tab eventKey="candidate" title="Ứng viên">
+                <Tab eventKey="candidate" title="Candidate">
                   <Form>
                     <Form.Group className="mb-3">
                       <Form.Label>Họ và tên</Form.Label>
@@ -293,8 +312,8 @@ const Signup = () => {
                         placeholder="Nhập email"
                         value={email}
                         onChange={(e) => {
-                          setEmail(e.target.value);
-                          handleCheckEmailExit(e.target.value);
+                          handeleCheckEmail(e);
+                          // handleCheckEmailExit(e.target.value);
                         }}
                         isInvalid={!!emailErr}
                       />
@@ -310,7 +329,7 @@ const Signup = () => {
                           placeholder="Nhập mật khẩu"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          isInvalid={!!passwordErr}
+                          // isInvalid={!!passwordErr}
                         />
 
                         <span 
@@ -322,7 +341,7 @@ const Signup = () => {
                         </span>
                       </div>
                       <Form.Control.Feedback type="invalid">
-                        {/* {passwordErr} */}
+                        {passwordErr}
                       </Form.Control.Feedback>
                     </Form.Group>
                     {/* Confirm */}
@@ -334,7 +353,7 @@ const Signup = () => {
                           placeholder="Nhập lại mật khẩu"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          isInvalid={!!passwordErr}
+                          // isInvalid={!!passwordErr}
                         />
 
                         <span 
@@ -367,7 +386,7 @@ const Signup = () => {
               </div>
             </Tab>
 
-                <Tab eventKey="company" title="Công ty">
+                <Tab eventKey="company" title="Company">
                   <Form>
                     <Form.Group className="mb-3">
                       <Form.Label>Tên công ty</Form.Label>
@@ -385,9 +404,11 @@ const Signup = () => {
                         placeholder="Nhập email"
                         value={email}
                         onChange={(e) => {
-                          setEmail(e.target.value);
+                          handeleCheckEmail(e);
+                          // handleCheckEmailExit(e.target.value);
                         }}
                         isInvalid={!!emailErr}
+                        // isInvalid={!!emailErr}
                       />
                       <Form.Control.Feedback type="invalid">
                         {emailErr}
@@ -400,8 +421,9 @@ const Signup = () => {
                           type={showPassword ? 'text' : 'password'} 
                           placeholder="Nhập mật khẩu"
                           value={password}
-                          onChange={(e) => handleCheckPassword(e.target.value)}
-                          isInvalid={!!passwordErr}
+                          // onChange={(e) => handleCheckPassword(e.target.value)}
+                          // isInvalid={!!passwordErr}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         <span 
                         onClick={togglePasswordVisibility} 
@@ -411,9 +433,9 @@ const Signup = () => {
                         { showPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
                       </span>
                       </div>
-                      <Form.Control.Feedback type="invalid">
+                      {/* <Form.Control.Feedback type="invalid">
                         {passwordErr}
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback> */}
                     </Form.Group>
                     {/* confirm */}
                     <Form.Group className="mb-3">
@@ -424,7 +446,7 @@ const Signup = () => {
                           placeholder="Nhập lại mật khẩu"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          isInvalid={!!passwordErr}
+                          // isInvalid={!!passwordErr}
                         />
                         <span 
                           onClick={toggleConfirmPasswordVisibility} 
@@ -434,9 +456,9 @@ const Signup = () => {
                           { showConfirmPassword ? <i className="fa-solid fa-eye-slash"></i> : <i className="fa-solid fa-eye"></i> }
                         </span>
                       </div>
-                      <Form.Control.Feedback type="invalid">
+                      {/* <Form.Control.Feedback type="invalid">
                         {passwordErr}
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback> */}
                     </Form.Group>
                     
                     <Button variant="primary" className="w-100" onClick={handleShowModal}>

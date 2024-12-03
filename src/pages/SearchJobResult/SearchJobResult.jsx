@@ -91,7 +91,7 @@ const SearchJobResult = () => {
       try{
       const savedJobsResponse = await getApiWithToken(`/save-job/gets/${user._id}`);
       const savedJobs = savedJobsResponse?.data?.savedJobs || [];
-      console.log('savedJobs',savedJobs);
+      // console.log('savedJobs',savedJobs);
       
       if(savedJobs.length > 0){
         const savedJobMap = savedJobs.reduce((acc, savedJob) => {
@@ -101,14 +101,14 @@ const SearchJobResult = () => {
           };
           return acc;
         }, {});
-        console.log('savedJobmap',savedJobMap);
+        // console.log('savedJobmap',savedJobMap);
         
         setSavedJobs(savedJobMap);
       }else{
         setSavedJobs({});
       }
     }catch(error){
-      console.log(error);    
+      // console.log(error);    
     }
     }
     } catch (err) {
@@ -138,7 +138,7 @@ const SearchJobResult = () => {
 
       if (response.data.success) {
         // setResults(response.data.data);
-        console.log(response.data.data.jobs);
+        // console.log(response.data.data.jobs);
         if (response.data.success){
           const jobs = response.data.data.jobs;
 
@@ -215,19 +215,19 @@ const SearchJobResult = () => {
     }
 
     try {
-      console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
+      // console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
       
       if (savedJobs[jobId]) {
-        console.log(1); 
+        // console.log(1); 
         const savedJobEntry = savedJobs[jobId];
         const savedJobId = savedJobEntry.savedJobId;
         // const savedJodId = Object.keys(savedJobs).find(savedId => savedId === jobId);
 
-        console.log('savedJobs',savedJobs);
-        console.log('savedJobId là id job',savedJobId);
+        // console.log('savedJobs',savedJobs);
+        // console.log('savedJobId là id job',savedJobId);
         
         if(savedJobId) {
-          console.log(3);
+          // console.log(3);
           
           await deleteApiWithToken(`/save-job/delete/${savedJobId}`);//savedJobId chứ không phải jobId
           setSavedJobs(prev => ({ ...prev, [jobId]: false }));
@@ -401,9 +401,9 @@ const SearchJobResult = () => {
                         </p>
                       </div>
                       <div className={clsx(styles.describe)}>
-                        <p>Company: {job.companyName}</p>
-                        <p>Address: {job.street}, {job.city}</p>
-                        <p>Salary: {job.salary}</p>
+                        <p>{job.companyName}</p>
+                        <p>{t('search.address')}: {job.street}, {job.city}</p>
+                        <p>{t('search.salary')}: {job.salary}</p>
                         {job.requirementSkillsNames && job.requirementSkillsNames.length > 0 ? (
                           <div className={clsx(styles.skills)}>
                             {job.requirementSkillsNames.map((skill, index) => (
@@ -433,7 +433,7 @@ const SearchJobResult = () => {
             ))
         ) : (
           <div className={clsx(styles.cardNoResult)}>
-            <p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p>
+            <p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p>
           </div>
         )}
               </div>

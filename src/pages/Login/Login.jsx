@@ -43,7 +43,7 @@ const Login = () => {
       try {
         setLoading(true);
         const result = await postApiNoneToken("/user/login", data);
-        console.log(result.data);
+        // console.log(result.data);
 
         if (result.data.error) {
           Swal.fire({ icon: "error", text: result.data.error });
@@ -65,7 +65,7 @@ const Login = () => {
           }
         }
       } catch (error) {
-        console.log("123", error);
+        // console.log("123", error);
         Swal.fire({ icon: "error", text: "Email hoặc mật khẩu không đúng" });
       } finally {
         setLoading(false);

@@ -25,7 +25,7 @@ const SavedCandidates = () => {
     const fetchSavedCandidates = async () => {
       try {
         const result = await getApiWithToken(`/save-candidate/gets/${companyId}`);
-        console.log(result);
+        // console.log(result);
         
         if (result.data.success) {
           const fetchedSavedCandidates = result.data.saveCandidate || [];

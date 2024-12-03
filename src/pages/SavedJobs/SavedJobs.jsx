@@ -29,7 +29,7 @@ const SavedJobs = () => {
         if (result.data.success) {
           const fetchedSavedJobs = result.data.savedJobs || [];
           setSavedJobs(result.data.savedJobs);
-          console.log(savedJobs);
+          // console.log(savedJobs);
           
           // console.log(result.data.savedJobs);
           // console.log(fetchedSavedJobs);          
@@ -38,7 +38,7 @@ const SavedJobs = () => {
             const jobDetailPromises = fetchedSavedJobs.map(async (job) => {
               try {
                 const jobResult = await getAPiNoneToken(`/job/${job.job._id}`);
-                console.log(jobResult);
+                // console.log(jobResult);
                 
                 if (jobResult.data.success) {
                   // console.log(job.job);                  

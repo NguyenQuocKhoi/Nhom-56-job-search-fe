@@ -34,7 +34,7 @@ const PostedDetail = () => {
       try {
         const resultJobs = await getAPiNoneToken(`/job/${jobId}`);
         setJob(resultJobs.data.job);
-        console.log(resultJobs);
+        // console.log(resultJobs);
         
         //Lấy tên category
         // if (resultJobs.data.job.category) {
@@ -60,7 +60,7 @@ const PostedDetail = () => {
         // console.log(1);
         
         const resultApplies = await getApiWithToken(`/application/get-applications-by-job/${jobId}`);
-        console.log(resultApplies);
+        // console.log(resultApplies);
         
         const applicationsWithCandidates = await Promise.all(resultApplies.data.applications.map(async (apply) => {
           const candidateResult = await getApiWithToken(`/candidate/${apply.candidate}`);
@@ -70,7 +70,7 @@ const PostedDetail = () => {
         }));
   
         setApply(applicationsWithCandidates);
-        console.log(applicationsWithCandidates);
+        // console.log(applicationsWithCandidates);
 
         //đếm số lượng ứng viên có trạng thái "pending"
         const pendingApplications = applicationsWithCandidates.filter(apply => apply.status === 'pending');
@@ -185,13 +185,13 @@ const PostedDetail = () => {
 
             <div className={clsx(styles.ngang)}>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
-                <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
+                <strong>{t('detailJob.expired')}:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
               </p>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('salary') })}>
-                <strong>Salary:</strong> {job.pendingUpdates?.salary || job.salary}
+                <strong>{t('detailJob.salary')}:</strong> {job.pendingUpdates?.salary || job.salary}
               </p>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('position') })}>
-                <strong>Position:</strong> {job.pendingUpdates?.position || job.position}
+                <strong>{t('detailJob.position')}:</strong> {job.pendingUpdates?.position || job.position}
               </p>
             </div>
           </div>
@@ -200,17 +200,17 @@ const PostedDetail = () => {
             {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}>
               <strong>Interest:</strong> {job.pendingUpdates?.interest || job.interest}
             </p> */}
-            <p><strong>Mô tả:</strong></p>
+            <p><strong>{t('detailJob.describe')}:</strong></p>
             <div
               className={clsx({ [styles.highlight]: isFieldDifferent('description') })}
               dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.description || job.description }}
             ></div>
-            <p><strong>Yêu cầu:</strong></p>            
+            <p><strong>{t('detailJob.requirement')}:</strong></p>            
             <div
               className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}
               dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.requirements || job.requirements }}
             ></div>
-            <p><strong>Phúc lợi:</strong></p>            
+            <p><strong>{t('detailJob.interest')}:</strong></p>            
             <div
               className={clsx({ [styles.highlight]: isFieldDifferent('interest') })}
               dangerouslySetInnerHTML={{ __html: job.pendingUpdates?.interest || job.interest }}
@@ -218,13 +218,13 @@ const PostedDetail = () => {
             {/* <p className={clsx({ [styles.highlight]: isFieldDifferent('requirements') })}>
               <strong>Requirements:</strong> {job.pendingUpdates?.requirements || job.requirements}
             </p> */}
-            <p><strong>Posted:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
+            <p><strong>{t('detailJob.postAt')}:</strong> {new Date(job.createdAt).toLocaleDateString('vi-VN')}</p>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('expiredAt') })}>
-              <strong>Expires:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
+              <strong>{t('detailJob.expired')}:</strong> {new Date(job.pendingUpdates?.expiredAt || job.expiredAt).toLocaleDateString('vi-VN')}
             </p>
             {
               job.pendingUpdates &&
-                (<p><strong>Last Modified:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString('vi-VN')}</p>)
+                (<p><strong>{t('detailJob.lastModified')}:</strong> {new Date(job.pendingUpdates.lastModified).toLocaleString('vi-VN')}</p>)
               }
           </div>
 
@@ -241,32 +241,32 @@ const PostedDetail = () => {
             <div className={clsx(styles.companyContainer)}>
               <div className={clsx(styles.titleCongty)}>
                 <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
-                <p><strong>Company:</strong> {job.company.name}</p>
+                <p><strong></strong> {job.company.name}</p>
               </div>
               <p className={clsx({ [styles.highlight]: isFieldDifferent('city') })}>
-                <strong>Address:</strong> {job.pendingUpdates?.street || job.street}, {job.pendingUpdates?.city || job.city}
+                <strong>{t('detailJob.address')}:</strong> {job.pendingUpdates?.street || job.street}, {job.pendingUpdates?.city || job.city}
               </p>
             </div>
           
 
           <div className={clsx(styles.thongtinchung)}>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('type') })}>
-              <strong>Hình thức làm việc:</strong> {job.pendingUpdates?.type || job.type}
+              <strong>{t('detailJob.type')}:</strong> {job.pendingUpdates?.type || job.type}
             </p>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('numberOfCruiment') })}>
-              <strong>Số lượng tuyển:</strong> {job.pendingUpdates?.numberOfCruiment || job.numberOfCruiment}
+              <strong>{t('detailJob.numberOfCruiment')}:</strong> {job.pendingUpdates?.numberOfCruiment || job.numberOfCruiment}
             </p>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('experienceLevel') })}>
-              <strong>Kinh nghiệm:</strong> {job.pendingUpdates?.experienceLevel || job.experienceLevel}
+              <strong>{t('detailJob.ex')}:</strong> {job.pendingUpdates?.experienceLevel || job.experienceLevel}
             </p>
           </div>
 
           <div className={clsx(styles.them)}>
             <p className={clsx({ [styles.highlight]: isFieldDifferent('category') })}>
-              <strong>Lĩnh vực:</strong> {categoryName || 'No Category'}
+              <strong>{t('detailJob.category')}:</strong> {categoryName || 'No Category'}
             </p>
             <div>
-              <strong>Yêu cầu kỹ năng: </strong>
+              <strong>{t('detailJob.skill')}: </strong>
               {skills.length > 0 ? (
                 <ul>
                   {skills.map((skill, index) => (
@@ -274,7 +274,7 @@ const PostedDetail = () => {
                   ))}
                 </ul>
               ) : (
-                <span>No skill</span>
+                <span>{t('detailCandidate.noSkillAdded')}</span>
               )}
             </div>
           </div>

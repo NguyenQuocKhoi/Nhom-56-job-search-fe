@@ -140,7 +140,7 @@ const JobDetail = () => {
           const applicationResponse = await getApiWithToken(`/application/get-applications/${candidateId}`);
           const applications = applicationResponse?.data?.applications || [];
 
-          console.log(applications);//
+          // console.log(applications);//
     
           //mới
           const jobApplication = applications.find(application =>
@@ -250,7 +250,7 @@ const JobDetail = () => {
           setError('Job not found');
         }
       } catch (err) {
-        console.log("Failed to fetch job details");
+        // console.log("Failed to fetch job details");
         // setError('Failed to fetch job details');///////////////////
       }
     };
@@ -296,15 +296,15 @@ const JobDetail = () => {
     try {
       const result = await getApiWithToken(`/candidate/${userId}`)
         if(result.data.candidate.resume === undefined){
-          console.log("khong co cv");
+          // console.log("khong co cv");
           setShowModalNoneCV(true);
         }else {
-          console.log("co cv roi"); 
+          // console.log("co cv roi"); 
           setShowModalCV(true);
         }
       }
      catch (error) {
-      console.log(error);
+      // console.log(error);
       
     }
   };
@@ -357,7 +357,7 @@ const JobDetail = () => {
       setShowModalNoneCV(false);//
       setIsApplied(true);//
      }catch(error){
-        console.log(error);
+        // console.log(error);
         
      }
 
@@ -455,7 +455,7 @@ const JobDetail = () => {
       setShowModalCV(false);
       setIsApplied(true);//
      }catch(error){
-      console.log('Error during CV upload and application:', error);
+      // console.log('Error during CV upload and application:', error);
       Swal.fire('Đã có lỗi xảy ra!', 'Vui lòng thử lại sau.', 'error');
         // console.log(error);  
      }
@@ -472,7 +472,7 @@ const JobDetail = () => {
     let savedJobs = [];
   
     try {
-      console.log("User data id:", userData._id);
+      // console.log("User data id:", userData._id);
   
       // Lấy danh sách công việc đã lưu
       const savedJobsResponse = await getApiWithToken(`/save-job/gets/${userData._id}`);
@@ -488,8 +488,8 @@ const JobDetail = () => {
       const savedJob = savedJobs.find(savedJob => 
         savedJob.job._id === job._id && savedJob.candidate === userData._id
       );
-      console.log("Saved jobs:", savedJobs);
-      console.log("Saved job:", savedJob);//chưa lưu thì undifined
+      // console.log("Saved jobs:", savedJobs);
+      // console.log("Saved job:", savedJob);//chưa lưu thì undifined
   
       if (savedJob) {
         // Nếu công việc đã được lưu, thực hiện bỏ lưu

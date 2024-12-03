@@ -28,7 +28,13 @@
       "default":"Mặc định",
       "postAt":"Ngày đăng",
       "expireOn":"Ngày hết hạn",
-      "salaryDownToUp":"Lương từ thấp đến cao"
+      "salaryDownToUp":"Lương từ thấp đến cao",
+      "all":"Tất cả",      
+      "candidate":"Ứng viên",
+      "address":"Địa chỉ",
+      "salary":"Lương",
+      "gender":"Giới tính",
+      "noMatch":"Không tìm thấy kết quả phù hợp"
     },
     "recommendJob":{
       "recommendJob":"Gợi ý việc làm phù hợp"
@@ -253,7 +259,8 @@
       "ex":"Kinh nghiệm",
       "category":"Lĩnh vực",
       "skill":"Yêu cầu kỹ năng",
-      "suspend": "Tạm ngưng"
+      "suspend": "Tạm ngưng",
+      "lastModified": "Lần sửa cuối cùng"
     }
   }
   

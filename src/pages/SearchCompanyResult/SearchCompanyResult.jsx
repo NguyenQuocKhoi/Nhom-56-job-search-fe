@@ -75,7 +75,7 @@ const SearchCompanyResult = () => {
       setLoading(false);
 
       if (response.data.success) {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setResults(response.data.data);
       } else {
         setResults(null);
@@ -164,7 +164,7 @@ const SearchCompanyResult = () => {
                     </Link>
                   ))
                   ):(
-                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>Không tìm thấy kết quả phù hợp</p></div>
+                    <div className={clsx(styles.cardNoResult)}><p className={clsx(styles.textNoResult)}>{t('search.noMatch')}</p></div>
                 )}
               </div>
           </div>

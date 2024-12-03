@@ -72,7 +72,7 @@ const EditPost = () => {
         const data = await getAPiNoneToken(`/job/${jobId}`);
         const job = data.data.job;
 
-        console.log(job.requirementSkills);
+        // console.log(job.requirementSkills);
 
         const categoryData = await getAPiNoneToken(`/category/${job.category}`);
         const categoryDa = await getAPiNoneToken(`/category/get-all`);

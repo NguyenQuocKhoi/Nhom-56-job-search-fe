@@ -112,7 +112,7 @@ const CandidateManagement = () => {
 
     fetchSkills();
   
-      console.log("Updated Candidates:", updatedCandidates);
+      // console.log("Updated Candidates:", updatedCandidates);
   
     } catch (err) {
       setError('Failed to fetch candidates');
@@ -151,8 +151,8 @@ const CandidateManagement = () => {
   
       const response = await postApiNoneToken('/candidate/search', searchParams);
 
-      console.log("64", searchParams);      
-      console.log("66", response.data.candidates);
+      // console.log("64", searchParams);      
+      // console.log("66", response.data.candidates);
 
       const candidates = response.data.candidates;
 
@@ -186,7 +186,7 @@ const CandidateManagement = () => {
       const newIsActiveState = !currentIsActive;
       const response = await putApiWithToken(`/candidate/disable-candidate/${candidateId}`, { isActive: newIsActiveState });
   
-      console.log(response);
+      // console.log(response);
       
       if (response.data.success) {
         Swal.fire({
@@ -259,7 +259,8 @@ const CandidateManagement = () => {
       skill: [],
       experience: '',
       education: '',
-      moreInformation: ''
+      moreInformation: '',
+      role: 'candidate',
     })
   };
 
@@ -326,12 +327,12 @@ const CandidateManagement = () => {
     e.preventDefault();
 
     try {
-      console.log(1);
-      console.log(candidateData.role);
-      console.log(candidateData);
+      // console.log(1);
+      // console.log(candidateData.role);
+      // console.log(candidateData);
       
       const response = await postApiWithToken('/user/create-candidate', candidateData);
-      console.log(response);
+      // console.log(response);
       
       if (response.status === 200) {
         Swal.fire({
@@ -818,7 +819,7 @@ const CandidateManagement = () => {
           {results.length > 0 ? (
           results.map((candidate) => (
             <div key={candidate._id} className={clsx(styles.content)}>
-                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)} target="_blank" rel="noopener noreferrer">
               <div className={clsx(styles.candidatecard)}>
                   <div className={clsx(styles.contentCandidatecard)}>
                     <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
@@ -874,7 +875,7 @@ const CandidateManagement = () => {
             <div key={candidate._id} className={clsx(styles.content)}>
                 {/* <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}> */}
               <div className={clsx(styles.candidatecard)}>
-                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)}>
+                <Link to={`/detailCandidateAdmin/${candidate._id}`} className={clsx(styles.linkCandidate)} target="_blank" rel="noopener noreferrer">
                   <div className={clsx(styles.contentCandidatecard)}>
                     <img src={candidate.avatar || logo} alt="Logo" className={clsx(styles.avatar)}/>
                     <div className={clsx(styles.contentText)}>

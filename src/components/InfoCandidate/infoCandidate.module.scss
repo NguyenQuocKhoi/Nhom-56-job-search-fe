@@ -111,15 +111,27 @@
   padding: 10px;
   // background: red;
 }
-.skillContainer{
+// .skillsContainer{
+  // background: green;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin: 5px;
+//   width: 94%;
+//   background: lightgray;
+//   padding: 5px;
+//   border-radius: 5px;
+// }
+.skillCheckbox{
+  // background: green;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 5px;
-  width: 94%;
-  background: lightgray;
-  padding: 5px;
-  border-radius: 5px;
+  gap: 10%;
+  // justify-content: center;
+  // align-items: center;
+  // margin-top: 10px;
+}
+.checkBox{
+  margin-top: 6px;
 }
 .skillSection{
   // background: red;
@@ -210,16 +222,66 @@
   background: white;
   width: 18%;
 }
-.modalOverlay{
-  width: 100%;
-  // background: red;
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  gap: 5px;
-  padding: 10px;
 }
+.modalContent {
+  background: white;
+  // background: red;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.skillsContainer {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+// .openModalButton,
+// .closeModalButton {
+//   background-color: #007bff;
+//   color: white;
+//   padding: 8px;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+// }
+
+.selectedSkills {
+  // margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.selectedSkill {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+// .modalOverlay{
+//   width: 100%;
+//   // background: red;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+//   gap: 5px;
+//   padding: 10px;
+// }
 .skillcard{
   display: flex;
   justify-content: center;
@@ -231,13 +293,13 @@
   height: 30px;
   gap: 10px;
   .skillCheckbox{
-    margin-top: 16px;
+    background: red;
   }
-  .skillname{
-    // flex: 1;
-    width: 60%;
-    // color: red;
-  }
+  // .skillname{
+  //   // flex: 1;
+  //   width: 60%;
+  //   // color: red;
+  // }
 }
 .avatar {
   width: 150px;
@@ -358,7 +420,9 @@ textarea {
   border-radius: 5px;
   border: 1px solid white;
   color: white;
-  width: 60%;
+  width: 20%;
+  margin-left: 80%;
+  margin-top: 1%;
 }
 
 .btnPublicAccount{
@@ -456,50 +520,50 @@ textarea {
   z-index: 1000;
 }
 
-.modalContent {
-  background: #fff;
-  // background: red;
-  // width: 100%;
-  padding: 20px;
-  // margin: 5px;
-  border-radius: 8px;
-  // max-width: 500px; //
-  max-height: 80vh; // 
-  overflow-y: auto; // 
-  position: relative; // 
-}
+// .modalContent {
+//   background: #fff;
+//   // background: red;
+//   // width: 100%;
+//   padding: 20px;
+//   // margin: 5px;
+//   border-radius: 8px;
+//   // max-width: 500px; //
+//   max-height: 80vh; // 
+//   overflow-y: auto; // 
+//   position: relative; // 
+// }
 
-.modalContent input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
+// .modalContent input[type="text"] {
+//   width: 100%;
+//   padding: 10px;
+//   margin-bottom: 10px;
+// }
 
-.modalContent ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+// .modalContent ul {
+//   list-style-type: none;
+//   padding: 0;
+//   margin: 0;
+// }
 
-.modalContent li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
-}
+// .modalContent li {
+//   padding: 10px;
+//   cursor: pointer;
+//   border-bottom: 1px solid #ddd;
+// }
 
-.modalContent li:hover {
-  background-color: #f0f0f0;
-}
+// .modalContent li:hover {
+//   background-color: #f0f0f0;
+// }
 
-.modalContent .selected {
-  background-color: #d0f0c0; 
-}
+// .modalContent .selected {
+//   background-color: #d0f0c0; 
+// }
 
-.modalContent button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
+// .modalContent button {
+//   position: absolute;
+//   top: 10px;
+//   right: 10px;
+// }
 
 //
 .changed {
@@ -634,16 +698,16 @@ textarea {
     align-items: flex-start;
     // background: red;
   }
-  .skillContainer{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px;
-    width: 94%;
-    background: lightgray;
-    padding: 5px;
-    border-radius: 5px;
-  }  
+  // .skillContainer{
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   margin: 5px;
+  //   width: 94%;
+  //   background: lightgray;
+  //   padding: 5px;
+  //   border-radius: 5px;
+  // }  
   .modalSkill{
     display: flex;
     justify-content: center;

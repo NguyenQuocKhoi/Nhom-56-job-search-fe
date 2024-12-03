@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import logo from '../../../images/logo.png';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Loading/Loading';
 
 const DetailCandidateAdmin = () => {
   const { candidateId } = useParams();
@@ -13,14 +14,15 @@ const DetailCandidateAdmin = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [skills, setSkills] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     const fetchCandidate = async () => {
       try {
-        console.log(candidateId);
-        
+        // console.log(candidateId);
+        setLoading(true)
         const result = await getApiWithToken(`/candidate/${candidateId}`);
         setCandidate(result.data.candidate);
 
@@ -38,6 +40,8 @@ const DetailCandidateAdmin = () => {
 
       } catch (err) {
         setError('Failed to fetch candidate details');
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -49,7 +53,7 @@ const DetailCandidateAdmin = () => {
       const newIsActiveState = !currentIsActive;
       const response = await putApiWithToken(`/candidate/disable-candidate/${userId}`, { isActive: newIsActiveState });
   
-      console.log(response);
+      // console.log(response);
       
       if (response.data.success) {
         Swal.fire({
@@ -79,7 +83,7 @@ const DetailCandidateAdmin = () => {
   };
 
   if (error) return <div>{error}</div>;
-  if (!candidate || !user) return <div>Job not found</div>;
+  if (!candidate || !user) return <div>{loading ? <Loading /> : null}</div>;
 
   return (
     <>
@@ -88,30 +92,30 @@ const DetailCandidateAdmin = () => {
         <div className={clsx(styles.top)}>
           <img src={candidate.avatar || logo} alt="Avatar" className={clsx(styles.avatar)} />
           <div className={clsx(styles.topText)}>
-            <p><strong>Name:</strong> {candidate.name}</p>
+            <p><strong>Họ và tên:</strong> {candidate.name}</p>
             <p><strong>Email:</strong> {candidate.email}</p>
-            <p><strong>Phone Number:</strong> {candidate.phoneNumber}</p>
-            <p><strong>Address:</strong> {candidate.street}, {candidate.city}</p>
-            <p><strong>Date of Birth:</strong> {new Date(candidate.dateOfBirth).toLocaleDateString('vi-VN')}</p>
+            <p><strong>Số điện thoại:</strong> {candidate.phoneNumber}</p>
+            <p><strong>Địa chỉ:</strong> {candidate.street}, {candidate.city}</p>
+            <p><strong>Ngày sinh:</strong> {new Date(candidate.dateOfBirth).toLocaleDateString('vi-VN')}</p>
             {/* <p><strong>Date of Birth:</strong> {candidate.dateOfBirth}</p> */}
           </div>
         </div>
 
         <div className={clsx(styles.bot)}>
           <div className={clsx(styles.botLeft)}>
-            <p><strong>Experience:</strong> {candidate.experience}</p>
-            <p><strong>Education:</strong> {candidate.education}</p>
+            <p><strong>Kinh nghiệm:</strong> {candidate.experience}</p>
+            <p><strong>Học vấn:</strong> {candidate.education}</p>
             {/* <p><strong>More Information:</strong> {candidate.moreInformation}</p> */}
-            <p><strong>More Infomation:</strong></p>
+            <p><strong>Thông tin thêm:</strong></p>
             <div
               dangerouslySetInnerHTML={{ __html: candidate.moreInformation }}
             ></div>
-            <p><strong>Resume:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
+            <p><strong>Hồ sơ xin việc:</strong> <a href={candidate.resume} target="_blank" rel="noopener noreferrer">View CV</a></p>
           </div>
 
           <div className={clsx(styles.botRight)}>
             <div className={clsx(styles.skillSection)}>
-            <strong>Skill:</strong>
+            <strong>Kỹ năng:</strong>
               {skills.length > 0 ? (
                 skills.map((skill, index) => (
                   <ul key={index}>
@@ -121,7 +125,7 @@ const DetailCandidateAdmin = () => {
                   </ul>
                 ))
               ) : (
-                <p>No skills added</p>
+                <p>Chưa cập nhật kỹ năng</p>
               )}
             </div>
           </div>

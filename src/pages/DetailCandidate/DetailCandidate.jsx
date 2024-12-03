@@ -43,7 +43,7 @@ const DetailCandidate = () => {
         // Fetch application details to get the status
         const applicationResult = await getApiWithToken(`/application/${applicationId}`);
         const applicationStatus = applicationResult.data.application.status;
-        console.log(applicationResult.data.application.resume);
+        // console.log(applicationResult.data.application.resume);
         
         setApplication(applicationResult.data.application.resume);
 

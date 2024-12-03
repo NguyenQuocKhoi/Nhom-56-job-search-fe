@@ -49,7 +49,7 @@ const CategoryManagement = () => {
   const fetchJobsByCategory = async (categoryName) => {
     try {
       const response = await postApiNoneToken('/category/get-job', { categoryName });
-      console.log(response);
+      // console.log(response);
       
       if (response.data.success) {
         setJobs(response.data.jobs);
@@ -57,7 +57,7 @@ const CategoryManagement = () => {
         setError(response.message || 'Error fetching jobs');
       }
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       // setError('Error fetching jobs 123');
     }
   };
@@ -104,7 +104,7 @@ const CategoryManagement = () => {
         Swal.fire('Error', 'Category name cannot be empty', 'error');
         return;
       }
-      console.log(categoryInput);
+      // console.log(categoryInput);
       
   
       const checkResult = await postApiWithToken('/category/check-category', { name: categoryInput });
@@ -137,7 +137,7 @@ const CategoryManagement = () => {
     try {
       const response = await postApiWithToken('/category/get-category-by-name', { name: categorySearchInput });
 
-      console.log(response);
+      // console.log(response);
       
 
       if (response.data.success) {

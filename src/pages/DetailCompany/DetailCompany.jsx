@@ -42,8 +42,8 @@ const DetailCompany = () => {
           // limit: 6,
           // sort: sortOrder === 'new' ? 'desc' : 'asc',
         });
-        console.log("response",response);
-        console.log("length",response.data.jobs?.length);
+        // console.log("response",response);
+        // console.log("length",response.data.jobs?.length);
         
         if (!response.data) {
         // if (response.data === '') {

@@ -157,7 +157,7 @@ const PostedJobs = () => {
             limit: 6,
             sort: sortOrder === 'new' ? 'desc' : 'asc',
           });
-          setAcceptedJobs(response.data.jobs);
+          setAcceptedJobs(response.data.jobs || []);
           setTotalPages(response.data.totalPages);
           break;
         case 'Reject':
@@ -166,7 +166,7 @@ const PostedJobs = () => {
             limit: 6,
             sort: sortOrder === 'new' ? 'desc' : 'asc',
           });
-          setRejectedJobs(response.data.jobs);
+          setRejectedJobs(response.data.jobs || []);
           setTotalPages(response.data.totalPages);
           break;
         case 'Pending':
@@ -175,7 +175,7 @@ const PostedJobs = () => {
             limit: 6,
             sort: sortOrder === 'new' ? 'desc' : 'asc',
           });
-          setPendingJobs(response.data.data.jobs);
+          setPendingJobs(response.data.data.jobs || []);
           setTotalPages(response.data.data.totalPages);
           break;
         default:
@@ -446,7 +446,7 @@ const PostedJobs = () => {
                           <p>{job.street}, {job.city}</p>
                           <p>Salary: ${job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
-                          <p>Category: {categories[job.category] || 'No Category'}</p>
+                          {/* <p>Category: {categories[job.category] || 'No Category'}</p> */}
                           {/* <p className={clsx(styles.numberApplyPending)}>Số lượng chưa phê duyệt: {pendingApplications[job._id]}</p> */}
                           <strong>Số lượng chưa phê duyệt: {pendingApplicationsCount[job._id] || 0}</strong>
                         </div>

@@ -11,7 +11,7 @@ export const validateEmail = (email) => {
     } else {
       return {
         success: false,
-        message: "Invalid email address",
+        message: "Địa chỉ email không hợp lệ",
       };
     }
   };
@@ -28,7 +28,7 @@ export const validatePassword = (password) => {
       return {
         success: false,
         message:
-          "Password must be at least 6 characters long, include both uppercase and lowercase letters, at least one number, and one special character.",
+          "Mật khẩu phải dài ít nhất 6 ký tự, bao gồm cả chữ hoa và chữ thường, ít nhất một số",
       };
     }
   };
@@ -42,7 +42,7 @@ export  const validateName = (name) => {
     } else {
       return {
         success: false,
-        message: "Name must be at least 3 characters long",
+        message: "Họ và tên ứng viên hoặc tên công ty phải dài ít nhất 3 ký tự",
       };
     }
   };

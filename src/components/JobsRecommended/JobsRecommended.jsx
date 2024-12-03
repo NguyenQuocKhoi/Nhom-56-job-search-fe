@@ -135,19 +135,19 @@ const JobsRecommended = ({ candidateId }) => {
     }
 
     try {
-      console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
+      // console.log('savedJobs[jobId] là boolean',savedJobs[jobId]);
       
       if (savedJobs[jobId]) {
-        console.log(1); 
+        // console.log(1); 
         const savedJobEntry = savedJobs[jobId];
         const savedJobId = savedJobEntry.savedJobId;
         // const savedJodId = Object.keys(savedJobs).find(savedId => savedId === jobId);
 
-        console.log('savedJobs',savedJobs);
-        console.log('savedJobId là id job',savedJobId);
+        // console.log('savedJobs',savedJobs);
+        // console.log('savedJobId là id job',savedJobId);
         
         if(savedJobId) {
-          console.log(3);
+          // console.log(3);
           
           await deleteApiWithToken(`/save-job/delete/${savedJobId}`);//savedJobId chứ không phải jobId
           setSavedJobs(prev => ({ ...prev, [jobId]: false }));

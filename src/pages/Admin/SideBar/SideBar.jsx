@@ -32,7 +32,7 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
           const pendingJobs = response.data.jobs.filter(job => 
             job.pendingUpdates !== null || job.status === undefined
           );          
-          console.log("job pending", pendingJobs);          
+          // console.log("job pending", pendingJobs);          
 
           if (pendingJobs.length > 0) {
             setHasPendingJobs(true);
@@ -72,7 +72,7 @@ const Sidebar = ({ setSelectedTab, selectedTab }) => {
           const pendingCompanies = responseC.data.companies.filter(company => 
             company.status === undefined || company.pendingUpdates !== null
           );          
-        console.log("pending company", pendingCompanies);
+        // console.log("pending company", pendingCompanies);
 
           if (pendingCompanies.length > 0) {
             setHasPendingCompanies(true);

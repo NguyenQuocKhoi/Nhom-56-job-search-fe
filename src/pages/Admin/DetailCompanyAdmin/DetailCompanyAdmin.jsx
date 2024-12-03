@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getAPiNoneToken, getApiWithToken, putApiWithToken } from '../../../api';
+import { getAPiNoneToken, getApiWithToken, postApiNoneToken, putApiWithToken } from '../../../api';
 import styles from './detailCompanyAdmin.module.scss';
 import clsx from 'clsx';
 import Header from '../HeaderAdmin/HeaderAdmin';
 import logo from '../../../images/logo.png';
 import Swal from 'sweetalert2';
+import Loading from '../../../components/Loading/Loading';
 
 const DetailCompanyAdmin = () => {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ const DetailCompanyAdmin = () => {
     window.scrollTo(0, 0);
 
     const fetchCompany = async () => {
-      try {
+      try {        
+        setLoading(true)
         const result = await getAPiNoneToken(`/company/${id}`);
         setCompany(result.data.company);
 
@@ -45,26 +47,25 @@ const DetailCompanyAdmin = () => {
 
     const fetchJobs = async () => {
       try {
-        const response = await getAPiNoneToken(`/job/get-jobs/${id}?page=${currentPage}&limit=6`);
-        console.log(response.data.jobs);
+        setLoading(true)
+        const response = await postApiNoneToken(`/job/get-job/${id}?page=${currentPage}&limit=6`);
+        // console.log(response.data.jobs);
         
         // if (response.data.jobs.length === 0) {
         if (response.data.jobs === undefined) {
-          setJobs([]);  // No jobs found
-          setTotalPages(1); // Ensure pagination is reset
+          setJobs([]);
+          setTotalPages(1);
         } else {
           const { jobs, totalPages } = response.data;
           setJobs(jobs);
           setTotalPages(totalPages);
   
-          // Fetch category names for jobs
           const categoryIds = jobs
             .map((job) => job.category)
-            .filter((categoryId) => categoryId); // Filter out undefined or null categories
+            .filter((categoryId) => categoryId);
 
           const uniqueCategoryIds = [...new Set(categoryIds)];
 
-          // Fetch all categories in parallel
           const categoryPromises = uniqueCategoryIds.map((categoryId) =>
             getAPiNoneToken(`/category/${categoryId}`)
           );
@@ -106,13 +107,15 @@ const DetailCompanyAdmin = () => {
     //   return null;
     // }
 
-    if (label === 'Description') {
+    if (label === 'Mô tả') {
       return (
         <div>
           <p><strong>{label}:</strong></p>
           <div dangerouslySetInnerHTML={{ __html: originalValue }} />
           {updatedValue !== undefined && updatedValue !== originalValue && (
-            <div style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}>
+            <div 
+              // style={{ backgroundColor: 'yellow', paddingLeft: '10px' }}
+            >
               <strong>(Cập nhật thành:)</strong>
               <div dangerouslySetInnerHTML={{ __html: updatedValue }} />
             </div>
@@ -125,7 +128,9 @@ const DetailCompanyAdmin = () => {
       <p>
         <strong>{label}:</strong> {originalValue}
         {updatedValue !== undefined && updatedValue !== originalValue && (
-          <span style={{ backgroundColor: 'yellow', color: 'black', paddingLeft: '10px' }}>
+          <span 
+            // style={{ backgroundColor: 'yellow', color: 'black', paddingLeft: '10px' }}
+          >
             (Cập nhật thành: {updatedValue})
           </span>
         )}
@@ -185,7 +190,7 @@ const DetailCompanyAdmin = () => {
       const newIsActiveState = !currentIsActive;
       const response = await putApiWithToken(`/company/disable-company/${companyId}`, { isActive: newIsActiveState });
   
-      console.log(response);
+      // console.log(response);
       
       if (response.data.success) {
         Swal.fire({
@@ -221,7 +226,7 @@ const DetailCompanyAdmin = () => {
   };
 
   if (error) return <div>{error}</div>;
-  if (!company || !user) return <div>Company not found</div>;
+  if (!company || !user) return <div>{loading ? <Loading /> : null}</div>;
 
   return (
     <>
@@ -232,20 +237,22 @@ const DetailCompanyAdmin = () => {
             src={company.pendingUpdates?.avatar || company.avatar || logo} 
             alt="Logo" 
             className={clsx(styles.avatar)} 
-            style={company.pendingUpdates?.avatar && company.pendingUpdates.avatar !== company.avatar ? { border: '5px solid yellow' } : {}}
+            // style={company.pendingUpdates?.avatar && company.pendingUpdates.avatar !== company.avatar ? { border: '5px solid yellow' } : {}}
           />
           <div className={clsx(styles.topTitle)}>
             <div className={clsx(styles.topTitleText)}>
               <p><strong>{company.name}</strong></p>
                 {
                   company.pendingUpdates?.name && company.pendingUpdates.name !== company.name && (
-                    <p style={{backgroundColor: 'yellow'}}>Tên mới: <strong>{company.pendingUpdates.name}</strong></p>
+                    <p 
+                      // style={{backgroundColor: 'yellow'}}
+                    >Tên mới: <strong>{company.pendingUpdates.name}</strong></p>
                   )
                 }
             </div>
             <div className={clsx(styles.address)}>
               {renderField(
-                'Address',
+                'Địa chỉ',
                 company.street && company.city ? `${company.street}, ${company.city}` : '',
                 company.pendingUpdates?.street && company.pendingUpdates?.city &&
                  (`${company.pendingUpdates?.street}, ${company.pendingUpdates?.city}` !== `${company.street}, ${company.city}`)
@@ -258,12 +265,12 @@ const DetailCompanyAdmin = () => {
 
         <div className={clsx(styles.mid)}>
           <div className={clsx(styles.intro)}>
-            {renderField('Description', company.description, company.pendingUpdates?.description)}
+            {renderField('Mô tả', company.description, company.pendingUpdates?.description)}
           </div>
 
           <div className={clsx(styles.midRight)}>
             <div className={clsx(styles.contact)}>
-              {renderField('Phone number', company.phoneNumber, company.pendingUpdates?.phoneNumber)}
+              {renderField('Số điện thoại', company.phoneNumber, company.pendingUpdates?.phoneNumber)}
               {renderField('Website', company.website, company.pendingUpdates?.website)}
               {renderField('Email', company.email, company.pendingUpdates?.email)}
             </div>
@@ -285,7 +292,7 @@ const DetailCompanyAdmin = () => {
               )}
               onClick={() => handleStatusUpdate(company._id, true)}
             >
-              Accept
+              Đồng ý
             </button>
             <button
               className={clsx(styles.button, 
@@ -298,7 +305,7 @@ const DetailCompanyAdmin = () => {
               )}
               onClick={() => handleStatusUpdate(company._id, false)}
             >
-              Reject
+              Từ chối
             </button>
             {/* <button
               className={clsx(styles.button, 
@@ -328,7 +335,7 @@ const DetailCompanyAdmin = () => {
             className={clsx(styles.button, styles.accepted)}
             onClick={() => handleStatusUpdate(company._id, true)}
           >
-            Accept
+            Đồng ý
           </button>
         )}
 
@@ -337,7 +344,7 @@ const DetailCompanyAdmin = () => {
             className={clsx(styles.button, styles.rejected)}
             onClick={() => handleStatusUpdate(company._id, false)}
           >
-            Reject
+            Từ chối
           </button>
         )}
 
@@ -391,7 +398,7 @@ const DetailCompanyAdmin = () => {
               </div>
               <div className={clsx(styles.jobContainer)}>
                 {jobs.map((job) => (
-                  <Link key={job._id} to={`/detailJob/${job._id}`} className={clsx(styles.jobcard)}>
+                  <Link key={job._id} to={`/detailJobAdmin/${job._id}`} className={clsx(styles.jobcard)} target="_blank" rel="noopener noreferrer">
                     <div className={clsx(styles.content)}>
                       <img src={job.company.avatar} alt="Logo" className={clsx(styles.avatar)} />
                       <div className={clsx(styles.text)}>
@@ -399,11 +406,11 @@ const DetailCompanyAdmin = () => {
                           <p><strong>{job.title}</strong></p>
                         </div>
                         <div className={clsx(styles.describe)}>
-                          <p>Company: {job.company.name}</p>
-                          <p>Address: {job.address}</p>
-                          <p>Salary: ${job.salary}</p>
+                          <p>{job.company.name}</p>
+                          <p>Địa chỉ: {job.address}</p>
+                          <p>Lương: {job.salary}</p>
                           <p>Status: {job.status ? 'Approved' : job.status === false ? 'Rejected' : 'Pending'}</p>
-                          <p>Category: {categories[job.category] || 'No Category'}</p>
+                          <p>Lĩnh vực: {categories[job.category] || 'No Category'}</p>
                         </div>
                       </div>
                     </div>
@@ -418,7 +425,7 @@ const DetailCompanyAdmin = () => {
               >
                 <i className="fa-solid fa-angle-left"></i>
               </button>
-              <span>Page {currentPage} of {totalPages}</span>
+              <span>{currentPage} / {totalPages} trang</span>
               <button 
                 onClick={() => handlePageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
